@@ -1,7 +1,6 @@
 # -*- makefile -*-
 # 
-# A fragment used by CMT to register the library version with
-# TOADatabase.
+# A fragment used by CMT to register the library version
 #
 
 ${CONSTITUENT}_output = $(src)
@@ -9,12 +8,12 @@ ${CONSTITUENT}_output = $(src)
 ${CONSTITUENT} :: $(src)T$(package)_version.hxx $(src)T$(package)_version.cxx $(src)T$(package)_version_LinkDef.h
 	@echo "------> Register $(package) version"
 
-$(src)T$(package)_version.hxx :: $(OAEVENTROOT)/src/Tpackage_version.hxx.in
+$(src)T$(package)_version.hxx :: $(CAPTEVENTROOT)/src/Tpackage_version.hxx.in
 	sed s/%PACKAGE%/$(package)/g $^ > $@
 
-$(src)T$(package)_version.cxx :: $(OAEVENTROOT)/src/Tpackage_version.cxx.in
+$(src)T$(package)_version.cxx :: $(CAPTEVENTROOT)/src/Tpackage_version.cxx.in
 	sed s/%PACKAGE%/$(package)/g $^ > $@
 
-$(src)T$(package)_version_LinkDef.h :: $(OAEVENTROOT)/src/Tpackage_version_LinkDef.in
+$(src)T$(package)_version_LinkDef.h :: $(CAPTEVENTROOT)/src/Tpackage_version_LinkDef.in
 	sed s/%PACKAGE%/$(package)/g $^ > $@
 

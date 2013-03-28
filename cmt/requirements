@@ -1,5 +1,4 @@
-package oaEvent
-version v8r10
+package captEvent
 # This package provides the core I/O and support functions for all of the
 # ND280 software and must be kept stable.  As much as possible, backward
 # compatibility must be maintained.  Please contact the package manager
@@ -10,17 +9,16 @@ version v8r10
 # significant changes are made.  Email enquiries should be directed to
 # t2k-nd280-software@nngroup.physics.sunysb.edu
 #
-# Changes in oaEvent affect the output format of events.  Incompatible
+# Changes in captEvent affect the output format of events.  Incompatible
 # changes can make older data unreadable.
 #
-manager Clark McGrew <clark.mcgrew@sunysb.edu>
-author t2k-nd280-software@nngroup.physics.sunysb.edu
+author Clark McGrew <clark.mcgrew@stonybrook.edu>
 
 branches cmt src app dict
 
 # The packages used by this one.
-use nd280Policy 
-use ROOT 
+use captainPolicy 
+use ROOT * LCG_Interfaces
 use testBase
 
 # Build methods to include.
@@ -29,52 +27,35 @@ document register register
 document rootcint rootcint *.hxx *_LinkDef.h
 
 # Install the geometry file.
-macro install_dir $(OAEVENTROOT)/$(oaEvent_tag)
-document installer installer ../scripts/GEOMETRY.LIST
+macro install_dir $(CAPTEVENTROOT)/$(captEvent_tag)
 
 # Build the documentation.
 document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
 
 # The library to build
-library oaEvent *.cxx *.hxx ../dict/*.cxx
+library captEvent *.cxx *.hxx ../dict/*.cxx
 
 # Build information used by packages that use this one.
-macro oaEvent_cppflags " -DOAEVENT_USED "
-macro oaEvent_linkopts " -L$(OAEVENTROOT)/$(oaEvent_tag) -loaEvent "
-macro oaEvent_stamps " $(oaEventstamp)"
+macro captEvent_cppflags " -DCAPTEVENT_USED "
+macro captEvent_linkopts " -L$(CAPTEVENTROOT)/$(captEvent_tag) -lcaptEvent "
+macro captEvent_stamps " $(captEventstamp)"
 
 # The paths to find this library and it's executables
-path_remove LD_LIBRARY_PATH "$(OAEVENTROOT)" 
-path_prepend LD_LIBRARY_PATH "$(OAEVENTROOT)/$(oaEvent_tag)"
+path_remove LD_LIBRARY_PATH "$(CAPTEVENTROOT)" 
+path_prepend LD_LIBRARY_PATH "$(CAPTEVENTROOT)/$(captEvent_tag)"
 
-path_remove DYLD_LIBRARY_PATH "" \
-	    Darwin	      "$(OAEVENTROOT)"   
-path_prepend DYLD_LIBRARY_PATH "" \ 
-	    Darwin	    "$(OAEVENTROOT)/$(oaEvent_tag)"
-
-path_remove PATH "$(OAEVENTROOT)"
-path_prepend PATH "$(OAEVENTROOT)/$(oaEvent_tag)" \
-      WIN32      "$(OAEVENTROOT)/$(oaEvent_tag)" 
-
-path_append PATH "$(OAEVENTROOT)/scripts"
+path_remove PATH "$(CAPTEVENTROOT)"
+path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)" \
+      WIN32      "$(CAPTEVENTROOT)/$(captEvent_tag)" 
 
 # Applications to build
 application dump-event ../app/dump-event.cxx
-application plot-event ../app/plot-event.cxx 
 application strip-geom ../app/strip-geom.cxx 
-application check-fits ../app/check-fits.cxx
 application validate-geometry ../app/validate-geometry.cxx
 
 # Test applications to build
-application oaEventTUT -check ../test/oaEventTUT.cxx ../test/tut*.cxx
-application testSplit -group=test ../test/testSplit.cxx
-application testGeomId -group=test ../test/testGeomId.cxx
-application testND280Log -group=test ../test/testND280Log.cxx
-application testSHA1 -group=test ../test/testSHA1.cxx
+application captEventTUT -check ../test/captEventTUT.cxx ../test/tut*.cxx
 
 # Register fragments needed to register libraries with TOADatabase.
 make_fragment register -header=register_header -trailer=register_trailer
-
-# Define a setup script to check for geometries and download them if required.
-setup_script geometry_setup
 
