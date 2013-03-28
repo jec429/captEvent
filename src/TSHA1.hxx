@@ -1,8 +1,8 @@
-#ifndef _SHA1_H_
-#define _SHA1_H_
+#ifndef _TSHA1_HXX_
+#define _TSHA1_HXX_
 
 namespace ND {
-    class SHA1;
+    class TSHA1;
 }
 
 // Implement the Secure Hashing Standard.
@@ -32,12 +32,12 @@ namespace ND {
 //     Many of the variable names in this class, especially the single
 //     character names, were used because those were the names used
 //     in the publication.
-class ND::SHA1 {
+class ND::TSHA1 {
 
 public:
 
-    SHA1();
-    virtual ~SHA1();
+    TSHA1();
+    virtual ~TSHA1();
 
     /**
      *  Re-initialize the class
@@ -58,10 +58,10 @@ public:
                 unsigned    length);
     void Input(unsigned char message_element);
     void Input(char message_element);
-    SHA1& operator<<(const char *message_array);
-    SHA1& operator<<(const unsigned char *message_array);
-    SHA1& operator<<(const char message_element);
-    SHA1& operator<<(const unsigned char message_element);
+    TSHA1& operator<<(const char *message_array);
+    TSHA1& operator<<(const unsigned char *message_array);
+    TSHA1& operator<<(const char message_element);
+    TSHA1& operator<<(const unsigned char message_element);
 
     /// Add an integer to the sha1 hash (added by CDM)
     void Input(int integer_element);
