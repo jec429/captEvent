@@ -1,0 +1,250 @@
+/*! \page reconObjects Recon Object Design and Usage
+
+The ND280 recon (reconstruction) objects have been designed to store the
+results of recon algorithms.  They also pass intermediate results between
+algorithms.  The \ref recObjRequirements are listed at the bottom of this
+page.
+
+<em>This is a work in progress, and is extremely incomplete.  Don't be
+alarmed if something is missing!  Any contributions, suggestions, and
+comments are welcome.</em>
+
+\section recIntro Prologue: Scope and Intention of the Recon Object Design
+
+This describes classes used to store the output of reconstruction
+algorithms (i.e. the output of pattern recognition, and fitting algorithms
+that operate on hits, or summaries of hit information).  This is not a
+design for a summary used during a physics analysis.  In particular, the
+scope is limited to parameters that can be inferred directly from the data
+(e.g. reconstruction objects are not expected to hold neutrino interaction
+types like "quasi-elastic").
+
+\section recDesign Design and Implementation
+
+For now, cheat and put the design and implementation stuff in one section.
+
+\subsection recObjStateDesign The TReconState Design
+
+The parameters describing the state of each reconstruction object is held
+in an associated class derived from ND::TReconState.  This has the
+advantage that the state parameters are separate from the object, and
+minimizes the conceptual confusion between the reconstruction object, and
+the state of the reconstruction object.  The primary user level state
+classes are ND::TClusterState, ND::TShowerState, ND::TTrackState,
+ND::TVertexState, and ND::TParticleState.
+
+The ND::TReconState derived classes store the parameter variables within a
+ND::TCorrValues "hypervector".  The assignment of a particular state
+parameter to an index in the ND::TCorrValues object is done as the object is
+constructed and depends on the well defined C++ constructor order.  The
+ND::TCorrValues object should not be directly used in a program.
+
+User level state classes are constructed through multiple inheritance of
+mix-in classes (Example mix-in classes are ND::TMEDepositState, and
+ND::TMPositionState).  These class inherit from ND::TReconState using
+virtual inheritance.  The mix-in classes provide the essential user
+interface for the user classes, and map parameters to specific indices in
+the ND::TCorrValues object.  The index assignment is done during object
+construction.  As much as is practical, the actual index value assigned to
+a parameter is hidden from the user.
+
+\section recObjRequirements Requirements for the Design
+
+\subsection recObjConstraints Constraints on the Design
+
+\subsubsection recObjProg Programming Constraints
+
+Recon objects are part of the oaEvent library which provides the
+core input and output for the ND280 off-line software.  As a result, this
+imposes several programming constraints.
+
+ - The oaEvent library dependencies are limited to ROOT.
+ - The oaEvent package dependencies are limited to the ROOT, nd280Policy and
+   testBase packages
+ - The objects must be suitable for output to the ND280 off-line event
+   files.
+
+In addition, the oaEvent library should not change very much so that we can
+have a stable output format.  This implies that the recon object
+classes should be relatively small, but also provide flexibility so that
+they can be adapted without requiring a new version of oaEvent.
+
+\subsubsection recObjSize Size Constraints
+
+The recon objects are summarizing hit data, and should be designed to not
+be a significant contribution to the data size.  
+
+\subsection recObjReps Recon Object Representation Requirements
+
+The types of information that must be represented by recon objects
+are split into two categories: Information shared by all objects (which
+would be expected in a base class), and information specific to particular
+types of objects.  The class specific parameters are also divided
+(relatively arbitrarily) into information about reconstructed geometric
+distributions of energy deposition (clusters, showers, and tracks), and
+information about reconstructed physics quantities (particles and
+vertices).  These distinctions are largely conceptual and are not reflected
+in the code.
+
+\subsubsection recObjOps Operations Done on a Recon Object
+
+\paragraph recObjIO Input and Output of Recon Objects
+
+The recon objects must be saved in a ND::TND280Event object.  For
+efficiency, this implies that they are derived from either TObject,
+ND::TDatum, or ND::TDataVector.  The recon object should also be available
+within the ND::TND280Event name hierarchy, and support a namespace hierarchy so
+that algorithms can store arbitrary information.
+
+\subsubsection recObjBase Information shared by all Recon Objects
+
+All recon objects must provide the following information
+
+ - The algorithm used to generate the recon object.  
+ - The status of the recon (successful, failed, &c)
+ - The quality of the recon (e.g. goodness of fit or chi-squared).
+ - The number of degrees of freedom.
+ - The parameter values (state) associated with the reconstructed object
+ - Any previous recon objects that provided input (see also \ref recObjNode).
+ - The parameter values (and associated "measurements") at each stage of
+   the fit (see also \ref recObjNode). 
+    - For the track and particle objects (see the \ref reconTrack and \ref
+      reconParticle sections), the parameter values will be the associated
+      with each intermediate position.
+    - For an incremental fit, the parameter values are associated with each
+      stage of the fit.
+    - For other objects, the parameter values will be associated with the
+      reconstruction objects that have been added to the fit.
+ - When reconstruction MC, it must be possible to determine the interactions
+   and particle trajectories that contribute to the reconstructed object.
+
+This is implemented in the base class ND::TReconBase.
+
+\subsubsection recObjGeometric Geometric representation of energy deposition
+
+The following types of energy deposition information must be represented by
+recon object.  (It needs to be made clear that each "geometric" recon
+object class will only have information for one of the categories below.)
+This information represents the position and time of energy deposits in a
+detector before the energy deposit has been associated with a particular
+particle type.  The unit of energy deposit is taken to be either MeV, or a
+quantity related to the electronics (photo-electron, pico-couloumb, &c),
+and will vary depending on the specific use case.  In addition to the
+information listed below, the covariances for each quantity must be
+included in the recon object.
+
+\paragraph reconCluster TReconCluster: Clustered Energy Deposition
+
+This is implemented by ND::TReconCluster.
+
+There needs to be a representation of a localized energy deposition
+centered at a position (i.e. a spheroidal blob of energy).  This type of
+energy deposit is described by the amount of energy, the
+central position of the deposit, and the moments of the deposition
+(deposit,position,time,the 6 moments).  It must also be possible to
+identify the specific detector hits associated with the energy cluster.
+
+\paragraph reconShower TReconShower: Directed Energy Deposition
+
+This is implemented by ND::TReconShower.
+
+There needs to be a representation of an energy deposition starting at a
+position and falling within a cone.  This is described by the total amount
+of energy deposited, the starting position of the cone, the time of the
+deposit, the direction of the cone axis, and the opening angle of the cone
+(deposit, position, time, direction, opening angle).  It must also
+be possible to identify the detector hits associated with the shower.
+
+\paragraph reconTrack TReconTrack: A Curvilinear Energy Deposition
+
+This is implemented by ND::TReconTrack.
+
+There needs to be a representation of a curvilinear energy deposit starting
+a position, and following a path.  This is described by the amount of
+energy (dEdX), the initial position , the initial time, the initial
+direction, the initial curvature, and the initial path width.  There must
+be a way to represent the path of the energy deposition between the initial
+and final ends of the deposition.  At each intermediate point, we require a
+representation of the energy deposit (dEdX), position, time, direction,
+curvature, and width.  It must be possible to identify the detector hits
+associated with the points along the track.
+
+\subsubsection recObjPhysics Reconstructed physics quantities
+
+There needs to be a way to represent reconstructed parameters of
+interactions.  The parameter covariances must be provided in addition to
+the listed parameters.  (It needs to be made clear that each "physics"
+recon object class will only have information for one of the categories
+below.)
+
+\paragraph reconVertex TReconVertex: An interaction
+
+This is implemented by ND::TReconVertex.
+
+There needs to be a representation of a reconstructed interaction vertex.
+This is described by the position, time, and particles leaving the vertex.  
+
+\paragraph reconParticle TReconParticle: A particle
+
+This is implemented by ND::TReconParticle.
+
+There needs to be a representation of a hypothesized particle leaving an
+interaction vertex.  This is described by the position, time, momentum
+direction, particle type, and charge.  The goodness of fit for the particle
+corresponds to the likelihood that the observed charge distribution.  The
+particle type should be one of a predefined set.  A possible set might be
+EM, electron, gamma, pi-zero, light-charged, heavy-charged, muon, pion, and
+proton (determined by the capabilities of the ND280 detectors).
+
+\paragraph reconMissing Other stuff that needs to be represented
+
+Do we need to have a representation for a set of hypothesized interactions or
+particles?  I think this would just be a vector of candidate TReconVertex or
+TReconParticle objects, and not a recon object.  How does a vector of
+candidate TReconParticle objects interact with a TReconVertex object?  &c.
+
+\subsection recObjState Recon Object State Representation Requirements
+
+This is implemented by classes derived from ND::TReconState.
+
+A recon object contains the state generated by the reconstruction
+algorithm.  The state object represents the value of parameters and
+covariances.  It does not contain general status information such as the
+goodness, degree's of freedom, or objects which contributed to the
+reconstruction.  The values saved in the particle states are described in
+\ref recObjGeometric and \ref recObjPhysics.
+
+- All states must be derived from a single base so that they can be saved
+  in a polymorphic array
+- Access to state parameters must be done in a type safe way.  In
+  otherwords, if a state does not contain a value for a particular
+  parameter it must not return the value of a different parameter (This
+  precludes using an array of values where the array index has meaning).  
+- If a state does not contain a value for a parameter, the missing
+  parameter should be treated as a default value with an infinite uncertainty.
+  This means that the parameter can be added to a chi-squared or likelihood
+  fit without affecting the total sum.
+- The parameters contained in the state must be indicated by the state
+  type.  
+
+\subsubsection recObjStateOps Operations On a State.
+
+All state objects must support the following operations:
+
+- Provide the parameter and convariance information
+- Calculate the distance between states in terms of log-likelihood
+  (or chi-square).
+- <add more here!>
+
+\subsection recObjNode TReconNode: States Associated with Recon Objects
+
+This is implemented by ND::TReconNode.  
+
+There must be a way to associate to associate a recon object with its
+contribution to a second recon object.  The associate consists of
+
+  - The contributing recon object.
+  - The state associated with the recon object.
+  - The goodness associated with the state.
+
+*/

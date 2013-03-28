@@ -1,0 +1,20 @@
+# -*- makefile -*-
+# 
+# A fragment used by CMT to register the library version with
+# TOADatabase.
+#
+
+${CONSTITUENT}_output = $(src)
+
+${CONSTITUENT} :: $(src)T$(package)_version.hxx $(src)T$(package)_version.cxx $(src)T$(package)_version_LinkDef.h
+	@echo "------> Register $(package) version"
+
+$(src)T$(package)_version.hxx :: $(OAEVENTROOT)/src/Tpackage_version.hxx.in
+	sed s/%PACKAGE%/$(package)/g $^ > $@
+
+$(src)T$(package)_version.cxx :: $(OAEVENTROOT)/src/Tpackage_version.cxx.in
+	sed s/%PACKAGE%/$(package)/g $^ > $@
+
+$(src)T$(package)_version_LinkDef.h :: $(OAEVENTROOT)/src/Tpackage_version_LinkDef.in
+	sed s/%PACKAGE%/$(package)/g $^ > $@
+

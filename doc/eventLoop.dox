@@ -1,0 +1,426 @@
+/*! \page eventLoop Processing ND280 Events (the Event Loop Tutorial)
+
+While ND280 events can be accessed inside of a larger framework using a
+ROOT selector and PROOF (a path towards instant gridification), as of now
+the easiest access is through an event loop using the using the
+ND::nd280EventLoop() template and a class derived from
+ND::TND280EventLoopFunction base class.  The user will then need to provide
+a short (as in four line) main program which can then be compiled and run
+using the \ref oaEvent library.  This creates creates a stand-alone
+program, and is ideal for data reduction and reconstruction programs.  The
+event loop automatically provides trigger type selection (based on the
+trigger type in the event header, see \ref triggerSelection), THandle
+memory leak detection (plus debugging), and handling of one or more output
+files.
+
+
+In the rest of this page we will explain how to write some simple example
+programs.  These examples presume that you have the oaEvent package
+installed.  You can verify that you've got a working version of oaEvent
+library by running the \c dump-event.exe program which should print a short
+usage message.  If you do not have a working copy of oaEvent, return to the
+<a
+href="http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/Workbook.html">
+Workbook documentation </a> to complete the installation.  In what follows
+we assume that you have installed the software in a directory called
+'${HOME}/nd280rep'; change this to where ever your actual software is
+installed.
+
+\htmlonly
+The documentation below will give an excellent description of how
+to make an event loop.  Once you have read the details below,
+you may want to look at the example file  
+<a href="../doc/exampleEventLoop.cxx">exampleEventLoop.cxx</a> 
+for a list of the various parts of the event loop;
+you can also examine the simple program dump-event.cxx which 
+implements the executable dump-event.exe which is mentionned above.
+\endhtmlonly
+Documentation
+for running the program can be found here \ref runningEventLoop which lists
+the dump-event.exe options.
+
+\section eventLoopStart An Event Loop Hello World
+
+Here is a slightly simplified example presented as a "Hello World".  Before
+you can start writing programs that access the ND280 event information, you
+need to create a cmt package for your work and assign a working version
+(you will need to check the CMT manual for details not covered here).
+Assume that you name your package myND280 and choose a version number v0r0,
+you create the package by running
+
+\code
+cmt create myND280 v0r0
+\endcode
+
+which creates a new sub-directory tree starting at \c myND280/v0r0 which is
+called the package root.  For the rest of the example, directories will be
+given relative to the package root (i.e. ${HOME}/nd280rep/myND280/v0r0).
+Change directory into \c myND280/v0r0/cmt and edit the \c requirements
+file.  The requirements file will start with only a single line saying
+'package myND280'; replace this with the following lines
+
+\code 
+package myND280
+
+use oaEvent
+
+macro myND280_linkopts " -L$(MYND280ROOT)/$(myND280_tag) "
+
+path_remove LD_LIBRARY_PATH "$(MYND280ROOT)"
+path_prepend LD_LIBRARY_PATH "$(MYND280ROOT)/$(myND280_tag)"
+
+path_remove PATH "$(MYND280ROOT)"
+path_prepend PATH "$(MYND280ROOT)/$(myND280_tag)"
+\endcode
+
+Before trying the rest of this example, you must go to the cmt subdirectory
+and run
+
+\code
+cmt config
+source setup.sh
+\endcode
+
+An nd280EventLoop() program consists of a user class derived from
+ND::TND280EventLoopFunction, and a very small main program.  The user class is
+only needs to implement a constructor and a destructor, neither of which
+need to do anything.  The simplest skeleton program is 
+
+\code
+#include <nd280EventLoop.hxx>
+
+class TMySimpleEventLoop: public ND::TND280EventLoopFunction {
+public:
+    TMySimpleEventLoop() {}
+    virtual ~TMySimpleEventLoop() {}
+};
+
+int main(int argc, char **argv) {
+    TMySimpleEventLoop userCode;
+    nd280EventLoop(argc,argv,userCode);
+}
+\endcode
+
+To get a working example of this program, create the \c
+${HOME}/nd280rep/myND280/v0r0/app subdirectory and add this text to the
+file \c app/mySimpleEventLoop.cxx.  Then, edit the cmt/requirements file to add
+
+\code
+application mySimpleEventLoop ../app/mySimpleEventLoop.cxx
+\endcode
+
+to the end of the file.  You should now be able to go into the cmt
+directory and run the \c make command to build an executable named
+mySimpleEventLoop.exe.  The make command will create a new subdirectory in the
+package root for processor specific files.  On my system, this directory is
+\c Linux-i686, but it could be different on yours.  That's OK since the
+setup scripted that you source above takes care of the differences.  If the
+make command was successful, you can type
+
+\code
+mySimpleEventLoop.exe
+\endcode
+
+to run the skeleton program.  It should print out a usage message telling
+you the available command options and then exit.
+
+\section eventLoopUserCode Adding User Code to the Event Loop
+
+Your version of mySimpleEventLoop.cxx is a full event loop program that can
+read event files, but it doesn't do anything yet.  To access the data, you
+need to add user code to the TMySimpleEventLoop class.  This is done by
+adding a TMySimpleEventLoop::operator()(TND280Event&) to your class.  This
+operator is called for each event in a file.  As a simple example of using
+this operator, the following TMySimpleEventLoop class dumps the event
+information for each event in a file.
+
+\code
+class TMySimpleEventLoop: public ND::TND280EventLoopFunction {
+public:
+    TMySimpleEventLoop() {}
+    virtual ~TMySimpleEventLoop() {}
+    bool operator () (ND::TND280Event& event) {
+        event.ls();
+	return true;
+    }
+};
+\endcode
+
+Add this operator to your \c mySimpleEventLoop.cxx and compile.  You can
+now run mySimpleEventLoop.exe on an event file and get tons of information.
+The TMySimpleEventLoop::operator() has access to any information in the
+event, so see the documentation for TND280Event.
+
+Most useful code will need to create histograms and do other initialization
+before the first event, and then save information after the last event.
+This can be done by overriding the
+ND::TND280EventLoopFunction::Initialize() and
+ND::TND280EventLoopFunction::Finalize() methods.  Here is an example that
+will histogram the number of hits in the P0D.
+
+\code
+
+#include <memory>
+
+// Include to get Event Loop.
+#include <nd280EventLoop.hxx>
+
+// Includes for ROOT classes
+#include <TH1F.h>
+#include <TPad.h>
+
+class TMySimpleEventLoop: public ND::TND280EventLoopFunction {
+public:
+    TMySimpleEventLoop() {}
+    virtual ~TMySimpleEventLoop() {}
+
+    void Initialize() {
+        fP0DHits = new TH1F("p0dHits", "Hits in the P0D",10000,0,10000);
+    }
+
+    bool operator () (ND::TND280Event& event) {
+
+        // Get the list of P0D hits from the event.
+	ND::THandle<ND::THitSelection> p0d(event.GetHitSelection("p0d"));
+        
+	// Check if this hit selection exists.  Critical!
+	if(p0d){
+
+            // Get the number of P0D hits
+            int number_hits = p0d->size();
+                        
+            // Fill the histogram
+            fP0DHits->Fill(number_hits);
+
+        }	
+
+	return true;
+    }
+
+    // Called at least once.  If multiple file are open, it will be called
+    // for each one.   Notice there are two forms...
+    void Finalize(ND::TND280Output * const output) {
+        fP0DHits->Draw();
+        gPad->Print("p0dHits.eps");
+    }
+
+private:
+    TH1F* fP0DHits;
+};
+
+int main(int argc, char **argv) {
+    TMySimpleEventLoop userCode;
+    nd280EventLoop(argc,argv,userCode);
+}
+
+\endcode
+
+This program can now be run as above 
+
+\code
+mySimpleEventLoop.exe input-file.root
+\endcode
+
+and will produce a postscript file plotting a histogram of the number of
+hits in the P0D.
+
+\section eventLoopFilter Filtering Events, or Event Selection
+
+A typical use of an event loop is to read through an event file and save
+events which match a particular set of criteria to an output file.  This is
+trivially done using a ND::TND280EventLoopFunction.  The first step is open an
+output file while running the \c mySimpleEventLoop.exe program.  This is done by
+adding the \c "-o" option to the command line.
+
+\code
+mySimpleEventLoop.exe input-file.root -o output-file.root
+\endcode
+
+When an output file is open, if a user's TMySimpleEventLoop::operator()
+returns true then the event will be saved to the file.  Events can be
+filter out of the file by returning false from
+TMySimpleEventLoop::operator().
+
+\section eventLoopSaveTree Saving an Analysis Tree (An NTUPLE)
+
+Many programs that want to read through an event file will need to produce
+a TTree summarizing the data.  This is done in much the same way as if you
+are writing events to an output file, except your
+TMySimpleEventLoop::operator() should return false so that events are not
+saved (If you return true, you will get your tree, and the events).  To
+save a TTree in the output file, you must create the tree in your
+TMySimpleEventLoop::Initialize() method, and declare the branches that will
+be saved.  The branch variables should be declare as private members of
+TMySimpleEventLoop.  The code below uses the same information we looked at
+before (number of hits in P0D), but stores it in the TTree.
+
+\code
+#include <nd280EventLoop.hxx>
+#include <memory>
+#include <TTree.h>
+
+class TMySimpleEventLoop: public ND::TND280EventLoopFunction {
+public:
+    TMySimpleEventLoop() {}
+    virtual ~TMySimpleEventLoop() {}
+
+    virtual void Initialize(void) {
+        fOutputTree = new TTree("userLoopTree","A simple summary tree");
+        fOutputTree->Branch("NP0DHits", &fNP0DHits, "NP0DHits/I");
+    }
+
+    bool operator () (ND::TND280Event& event) {
+       // Get the P0D hits
+       ND::THandle<ND::THitSelection> p0d(event.GetHitSelection("p0d"));
+       // Update Tree values
+       if (p0d) fNP0DHits = p0d->size();
+       else  fNP0DHits = 0;
+       fOutputTree->Fill();
+        return false; // Don't save events...
+    }
+ 
+    // Called if the output file is open.  Notice there are two forms...
+    void Finalize(ND::TND280Output& output) {
+        fOutputTree->Write();    
+    }
+
+private:
+    TTree* fOutputTree;
+    int    fNP0DHits;
+};
+
+int main(int argc, char **argv) {
+    TMySimpleEventLoop userCode;
+    nd280EventLoop(argc,argv,userCode);
+}
+\endcode 
+
+You can start your event loop to write a tree from treeEventLoop.cxx found
+in the oaEvent documentation directory.
+
+\htmlonly
+There is skeleton code available in 
+<a href="../doc/treeEventLoop.cxx">treeEventLoop.cxx</a> that can
+be copied to a local directory and modified.  If you use this code, do a
+global search and replace on "UserLoop", changing it to some more useful
+name.  That will help keep the doxygen documentation useful.
+\endhtmlonly
+
+\section eventLoopMultiOutput Writing Multiple Output Files
+
+Occasionally, events from a set of input files will need to be written into
+multiple output files.  An example might be splitting the data into
+different trigger types, or saving a separate file of rejected events for
+debugging.  This can be done by defining the TND280EventLoop::Process()
+method.  As a trivial example, here is a program to save all beam spill 
+triggers, pedestal triggers into a separate file, and reject all other
+trigger types.  For a better way to do this see, \ref triggerSelection.
+
+\code
+#include <nd280EventLoop.hxx>
+
+class TMySimpleEventLoop: public ND::TND280EventLoopFunction {
+public:
+    TMySimpleEventLoop() {}
+    virtual ~TMySimpleEventLoop() {}
+
+    int Process () (ND::TND280Event& event, int availableOutputs) {
+    	if (event.CheckTrigger(ND::Trigger::kBeamSpill)) return 0;
+    	if (event.CheckTrigger(ND::Trigger::kPedestal)) return 1;
+        return -1;
+    }
+};
+
+int main(int argc, char **argv) {
+    TMySimpleEventLoop userCode;
+    nd280EventLoop(argc,argv,userCode);
+}
+\endcode 
+
+The output files are indexed from zero, so 0 is the first file, 1 is the
+second file and so on.  If a negative value or an index greater than the
+number of available output files is returned, then the event will not be
+saved.  You can start your event loop to process multiple files from
+multiEventLoop.cxx found in the oaEvent documentation directory.
+
+After building this program, it can be run from the command line as
+
+\code
+mySimpleEventLoop.exe input-file.root -o beam-spill.root -o pedestal.root
+\endcode
+
+Where the beam spill events will be saved into beam-spill.root, the
+pedestal events will be saved into pedestal.root, and other events are
+rejected.  Notice the difference from the previous command lines.  This
+command line specifies multiple output files.
+
+\section runningEventLoop Command Line Options for an Event Loop
+
+These are the command line options for the dump-event.exe program.  All
+event loops will share these options:
+
+\verbatim
+usage: dump-event.exe [options] [input-file] ...
+
+Options:
+    -o <file>         Set the name of an output file.
+                      Multiple output files can be provided.
+    -a                Read all events
+    -c <file>         Set the logging config file name.
+    -d                Increase the debug level.
+    -G                Force a geometry file.
+    -g                Force the geometry to be saved.
+    -H                Debug THandle objects
+    -m                MIDAS input file
+    -n <cnt>          Only read <cnt> events [Default: 1]
+    -r                ND280 ROOT file
+    -s <cnt>          Skip <cnt> events
+    -t [bpTPEFecC]    Only accept these triggers.
+                         b  Beam triggers
+                         p  Pedestal/noise triggers
+                         T  TPC laser triggers
+                         P  P0D light injection triggers
+                         E  ECal LED triggers
+                         F  FGD LED triggers
+                         e  Electronics calibration triggers
+                         c  TFB cosmic ray triggers
+                         C  FGD cosmic ray triggers
+    -v                Increase the verbosity.
+    -O <opt>[=<val>]  Set an option for the user code
+\endverbatim
+
+\subsection triggerSelection Selecting different trigger types
+
+The event loop provides command line options to select different trigger
+types.  By default, the event loop calls the user code for any type of
+event, but if the "-t" option is used, user code will only be called for
+the requested trigger types.  The available trigger bits are "b", "p", "T",
+"P", "E", "F", "e", "c", and "C".  The trigger option can be used multiple
+times, and may be called with multiple trigger types (e.g. "-t bcC" to
+accept beam, and cosmic triggers).  The trigger bit definitions are above
+in \ref runningEventLoop. 
+
+*/
+
+/*! \file exampleEventLoop.cxx
+There is skeleton code available 
+\htmlonly
+<a href="../doc/exampleEventLoop.cxx">(../doc/exampleEventLoop.cxx)</a> 
+\endhtmlonly
+that can be copied to a local directory and modified.  If you use this
+code, do a global search and replace on "UserLoop", changing it to some
+more useful name.  That will help keep the doxygen documentation useful.
+*/
+
+
+/*! \file treeEventLoop.cxx
+There is skeleton code available 
+\htmlonly
+<a href="../doc/treeEventLoop.cxx">(../doc/treeEventLoop.cxx)</a> 
+\endhtmlonly
+of a ND::TND280EventLoopFunction that creates and saves an TTree to the output
+file without saving events.  If you use this code, do a global search and
+replace on "UserLoop", changing it to some more useful name.  That will
+help keep the doxygen documentation useful. 
+*/
+

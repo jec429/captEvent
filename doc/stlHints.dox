@@ -1,0 +1,151 @@
+// This is not a real header file, but is here to trick Doxygen in to
+// providing a little bit of documentation for the standard template
+// library base classes.  This is not intended as a replacement for a C++
+// reference manual
+
+namespace std {
+
+    /// The std::vector template is part of the C++ standard library and
+    /// provides a variable length array.  This documentation is part of the
+    /// ND280 software, and is not intended as a replacement for the C++
+    /// reference manual.  If you are not familiar with std::vector, you \em
+    /// need to get a C++ tutorial and learn all about it.  It's one of those
+    /// things you must understand to program in C++.  The documentation
+    /// provided here is a simplification of the actual class.
+    template <class T>
+    class vector {
+    public:
+        typedef std::random_iterator<T> iterator;
+	typedef std::const_random_iterator<T> const_iterator;
+        typedef std::random_reverse_iterator<T> reverse_iterator;
+	typedef std::const_random_reverse_iterator<T> const_reverse_iterator;
+
+        /// A reference to the contained class.
+	typedef T& reference;
+	typedef const T& const_reference;
+
+	/// Returns an iterator pointing to the beginning of the vector.
+	iterator begin();
+	const_iterator begin() const;
+
+	/// Returns an iterator pointing to the end of the vector.
+	iterator end();
+	const_iterator end() const;
+
+	/// Returns a reverse_iterator pointing to the beginning of the
+	/// reversed vector. 
+	reverse_iterator rbegin();
+	const_reverse_iterator rbegin() const;
+
+	/// Returns a reverse_iterator pointing to the end of the reversed
+	/// vector.
+	reverse_iterator rend();
+	const_reverse_iterator rend() const;
+
+        /// Returns the number of elements in the vector.
+	size_type size() const;
+
+        /// Returns true if the vector is empty.
+	bool empty() const;
+
+        /// Return a reference to the n'th element of the vector.
+	reference operator [] (size_type n);
+	const_reference operator [] (size_type n) const;
+
+        /// Return a reference to the first element of the vector.
+	reference front();
+
+        /// Return a reference to the last element of the vector.
+	reference back();
+
+        /// Insert a new element at the end of the vector.
+        void push_back(const T& object);
+
+        /// Remove the last element of the vector.
+	void pop_back();
+
+        /// Erases all of the elements of a vector BUT DOES NOT DELETE
+        /// POINTERS.
+	void clear();
+
+        /// Erase an element of a vector, but does not delete pointers.
+	void erase(iterator pos);
+    };
+
+    /// The std::map template is part of the C++ standard library and provides
+    /// an "associative array".  This documentation is part of the ND280
+    /// software, and is not intended as a replacement for the C++ reference
+    /// manual.  If you are not familiar with std::map, take a looke at a C++
+    /// tutorial and learn all about it.  It's one of those things that is
+    /// very helpful to understand while working in C++.  The documentation
+    /// provided here is a simplification of the actual class.
+    template<class K, class T>
+    class map {
+    public:
+        typedef std::random_iterator< std::pair<K,T> > iterator;
+	typedef std::const_random_iterator< std::pair<K,T> > const_iterator;
+        typedef std::random_reverse_iterator< std::pair<K,T> >
+            reverse_iterator;
+	typedef std::const_random_reverse_iterator< std::pair<K,T> > 
+            const_reverse_iterator;
+
+	/// Returns an iterator pointing to the beginning of the map.
+	iterator begin();
+	const_iterator begin() const;
+
+	/// Returns an iterator pointing to the end of the map.
+	iterator end();
+	const_iterator end() const;
+
+	/// Returns a reverse_iterator pointing to the beginning of the
+	/// reversed map. 
+	reverse_iterator rbegin();
+	const_reverse_iterator rbegin() const;
+
+	/// Returns a reverse_iterator pointing to the end of the reversed
+	/// map.
+	reverse_iterator rend();
+	const_reverse_iterator rend() const;
+
+        /// Returns the number of elements in the map.
+	size_type size() const;
+
+        /// Returns true if the map is empty.
+	bool empty() const;
+
+        /// Erases all of the elements of a map BUT DOES NOT DELETE
+        /// POINTERS.
+	void clear();
+
+        /// Find the first element whose key is k, and return end() if the key
+        /// is not found.
+        iterator find(const K& k);
+
+        /// Erase an element of a map, but does not delete pointers.
+	void erase(iterator pos);
+
+        /// Insert an element into the map.
+        iterator insert(const T& value);
+
+        /// Returns a reference to the object that is associated with a
+        /// particular key. If the map does not already contain such an
+        /// object, operator[] inserts the default object T().
+        reference operator [] (const K& k);
+    };
+
+    /// A std::pair is a pair of values used (among other places) in std::map.
+    /// This documentation is part of the ND280 software, and is not intended
+    /// as a replacement for the C++ reference manual.  If you are not
+    /// familiar with std::pair, take a looke at a C++ tutorial and learn all
+    /// about it.  It's one of those things that is very helpful to understand
+    /// while working in C++.  The documentation provided here is a
+    /// simplification of the actual class.
+    template <class K, class T> 
+    class pair {
+    public:
+        /// The value of the first object which is usually the key.
+        K first;
+        /// The value of the second object which is usually the data.
+        T second;
+    };
+};

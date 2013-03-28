@@ -1,0 +1,220 @@
+#include <iostream>
+#include <tut.h>
+
+#include "THandle.hxx"
+#include "TReconState.hxx"
+#include "TCorrValues.hxx"
+#include "TClusterState.hxx"
+#include "TShowerState.hxx"
+#include "TTrackState.hxx"
+#include "TPIDState.hxx"
+#include "TVertexState.hxx"
+
+namespace tut {
+    struct baseTReconState {
+        baseTReconState() {
+            // Run before each test.
+        }
+        ~baseTReconState() {
+            // Run after each test.
+        }
+    };
+
+    // Declare the test
+    typedef test_group<baseTReconState>::object testTReconState;
+    test_group<baseTReconState> groupTReconState("TReconState");
+
+    // Test the default constructor and destructor.
+    template<> template<>
+    void testTReconState::test<1> () {
+        ND::TClusterState v;
+    }
+
+    // Test the TClusterState projection operator.
+    template<> template<>
+    void testTReconState::test<2> () {
+        ND::THandle<ND::TClusterState> s(new ND::TClusterState);
+
+        ensure_greaterthan("TClusterState dimensionality",s->GetDimensions(),4);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected cluster state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ND::TCorrValues v = ND::TClusterState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Cluster state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Projected cluster state covariance", 
+                            v.GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+    }
+
+    // Test the TShowerState projection operator.
+    template<> template<>
+    void testTReconState::test<3> () {
+        ND::THandle<ND::TShowerState> s(new ND::TShowerState);
+
+        ensure_greaterthan("TShowerState dimensionality",s->GetDimensions(),4);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected shower state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ND::TCorrValues v = ND::TShowerState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Shower state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Projected shower state covariance", 
+                            v.GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+    }
+
+    // Test the TTrackState projection operator.
+    template<> template<>
+    void testTReconState::test<4> () {
+        ND::THandle<ND::TTrackState> s(new ND::TTrackState);
+
+        ensure_greaterthan("TTrackState dimensionality",s->GetDimensions(),4);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected track state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ND::TCorrValues v = ND::TTrackState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Track state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Projected track state covariance", 
+                            v.GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+    }
+
+    // Test the TVertexState projection operator.
+    template<> template<>
+    void testTReconState::test<5> () {
+        ND::THandle<ND::TVertexState> s(new ND::TVertexState);
+
+        ensure_greaterthan("TVertexState dimensionality",s->GetDimensions(),3);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected vertex state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ND::TCorrValues v = ND::TVertexState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Vertex state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Projected vertex state covariance", 
+                            v.GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+    }
+
+    // Test the TPIDState projection operator.
+    template<> template<>
+    void testTReconState::test<6> () {
+        ND::THandle<ND::TPIDState> s(new ND::TPIDState);
+
+        ensure_greaterthan("TPIDState dimensionality",s->GetDimensions(),4);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected PID state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ND::TCorrValues v = ND::TPIDState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("PID state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Projected PID state covariance", 
+                            v.GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+    }
+
+    // Test the TVertexState projection operator.
+    template<> template<>
+    void testTReconState::test<7> () {
+        ND::THandle<ND::TVertexState> s(new ND::TVertexState);
+
+        ensure_greaterthan("TVertexState dimensionality",s->GetDimensions(),3);
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            s->SetCovarianceValue(i,i,double(i+1));
+        }
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Expected vertex state covariance", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+ 
+        ND::TCorrValues v = ND::TTrackState::ProjectState(s);
+
+        for (int i = 0; i<s->GetDimensions(); ++i) {
+            ensure_distance("Vertex state covariance after projection", 
+                            s->GetCovarianceValue(i,i),
+                            double(i+1), 0.0001);
+        }
+
+        ensure("Vertex as Track -- EDeposit",v.IsFree(0));
+        ensure("Vertex as Track -- X",!v.IsFree(1));
+        ensure("Vertex as Track -- Y",!v.IsFree(2));
+        ensure("Vertex as Track -- Z",!v.IsFree(3));
+        ensure("Vertex as Track -- T",!v.IsFree(4));
+        ensure("Vertex as Track -- DX",v.IsFree(5));
+        ensure("Vertex as Track -- DY",v.IsFree(6));
+        ensure("Vertex as Track -- DZ",v.IsFree(7));
+        ensure("Vertex as Track -- Curvature",v.IsFree(8));
+        ensure("Vertex as Track -- Width 1",v.IsFree(9));
+        ensure("Vertex as Track -- Width 2",v.IsFree(10));
+
+    }
+
+};

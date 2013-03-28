@@ -1,0 +1,80 @@
+package oaEvent
+version v8r10
+# This package provides the core I/O and support functions for all of the
+# ND280 software and must be kept stable.  As much as possible, backward
+# compatibility must be maintained.  Please contact the package manager
+# before making changes.  In particular, contact the package manager
+# before designing (or especially implementing) any structural changes so
+# we can make sure that all of the impacts of the change are understood by
+# the entire group.  A new stable version should be created before
+# significant changes are made.  Email enquiries should be directed to
+# t2k-nd280-software@nngroup.physics.sunysb.edu
+#
+# Changes in oaEvent affect the output format of events.  Incompatible
+# changes can make older data unreadable.
+#
+manager Clark McGrew <clark.mcgrew@sunysb.edu>
+author t2k-nd280-software@nngroup.physics.sunysb.edu
+
+branches cmt src app dict
+
+# The packages used by this one.
+use nd280Policy 
+use ROOT 
+use testBase
+
+# Build methods to include.
+document version version *.cxx *.hxx *_LinkDef.h
+document register register 
+document rootcint rootcint *.hxx *_LinkDef.h
+
+# Install the geometry file.
+macro install_dir $(OAEVENTROOT)/$(oaEvent_tag)
+document installer installer ../scripts/GEOMETRY.LIST
+
+# Build the documentation.
+document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
+
+# The library to build
+library oaEvent *.cxx *.hxx ../dict/*.cxx
+
+# Build information used by packages that use this one.
+macro oaEvent_cppflags " -DOAEVENT_USED "
+macro oaEvent_linkopts " -L$(OAEVENTROOT)/$(oaEvent_tag) -loaEvent "
+macro oaEvent_stamps " $(oaEventstamp)"
+
+# The paths to find this library and it's executables
+path_remove LD_LIBRARY_PATH "$(OAEVENTROOT)" 
+path_prepend LD_LIBRARY_PATH "$(OAEVENTROOT)/$(oaEvent_tag)"
+
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(OAEVENTROOT)"   
+path_prepend DYLD_LIBRARY_PATH "" \ 
+	    Darwin	    "$(OAEVENTROOT)/$(oaEvent_tag)"
+
+path_remove PATH "$(OAEVENTROOT)"
+path_prepend PATH "$(OAEVENTROOT)/$(oaEvent_tag)" \
+      WIN32      "$(OAEVENTROOT)/$(oaEvent_tag)" 
+
+path_append PATH "$(OAEVENTROOT)/scripts"
+
+# Applications to build
+application dump-event ../app/dump-event.cxx
+application plot-event ../app/plot-event.cxx 
+application strip-geom ../app/strip-geom.cxx 
+application check-fits ../app/check-fits.cxx
+application validate-geometry ../app/validate-geometry.cxx
+
+# Test applications to build
+application oaEventTUT -check ../test/oaEventTUT.cxx ../test/tut*.cxx
+application testSplit -group=test ../test/testSplit.cxx
+application testGeomId -group=test ../test/testGeomId.cxx
+application testND280Log -group=test ../test/testND280Log.cxx
+application testSHA1 -group=test ../test/testSHA1.cxx
+
+# Register fragments needed to register libraries with TOADatabase.
+make_fragment register -header=register_header -trailer=register_trailer
+
+# Define a setup script to check for geometries and download them if required.
+setup_script geometry_setup
+

@@ -1,0 +1,53 @@
+#! /bin/bash
+#
+# Download the geometries from repo.nd280.org/nd280files/geometry using
+# wget.  This is run without arguments.
+
+# The location of the input files.
+if [ ${GEOMFILES}x == x ]; then
+    GEOMFILES=http://repo.nd280.org/nd280files/geometry/
+fi
+
+# This directory should ALWAYS exist, but check anyway.
+if [ ! -d ${OAEVENTROOT} ]; then
+    echo nd280-get-geometry: oaEvent directory is missing!
+    echo    where is: ${OAEVENTROOT}
+    exit 1
+fi
+cd ${OAEVENTROOT}
+
+# This directory won't exist when the package is checkout the first  time.
+if [ ! -d ${OAEVENTROOT}/${OAEVENTCONFIG} ]; then
+    mkdir ${OAEVENTCONFIG}
+fi
+cd ${OAEVENTCONFIG}
+
+# Get an index of geometry files.
+wget -q -T 5 -t 2 -S -N ${GEOMFILES} -o /dev/null
+
+if [ ! -f index.html ]; then
+    echo nd280-get-geometry: Cannot check for new geometries.
+    exit 1
+fi
+
+# Build a list of the files download.
+cat index.html | \
+    egrep 'geom-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}' | \
+    sed 's/<tr>.*<a[^>]*>'// | \
+    sed 's/<.*//' | \
+    cat > geometry.index
+
+# Remove the index.
+rm index.html
+
+# Get the files.
+for file in `cat geometry.index`; do
+    if  [ ! -f ${file} ]; then
+	wget -nv -T 15 -t 1 -S -N -c ${GEOMFILES}/$file 2>&1 | grep URL
+    fi
+done
+
+# Get the geometry context map.
+# wget -nv -S -N -c ${GEOMFILES}/GEOMETRY.LIST -o /dev/null
+
+echo Geometries up to date

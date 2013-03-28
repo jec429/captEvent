@@ -1,0 +1,125 @@
+/*! \page understandingTDatum Understanding the ND280 Event Structure
+
+ND280 event data is stored in a tree of named objects and accessed using
+the object name.  If you are running on a system where the ND280 software
+is already installed, you can find out the objects that are saved in an
+event file using the program \c dump-event.exe
+
+The ND280 event data structure is based on a system rather similar to the
+ROOT TFolder or TDirectory classes.  What differs is that the ND280
+structure doesn't depend on global variables to record the current location
+within a data structure, and each object contained within a data structure
+records the event to which it belongs.  Our event structure is implemented
+using the base class, TDataVector.  
+
+The TDataVector class can be thought of as a map or a dictionary (similar
+to the STL map).  It owns any object that it contains, and is designed to
+work with the ROOT browser.  Most classes saved in an event will be derived
+from a TDataVector.  Users will often interact with a TDataVector since it
+is the base class for TND280Event, TAlgorithmResult, and TOATrack.
+
+The TDatum class is a light weight extension of the ROOT TNamed class that
+provides the lowest level support for the ND280 data structure.  It is the
+base class for (almost) all other ND280 classes.  While TDatum is almost
+ubiquitous our code, most of your interaction will be through the
+TDataVector class which is derived from TDatum.
+
+Events are saved in a root TTree object, and can be accessed using any of
+the normal ROOT methods.  A typical ND280 event file will contain (at
+least) two objects, ND280Events, and ND280Geometry.  The first object is a
+TTree with a single branch containing all of the events in the file.  There
+is a small amount of bookkeeping required to correctly read events from a
+file, mostly involving keeping the TOADatabase synchronized with the
+event.  This can be handled by reading the ND280Events TTree object using
+the TND280Input class.  
+
+\section accessingTDatum The TND280Event Has, Get, and Use methods
+
+Information in an event is accessed using the TDatum::Has(), TDatum::Get(),
+and TDatum::Use() methods. These methods are actually member templates and
+provide type safety, in fact, they can catch many errors at compilation
+time.  
+
+\code
+// Access using a pointer that may be NULL.
+ND::THandle<ND::TAlgorithmResult> sbcat = event.Get<ND::TAlgorithmResult>("fits/sbCATxz");
+if (sbcat) {
+   std::cout << "result found" << std::endl;
+}
+
+// Access using a reference and an exception trap.
+try {
+    ND::TAlgorithmResult& sbcat = event.Use<ND::TAlgorithmResult>("fits/sbCATxz");
+    std::cout << "result found" << std::endl;
+}
+catch (ENoSuchElement) {
+    std::cout << "result not found" << std::endl;
+}
+
+// Access by first checking that the object exists and then using a reference.
+if (event.Has<ND::TAlgorithmResult>("fits/sbCATxz")) {
+    ND::TAlgorithmResult& sbcat = event.Use<ND::TAlgorithmResult>("fits/sbCATxz");
+    std::cout << "result found" << std::endl;
+}
+
+// Finally, there is a convenience method to access algorithm results.
+// Check the documentation for other classes.  This returns a pointer
+// result, and is otherwise the same as the TDatum::Get example.  
+ND::THandle<ND::TAlgorithmResult> sbcat = event.GetFit("sbCATxz");
+if (sbcat) {
+    std::cout << "result found" << std::endl;
+}
+\endcode
+
+\section designRequirementsTDatum Design of the Event Structure
+
+The ND280 event structure was developed according to several design
+criteria.  
+
+-# Access to data within an event must be simple.  While the learning curve
+   can't be flat, it shouldn't be very steep.
+-# The event structure must be flexible.  It is very clear that the data
+   saved within an event will evolve over the lifetime of the
+   experiment. This must be designed into the event structure. 
+-# Data access must explicitly provide type safety.  Users must not be
+   expected to explicitly down-cast pointers.  
+-# Memory management must be handled in a robust manner.
+-# The event structure must be light weight.  The basic code should be
+   relatively small.  The I/O should be relatively fast.  The size overhead
+   should be relatively small.
+-# Event I/O must have minimal dependence on external libraries.  We want
+   our format to be stable over almost a decade.  That rules out depending
+   on large bodies of external code.
+
+The first requirement implies that the data structure should rely heavily
+on an existing, heavily used package.  Several packages were considered,
+but the only reasonable solutions were to base our event format on either
+ROOT or GAUDI.  ROOT is a very attractive system since it provides great
+flexibility, has an active user community, and excellent documentation.
+GAUDI also has many attractive features, but the user community isn't as
+active, and the documentation is less comprehensive than that of ROOT.
+
+Type safety, and robust memory management (requirements three and four) are
+very important requirements in any large software system.  Unfortunately,
+ROOT provides little type safety since it requires on explicit casting, or
+the heavy use of dynamic cast.  It also has a tricky set of memory
+management rules.  The ROOT community recognizes these significant
+problems, and they are being addressed by the adoption of well know C++
+template based coding techniques.
+
+It is difficult to describe to ROOT as lightweight, but GAUDI is intended as a
+layer *on top* of ROOT.  One of GAUDI's original goals is to hide the
+underlying data storage format.  However, after those design goals were
+developed, ROOT has become the clear "best in class" for small to medium
+sized experiment data storage.  ROOT I/O is fast, and has a relatively
+small size overhead.
+
+\subsection designTDatum The ND280 TDatum and TDataVector classes
+
+The event data structure design has been address by creating two small base
+classes (Less than 450 lines of code, 300 lines of comments) which extend
+the capabilities of the ROOT TNamed class.  These base classes introduce
+approximately 8 bytes of overhead for each datum in an event.  They provide
+type safety and a specific memory management policy.
+
+*/

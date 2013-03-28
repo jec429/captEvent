@@ -1,0 +1,12 @@
+# -*- makefile -*-
+# 
+# A fragment used by CMT to register the library with TOADatabase.
+#
+
+clean :: registerclean
+
+registerclean :: 
+	/bin/rm $(src)T$(package)_version.hxx || true
+	/bin/rm $(src)T$(package)_version.cxx || true
+	/bin/rm $(src)T$(package)_version_LinkDef.h || true
+
