@@ -1,0 +1,18 @@
+# -*- makefile -*-
+# 
+# Start of the linkdef_header fragment used by CMT to build the ROOT
+# dictionary files.
+#
+dict = $(bin)dict/
+
+${CONSTITUENT}_output = $(dict)
+${CONSTITUENT}stamp = $(bin)${CONSTITUENT}.stamp
+${CONSTITUENT}shstamp = $(bin)${CONSTITUENT}.shstamp
+
+${CONSTITUENT} :: $(filter %_LinkDef.${CONSTITUENT},${OBJS})
+	@echo "------> ${CONSTITUENT} ok"
+
+# 
+# End of the linkdef_header fragment.
+#
+

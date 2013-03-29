@@ -14,31 +14,32 @@ package captEvent
 #
 author Clark McGrew <clark.mcgrew@stonybrook.edu>
 
-branches cmt src app dict
-
-# The packages used by this one.
-use captainPolicy 
+# The packages used by this one.  Only direct dependencies should be
+# included. 
 use ROOT * LCG_Interfaces
+use captainPolicy 
 use testBase
 
-# Build methods to include.
+# Build the version file.
 document version version *.cxx *.hxx *_LinkDef.h
-document register register 
-document rootcint rootcint *.hxx *_LinkDef.h
 
-# Install the geometry file.
-macro install_dir $(CAPTEVENTROOT)/$(captEvent_tag)
+# Build the registration prototype.
+document register register 
+
+# Build all of the ROOT dictionaries.
+document linkdef linkdef *.hxx *_LinkDef.h
 
 # Build the documentation.
 document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
 
 # The library to build
-library captEvent *.cxx *.hxx ../dict/*.cxx
+library captEvent bogusVariable=helloBogus *.cxx *.hxx $(bin)dict/*.cxx
+dependency target=captEvent depends=linkdef
 
 # Build information used by packages that use this one.
 macro captEvent_cppflags " -DCAPTEVENT_USED "
 macro captEvent_linkopts " -L$(CAPTEVENTROOT)/$(captEvent_tag) -lcaptEvent "
-macro captEvent_stamps " $(captEventstamp)"
+macro captEvent_stamps " $(captEventstamp) $(linkdefstamp) "
 
 # The paths to find this library and it's executables
 path_remove LD_LIBRARY_PATH "$(CAPTEVENTROOT)" 
@@ -50,12 +51,18 @@ path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)" \
 
 # Applications to build
 application dump-event ../app/dump-event.cxx
+dependency target=dump-event depends=captEvent
+
 application strip-geom ../app/strip-geom.cxx 
+dependency target=strip-geom depends=captEvent
+
 application validate-geometry ../app/validate-geometry.cxx
+dependency target=validate-geometry depends=captEvent
 
 # Test applications to build
 application captEventTUT -check ../test/captEventTUT.cxx ../test/tut*.cxx
+dependency target=captEventTUT depends=captEvent
 
 # Register fragments needed to register libraries with TOADatabase.
 make_fragment register -header=register_header -trailer=register_trailer
-
+make_fragment linkdef -header=linkdef_header -trailer=linkdef_trailer 

@@ -1,0 +1,16 @@
+# -*- makefile -*-
+# 
+# Start of the linkdef_trailer fragment used by CMT to build the ROOT
+# dictionary files.
+#
+
+clean :: ${CONSTITUENT}clean
+	@cd .
+
+${CONSTITUENT}clean ::
+	$(cleanup_echo) $(dict)
+	-$(cleanup_silent) rm -rf $(dict)
+
+#
+# End of the linkdef_trailer fragment.
+#
