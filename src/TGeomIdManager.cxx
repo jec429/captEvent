@@ -25,11 +25,6 @@
 #include "TND280Event.hxx"
 #include "TGeomIdFinder.hxx"
 #include "TP0DIdFinder.hxx"
-#include "TTPCIdFinder.hxx"
-#include "TFGDIdFinder.hxx"
-#include "TECalIdFinder.hxx"
-#include "TSMRDIdFinder.hxx"
-#include "TIngridIdFinder.hxx"
 
 ND::TGeomIdManager::TGeomIdManager() {
     ResetGeometry();
@@ -560,11 +555,6 @@ void ND::TGeomIdManager::BuildGeomIdMap() {
         fFinders.clear();
     }
     fFinders.push_back(new TP0DIdFinder());
-    fFinders.push_back(new TTPCIdFinder());
-    fFinders.push_back(new TFGDIdFinder());
-    fFinders.push_back(new TECalIdFinder());
-    fFinders.push_back(new TSMRDIdFinder());
-    fFinders.push_back(new TIngridIdFinder());
 
     // Initialize to begin recursion.
     std::vector<std::string> names; names.reserve(20);

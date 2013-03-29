@@ -12,7 +12,7 @@ class TGeoManager;
 
 #include "EoaCore.hxx"
 #include "TGeometryId.hxx"
-#include "SHA1.hxx"
+#include "TSHA1.hxx"
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
 #include "TND280Context.hxx"
@@ -319,7 +319,7 @@ private:
 
     /// The class to calculate the SHA1 message digest.  This is used in
     /// RecurseHashCode.
-    ND::SHA1 fSHA1;
+    ND::TSHA1 fSHA1;
 
     /// A vector of TGeomIdFinder objects.
     std::vector<TGeomIdFinder*> fFinders;

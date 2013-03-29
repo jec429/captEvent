@@ -31,7 +31,7 @@
 #include "TEventFolder.hxx"
 #include "TDigitManager.hxx"
 #include "TGeomIdManager.hxx"
-#include "SHA1.hxx"
+#include "TSHA1.hxx"
 
 ClassImp(ND::TOADatabase);
 
@@ -335,7 +335,7 @@ ND::TAlignmentId ND::TOADatabase::ApplyAlignmentLookup(
     // empty string.
     if (!id.Valid()) {
         ND280NamedDebug("Geometry","No alignment id, so create an empty one");
-        SHA1 sha;
+        TSHA1 sha;
         unsigned int message[5];
         if (sha.Result(message)) {
             id = TAlignmentId(message);

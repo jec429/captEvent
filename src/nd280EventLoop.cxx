@@ -14,7 +14,6 @@
 #include "EoaCore.hxx"
 
 #include "TND280Event.hxx"
-#include "TMidasFile.hxx"
 #include "TND280Input.hxx"
 #include "TND280Output.hxx"
 #include "TOADatabase.hxx"
@@ -70,8 +69,6 @@ namespace {
         std::cout << "    -H                Debug THandle (slow)"
                   << std::endl;
         
-        std::cout << "    -m                MIDAS input file"
-                  << std::endl;
 
         std::cout << "    -n <cnt>          Only read <cnt> events";
         if (readCount>0) std::cout << "  [Default: " << readCount << "]";
@@ -86,27 +83,6 @@ namespace {
         std::cout << "    -s <cnt>          Skip <cnt> events"
                   << std::endl;
         
-        std::cout << "    -t [bpTPEFecC]    Only accept these triggers"
-                  << std::endl
-                  << "                        b  Beam triggers"
-                  << std::endl
-                  << "                        p  Pedestal/noise triggers"
-                  << std::endl
-                  << "                        T  TPC laser triggers"
-                  << std::endl
-                  << "                        P P0D light injection triggers"
-                  << std::endl
-                  << "                        E  ECal LED triggers"
-                  << std::endl
-                  << "                        F  FGD LED triggers"
-                  << std::endl
-                  << "                        e  Electronics calib triggers"
-                  << std::endl
-                  << "                        c  TFB cosmic ray triggers"
-                  << std::endl
-                  << "                        C  FGD cosmic ray triggers"
-                  << std::endl;
-
         std::cout << "    -u                Log the memory and CPU usage"
                   << std::endl;
 
@@ -155,12 +131,11 @@ int ND::nd280EventLoop(int argc, char** argv,
 
     enum {
         kRootFile,
-        kMIDASFile
     } fileType = kRootFile;
 
     // Process the options.
     for (;;) {
-        int c = getopt(argc, argv, "ac:dD:f:G:gHmn:o:O:qrs:t:uvV:");
+        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qrs:uvV:");
         if (c<0) break;
         switch (c) {
         case 'a':
@@ -245,11 +220,6 @@ int ND::nd280EventLoop(int argc, char** argv,
             EnableHandleRegistry(true);
             break;
         }
-        case 'm': 
-        {
-            fileType = kMIDASFile;
-            break;
-        }
         case 'n':
         {
             std::istringstream tmp(optarg);
@@ -296,57 +266,6 @@ int ND::nd280EventLoop(int argc, char** argv,
         {
             std::istringstream tmp(optarg);
             tmp >> skipCount;
-            break;
-        }
-        case 't':
-        {
-            std::cout << "Only following triggers will be accepted:";
-            for (char *trig = optarg; *trig !=0 ; ++trig) {
-                switch (*trig) {
-                case 'b':
-                    std::cout << " beam-spill";
-                    validTriggersMask |= ND::Trigger::kBeamSpill;
-                    break;
-                case 'p':
-                    std::cout << " pedestal";
-                    validTriggersMask |= ND::Trigger::kPedestal;
-                    break;
-                case 'T':
-                    std::cout << " TPC-laser";
-                    validTriggersMask |= ND::Trigger::kTPCLaser;
-                    break;
-                case 'P':
-                    std::cout << " P0D-LED";
-                    validTriggersMask |= ND::Trigger::kP0DLED;
-                    break;
-                case 'E':
-                    std::cout << " ECal-LED";
-                    validTriggersMask |= ND::Trigger::kECalLED;
-                    break;
-                case 'F':
-                    std::cout << " FGD-LED";
-                    validTriggersMask |= ND::Trigger::kFGDLED;
-                    break;
-                case 'e':
-                    std::cout << " FEE-calibration";
-                    validTriggersMask |= ND::Trigger::kFEECalib;
-                    break;
-                case 'c':
-                    std::cout << " TFB-cosmic";
-                    validTriggersMask |= ND::Trigger::kTFBCosmic;
-                    break;
-                case 'C':
-                    std::cout << " FGD-cosmic";
-                    validTriggersMask |= ND::Trigger::kFGDCosmic;
-                    break;
-                default:
-                    std::cout << std::endl
-                              << "Invalid trigger type (" << *trig << ")"
-                              << std::endl;
-                    nd280EventLoopUsage(programName,userCode,defaultReadCount);
-                }
-            }
-            std::cout << std::endl;
             break;
         }
         case 'u':
@@ -488,13 +407,6 @@ int ND::nd280EventLoop(int argc, char** argv,
                 input.reset(new ND::TND280Input(file));
                 break;
             }
-            case kMIDASFile:
-            {
-                ND::TMidasFile* midas = new ND::TMidasFile();
-                midas->Open(fileName.c_str());
-                input.reset(midas);
-                break;
-            }
             default:
                 std::cout << "ERROR: Unknown file type" << std::endl;
             }
@@ -526,35 +438,8 @@ int ND::nd280EventLoop(int argc, char** argv,
                 if (targetEvent>=0 && event->GetEventId()<targetEvent) continue;
                 else targetEvent = -1;
 
-                if (validTriggersMask != 0 
-                    && (event->GetHeader().GetTriggerWord()
-                        == ND::TND280Event::Header::Invalid)
-                    && event->GetHeader().IsData()) {
-                    static int messageShown = 3;
-                    if (messageShown>0) {
-                        ND280Error("Attempting to apply trigger mask"
-                                  << " to data with invalid trigger word");
-                        -- messageShown;
-                    }
-                }
-
-                // Only filter if a trigger bit mask was provided, the event
-                // is data (not a message, run begin or end), and has a valid
-                // trigger word (not MC unless the trigger is being
-                // simulated).
-                if (validTriggersMask != 0
-                    && event->GetHeader().IsData()
-                    && (event->GetHeader().GetTriggerWord()
-                        != ND::TND280Event::Header::Invalid)
-                    && 0 == (event->GetHeader().GetTriggerBits() 
-                             & validTriggersMask)) {
-                    ND280Verbose("Skip event with trigger mask of "
-                                 << std::hex 
-                                 << event->GetHeader().GetTriggerBits());
-                    continue;
-                }
-                    
                 ++totalRead;
+
                 lastEventId = event->GetEventId();
                 lastRunId = event->GetRunId();
                 memoryUsage.LogMemory();
