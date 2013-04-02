@@ -181,7 +181,9 @@ ND::TOADatabase& ND::TOADatabase::Get(void) {
 TGeoManager* ND::TOADatabase::Geometry(ND::TND280Event* event) {
     // If an event wasn't provided, then try getting the current event.
     if (!event) event = ND::TEventFolder::GetCurrentEvent();
-    return GeomId().GetGeometry(event);
+    TGeoManager* geom = GeomId().GetGeometry(event);
+    if (!geom) throw ND::ENoGeometry();
+    return geom;
 }
 
 void ND::TOADatabase::SetCurrentInputFile(TFile* input) {
