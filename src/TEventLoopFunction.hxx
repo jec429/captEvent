@@ -8,7 +8,7 @@
 namespace CP {
     class TEventLoopFunction;
     class TVInputFile;
-    class TND280Output;
+    class TRootOutput;
 
     /// Terminate an event loop that is processing a particular file.  This
     /// should be thrown by the event loop user function when it wants to stop
@@ -39,7 +39,7 @@ namespace CP {
 ///         // User Code
 ///         return true;
 ///     }
-///     void Finalize(TND280Output* file) {
+///     void Finalize(TRootOutput* file) {
 ///         // Called before exiting.  If no file, then parameter is NULL.
 ///     }
 /// };
@@ -145,7 +145,7 @@ public:
     /// Called after the last event has been processed, but before any open
     /// output files are closed.  This is called at least once, and will be
     /// called for each open file.  If there aren't any open output files, the
-    /// TND280Output pointer will be NULL.
+    /// TRootOutput pointer will be NULL.
     ///
     /// \note C++ trivia: When determining which method to call,
     /// "TVInputFile*const" and "TVInputFile*" are equivalent so a method may
@@ -154,7 +154,7 @@ public:
     /// "TVInputFile*const" prevents the pointer from being changed in the
     /// body.  Therefore, the way to read this declaration is that "const"
     /// documents that the method *must* not change the value of the pointer.
-    virtual void Finalize(TND280Output * const file);
+    virtual void Finalize(TRootOutput * const file);
 
     /// Called when there is a usage error.  This code should print a usage
     /// message and then return. 

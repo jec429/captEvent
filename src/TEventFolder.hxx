@@ -16,7 +16,7 @@ namespace CP {
 /// in the //root/Events folder.
 ///
 /// TND280Event objects are usually read from an input file using a
-/// TND280Input object (output is with a TND280Output).  The last event read
+/// TND280Input object (output is with a TRootOutput).  The last event read
 /// will be available from TEventFolder::GetCurrentEvent() which is a static
 /// method.  Interactive programs which want to provide a method to keep
 /// multiple events in memory (e.g. the event display), should get the current

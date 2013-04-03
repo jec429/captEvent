@@ -22,7 +22,7 @@ void CP::TEventLoopFunction::BeginFile(TVInputFile *const) {}
 
 void CP::TEventLoopFunction::EndFile(TVInputFile *const) {}
 
-void CP::TEventLoopFunction::Finalize(TND280Output * const value) {}
+void CP::TEventLoopFunction::Finalize(TRootOutput * const value) {}
 
 void CP::TEventLoopFunction::Usage(void) {}
 

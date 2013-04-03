@@ -45,7 +45,7 @@ public:
     // can be prevented by adding
     //
     // using CP::TEventLoopFunction::Finalize;
-    void Finalize(CP::TND280Output*const output) {
+    void Finalize(CP::TRootOutput*const output) {
     }
 
 private:

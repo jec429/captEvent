@@ -15,7 +15,7 @@
 
 #include "TND280Event.hxx"
 #include "TND280Input.hxx"
-#include "TND280Output.hxx"
+#include "TRootOutput.hxx"
 #include "TOADatabase.hxx"
 #include "THandleHack.hxx"
 #include "TND280Log.hxx"
@@ -117,7 +117,7 @@ int CP::captainEventLoop(int argc, char** argv,
     std::string programName = argv[0];
     char *configName = NULL;
     std::vector<std::string> outputNames;
-    std::vector<TND280Output*> outputFiles;
+    std::vector<TRootOutput*> outputFiles;
     bool preventSavedGeometry = false;
     std::string geometryFile = "";
     int targetRun = -1;
@@ -362,7 +362,7 @@ int CP::captainEventLoop(int argc, char** argv,
         for (std::vector<std::string>::iterator n = outputNames.begin();
              n != outputNames.end();
              ++n) {
-            TND280Output* output = new TND280Output((*n).c_str(),"NEW");
+            TRootOutput* output = new TRootOutput((*n).c_str(),"NEW");
             if (!output->IsOpen()) {
                 std::cerr << "ERROR: Output file not open" << std::endl;
                 exit(2);
@@ -538,7 +538,7 @@ int CP::captainEventLoop(int argc, char** argv,
     }
     
     if (!outputFiles.empty()) {
-        for (std::vector<CP::TND280Output*>::iterator file 
+        for (std::vector<CP::TRootOutput*>::iterator file 
                  = outputFiles.begin();
              file != outputFiles.end(); 
              ++ file) {
@@ -547,14 +547,14 @@ int CP::captainEventLoop(int argc, char** argv,
         }
     }
     else {
-        userCode.Finalize((CP::TND280Output*) NULL);
-        memoryUsage.Write((CP::TND280Output*) NULL);
+        userCode.Finalize((CP::TRootOutput*) NULL);
+        memoryUsage.Write((CP::TRootOutput*) NULL);
     }
     
     std::cout << "Total Events Read: " << totalRead << std::endl;
     if (!outputFiles.empty()) {
         std::cout << "Total Events Written: " << totalWritten << std::endl;
-        for (std::vector<TND280Output*>::iterator file = outputFiles.begin();
+        for (std::vector<TRootOutput*>::iterator file = outputFiles.begin();
              file != outputFiles.end();
              ++file) {
             (*file)->Close();

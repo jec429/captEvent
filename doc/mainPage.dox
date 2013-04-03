@@ -25,7 +25,7 @@
   ROOT (as of 5.10), you must be careful and only access the geometry using
   the right "All Folders" panel.  The event tree can be browsed, but it is not
   very useful since you can The best way to read and write ND280 event files
-  is to use the CP::TND280Input and CP::TND280Output classes.  These provide an
+  is to use the CP::TND280Input and CP::TRootOutput classes.  These provide an
   interface to the TFile class and take care of some of the basic bookkeeping
   needed to process events.
 

@@ -55,7 +55,7 @@ public:
     /// so you can add extra information.  Because of an ideosyncracy in the
     /// way root handles histograms, objects created in Initialize() will
     /// already be stored in the output file.
-    virtual void Finalize(TND280Output* output) {
+    virtual void Finalize(TRootOutput* output) {
         fOutputTree->Write();
     }
 

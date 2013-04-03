@@ -20,7 +20,7 @@ namespace CP {
 /// Attach to a file so that the events can be read.  This also checks
 /// to see if the geometry is saved in the input file and reads it if
 /// it can.  This will only read files that were written using the
-/// TND280Output class.  This will work with any file name, but the preferred
+/// TRootOutput class.  This will work with any file name, but the preferred
 /// file extension is [name].root (using this extension will help root
 /// identify this file as an ND280 event file).
 class CP::TND280Input : public TVInputFile {

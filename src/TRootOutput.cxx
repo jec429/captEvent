@@ -1,6 +1,6 @@
-// $Id: TND280Output.cxx,v 1.11 2011/09/07 21:55:44 mcgrew Exp $
+// $Id: TRootOutput.cxx,v 1.11 2011/09/07 21:55:44 mcgrew Exp $
 //
-// Implement the CP::TND280Output class which is a specialization of the
+// Implement the CP::TRootOutput class which is a specialization of the
 // TEventOutput class that writes the events in a root format.  This is the
 // native format.
 //
@@ -10,15 +10,15 @@
 #include <TGeoManager.h>
 #include <TKey.h>
 
-#include "TND280Output.hxx"
+#include "TRootOutput.hxx"
 #include "TND280Event.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
 #include "TND280Log.hxx"
 
-ClassImp(CP::TND280Output);
+ClassImp(CP::TRootOutput);
 
-CP::TND280Output::TND280Output(const char *fileName,
+CP::TRootOutput::TRootOutput(const char *fileName,
                                Option_t* opt, 
                                int compress) 
     : TFile(fileName, opt, "ROOT Output File", compress),
@@ -28,11 +28,11 @@ CP::TND280Output::TND280Output(const char *fileName,
     IsAttached();
 }
 
-CP::TND280Output::~TND280Output(void) {
+CP::TRootOutput::~TRootOutput(void) {
     if (IsOpen()) Close();
 }
 
-bool CP::TND280Output::IsAttached(void) {
+bool CP::TRootOutput::IsAttached(void) {
     if (!IsOpen()) return false;
     if (gFile != this) {
         if (gFile) {
@@ -61,9 +61,9 @@ bool CP::TND280Output::IsAttached(void) {
     return fAttached;
 }
 
-int CP::TND280Output::GetEventsWritten(void) {return fEventsWritten;}
+int CP::TRootOutput::GetEventsWritten(void) {return fEventsWritten;}
 
-void CP::TND280Output::WriteEvent(CP::TND280Event& event) {
+void CP::TRootOutput::WriteEvent(CP::TND280Event& event) {
     if (!IsAttached()) return;
     // Copy the pointer into the location attached to the file.
     fEventPointer = &event;
@@ -77,7 +77,7 @@ void CP::TND280Output::WriteEvent(CP::TND280Event& event) {
 }
 
 // Save a geometry to the output file.
-void CP::TND280Output::WriteGeometry(TGeoManager* geom) {
+void CP::TRootOutput::WriteGeometry(TGeoManager* geom) {
     if (!IsAttached()) return;
     if (!geom) return;
     TKey *key = FindKey(geom->GetName());
@@ -91,17 +91,17 @@ void CP::TND280Output::WriteGeometry(TGeoManager* geom) {
     ND280Log("** Geometry " << geom->GetName() << " written to output file ");
 }
 
-bool CP::TND280Output::GeometryWritten(void) {
+bool CP::TRootOutput::GeometryWritten(void) {
     return fGeometry;
 }
     
-void CP::TND280Output::Commit(void) {
+void CP::TRootOutput::Commit(void) {
     if (!IsAttached()) return;
     fEventTree->AutoSave();
     Flush();
 }
 
-void CP::TND280Output::Close(Option_t* opt) {
+void CP::TRootOutput::Close(Option_t* opt) {
     Write();
     if (CP::TND280Log::LogLevel <= CP::TND280Log::GetLogLevel()) {
         TFile::ls();

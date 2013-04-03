@@ -10,7 +10,7 @@
 
 #include "TND280Event.hxx"
 #include "TND280Input.hxx"
-#include "TND280Output.hxx"
+#include "TRootOutput.hxx"
 #include "TMCHit.hxx"
 #include "TMultiHit.hxx"
 #include "TG4VHit.hxx"
@@ -193,8 +193,8 @@ namespace tut {
             // Write events to an output file and save them in a local vector.
             try {
                 if (outputEvents.size()<1) {
-                    CP::TND280Output* output 
-                        = new CP::TND280Output(fileName,"RECREATE");
+                    CP::TRootOutput* output 
+                        = new CP::TRootOutput(fileName,"RECREATE");
                     for (int i=0; i<5; ++i) {
                         CP::TND280Event* event = new CP::TND280Event();
                         event->SetRunId(1);

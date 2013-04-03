@@ -1,6 +1,6 @@
-// $Id: TND280Output.hxx,v 1.9 2011/05/06 16:05:36 mcgrew Exp $
-#ifndef TND280Output_hxx_seen
-#define TND280Output_hxx_seen
+// $Id: TRootOutput.hxx,v 1.9 2011/05/06 16:05:36 mcgrew Exp $
+#ifndef TRootOutput_hxx_seen
+#define TRootOutput_hxx_seen
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -13,7 +13,7 @@ class TGeoManager;
 namespace CP {
     class TND280Event;
     class TTPCPadManager;
-    class TND280Output;
+    class TRootOutput;
 
     /// Base class for output errors.
     OA_EXCEPTION(END280Output, EoaCore);
@@ -29,14 +29,14 @@ namespace CP {
 /// the geometry to the output file.  This will work with any file name, but
 /// the preferred file extension is [name].root (using this extension will
 /// help root identify this file as a ND280 event file).
-class CP::TND280Output : public TFile {
+class CP::TRootOutput : public TFile {
 public:
     /// Open a new output file.
-    TND280Output(const char* name,
+    TRootOutput(const char* name,
                 Option_t* opt="CREATE",
                 Int_t compress = 1);
 
-    virtual ~TND280Output(void);
+    virtual ~TRootOutput(void);
 
     /// Return the name of the output file.
     virtual const char* GetOutputName(void) {return GetName();};
@@ -62,12 +62,12 @@ public:
     virtual void Commit(void);
     
     /// Close the ROOT output file.  No default parameter since there
-    /// must be a Close(void) function to satisfy the TND280Output
+    /// must be a Close(void) function to satisfy the TRootOutput
     /// abstract class which defines a pure virtual Close(void).
     virtual void Close(Option_t* opt = "");
     
 private:
-    TND280Output(const TND280Output& aFile);
+    TRootOutput(const TRootOutput& aFile);
     
     TTree *fEventTree;          // The tree with events. 
     TND280Event *fEventPointer; // A memory location for the event pointer.
@@ -76,6 +76,6 @@ private:
     int fEventsWritten;         // Number of events written to file.
     TGeoManager* fGeometry;     // The geometry saved in the output file.
 
-    ClassDef(TND280Output,0);
+    ClassDef(TRootOutput,0);
 };
 #endif

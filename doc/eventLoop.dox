@@ -199,7 +199,7 @@ public:
 
     // Called at least once.  If multiple file are open, it will be called
     // for each one.   Notice there are two forms...
-    void Finalize(CP::TND280Output * const output) {
+    void Finalize(CP::TRootOutput * const output) {
         fP0DHits->Draw();
         gPad->Print("p0dHits.eps");
     }
@@ -280,7 +280,7 @@ public:
     }
  
     // Called if the output file is open.  Notice there are two forms...
-    void Finalize(CP::TND280Output& output) {
+    void Finalize(CP::TRootOutput& output) {
         fOutputTree->Write();    
     }
 

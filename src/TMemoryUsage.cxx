@@ -37,7 +37,7 @@ void CP::TMemoryUsage::LogMemory() {
     fEventMemory.push_back(info);
 }
 
-void CP::TMemoryUsage::Write(CP::TND280Output* output) {
+void CP::TMemoryUsage::Write(CP::TRootOutput* output) {
     if (!fEnabled) return;
 
     if (output && output->IsOpen()) {

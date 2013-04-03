@@ -1,6 +1,6 @@
 #ifndef TMemoryUsage_hxx_seen
 #define TMemoryUsage_hxx_seen
-#include <TND280Output.hxx>
+#include <TRootOutput.hxx>
 #include <typeinfo>
 #include <TSystem.h>
 #include <vector>
@@ -38,7 +38,7 @@ public:
     /// the top-level directory of the output file.  The histograms are
     /// indexed by the number of calls to LogMemory().  If Enable() has not
     /// been called, this function does nothing.
-    void Write(CP::TND280Output* output);
+    void Write(CP::TRootOutput* output);
     
 private:
     /// Whether to log memory usage. Set using Enable()
