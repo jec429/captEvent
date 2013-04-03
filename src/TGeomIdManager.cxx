@@ -15,7 +15,7 @@
 #include <TString.h>
 #include <TPRegexp.h>
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "ND280GeomId.hxx"
 #include "ND280GeomIdDef.hxx"

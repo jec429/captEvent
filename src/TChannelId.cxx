@@ -6,7 +6,7 @@
 #include "TTFBChannelId.hxx"
 #include "TFGDChannelId.hxx"
 #include "TTPCChannelId.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TChannelId);
 

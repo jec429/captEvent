@@ -7,7 +7,7 @@
 #include "HEPUnits.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TTPCPadManager);
 

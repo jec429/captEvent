@@ -11,7 +11,7 @@
 #include "TDigitProxy.hxx"
 #include "TOADatabase.hxx"
 #include "TGeomIdManager.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::THit);
 

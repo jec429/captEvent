@@ -1,6 +1,6 @@
 #include "TAlgorithm.hxx"
 #include "TOADatabase.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TAlgorithm);
 

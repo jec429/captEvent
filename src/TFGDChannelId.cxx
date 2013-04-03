@@ -1,5 +1,5 @@
 #include <cstdio>
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TFGDChannelId.hxx"
 
 #define RAWFGD_CHAN_PER_ASIC 82

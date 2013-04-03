@@ -7,7 +7,7 @@
 
 #include "THandle.hxx"
 #include "THandleHack.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 namespace {
     int gHandleBaseCount = 0;
@@ -59,29 +59,29 @@ void CP::DumpHandleRegistry() {
     if (!gHandleSet) return;
     if (gHandleSet->empty()) return;
     ND280Log("Existing handles: " << gHandleSet->size());
-    CP::TND280Log::IncreaseIndentation();
+    CP::TCaptLog::IncreaseIndentation();
     for (std::set<CP::THandleBase*>::iterator h = gHandleSet->begin();
          h != gHandleSet->end();
          ++h) {
         CP::THandleBase* handleBase = *h;
         ND280Log(std::hex << "(0x" << handleBase << ")");
         if (handleBase) {
-            CP::TND280Log::IncreaseIndentation();
+            CP::TCaptLog::IncreaseIndentation();
             TObject *object = handleBase->GetObject();
             ND280Log(std::hex << "-> (0x" << object << ")");
             if (object) {
-                CP::TND280Log::IncreaseIndentation();
+                CP::TCaptLog::IncreaseIndentation();
                 ND280Log("Class: " << object->ClassName());
                 ND280Log("Name: " << object->GetName());
-                CP::TND280Log::DecreaseIndentation();
-                if (CP::TND280Log::GetDebugLevel()>CP::TND280Log::ErrorLevel) {
+                CP::TCaptLog::DecreaseIndentation();
+                if (CP::TCaptLog::GetDebugLevel()>CP::TCaptLog::ErrorLevel) {
                     object->ls();
                 }
             }
-            CP::TND280Log::DecreaseIndentation();
+            CP::TCaptLog::DecreaseIndentation();
         }
     }
-    CP::TND280Log::DecreaseIndentation();
+    CP::TCaptLog::DecreaseIndentation();
 } 
 
 void CP::EnableHandleRegistry(bool enable) {

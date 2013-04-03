@@ -4,7 +4,7 @@
 #include "TEventFolder.hxx"
 #include "TOADatabase.hxx"
 #include "TDigitManager.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 CP::TDigitManager::TDigitManager() 
     : fPersistentDigits(false) {}

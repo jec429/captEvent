@@ -10,7 +10,7 @@
 #include <TObject.h>
 
 #include "EoaCore.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 namespace CP {
     OA_EXCEPTION(EHandle,EoaCore);

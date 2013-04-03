@@ -12,7 +12,7 @@
 
 #include "TEvent.hxx"
 #include "TEventFolder.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 CP::TEventFolder* CP::TEventFolder::fEventFolder = NULL;
 CP::TEvent* CP::TEventFolder::fCurrentEvent = NULL;

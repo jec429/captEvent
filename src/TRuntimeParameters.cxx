@@ -3,7 +3,7 @@
 
 #include "HEPUnits.hxx"
 #include "HEPConstants.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 #include <iostream>
 #include <cstdlib>

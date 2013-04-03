@@ -10,7 +10,7 @@
 
 #include "TDatum.hxx"
 #include "TData.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 #define T_DATA_VECTOR_TITLE "Data Vector"
 

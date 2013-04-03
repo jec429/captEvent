@@ -14,7 +14,7 @@
 
 #include "TCorrValues.hxx"
 #include "THandle.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 namespace CP {
     class TReconState;

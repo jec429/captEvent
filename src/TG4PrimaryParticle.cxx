@@ -7,7 +7,7 @@
 #include <TParticlePDG.h>
 
 #include "TG4PrimaryParticle.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TG4PrimaryParticle);
 

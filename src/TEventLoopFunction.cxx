@@ -1,4 +1,4 @@
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TEventLoopFunction.hxx"
 
 CP::TEventLoopFunction::TEventLoopFunction() {}

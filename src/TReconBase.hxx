@@ -4,7 +4,7 @@
 #include <TObject.h>
 
 #include "EoaCore.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "THandle.hxx"
 #include "TDatum.hxx"
 #include "TDataVector.hxx"

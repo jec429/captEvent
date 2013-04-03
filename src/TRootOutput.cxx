@@ -14,7 +14,7 @@
 #include "TEvent.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TRootOutput);
 
@@ -103,7 +103,7 @@ void CP::TRootOutput::Commit(void) {
 
 void CP::TRootOutput::Close(Option_t* opt) {
     Write();
-    if (CP::TND280Log::LogLevel <= CP::TND280Log::GetLogLevel()) {
+    if (CP::TCaptLog::LogLevel <= CP::TCaptLog::GetLogLevel()) {
         TFile::ls();
     }
     TFile::Close(opt);

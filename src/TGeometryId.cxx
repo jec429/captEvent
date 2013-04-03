@@ -1,7 +1,7 @@
 // $Id: TGeometryId.cxx,v 1.12 2012/02/22 03:15:09 mcgrew Exp $
 
 #include <sstream>
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "ND280GeomIdDef.hxx"
 #include "TOADatabase.hxx"

@@ -3,25 +3,25 @@
 #include <fstream>
 #include <time.h>
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
-CP::TND280Log::ErrorPriority CP::TND280Log::fErrorPriority = CP::TND280Log::ErrorLevel;
-CP::TND280Log::LogPriority CP::TND280Log::fLogPriority = CP::TND280Log::LogLevel;
-std::ostream* CP::TND280Log::fDebugStream = NULL;
-std::ostream* CP::TND280Log::fLogStream = NULL;
-std::map<std::string,CP::TND280Log::ErrorPriority> CP::TND280Log::fErrorTraces;
-std::map<std::string,CP::TND280Log::LogPriority> CP::TND280Log::fLogTraces;
-int CP::TND280Log::fIndentation = 0;
+CP::TCaptLog::ErrorPriority CP::TCaptLog::fErrorPriority = CP::TCaptLog::ErrorLevel;
+CP::TCaptLog::LogPriority CP::TCaptLog::fLogPriority = CP::TCaptLog::LogLevel;
+std::ostream* CP::TCaptLog::fDebugStream = NULL;
+std::ostream* CP::TCaptLog::fLogStream = NULL;
+std::map<std::string,CP::TCaptLog::ErrorPriority> CP::TCaptLog::fErrorTraces;
+std::map<std::string,CP::TCaptLog::LogPriority> CP::TCaptLog::fLogTraces;
+int CP::TCaptLog::fIndentation = 0;
 
-CP::TND280Log::TND280Log() { }
-CP::TND280Log::~TND280Log() { }
+CP::TCaptLog::TCaptLog() { }
+CP::TCaptLog::~TCaptLog() { }
 
-void CP::TND280Log::SetDebugLevel(const char* trace, 
-                              CP::TND280Log::ErrorPriority level) {
+void CP::TCaptLog::SetDebugLevel(const char* trace, 
+                              CP::TCaptLog::ErrorPriority level) {
     fErrorTraces[trace] = level;
 }
 
-CP::TND280Log::ErrorPriority CP::TND280Log::GetDebugLevel(const char* trace) {
+CP::TCaptLog::ErrorPriority CP::TCaptLog::GetDebugLevel(const char* trace) {
     std::map<std::string,ErrorPriority>::iterator elem = fErrorTraces.find(trace);
     if (elem == fErrorTraces.end()) return fErrorPriority;
     return elem->second;
@@ -48,8 +48,8 @@ namespace {
     }
 }
 
-void CP::TND280Log::SetDebugStream(std::ostream* err) {
-    CP::TND280Log::fDebugStream = err;
+void CP::TCaptLog::SetDebugStream(std::ostream* err) {
+    CP::TCaptLog::fDebugStream = err;
     if (!fDebugStream) return;
     std::ofstream* ofile = dynamic_cast<std::ofstream*>(err);
     if (ofile && !(ofile->is_open())) {
@@ -66,24 +66,24 @@ void CP::TND280Log::SetDebugStream(std::ostream* err) {
                   << std::endl;
 }
 
-std::ostream& CP::TND280Log::GetDebugStream() {
-    if (!CP::TND280Log::fDebugStream ) return GetLogStream();
-    return *CP::TND280Log::fDebugStream;
+std::ostream& CP::TCaptLog::GetDebugStream() {
+    if (!CP::TCaptLog::fDebugStream ) return GetLogStream();
+    return *CP::TCaptLog::fDebugStream;
 }
     
-void CP::TND280Log::SetLogLevel(const char* trace, 
-                            CP::TND280Log::LogPriority level) {
+void CP::TCaptLog::SetLogLevel(const char* trace, 
+                            CP::TCaptLog::LogPriority level) {
     fLogTraces[trace] = level;
 }
 
-CP::TND280Log::LogPriority CP::TND280Log::GetLogLevel(const char* trace) {
+CP::TCaptLog::LogPriority CP::TCaptLog::GetLogLevel(const char* trace) {
     std::map<std::string,LogPriority>::iterator elem = fLogTraces.find(trace);
     if (elem == fLogTraces.end()) return fLogPriority;
     return elem->second;
 }
 
-void CP::TND280Log::SetLogStream(std::ostream* log) {
-    CP::TND280Log::fLogStream = log;
+void CP::TCaptLog::SetLogStream(std::ostream* log) {
+    CP::TCaptLog::fLogStream = log;
     if (!fLogStream) return;
     std::ofstream* ofile = dynamic_cast<std::ofstream*>(log);
     if (ofile && !(ofile->is_open())) {
@@ -100,29 +100,29 @@ void CP::TND280Log::SetLogStream(std::ostream* log) {
                 << std::endl;
 }
 
-std::ostream& CP::TND280Log::GetLogStream() {
-    if (!CP::TND280Log::fLogStream) return std::cout;
-    return *CP::TND280Log::fLogStream;
+std::ostream& CP::TCaptLog::GetLogStream() {
+    if (!CP::TCaptLog::fLogStream) return std::cout;
+    return *CP::TCaptLog::fLogStream;
 }
 
-void CP::TND280Log::SetIndentation(int i) {
-    CP::TND280Log::fIndentation = std::max(i,0);
+void CP::TCaptLog::SetIndentation(int i) {
+    CP::TCaptLog::fIndentation = std::max(i,0);
 }
 
-void CP::TND280Log::IncreaseIndentation() {
-    ++CP::TND280Log::fIndentation;
+void CP::TCaptLog::IncreaseIndentation() {
+    ++CP::TCaptLog::fIndentation;
 }
 
-void CP::TND280Log::DecreaseIndentation() {
-    if (CP::TND280Log::fIndentation>0) --CP::TND280Log::fIndentation;
+void CP::TCaptLog::DecreaseIndentation() {
+    if (CP::TCaptLog::fIndentation>0) --CP::TCaptLog::fIndentation;
 }
     
-void CP::TND280Log::ResetIndentation() {
-    CP::TND280Log::fIndentation = 0;
+void CP::TCaptLog::ResetIndentation() {
+    CP::TCaptLog::fIndentation = 0;
 }
 
 
-std::string CP::TND280Log::MakeIndent() {
+std::string CP::TCaptLog::MakeIndent() {
     if (fIndentation<1) return "";
     std::string indent = "";
     for (int i=0; i<fIndentation; ++i) {
@@ -134,50 +134,50 @@ std::string CP::TND280Log::MakeIndent() {
 
 namespace {
     bool TranslateLogLevel(const std::string& name, 
-                           CP::TND280Log::LogPriority& level) {
+                           CP::TCaptLog::LogPriority& level) {
         if (name == "QuietLevel") {
-            level = CP::TND280Log::QuietLevel;
+            level = CP::TCaptLog::QuietLevel;
             return true;
         }
         if (name == "LogLevel") {
-            level = CP::TND280Log::LogLevel;
+            level = CP::TCaptLog::LogLevel;
             return true;
         }
         if (name == "InfoLevel") {
-            level = CP::TND280Log::InfoLevel;
+            level = CP::TCaptLog::InfoLevel;
             return true;
         }
         if (name == "VerboseLevel") {
-            level = CP::TND280Log::VerboseLevel;
+            level = CP::TCaptLog::VerboseLevel;
             return true;
         }
         return false;
     }
 
     bool TranslateErrorLevel(const std::string& name, 
-                             CP::TND280Log::ErrorPriority& level) {
+                             CP::TCaptLog::ErrorPriority& level) {
         if (name == "SilentLevel") {
-            level = CP::TND280Log::SilentLevel;
+            level = CP::TCaptLog::SilentLevel;
             return true;
         }
         if (name == "ErrorLevel") {
-            level = CP::TND280Log::ErrorLevel;
+            level = CP::TCaptLog::ErrorLevel;
             return true;
         }
         if (name == "SevereLevel") {
-            level = CP::TND280Log::SevereLevel;
+            level = CP::TCaptLog::SevereLevel;
             return true;
         }
         if (name == "WarnLevel") {
-            level = CP::TND280Log::WarnLevel;
+            level = CP::TCaptLog::WarnLevel;
             return true;
         }
         if (name == "DebugLevel") {
-            level = CP::TND280Log::DebugLevel;
+            level = CP::TCaptLog::DebugLevel;
             return true;
         }
         if (name == "TraceLevel") {
-            level = CP::TND280Log::TraceLevel;
+            level = CP::TCaptLog::TraceLevel;
             return true;
         }
         return false;
@@ -277,7 +277,7 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetLogStream(str);
+                CP::TCaptLog::SetLogStream(str);
             }
             else if (fields.size() == 2
                      && fields[0] == "error"
@@ -295,14 +295,14 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetDebugStream(str);
+                CP::TCaptLog::SetDebugStream(str);
             }
             else if (fields.size() == 3
                      && fields[0] == "log"
                      && fields[1] == "default"
                      && fields[2] == "level") {
                 // Set the default log level.
-                CP::TND280Log::LogPriority level;
+                CP::TCaptLog::LogPriority level;
                 if (!TranslateLogLevel(value,level)) {
                     std::cerr << "WARNING: " << config << ":" 
                               << inputLine << ": "
@@ -314,14 +314,14 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetLogLevel(level);
+                CP::TCaptLog::SetLogLevel(level);
             }
             else if (fields.size() == 3
                      && fields[0] == "error"
                      && fields[1] == "default"
                      && fields[2] == "level") {
                 // Set the default error level.
-                CP::TND280Log::ErrorPriority level;
+                CP::TCaptLog::ErrorPriority level;
                 if (!TranslateErrorLevel(value,level)) {
                     std::cerr << "WARNING: " << config << ":" 
                               << inputLine << ": "
@@ -333,13 +333,13 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetDebugLevel(level);
+                CP::TCaptLog::SetDebugLevel(level);
             }
             else if (fields.size() == 3
                      && fields[0] == "log"
                      && fields[2] == "level") {
                 // Set the log level.
-                CP::TND280Log::LogPriority level;
+                CP::TCaptLog::LogPriority level;
                 if (!TranslateLogLevel(value,level)) {
                     std::cerr << "WARNING: " << config << ":" 
                               << inputLine << ": "
@@ -351,13 +351,13 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetLogLevel(fields[1].c_str(),level);
+                CP::TCaptLog::SetLogLevel(fields[1].c_str(),level);
             }
             else if (fields.size() == 3
                      && fields[0] == "error"
                      && fields[2] == "level") {
                 // Set the error level.
-                CP::TND280Log::ErrorPriority level;
+                CP::TCaptLog::ErrorPriority level;
                 if (!TranslateErrorLevel(value,level)) {
                     std::cerr << "WARNING: " << config << ":" 
                               << inputLine << ": "
@@ -369,7 +369,7 @@ namespace {
                               << std::endl;
                     continue;
                 }
-                CP::TND280Log::SetDebugLevel(fields[1].c_str(),level);
+                CP::TCaptLog::SetDebugLevel(fields[1].c_str(),level);
             }
             else {
                 std::cerr << "WARNING: " << config << ":" << inputLine << ": "
@@ -385,7 +385,7 @@ namespace {
     }
 }
 
-void CP::TND280Log::Configure(const char* conf) {
+void CP::TCaptLog::Configure(const char* conf) {
     // Try to read a local configuration file.  
     ReadConfigurationFile("./captainlog.config");
     if (conf) {

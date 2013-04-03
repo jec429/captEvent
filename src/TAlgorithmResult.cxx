@@ -3,7 +3,7 @@
 #include "TAlgorithm.hxx"
 #include "TAlgorithmTag.hxx"
 #include "TDataSymLink.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 
 ClassImp(CP::TAlgorithmResult);

@@ -4,7 +4,7 @@
 
 #include <TROOT.h>
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TReconState.hxx"
 
 ClassImp(CP::TReconState);

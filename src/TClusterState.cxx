@@ -1,5 +1,5 @@
 #include "TClusterState.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 ///////////////////////////////////////////////////////
 ClassImp(CP::TClusterState);
 

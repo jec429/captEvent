@@ -11,7 +11,7 @@
 
 #include "TEvent.hxx"
 #include "TOADatabase.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 CP::TRootInput::TRootInput(const char* name, Option_t* option, Int_t compress) 
     : fFile(NULL), fSequence(0), fEventTree(NULL), fEventPointer(0),

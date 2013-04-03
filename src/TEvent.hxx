@@ -5,7 +5,7 @@
 
 #include "TObject.h"
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 #include "TDataVector.hxx"
 #include "THandle.hxx"

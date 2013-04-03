@@ -1,5 +1,5 @@
 #include <TMemoryUsage.hxx>
-#include <TND280Log.hxx>
+#include <TCaptLog.hxx>
 #include "TH1F.h"
 #include <algorithm>
 

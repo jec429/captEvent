@@ -1,5 +1,5 @@
-#ifndef TND280Log_hxx_seen
-#define TND280Log_hxx_seen
+#ifndef TCaptLog_hxx_seen
+#define TCaptLog_hxx_seen
 
 #include <iostream>
 #include <iomanip>
@@ -7,13 +7,13 @@
 #include <map>
 
 namespace CP {
-    class TND280Log;
+    class TCaptLog;
 }
 
 ////////////////////////////////////////////////////////////
-// $Id: TND280Log.hxx,v 1.11 2010/02/22 17:18:53 mcgrew Exp $
+// $Id: TCaptLog.hxx,v 1.11 2010/02/22 17:18:53 mcgrew Exp $
 
-/// Provide control over log and error output.  The TND280Log class provides a
+/// Provide control over log and error output.  The TCaptLog class provides a
 /// set of static methods which control the amount of output from the ND280
 /// logging macros.  These macros come in two varieties (logging macros, and
 /// error reporting macros).  The level of output from the logging and error
@@ -31,8 +31,8 @@ namespace CP {
 /// - ND280Verbose() -- Print output at the VerboseLevel output level.
 ///
 /// The indentation levels of log messages can be controlled using the
-/// CP::TND280Log::IncreaseIndentation() and
-/// CP::TND280Log::DecreaseIndentation() static methods.  These should be used
+/// CP::TCaptLog::IncreaseIndentation() and
+/// CP::TCaptLog::DecreaseIndentation() static methods.  These should be used
 /// in pairs.
 ///
 /// The error macros print output to the error file with a header indicating
@@ -79,7 +79,7 @@ namespace CP {
 /// ND280Verbose("Have a piece of " << pi);
 /// \endcode
 ///
-/// If the logging level is set to TND280Log::LogLevel produces: 
+/// If the logging level is set to TCaptLog::LogLevel produces: 
 ///
 /// \code
 /// % The answer is 42.
@@ -121,7 +121,7 @@ namespace CP {
 /// ND280NamedInfo("anotherTrace","Won't be printed");
 /// \endcode
 ///
-/// If the "traceName" logging level is set to TND280Log::InfoLevel or above,
+/// If the "traceName" logging level is set to TCaptLog::InfoLevel or above,
 /// this produces:
 ///
 /// \code
@@ -137,17 +137,17 @@ namespace CP {
 /// log.traceName.level = InfoLevel
 /// \endcode
 ///
-/// \section captainlogConfig The TND280Log Configuration File
+/// \section captainlogConfig The TCaptLog Configuration File
 ///
-/// The configuration of the TND280Log object can be handled using static
+/// The configuration of the TCaptLog object can be handled using static
 /// methods, or using a configuration file that is read by a call to the
-/// TND280Log::Configure() method.  When the TND280Log::Configure() method is
+/// TCaptLog::Configure() method.  When the TCaptLog::Configure() method is
 /// called, it will first try to read "captainlog.config" in the local
-/// directory.  If TND280Log::Configure() is called with a file name, the
+/// directory.  If TCaptLog::Configure() is called with a file name, the
 /// named configuration file will be read after the captainlog.config file and
 /// can override any settings.
 ///
-/// The TND280Log configuration file uses a simple line oriented syntax.  
+/// The TCaptLog configuration file uses a simple line oriented syntax.  
 ///
 /// - Comments are begun with "#"
 /// - Configuration statements are case-sensitive
@@ -184,12 +184,12 @@ namespace CP {
 /// An example of the captainlog.config file shows how it might be used.  This
 /// file causes the log messages to be printed in "output.log", and the error
 /// messages to be printed in "output.err".  The default log level is set to
-/// TND280Log::InfoLevel so that messages are written from all ND280Log(),
+/// TCaptLog::InfoLevel so that messages are written from all ND280Log(),
 /// ND280NamedLog(), ND280Info(), and ND280NamedInfo() macros.  The default
-/// error level is set to TND280Log::SevereLevel so messages are written
+/// error level is set to TCaptLog::SevereLevel so messages are written
 /// from all ND280Error(), ND280NamedError(), ND280Severe(), and
 /// ND280NamedSevere() macros.  The error level for the "myTrace" trace is
-/// set to TND280Log::DebugLevel, so messages are written for any
+/// set to TCaptLog::DebugLevel, so messages are written for any
 /// ND280NamedWarn() and ND280NamedDebug() macro which has a trace argument of
 /// "myTrace" (e.g. ND280NamedWarn("myTrace","some output") will write "some
 /// output" into the log file).
@@ -236,17 +236,17 @@ namespace CP {
 ///
 /// The available log output levels are:
 ///
-/// - TND280Log::QuietLevel -- No log output.
+/// - TCaptLog::QuietLevel -- No log output.
 ///
-/// - TND280Log::LogLevel -- This is for messages that should be printed in
+/// - TCaptLog::LogLevel -- This is for messages that should be printed in
 ///    the log file.  Messages from ND280Log(), and ND280NamedLog() will be
 ///    printed.
 /// 
-/// - TND280Log::InfoLevel -- This is for messages that will be useful in log
+/// - TCaptLog::InfoLevel -- This is for messages that will be useful in log
 ///   files, but may be skipped during large production jobs.  Messages from
 ///   ND280Info(), and ND280NamedInfo() will be printed.
 ///
-/// - TND280Log::VerboseLevel -- This is for messages that curious users can
+/// - TCaptLog::VerboseLevel -- This is for messages that curious users can
 ///   use to track the progress of local jobs, but which do not belong in a
 ///   production log file.  Messages from ND280Verbose(), and
 ///   ND280NamedVerbose() will be printed.
@@ -255,32 +255,32 @@ namespace CP {
 ///
 /// The available error levels are:
 ///
-/// - TND280Log::SilentLevel -- No error output. Exception: Message from
+/// - TCaptLog::SilentLevel -- No error output. Exception: Message from
 ///   ND280Error() are not suppressed even when the error output level is
 ///   set to SilentLevel.  These messages can be suppressed by defining
 ///   ND280_ERROR_OUTPUT to false in the source code
 ///
-/// - TND280Log::ErrorLevel -- This should be reserved for messages that are
+/// - TCaptLog::ErrorLevel -- This should be reserved for messages that are
 ///   printed just before you expect a program to crash, and which should
 ///   never be supressed.  Messages from ND280Error() and ND280NamedError()
 ///   are printed at this level.
 ///
-/// - TND280Log::SevereLevel -- This is for messages that are printed when an
+/// - TCaptLog::SevereLevel -- This is for messages that are printed when an
 ///   event has triggered a problem where the code is going to produce an
 ///   incorrect result, but probably won't crash.  Messages from ND280Severe()
 ///   and ND280NamedSevere() are printed.
 ///
-/// - TND280Log::WarnLevel -- This is for messages printed when a problem has
+/// - TCaptLog::WarnLevel -- This is for messages printed when a problem has
 ///   been found, but it is unlikely to cause significant problems in the
 ///   analysis.  Messages from ND280Warn() and ND280NamedWarn() are printed.
 ///
-/// - TND280Log::DebugLevel -- This is for general debugging messages.
+/// - TCaptLog::DebugLevel -- This is for general debugging messages.
 ///   Messages from ND280Debug() and ND280NamedDebug() are printed.
 ///
-/// - TND280Log::TraceLevel -- This is for really verbose debugging messages.
+/// - TCaptLog::TraceLevel -- This is for really verbose debugging messages.
 ///   Messages from ND280Trace() and ND280NamedTrace() are printed.
 ///
-/// TND280Log is singleton class that controls the level of output from the
+/// TCaptLog is singleton class that controls the level of output from the
 /// ND280 error and logging statements.  All of the user visible
 /// functions are static.
 ///
@@ -304,7 +304,7 @@ namespace CP {
 /// \endcode
 ///
 /// has one streamish argument, and will print "A streamish argument" into the
-/// log file.  The TND280Log macros will accept any set of << operator
+/// log file.  The TCaptLog macros will accept any set of << operator
 /// arguments that could be printed to std::cout.  NOTE: the streamish
 /// argument doesn't start with a << operator.
 ///
@@ -362,7 +362,7 @@ namespace CP {
 ///
 /// While C Macros are generally discouraged in C++, they provide the only
 /// mechanism that meets the design requirements for logging.  This results in
-/// an interface similar to the one defined by TND280Log.  
+/// an interface similar to the one defined by TCaptLog.  
 ///
 /// \subsection logRationaleOther Why not use package X?
 ///
@@ -371,12 +371,12 @@ namespace CP {
 /// define an unsatisfactory streams based interface.  Other packages I'm
 /// aware of tend to have very rich features and a very large number of lines
 /// (i.e. log4cplus has 11 KLOC).  Many of these packages also bring
-/// significant build requirements.  By comparison, TND280Log is less than 700
+/// significant build requirements.  By comparison, TCaptLog is less than 700
 /// lines of code.  
 /// 
-class CP::TND280Log {
+class CP::TCaptLog {
 public:
-    ~TND280Log();
+    ~TCaptLog();
 
     typedef enum {SilentLevel,
                   ErrorLevel, 
@@ -404,7 +404,7 @@ public:
     static void SetDebugStream(std::ostream* err);
 
     /// Set the default debugging level.  The level parameter takes a value
-    /// with type TND280Log::ErrorPriority.
+    /// with type TCaptLog::ErrorPriority.
     static void SetDebugLevel(ErrorPriority level) {fErrorPriority = level;}
 
     /// Set the debugging level for a particular trace.
@@ -461,7 +461,7 @@ private:
     static std::map<std::string,LogPriority> fLogTraces;
     static int fIndentation;
 
-    TND280Log();
+    TCaptLog();
 };
 
 /// INTERNAL: A macro to handle the output of an error message.  This is used
@@ -469,15 +469,15 @@ private:
 #ifndef _ND280_OUTPUT_ERROR
 # define _ND280_OUTPUT_ERROR(trace,outStream)                           \
     do {                                                                \
-        std::ios::fmtflags save = CP::TND280Log::GetDebugStream().flags(); \
-        CP::TND280Log::GetDebugStream() << trace << __FILE__            \
+        std::ios::fmtflags save = CP::TCaptLog::GetDebugStream().flags(); \
+        CP::TCaptLog::GetDebugStream() << trace << __FILE__            \
                                         << ":" << __LINE__ << ": "      \
                                         << outStream                    \
                                         << std::setprecision(6)         \
                                         << std::setw(0)                 \
                                         << std::setfill(' ')            \
                                         << std::endl;                   \
-        CP::TND280Log::GetDebugStream().flags(save);                    \
+        CP::TCaptLog::GetDebugStream().flags(save);                    \
     } while (0)
 #endif
 
@@ -516,7 +516,7 @@ private:
 # define ND280NamedError(trace,outStream)                              \
     do {                                                                \
         if (ND280_ERROR_OUTPUT) {                                       \
-            if (CP::TND280Log::ErrorLevel <= CP::TND280Log::GetDebugLevel(trace)) \
+            if (CP::TCaptLog::ErrorLevel <= CP::TCaptLog::GetDebugLevel(trace)) \
                 _ND280_OUTPUT_ERROR("ERROR[" trace "]: ", outStream);  \
         }                                                               \
     } while (0)
@@ -525,7 +525,7 @@ private:
 #endif
 
 #ifndef ND280Severe
-/// Print an error message that appears at the CP::TND280Log::SevereLevel of
+/// Print an error message that appears at the CP::TCaptLog::SevereLevel of
 /// error output.  This macro should be reserved for error conditions
 /// where event data is going to be lost, or where the event might contain
 /// incorrect information.  This macro takes one \ref streamish providing the
@@ -533,7 +533,7 @@ private:
 # define ND280Severe(outStream)                                       \
     do {                                                              \
         if (ND280_ERROR_OUTPUT) {                                     \
-            if (CP::TND280Log::SevereLevel <= CP::TND280Log::GetDebugLevel()) \
+            if (CP::TCaptLog::SevereLevel <= CP::TCaptLog::GetDebugLevel()) \
                 _ND280_OUTPUT_ERROR("SEVERE: ",outStream);            \
         }                                                             \
     } while (0)
@@ -542,7 +542,7 @@ private:
 #endif
 
 #ifndef ND280NamedSevere
-/// Print an error message that appears at the CP::TND280Log::SevereLevel of
+/// Print an error message that appears at the CP::TCaptLog::SevereLevel of
 /// error output.  This macro should be reserved for error conditions
 /// where event data is going to be lost, or where the event might contain
 /// incorrect information.  This macro takes two arguments: The first argument
@@ -551,7 +551,7 @@ private:
 # define ND280NamedSevere(trace,outStream)                              \
     do {                                                                \
         if (ND280_ERROR_OUTPUT) {                                       \
-            if (CP::TND280Log::SevereLevel <= CP::TND280Log::GetDebugLevel(trace)) \
+            if (CP::TCaptLog::SevereLevel <= CP::TCaptLog::GetDebugLevel(trace)) \
                 _ND280_OUTPUT_ERROR("SEVERE[" trace "]: ", outStream);  \
         }                                                               \
     } while (0)
@@ -560,14 +560,14 @@ private:
 #endif
 
 #ifndef ND280Warn
-/// Print an error message that appears at the CP::TND280Log::WarnLevel of
+/// Print an error message that appears at the CP::TCaptLog::WarnLevel of
 /// error output.  This macro should be used when a correctable, but
 /// unexpected, problem is found with an event.  This macro takes one \ref
 /// streamish providing the error message.
 # define ND280Warn(outStream)                                          \
     do {                                                               \
         if (ND280_ERROR_OUTPUT) {                                      \
-            if (CP::TND280Log::WarnLevel <= CP::TND280Log::GetDebugLevel())    \
+            if (CP::TCaptLog::WarnLevel <= CP::TCaptLog::GetDebugLevel())    \
                 _ND280_OUTPUT_ERROR("WARNING: ",outStream);            \
         }                                                              \
     } while (0)
@@ -576,7 +576,7 @@ private:
 #endif
 
 #ifndef ND280NamedWarn
-/// Print an error message that appears at the CP::TND280Log::WarnLevel of
+/// Print an error message that appears at the CP::TCaptLog::WarnLevel of
 /// error output.  This macro should be used when a correctable, but
 /// unexpected, problem is found with an event.  This macro takes two
 /// arguments: The first argument must be a \ref trace (a string).  The second
@@ -584,7 +584,7 @@ private:
 # define ND280NamedWarn(trace,outStream)                                \
     do {                                                                \
         if (ND280_ERROR_OUTPUT) {                                       \
-            if (CP::TND280Log::WarnLevel <= CP::TND280Log::GetDebugLevel(trace)) \
+            if (CP::TCaptLog::WarnLevel <= CP::TCaptLog::GetDebugLevel(trace)) \
                 _ND280_OUTPUT_ERROR("WARNING[" trace "]: ", outStream); \
         }                                                               \
     } while (0)
@@ -593,7 +593,7 @@ private:
 #endif
 
 #ifndef ND280Debug
-/// Print an debugging message that appears at the CP::TND280Log::DebugLevel of
+/// Print an debugging message that appears at the CP::TCaptLog::DebugLevel of
 /// error output.  This macro should be used to print output needed during
 /// the debugging.  The ND280Trace() macro should be used during debugging to
 /// provide traces of the code execution.  This macro takes one \ref streamish
@@ -601,7 +601,7 @@ private:
 #define ND280Debug(outStream)                                          \
     do {                                                               \
         if (ND280_ERROR_OUTPUT) {                                      \
-            if (CP::TND280Log::DebugLevel <= CP::TND280Log::GetDebugLevel())   \
+            if (CP::TCaptLog::DebugLevel <= CP::TCaptLog::GetDebugLevel())   \
                 _ND280_OUTPUT_ERROR("DEBUG: ",outStream);              \
         }                                                              \
     } while (0)
@@ -610,7 +610,7 @@ private:
 #endif
 
 #ifndef ND280NamedDebug
-/// Print an debugging message that appears at the CP::TND280Log::DebugLevel of
+/// Print an debugging message that appears at the CP::TCaptLog::DebugLevel of
 /// error output.  This macro should be used to print output needed during
 /// the debugging.  The ND280Trace() macro should be used during debugging to
 /// provide traces of the code execution.  This macro takes two arguments: The
@@ -619,7 +619,7 @@ private:
 #define ND280NamedDebug(trace,outStream)                                \
     do {                                                                \
         if (ND280_ERROR_OUTPUT) {                                       \
-            if (CP::TND280Log::DebugLevel <= CP::TND280Log::GetDebugLevel(trace)) \
+            if (CP::TCaptLog::DebugLevel <= CP::TCaptLog::GetDebugLevel(trace)) \
                 _ND280_OUTPUT_ERROR("DEBUG[" trace "]: ", outStream);   \
         }                                                               \
     } while (0)
@@ -628,14 +628,14 @@ private:
 #endif
 
 #ifndef ND280Trace
-/// Print an debugging message that appears at the CP::TND280Log::TraceLevel of
+/// Print an debugging message that appears at the CP::TCaptLog::TraceLevel of
 /// error output.  This macro should be used to print short messages that
 /// trace the execution of code being debugged.  This macro takes one \ref
 /// streamish providing the error message.
 #define ND280Trace(outStream)                                          \
     do {                                                               \
         if (ND280_ERROR_OUTPUT) {                                      \
-            if (CP::TND280Log::TraceLevel <= CP::TND280Log::GetDebugLevel())   \
+            if (CP::TCaptLog::TraceLevel <= CP::TCaptLog::GetDebugLevel())   \
                 _ND280_OUTPUT_ERROR("TRACE:",outStream);               \
         }                                                              \
     } while (0)
@@ -644,7 +644,7 @@ private:
 #endif
 
 #ifndef ND280NamedTrace
-/// Print an debugging message that appears at the CP::TND280Log::TraceLevel of
+/// Print an debugging message that appears at the CP::TCaptLog::TraceLevel of
 /// error output.  This macro should be used to print short messages that
 /// trace the execution of code being debugged. This macro takes two
 /// arguments: The first argument must be a \ref trace (a string).  The second
@@ -652,7 +652,7 @@ private:
 #define ND280NamedTrace(trace,outStream)                                \
     do {                                                                \
         if (ND280_ERROR_OUTPUT) {                                       \
-            if (CP::TND280Log::TraceLevel <= CP::TND280Log::GetDebugLevel(trace)) \
+            if (CP::TCaptLog::TraceLevel <= CP::TCaptLog::GetDebugLevel(trace)) \
                 _ND280_OUTPUT_ERROR("TRACE[" trace "]: ", outStream);   \
         }                                                               \
     } while (0)
@@ -665,15 +665,15 @@ private:
 #ifndef _ND280_OUTPUT_LOG
 #define _ND280_OUTPUT_LOG(trace,outStream)                              \
     do {                                                                \
-        std::ios::fmtflags save = CP::TND280Log::GetLogStream().flags(); \
-        CP::TND280Log::GetLogStream() << trace                          \
-                                      << CP::TND280Log::MakeIndent()    \
+        std::ios::fmtflags save = CP::TCaptLog::GetLogStream().flags(); \
+        CP::TCaptLog::GetLogStream() << trace                          \
+                                      << CP::TCaptLog::MakeIndent()    \
                                       << outStream                      \
                                       << std::setprecision(6)           \
                                       << std::setw(0)                   \
                                       << std::setfill(' ')              \
                                       << std::endl;                     \
-        CP::TND280Log::GetLogStream().flags(save);                      \
+        CP::TCaptLog::GetLogStream().flags(save);                      \
     } while (0)
 #endif
 
@@ -686,14 +686,14 @@ private:
 #endif
 
 #ifndef ND280Log
-/// Print a message to the log that appears at the CP::TND280Log::LogLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::LogLevel of
 /// output.  This should be reserved for log messages that should appear
 /// during production.  This macro takes one \ref
 /// streamish providing the log message.
 #define ND280Log(outStream)                                             \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::LogLevel <= CP::TND280Log::GetLogLevel()) \
+            if (CP::TCaptLog::LogLevel <= CP::TCaptLog::GetLogLevel()) \
                 _ND280_OUTPUT_LOG("% ",outStream);                      \
         }                                                               \
     } while (0)
@@ -703,14 +703,14 @@ behaviour may result.
 #endif
 
 #ifndef ND280NamedLog
-/// Print a message to the log that appears at the CP::TND280Log::LogLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::LogLevel of
 /// output.  This macro takes two arguments: The first argument must be a \ref
 /// trace (a string).  The second argument is a \ref streamish providing the
 /// log message.
 #define ND280NamedLog(trace,outStream)                                  \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::LogLevel <= CP::TND280Log::GetLogLevel(trace)) \
+            if (CP::TCaptLog::LogLevel <= CP::TCaptLog::GetLogLevel(trace)) \
                 _ND280_OUTPUT_LOG("% [" trace "] ",outStream);          \
         }                                                               \
     } while (0)
@@ -720,12 +720,12 @@ behaviour may result.
 #endif
 
 #ifndef ND280Info
-/// Print a message to the log that appears at the CP::TND280Log::InfoLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::InfoLevel of
 /// output.  This macro takes one \ref streamish providing the log message.
 #define ND280Info(outStream)                                            \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::InfoLevel <= CP::TND280Log::GetLogLevel()) \
+            if (CP::TCaptLog::InfoLevel <= CP::TCaptLog::GetLogLevel()) \
                 _ND280_OUTPUT_LOG("%% ",outStream);                     \
         }                                                               \
     } while (0)
@@ -735,14 +735,14 @@ behaviour may result.
 #endif
 
 #ifndef ND280NamedInfo
-/// Print a message to the log that appears at the CP::TND280Log::InfoLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::InfoLevel of
 /// output.  This macro takes two arguments: The first argument must a \ref
 /// trace (a string).  The second argument is a \ref streamish providing the
 /// log message.
 #define ND280NamedInfo(trace,outStream)                                 \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::InfoLevel <= CP::TND280Log::GetLogLevel(trace)) \
+            if (CP::TCaptLog::InfoLevel <= CP::TCaptLog::GetLogLevel(trace)) \
                 _ND280_OUTPUT_LOG("%% [" trace "] ",outStream);         \
         }                                                               \
     } while (0)
@@ -752,12 +752,12 @@ behaviour may result.
 #endif
 
 #ifndef ND280Verbose
-/// Print a message to the log that appears at the CP::TND280Log::VerboseLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::VerboseLevel of
 /// output.  This macro takes one \ref streamish providing the log message.
 #define ND280Verbose(outStream) \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::VerboseLevel <= CP::TND280Log::GetLogLevel()) \
+            if (CP::TCaptLog::VerboseLevel <= CP::TCaptLog::GetLogLevel()) \
                 _ND280_OUTPUT_LOG("%%% ",outStream);                      \
         }                                                               \
     } while (0)
@@ -767,14 +767,14 @@ behaviour may result.
 #endif
 
 #ifndef ND280NamedVerbose
-/// Print a message to the log that appears at the CP::TND280Log::VerboseLevel of
+/// Print a message to the log that appears at the CP::TCaptLog::VerboseLevel of
 /// output.  This macro takes two arguments: The first argument must be a \ref
 /// trace (a string).  The second argument is a \ref streamish providing the
 /// log message.
 #define ND280NamedVerbose(trace,outStream)                              \
     do {                                                                \
         if (ND280_LOG_OUTPUT) {                                         \
-            if (CP::TND280Log::VerboseLevel <= CP::TND280Log::GetLogLevel(trace)) \
+            if (CP::TCaptLog::VerboseLevel <= CP::TCaptLog::GetLogLevel(trace)) \
                 _ND280_OUTPUT_LOG("%%% [" trace "] ",outStream);          \
         }                                                               \
     } while (0)

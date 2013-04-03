@@ -7,7 +7,7 @@
 #include "TRootOutput.hxx"
 #include "TOADatabase.hxx"
 #include "THandleHack.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TMemoryUsage.hxx"
 #include "TRuntimeParameters.hxx"
 
@@ -117,9 +117,9 @@ int CP::eventLoop(int argc, char** argv,
     int readCount = defaultReadCount;
     int skipCount = 0;
     int debugLevel = 0;
-    std::map<std::string, CP::TND280Log::ErrorPriority> namedDebugLevel;
+    std::map<std::string, CP::TCaptLog::ErrorPriority> namedDebugLevel;
     int logLevel = -1; // Will choose default logging level...
-    std::map<std::string, CP::TND280Log::LogPriority> namedLogLevel;
+    std::map<std::string, CP::TCaptLog::LogPriority> namedLogLevel;
     std::string programName = argv[0];
     char *configName = NULL;
     std::vector<std::string> outputNames;
@@ -170,19 +170,19 @@ int CP::eventLoop(int argc, char** argv,
                 std::string levelName = arg.substr(sep+1);
                 switch (levelName[0]) {
                 case 'e': case 'E':
-                    namedDebugLevel[name.c_str()] = CP::TND280Log::ErrorLevel;
+                    namedDebugLevel[name.c_str()] = CP::TCaptLog::ErrorLevel;
                     break;
                 case 's': case 'S':
-                    namedDebugLevel[name.c_str()] = CP::TND280Log::SevereLevel;
+                    namedDebugLevel[name.c_str()] = CP::TCaptLog::SevereLevel;
                     break;
                 case 'w': case 'W':
-                    namedDebugLevel[name.c_str()] = CP::TND280Log::WarnLevel;
+                    namedDebugLevel[name.c_str()] = CP::TCaptLog::WarnLevel;
                     break;
                 case 'd': case 'D':
-                    namedDebugLevel[name.c_str()] = CP::TND280Log::DebugLevel;
+                    namedDebugLevel[name.c_str()] = CP::TCaptLog::DebugLevel;
                     break;
                 case 't': case 'T':
-                    namedDebugLevel[name.c_str()] = CP::TND280Log::TraceLevel;
+                    namedDebugLevel[name.c_str()] = CP::TCaptLog::TraceLevel;
                     break;
                 default:
                     eventLoopUsage(programName,userCode,defaultReadCount);
@@ -301,16 +301,16 @@ int CP::eventLoop(int argc, char** argv,
                 std::string levelName = arg.substr(sep+1);
                 switch (levelName[0]) {
                 case 'q': case 'Q':
-                    namedLogLevel[name.c_str()] = CP::TND280Log::QuietLevel;
+                    namedLogLevel[name.c_str()] = CP::TCaptLog::QuietLevel;
                     break;
                 case 'l': case 'L':
-                    namedLogLevel[name.c_str()] = CP::TND280Log::LogLevel;
+                    namedLogLevel[name.c_str()] = CP::TCaptLog::LogLevel;
                     break;
                 case 'i': case 'I':
-                    namedLogLevel[name.c_str()] = CP::TND280Log::InfoLevel;
+                    namedLogLevel[name.c_str()] = CP::TCaptLog::InfoLevel;
                     break;
                 case 'v': case 'V':
-                    namedLogLevel[name.c_str()] = CP::TND280Log::VerboseLevel;
+                    namedLogLevel[name.c_str()] = CP::TCaptLog::VerboseLevel;
                     break;
                 default:
                     eventLoopUsage(programName,userCode,defaultReadCount);
@@ -324,49 +324,49 @@ int CP::eventLoop(int argc, char** argv,
     }
     
     // Set up the logging code.
-    TND280Log::Configure(configName);
+    TCaptLog::Configure(configName);
     
     if (logLevel == 0) {
-        TND280Log::SetLogLevel(TND280Log::QuietLevel);
+        TCaptLog::SetLogLevel(TCaptLog::QuietLevel);
     }
     else if (logLevel == 1) {
-        TND280Log::SetLogLevel(TND280Log::LogLevel);
+        TCaptLog::SetLogLevel(TCaptLog::LogLevel);
         ND280Log("Set log level to LogLevel");
     }
     else if (logLevel == 2) {
-        TND280Log::SetLogLevel(TND280Log::InfoLevel);
+        TCaptLog::SetLogLevel(TCaptLog::InfoLevel);
         ND280Info("Set log level to InfoLevel");
     }
     else if (logLevel >= 3) {
-        TND280Log::SetLogLevel(TND280Log::VerboseLevel);
+        TCaptLog::SetLogLevel(TCaptLog::VerboseLevel);
         ND280Verbose("Set log level to VerboseLevel");
     }
     
-    for (std::map<std::string,CP::TND280Log::LogPriority>::iterator i 
+    for (std::map<std::string,CP::TCaptLog::LogPriority>::iterator i 
              = namedLogLevel.begin();
          i != namedLogLevel.end();
          ++i) {
-        CP::TND280Log::SetLogLevel(i->first.c_str(), i->second);
+        CP::TCaptLog::SetLogLevel(i->first.c_str(), i->second);
     }
          
     if (debugLevel == 1) {
-        TND280Log::SetDebugLevel(TND280Log::WarnLevel);
+        TCaptLog::SetDebugLevel(TCaptLog::WarnLevel);
         ND280Warn("Set debug level to WarnLevel");
     }
     else if (debugLevel == 2) {
-        TND280Log::SetDebugLevel(TND280Log::DebugLevel);
+        TCaptLog::SetDebugLevel(TCaptLog::DebugLevel);
         ND280Debug("Set debug level to DebugLevel");
     }
     else if (debugLevel >= 2) {
-        TND280Log::SetDebugLevel(TND280Log::TraceLevel);
+        TCaptLog::SetDebugLevel(TCaptLog::TraceLevel);
         ND280Trace("Set debug level to TraceLevel");
     }
 
-    for (std::map<std::string,CP::TND280Log::ErrorPriority>::iterator i 
+    for (std::map<std::string,CP::TCaptLog::ErrorPriority>::iterator i 
              = namedDebugLevel.begin();
          i != namedDebugLevel.end();
          ++i) {
-        CP::TND280Log::SetDebugLevel(i->first.c_str(), i->second);
+        CP::TCaptLog::SetDebugLevel(i->first.c_str(), i->second);
     }
          
     if (!outputNames.empty()) {

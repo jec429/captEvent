@@ -7,7 +7,7 @@
 #include "THandle.hxx"
 #include "TReconBase.hxx"
 #include "TReconState.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 namespace CP {
     class TReconNode;

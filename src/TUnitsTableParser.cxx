@@ -1,6 +1,6 @@
 #include "TUnitsTableParser.hxx"
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "HEPUnits.hxx"
 
 #include <iostream>

@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "TCorrValues.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TCorrValues);
 
