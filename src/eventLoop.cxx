@@ -1,3 +1,16 @@
+#include "eventLoop.hxx"
+
+#include "EoaCore.hxx"
+
+#include "TEvent.hxx"
+#include "TRootInput.hxx"
+#include "TRootOutput.hxx"
+#include "TOADatabase.hxx"
+#include "THandleHack.hxx"
+#include "TND280Log.hxx"
+#include "TMemoryUsage.hxx"
+#include "TRuntimeParameters.hxx"
+
 #include <iostream>
 #include <sstream>
 #include <limits>
@@ -10,17 +23,6 @@
 #include <map>
 
 #include <TROOT.h>
-
-#include "EoaCore.hxx"
-
-#include "TEvent.hxx"
-#include "TRootInput.hxx"
-#include "TRootOutput.hxx"
-#include "TOADatabase.hxx"
-#include "THandleHack.hxx"
-#include "TND280Log.hxx"
-#include "TMemoryUsage.hxx"
-#include "eventLoop.hxx"
 
 namespace {
     void eventLoopUsage(std::string programName, 
@@ -80,6 +82,10 @@ namespace {
         std::cout << "    -r                ND280 ROOT file"
                   << std::endl;
 
+        std::cout << "    -R <override>     Name of an run-time parameter "
+                  << "override file"
+                  << std::endl;
+
         std::cout << "    -s <cnt>          Skip <cnt> events"
                   << std::endl;
         
@@ -134,7 +140,7 @@ int CP::eventLoop(int argc, char** argv,
 
     // Process the options.
     for (;;) {
-        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qrs:uvV:");
+        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qrR:s:uvV:");
         if (c<0) break;
         switch (c) {
         case 'a':
@@ -259,6 +265,11 @@ int CP::eventLoop(int argc, char** argv,
         case 'r':
         {
             fileType = kRootFile;
+            break;
+        }
+        case 'R':
+        {
+            CP::TRuntimeParameters::Get().ReadParamOverrideFile(optarg);
             break;
         }
         case 's':

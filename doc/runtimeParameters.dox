@@ -1,0 +1,133 @@
+/*! \page runtimeParameters The runtimeParameters package
+  
+\section introduction  Introduction
+
+This package is meant to provide access to a set of parameters that are
+defined in a set of text files; in particular, the text files are used to
+store 'software runtime parameters' in calibration and reconstruction
+algorithms.  This package consists of the a single class:
+TRuntimeParameters.
+
+Let's start with some definitions:
+
+'Software runtime parameters' (or just 'runtime parameters'): runtime
+parameters are values that determine how the software and software
+algorithms will operate.  Some examples of runtime parameters:
+
+    - A value that defines which reconstruction algorithm to use.
+    - A value that defines the minimum number of hits to use in some
+        clustering algorithm. 
+    - A value that defines the minimum charge for a dark noise rejection
+        algorithm.  
+
+
+'Calibration constants': these are constants that are provided by the
+sub-detector calibrations, that reflect physical quantities.  In general,
+these physical quantities will change with time; also, our knowledge and
+calculation of these quantities will also change.  Some examples of
+calibration constants:
+
+    - TPC gas drift velocity
+    - Number of ADC for a single photoelectron
+    - Pedestals
+
+This package is only meant to store runtime parameters.  Calibration
+constants are get stored in the offline
+database.
+
+\section truntimeParameters TRuntimeParameters
+
+This singleton class provides access to a set of parameters defined in text
+files.  The parameters are stored as a name and a value.  As an example,
+you can retrieve the integer number of pixels used in the MAPD simulation
+in elecSim by doing
+
+\code
+TRuntimeParameters::Get().GetParameterI("elecSim.MAPD.NumberPixels")
+\endcode
+
+You can also retrieve double values using 
+
+\code
+TRuntimeParameters::Get().GetParameterD("elecSim.MAPD.Crosstalk")
+\endcode
+
+ 
+\section parameters Storing parameters in text files
+
+The following are some notes and conventions about storing 
+parameters in the text files.
+
+- A package that needs a set of run time parameters should
+create a single parameters file.  The name of the file should be
+<package name>.parameters.dat (ie tpcRecon.parameters.dat for
+tpcRecon); the file should be located in the parameters
+directory of the package in question.
+
+- Within each text file parameters are stored as
+
+\code
+< NAME = VALUE>
+\endcode
+
+for parameters without units or as 
+
+\code
+< NAME = VALUE UNIT >
+\endcode
+
+for parameters with units.  An example of a parameter
+without a unit is 
+
+\code
+< elecSim.MAPD.NumberPixels = 400 >               
+\endcode
+
+and an example of a parameter with a unit is
+
+\code
+< elecSim.Scintillator.BirksConstant = 0.005 cm/MeV >               
+\endcode
+
+All text outside of <> brackets is ignored.
+
+- Parameter naming convention:
+
+1) Use points ('.') to separate a hierarchy 
+describing the parameter.
+
+2) The first part of the parameter name should be the CMT package that this
+parameter is being used by (in the above case elecSim). This is essential
+for maintaining the search path.
+
+- Parameter units.  As noted, you can explicitly define the units for your
+parameter.  However, the database only knows about a limited subset of
+different units.  You can see the list of known units by running the test
+program as follows:
+
+\code
+testDummyDatabase.exe --print_table
+\endcode
+
+
+\subsection autoparameters Automatic Loading of Parameters Files
+
+If the rules above are followed, then no additional work is 
+necessary in order for TRuntimeParameters to be able to 
+find and load the parameters files.  The first time a user asked
+for a particular parameter, the interface will know where to look 
+for the parameters text file; for instance if you ask for the 
+parameter tpcRecon.PID.TrunMean.PadFrac the interface will know
+to load the file tpcRecon/parameters/tpcRecon.parameters.dat
+
+Note that the package where you make this call must depend on the 
+package that has the parameters.  Continuing our example, to be 
+able to use the parameter tpcRecon.PID.TrunMean.PadFrac you must 
+be in tpcRecon or a package that depends on tpcRecon.  You could
+not, for example be in elecSim that does not depend on tpcRecon.
+
+*/
+
+
+
+
