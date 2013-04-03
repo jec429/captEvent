@@ -8,7 +8,7 @@
 
 #include <TROOT.h>
 
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 class TTestSplit: public CP::TND280EventLoopFunction {
 public:
@@ -30,7 +30,7 @@ private:
 
 int main(int argc, char **argv) {
     TTestSplit userCode;
-    nd280EventLoop(argc,argv,userCode);
+    captainEventLoop(argc,argv,userCode);
 }
 
 

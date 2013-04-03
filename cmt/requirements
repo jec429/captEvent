@@ -1,13 +1,13 @@
 package captEvent
 # This package provides the core I/O and support functions for all of the
-# ND280 software and must be kept stable.  As much as possible, backward
+# CAPTAIN software and must be kept stable.  As much as possible, backward
 # compatibility must be maintained.  Please contact the package manager
 # before making changes.  In particular, contact the package manager
 # before designing (or especially implementing) any structural changes so
 # we can make sure that all of the impacts of the change are understood by
 # the entire group.  A new stable version should be created before
 # significant changes are made.  Email enquiries should be directed to
-# t2k-nd280-software@nngroup.physics.sunysb.edu
+# captain-sw@simpa.lbl.gov.
 #
 # Changes in captEvent affect the output format of events.  Incompatible
 # changes can make older data unreadable.

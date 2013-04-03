@@ -387,7 +387,7 @@ namespace {
 
 void CP::TND280Log::Configure(const char* conf) {
     // Try to read a local configuration file.  
-    ReadConfigurationFile("./nd280log.config");
+    ReadConfigurationFile("./captainlog.config");
     if (conf) {
         bool success = ReadConfigurationFile(conf);
         if (!success) ND280Log("ND280Log configuration file was not read.");

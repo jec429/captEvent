@@ -94,8 +94,8 @@ namespace CP {
 /// %%% Have a piece of 3.1415
 /// \endcode
 ///
-/// The logging level can be set using the "nd280log.config" file (see \ref
-/// nd280logConfig) to define a log level
+/// The logging level can be set using the "captainlog.config" file (see \ref
+/// captainlogConfig) to define a log level
 ///
 /// \code
 /// log.default.level = VerboseLevel # also LogLevel or InfoLevel
@@ -137,14 +137,14 @@ namespace CP {
 /// log.traceName.level = InfoLevel
 /// \endcode
 ///
-/// \section nd280logConfig The TND280Log Configuration File
+/// \section captainlogConfig The TND280Log Configuration File
 ///
 /// The configuration of the TND280Log object can be handled using static
 /// methods, or using a configuration file that is read by a call to the
 /// TND280Log::Configure() method.  When the TND280Log::Configure() method is
-/// called, it will first try to read "nd280log.config" in the local
+/// called, it will first try to read "captainlog.config" in the local
 /// directory.  If TND280Log::Configure() is called with a file name, the
-/// named configuration file will be read after the nd280log.config file and
+/// named configuration file will be read after the captainlog.config file and
 /// can override any settings.
 ///
 /// The TND280Log configuration file uses a simple line oriented syntax.  
@@ -181,7 +181,7 @@ namespace CP {
 /// - error.[trace].level -- Set the error level for the named trace.  The
 ///  level names are the same as error.default.level.
 ///
-/// An example of the nd280log.config file shows how it might be used.  This
+/// An example of the captainlog.config file shows how it might be used.  This
 /// file causes the log messages to be printed in "output.log", and the error
 /// messages to be printed in "output.err".  The default log level is set to
 /// TND280Log::InfoLevel so that messages are written from all ND280Log(),
@@ -195,7 +195,7 @@ namespace CP {
 /// output" into the log file).
 ///
 /// \code
-/// # An atypical example nd280log.config
+/// # An atypical example captainlog.config
 /// log.file = "output.log"       # Set the name of the output file.
 /// error.file = "output.err"     # Set the name of the error file.
 ///
@@ -204,16 +204,16 @@ namespace CP {
 ///
 /// error.myTrace.level = DebugLevel # set myTrace to use TraceLevel.
 /// 
-/// # End of nd280log.config
+/// # End of captainlog.config
 /// \endcode
 ///
-/// Here is an example of a typical nd280log.config file that would be used
+/// Here is an example of a typical captainlog.config file that would be used
 /// during debuging.  This assumes that your routine is using the \ref trace
 /// MyRoutine (a bad name!), and prints all of the error messages to the
 /// terminal. 
 ///
 /// \code 
-/// # A Typical nd280log.config file.  Copy this into your directory as you
+/// # A Typical captainlog.config file.  Copy this into your directory as you
 /// #   are debugging a program. 
 ///
 /// # Uncomment the next line to save the log and debugging output to
@@ -229,7 +229,7 @@ namespace CP {
 /// # Print all of the debugging messages from my code.
 /// error.MyRoutine.level = TraceLevel
 ///
-/// # End of nd280log.config
+/// # End of captainlog.config
 /// \endcode
 ///
 /// \section logLevel Log Levels
@@ -393,10 +393,10 @@ public:
     /// Cause the logging and error output streams to be initialized.
     /// Basic configuration for logging occurs automatically, so this need not
     /// be called.  If this is called, then it first trys to read the
-    /// nd280log.config file in the current directory.  If Configure is called
+    /// captainlog.config file in the current directory.  If Configure is called
     /// with an argument, then the named file will be read after reading the
     /// local configuration file.  If Configure is called with a named file
-    /// then that file must exist.  The \ref nd280logConfig syntax is
+    /// then that file must exist.  The \ref captainlogConfig syntax is
     /// described elsewhere.
     static void Configure(const char* conf=NULL);
 

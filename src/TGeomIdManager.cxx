@@ -266,7 +266,7 @@ CP::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
     void* dirp = gSystem->OpenDirectory(geometryName.c_str());
     if (!dirp) {
         ND280Severe("Geometry directory not available:"
-                    "  Run nd280-get-geometry.");
+                    "  Run captain-get-geometry.");
         return result;
     }
 

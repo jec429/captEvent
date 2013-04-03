@@ -3,7 +3,7 @@
 While ND280 events can be accessed inside of a larger framework using a
 ROOT selector and PROOF (a path towards instant gridification), as of now
 the easiest access is through an event loop using the using the
-CP::nd280EventLoop() template and a class derived from
+CP::captainEventLoop() template and a class derived from
 CP::TND280EventLoopFunction base class.  The user will then need to provide
 a short (as in four line) main program which can then be compiled and run
 using the \ref oaEvent library.  This creates creates a stand-alone
@@ -20,10 +20,10 @@ installed.  You can verify that you've got a working version of oaEvent
 library by running the \c dump-event.exe program which should print a short
 usage message.  If you do not have a working copy of oaEvent, return to the
 <a
-href="http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/Workbook.html">
+href="http://www.hep.lancs.ac.uk/captainDoc/devel/invariant/captainDoc/workbook/Workbook.html">
 Workbook documentation </a> to complete the installation.  In what follows
 we assume that you have installed the software in a directory called
-'${HOME}/nd280rep'; change this to where ever your actual software is
+'${HOME}/captainrep'; change this to where ever your actual software is
 installed.
 
 \htmlonly
@@ -54,7 +54,7 @@ cmt create myND280 v0r0
 
 which creates a new sub-directory tree starting at \c myND280/v0r0 which is
 called the package root.  For the rest of the example, directories will be
-given relative to the package root (i.e. ${HOME}/nd280rep/myND280/v0r0).
+given relative to the package root (i.e. ${HOME}/captainrep/myND280/v0r0).
 Change directory into \c myND280/v0r0/cmt and edit the \c requirements
 file.  The requirements file will start with only a single line saying
 'package myND280'; replace this with the following lines
@@ -81,13 +81,13 @@ cmt config
 source setup.sh
 \endcode
 
-An nd280EventLoop() program consists of a user class derived from
+An captainEventLoop() program consists of a user class derived from
 CP::TND280EventLoopFunction, and a very small main program.  The user class is
 only needs to implement a constructor and a destructor, neither of which
 need to do anything.  The simplest skeleton program is 
 
 \code
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
 public:
@@ -97,12 +97,12 @@ public:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    nd280EventLoop(argc,argv,userCode);
+    captainEventLoop(argc,argv,userCode);
 }
 \endcode
 
 To get a working example of this program, create the \c
-${HOME}/nd280rep/myND280/v0r0/app subdirectory and add this text to the
+${HOME}/captainrep/myND280/v0r0/app subdirectory and add this text to the
 file \c app/mySimpleEventLoop.cxx.  Then, edit the cmt/requirements file to add
 
 \code
@@ -163,7 +163,7 @@ will histogram the number of hits in the P0D.
 #include <memory>
 
 // Include to get Event Loop.
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 // Includes for ROOT classes
 #include <TH1F.h>
@@ -210,7 +210,7 @@ private:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    nd280EventLoop(argc,argv,userCode);
+    captainEventLoop(argc,argv,userCode);
 }
 
 \endcode
@@ -255,7 +255,7 @@ TMySimpleEventLoop.  The code below uses the same information we looked at
 before (number of hits in P0D), but stores it in the TTree.
 
 \code
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 #include <memory>
 #include <TTree.h>
 
@@ -291,7 +291,7 @@ private:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    nd280EventLoop(argc,argv,userCode);
+    captainEventLoop(argc,argv,userCode);
 }
 \endcode 
 
@@ -317,7 +317,7 @@ triggers, pedestal triggers into a separate file, and reject all other
 trigger types.  For a better way to do this see, \ref triggerSelection.
 
 \code
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
 public:
@@ -333,7 +333,7 @@ public:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    nd280EventLoop(argc,argv,userCode);
+    captainEventLoop(argc,argv,userCode);
 }
 \endcode 
 

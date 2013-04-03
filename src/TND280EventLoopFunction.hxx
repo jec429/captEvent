@@ -17,7 +17,7 @@ namespace CP {
     OA_EXCEPTION(ENextEventLoopFile,EoaCore);
 };
 
-/// A base class for use with the CP::nd280EventLoop() which defines the
+/// A base class for use with the CP::captainEventLoop() which defines the
 /// command line options.  User classes should implement the
 /// operator()(TND280Event& event) method that returns true if the event
 /// should be saved to an output file.  If false is returned, then the event
@@ -47,7 +47,7 @@ namespace CP {
 ///
 /// int main(int argc, char **argv) {
 ///     TUserCode userCode;
-///     CP::nd280EventLoop(argc,argv,userCode);
+///     CP::captainEventLoop(argc,argv,userCode);
 /// }
 /// \endcode
 ///

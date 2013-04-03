@@ -16,7 +16,7 @@
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
 
-/// The standard namespace for nd280 offline software (see \ref namespaces).  
+/// The standard namespace for captain offline software (see \ref namespaces).  
 namespace CP {
     class TND280Event;
 }

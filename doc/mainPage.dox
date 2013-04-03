@@ -35,7 +35,7 @@
   the event structure is also described.
 
   The best frame work for accessing events is using an event loop which is
-  documented in \ref eventLoop and CP::nd280EventLoop().  Programs written
+  documented in \ref eventLoop and CP::captainEventLoop().  Programs written
   using the event loop automatically handle reading of the input file (in
   both ROOT and MIDAS format), output to one or more files, loading of the
   geometry, and filtering of the trigger type.

@@ -1,7 +1,7 @@
 #include <memory>
 #include <iostream>
 
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 /// User code for the event loop.  This can be copied and used as a skeleton
 /// for generic user loop programs.
@@ -55,5 +55,5 @@ private:
 
 int main(int argc, char **argv) {
     TUserLoop userLoop;
-    nd280EventLoop(argc,argv,userLoop);
+    captainEventLoop(argc,argv,userLoop);
 }

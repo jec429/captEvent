@@ -59,7 +59,7 @@ core input and output for the ND280 off-line software.  As a result, this
 imposes several programming constraints.
 
  - The oaEvent library dependencies are limited to ROOT.
- - The oaEvent package dependencies are limited to the ROOT, nd280Policy and
+ - The oaEvent package dependencies are limited to the ROOT, captainPolicy and
    testBase packages
  - The objects must be suitable for output to the ND280 off-line event
    files.

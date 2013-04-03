@@ -1,6 +1,6 @@
 #include <TROOT.h>
 
-#include <nd280EventLoop.hxx>
+#include <captainEventLoop.hxx>
 
 class TDumpEvent: public CP::TND280EventLoopFunction {
 public:
@@ -56,6 +56,6 @@ private:
 
 int main(int argc, char **argv) {
     TDumpEvent userCode;
-    CP::nd280EventLoop(argc,argv,userCode,1);
+    CP::captainEventLoop(argc,argv,userCode,1);
 }
 
