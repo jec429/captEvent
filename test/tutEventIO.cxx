@@ -9,7 +9,7 @@
 #include <tut.h>
 
 #include "TND280Event.hxx"
-#include "TND280Input.hxx"
+#include "TRootInput.hxx"
 #include "TRootOutput.hxx"
 #include "TMCHit.hxx"
 #include "TMultiHit.hxx"
@@ -218,7 +218,7 @@ namespace tut {
             try {
                 if (inputEvents.size()<1) {
                     // Read the event back.
-                    CP::TND280Input* input = new CP::TND280Input(fileName,"OLD");
+                    CP::TRootInput* input = new CP::TRootInput(fileName,"OLD");
                     for (CP::TND280Event* event = input->FirstEvent();
                          !input->EndOfFile();
                          event = input->NextEvent()) {

@@ -31,7 +31,7 @@ TTree with a single branch containing all of the events in the file.  There
 is a small amount of bookkeeping required to correctly read events from a
 file, mostly involving keeping the TOADatabase synchronized with the
 event.  This can be handled by reading the ND280Events TTree object using
-the TND280Input class.  
+the TRootInput class.  
 
 \section accessingTDatum The TND280Event Has, Get, and Use methods
 

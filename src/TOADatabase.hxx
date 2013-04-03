@@ -24,7 +24,7 @@ namespace CP {
     class TOADatabase;
     class TDigitManager;
     class TGeomIdManager;
-    class TND280Input;
+    class TRootInput;
     class TGeometryId;
 
     /// An exception from the data base.
@@ -60,7 +60,7 @@ namespace CP {
 /// CP::TOADatabase::GeometryChange class documentation for more details.
 ///
 class CP::TOADatabase {
-    friend class CP::TND280Input;
+    friend class CP::TRootInput;
     friend class CP::TGeomIdManager;
 
 public:
@@ -345,7 +345,7 @@ private:
     virtual CP::TAlignmentId ApplyAlignmentLookup(const CP::TND280Event* event);
 
     /// Set the current input file for the data base.  This must be set for
-    /// many of the methods to work correctly.  This is used by TND280Input to
+    /// many of the methods to work correctly.  This is used by TRootInput to
     /// notify TOADatabase when the input file changes.
     void SetCurrentInputFile(TFile* input);
     

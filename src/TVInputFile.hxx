@@ -7,7 +7,7 @@ namespace CP {
 };
 
 /// An abstract base class for input files that produce TND280Event objects.
-/// There are currently two derived class TND280Input which is the normal way
+/// There are currently two derived class TRootInput which is the normal way
 /// to read an offline event file, and TMidasFile which is the normal way to
 /// read a MIDAS .mid file and convert the raw data into TND280Event objects.  
 class CP::TVInputFile {

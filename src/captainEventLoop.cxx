@@ -14,7 +14,7 @@
 #include "EoaCore.hxx"
 
 #include "TND280Event.hxx"
-#include "TND280Input.hxx"
+#include "TRootInput.hxx"
 #include "TRootOutput.hxx"
 #include "TOADatabase.hxx"
 #include "THandleHack.hxx"
@@ -403,7 +403,7 @@ int CP::captainEventLoop(int argc, char** argv,
             switch (fileType) {
             case kRootFile:{
                 TFile* file = TFile::Open(fileName.c_str(),"OLD");
-                input.reset(new CP::TND280Input(file));
+                input.reset(new CP::TRootInput(file));
                 break;
             }
             default:

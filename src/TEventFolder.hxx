@@ -12,11 +12,11 @@ namespace CP {
     class TEventFolder;
 }
 
-/// Provide management for events read using the TND280Input object and kept
+/// Provide management for events read using the TRootInput object and kept
 /// in the //root/Events folder.
 ///
 /// TND280Event objects are usually read from an input file using a
-/// TND280Input object (output is with a TRootOutput).  The last event read
+/// TRootInput object (output is with a TRootOutput).  The last event read
 /// will be available from TEventFolder::GetCurrentEvent() which is a static
 /// method.  Interactive programs which want to provide a method to keep
 /// multiple events in memory (e.g. the event display), should get the current

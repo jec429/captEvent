@@ -1,5 +1,5 @@
-#ifndef TND280Input_hxx_seek
-#define TND280Input_hxx_seek
+#ifndef TRootInput_hxx_seek
+#define TRootInput_hxx_seek
 
 #include <TFile.h>
 
@@ -14,7 +14,7 @@ namespace CP {
     OA_EXCEPTION(ENoEvents,END280Input);
 
     class TND280Event;
-    class TND280Input;
+    class TRootInput;
 }
 
 /// Attach to a file so that the events can be read.  This also checks
@@ -23,19 +23,19 @@ namespace CP {
 /// TRootOutput class.  This will work with any file name, but the preferred
 /// file extension is [name].root (using this extension will help root
 /// identify this file as an ND280 event file).
-class CP::TND280Input : public TVInputFile {
+class CP::TRootInput : public TVInputFile {
 public:
     /// Open an input file. 
-    TND280Input(const char* fName, Option_t* option="", int compress = 1);
+    TRootInput(const char* fName, Option_t* option="", int compress = 1);
 
     /// Use a TFile that was opened someplace else.  The ND280Input object
     /// takes ownership of the file.  This is particularly useful if the file
     /// has been openned using the static TFile::Open method.  This method
     /// returns a pointer to a TFile derived class that is appropriate to the
     /// type of file (dist, http, &c).
-    TND280Input(TFile* file);
+    TRootInput(TFile* file);
 
-    virtual ~TND280Input(void);
+    virtual ~TRootInput(void);
     
     /// Overload the base class filename.
     const char* GetFilename() const {return GetInputName();}
@@ -76,7 +76,7 @@ public:
     virtual TND280Event* ReadEvent(Int_t n);
 
     /// Make sure that the file is closed.  This method is specific to
-    /// TND280Input.
+    /// TRootInput.
     virtual void Close(Option_t* opt = "");
 
     /// The generic way to close the file.  This is inherited from TVInputFile
@@ -107,9 +107,9 @@ private:
 
 #ifdef PRIVATE_COPY
 private:
-    TND280Input(const TND280Input& aFile);
+    TRootInput(const TRootInput& aFile);
 #endif
 
-    ClassDef(TND280Input,0);
+    ClassDef(TRootInput,0);
 };
 #endif
