@@ -10,7 +10,7 @@
 
 #include <captainEventLoop.hxx>
 
-class TTestSplit: public CP::TND280EventLoopFunction {
+class TTestSplit: public CP::TEventLoopFunction {
 public:
     TTestSplit() {
         fCount = 0;

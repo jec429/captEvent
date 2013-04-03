@@ -7,7 +7,7 @@
 
 #include <captainEventLoop.hxx>
 
-class TTestGeomId: public CP::TND280EventLoopFunction {
+class TTestGeomId: public CP::TEventLoopFunction {
 public:
     TTestGeomId() {}
 

@@ -1,15 +1,15 @@
 #ifndef captainEventLoop_hxx_seen
 #define captainEventLoop_hxx_seen
 
-#include "TND280EventLoopFunction.hxx"
+#include "TEventLoopFunction.hxx"
 
 namespace CP {
 /// The CP::captainEventLoop() function provides a basic event loop that will call
-/// user code for each event.  See CP::TND280EventLoopFunction for a base class
+/// user code for each event.  See CP::TEventLoopFunction for a base class
 /// that can be used with this event loop.  This is used in code like this:
 ///
 /// \code
-/// class TDumpEvent: public CP::TND280EventLoopFunction {
+/// class TDumpEvent: public CP::TEventLoopFunction {
 /// public:
 ///     bool operator () (CP::TND280Event& event) {
 ///         // User Code
@@ -74,7 +74,7 @@ namespace CP {
 /// name.  That will help keep the doxygen documentation useful.
 /// \endhtmlonly
     int captainEventLoop(int argc, char** argv, 
-                        CP::TND280EventLoopFunction& userCode, 
+                        CP::TEventLoopFunction& userCode, 
                         int defaultReadCount=0);
 };
  

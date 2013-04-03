@@ -5,7 +5,7 @@
 
 /// User code for the event loop.  This can be copied and used as a skeleton
 /// for generic user loop programs.
-class TUserLoop: public TND280EventLoopFunction {
+class TUserLoop: public TEventLoopFunction {
 public:
     /// Initialize any class specific variables, but most of the work can be
     /// done in Initialize.  Don't create histograms here!

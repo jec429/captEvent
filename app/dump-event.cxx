@@ -2,7 +2,7 @@
 
 #include <captainEventLoop.hxx>
 
-class TDumpEvent: public CP::TND280EventLoopFunction {
+class TDumpEvent: public CP::TEventLoopFunction {
 public:
     TDumpEvent() {
         fLSOption = "";
@@ -44,7 +44,7 @@ public:
     // Do nothing... This is here to test compiler warnings.  The warning
     // can be prevented by adding
     //
-    // using CP::TND280EventLoopFunction::Finalize;
+    // using CP::TEventLoopFunction::Finalize;
     void Finalize(CP::TND280Output*const output) {
     }
 

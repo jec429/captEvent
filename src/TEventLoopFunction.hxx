@@ -1,5 +1,5 @@
-#ifndef TND280EventLoopFunction_hxx_seen
-#define TND280EventLoopFunction_hxx_seen
+#ifndef TEventLoopFunction_hxx_seen
+#define TEventLoopFunction_hxx_seen
 
 #include "EoaCore.hxx"
 
@@ -7,7 +7,7 @@
 #include "method_deprecated.hxx"
 
 namespace CP {
-    class TND280EventLoopFunction;
+    class TEventLoopFunction;
     class TVInputFile;
     class TND280Output;
 
@@ -31,7 +31,7 @@ namespace CP {
 /// The event loop code is used as follows:
 ///
 /// \code
-/// class TUserCode: public TND280EventLoopFunction {
+/// class TUserCode: public TEventLoopFunction {
 /// public:
 ///     void Initialize() {
 ///         // Do something
@@ -65,11 +65,11 @@ namespace CP {
  * name.  That will help keep the doxygen documentation useful.
  * \endhtmlonly
  */
-class CP::TND280EventLoopFunction {
+class CP::TEventLoopFunction {
 public:
 
-    TND280EventLoopFunction ();
-    virtual ~TND280EventLoopFunction ();
+    TEventLoopFunction ();
+    virtual ~TEventLoopFunction ();
 
     /// Called for each event inside the event loop, and returns true if the
     /// event should be saved to the output file.  If the remainder of the

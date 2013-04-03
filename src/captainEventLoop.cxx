@@ -24,7 +24,7 @@
 
 namespace {
     void captainEventLoopUsage(std::string programName, 
-                             CP::TND280EventLoopFunction& userCode,
+                             CP::TEventLoopFunction& userCode,
                              int readCount) {
         std::cout << "usage: " << programName 
                   << " [options] [input-file] ..." 
@@ -105,7 +105,7 @@ namespace {
 };
 
 int CP::captainEventLoop(int argc, char** argv,
-                       CP::TND280EventLoopFunction& userCode, 
+                       CP::TEventLoopFunction& userCode, 
                        int defaultReadCount) {
     if (defaultReadCount<0) defaultReadCount = 0;
     int readCount = defaultReadCount;

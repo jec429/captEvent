@@ -4,7 +4,7 @@ While ND280 events can be accessed inside of a larger framework using a
 ROOT selector and PROOF (a path towards instant gridification), as of now
 the easiest access is through an event loop using the using the
 CP::captainEventLoop() template and a class derived from
-CP::TND280EventLoopFunction base class.  The user will then need to provide
+CP::TEventLoopFunction base class.  The user will then need to provide
 a short (as in four line) main program which can then be compiled and run
 using the \ref oaEvent library.  This creates creates a stand-alone
 program, and is ideal for data reduction and reconstruction programs.  The
@@ -82,14 +82,14 @@ source setup.sh
 \endcode
 
 An captainEventLoop() program consists of a user class derived from
-CP::TND280EventLoopFunction, and a very small main program.  The user class is
+CP::TEventLoopFunction, and a very small main program.  The user class is
 only needs to implement a constructor and a destructor, neither of which
 need to do anything.  The simplest skeleton program is 
 
 \code
 #include <captainEventLoop.hxx>
 
-class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
+class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
@@ -135,7 +135,7 @@ this operator, the following TMySimpleEventLoop class dumps the event
 information for each event in a file.
 
 \code
-class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
+class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
@@ -154,8 +154,8 @@ event, so see the documentation for TND280Event.
 Most useful code will need to create histograms and do other initialization
 before the first event, and then save information after the last event.
 This can be done by overriding the
-CP::TND280EventLoopFunction::Initialize() and
-CP::TND280EventLoopFunction::Finalize() methods.  Here is an example that
+CP::TEventLoopFunction::Initialize() and
+CP::TEventLoopFunction::Finalize() methods.  Here is an example that
 will histogram the number of hits in the P0D.
 
 \code
@@ -169,7 +169,7 @@ will histogram the number of hits in the P0D.
 #include <TH1F.h>
 #include <TPad.h>
 
-class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
+class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
@@ -228,7 +228,7 @@ hits in the P0D.
 
 A typical use of an event loop is to read through an event file and save
 events which match a particular set of criteria to an output file.  This is
-trivially done using a CP::TND280EventLoopFunction.  The first step is open an
+trivially done using a CP::TEventLoopFunction.  The first step is open an
 output file while running the \c mySimpleEventLoop.exe program.  This is done by
 adding the \c "-o" option to the command line.
 
@@ -259,7 +259,7 @@ before (number of hits in P0D), but stores it in the TTree.
 #include <memory>
 #include <TTree.h>
 
-class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
+class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
@@ -319,7 +319,7 @@ trigger types.  For a better way to do this see, \ref triggerSelection.
 \code
 #include <captainEventLoop.hxx>
 
-class TMySimpleEventLoop: public CP::TND280EventLoopFunction {
+class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
@@ -418,7 +418,7 @@ There is skeleton code available
 \htmlonly
 <a href="../doc/treeEventLoop.cxx">(../doc/treeEventLoop.cxx)</a> 
 \endhtmlonly
-of a CP::TND280EventLoopFunction that creates and saves an TTree to the output
+of a CP::TEventLoopFunction that creates and saves an TTree to the output
 file without saving events.  If you use this code, do a global search and
 replace on "UserLoop", changing it to some more useful name.  That will
 help keep the doxygen documentation useful. 
