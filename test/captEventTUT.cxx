@@ -5,7 +5,7 @@
 #include <tut.h>
 #include <tut_reporter.h>
 
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 
 namespace tut {
     test_runner_singleton runner;
@@ -17,7 +17,7 @@ int main(int argc,const char* argv[]) {
     std::string group;
     int test = -1;
 
-    CP::TND280Log::Configure();
+    CP::TCaptLog::Configure();
 
     command = errorFound;
 

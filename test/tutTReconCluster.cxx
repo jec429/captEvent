@@ -6,7 +6,7 @@
 
 #include "TReconCluster.hxx"
 #include "TReconTrack.hxx"
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TMCHit.hxx"
 #include "ND280GeomId.hxx"
 #include "HEPUnits.hxx"
@@ -92,10 +92,10 @@ namespace tut {
         try {
             recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetState(recState);
-            CP::TND280Log::ErrorPriority lvl = CP::TND280Log::GetDebugLevel();
-            CP::TND280Log::SetDebugLevel(CP::TND280Log::SilentLevel);
+            CP::TCaptLog::ErrorPriority lvl = CP::TCaptLog::GetDebugLevel();
+            CP::TCaptLog::SetDebugLevel(CP::TCaptLog::SilentLevel);
             recNodes.push_back(recNode);
-            CP::TND280Log::SetDebugLevel(lvl);
+            CP::TCaptLog::SetDebugLevel(lvl);
             recNode->ls();
             fail("TReconNodeContainer object is empty");
         } 

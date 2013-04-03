@@ -6,7 +6,7 @@
 
   The I/O is provided by ROOT which is used to save CP::TEvent objects and
   the TGeoManager description of the detector geometry.  The output to log
-  files, and for debugging is controlled by the CP::TND280Log class.  All of
+  files, and for debugging is controlled by the CP::TCaptLog class.  All of
   the classes are in the ND namespace.  This namespace should contain all
   ND280 code.  
 

@@ -17,7 +17,7 @@
 #include <TOADatabase.hxx>
 #include <TGeomIdManager.hxx>
 #include <TSHAHashValue.hxx>
-#include <TND280Log.hxx>
+#include <TCaptLog.hxx>
 
 void usage(int argc, char **argv) {
     std::cout << std::endl

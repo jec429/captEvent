@@ -1,10 +1,10 @@
 #include <iostream>
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "HEPUnits.hxx"
 
-// Test CP::TND280Log and friends.
+// Test CP::TCaptLog and friends.
 int main (int argc, char **argv) {
-    CP::TND280Log::Configure();
+    CP::TCaptLog::Configure();
 
     ND280Error("An Error Message " << "with a streamed integer " << 42);
     ND280Log("A Log Message " << "with a streamed integer " << 42);
@@ -13,88 +13,88 @@ int main (int argc, char **argv) {
     // Test the debugging levels.
     ////////////////////////////////////////////////////////
 
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::SilentLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::SilentLevel);
     ND280Error("An error message that should be printed");
 
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::ErrorLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::ErrorLevel);
     ND280Error("An error message that should be printed");
     ND280Severe("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::SevereLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::SevereLevel);
     ND280Severe("A severe message that should be printed");
     ND280Warn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::WarnLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::WarnLevel);
     ND280Warn("A warn message that should be printed");
     ND280Debug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::DebugLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::DebugLevel);
     ND280Debug("A debug message that should be printed");
     ND280Trace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
     
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::TraceLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::TraceLevel);
     ND280Trace("A trace message that should be printed");
 
     ////////////////////////////////////////////////////////
     // Test the named debugging levels.
     ////////////////////////////////////////////////////////
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::SilentLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::SilentLevel);
     ND280NamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::ErrorLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::ErrorLevel);
     ND280NamedError("test","An error message that should be printed");
     ND280NamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::SevereLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::SevereLevel);
     ND280NamedSevere("test","A severe message that should be printed");
     ND280NamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::WarnLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::WarnLevel);
     ND280NamedWarn("test","A warn message that should be printed");
     ND280NamedDebug("test","A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::DebugLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::DebugLevel);
     ND280NamedDebug("test","A debug message that should be printed");
     ND280NamedTrace("test","A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
     
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::TraceLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::TraceLevel);
     ND280NamedTrace("test","A trace message that should be printed");
 
     /////////////////////////////////////////////////////////
     // Test the logging levels
     /////////////////////////////////////////////////////////
 
-    CP::TND280Log::SetLogLevel(CP::TND280Log::QuietLevel);
+    CP::TCaptLog::SetLogLevel(CP::TCaptLog::QuietLevel);
     ND280Log("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel(CP::TND280Log::LogLevel);
+    CP::TCaptLog::SetLogLevel(CP::TCaptLog::LogLevel);
     ND280Log("A log message that should be printed");
     ND280Info("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel(CP::TND280Log::InfoLevel);
+    CP::TCaptLog::SetLogLevel(CP::TCaptLog::InfoLevel);
     ND280Info("An info message that should be printed");
     ND280Verbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel(CP::TND280Log::VerboseLevel);
+    CP::TCaptLog::SetLogLevel(CP::TCaptLog::VerboseLevel);
     ND280Verbose("A verbose message that should be printed");
 
     /////////////////////////////////////////////////////////
     // Test the named logging levels
     /////////////////////////////////////////////////////////
 
-    CP::TND280Log::SetLogLevel("test",CP::TND280Log::QuietLevel);
+    CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::QuietLevel);
     ND280NamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel("test",CP::TND280Log::LogLevel);
+    CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::LogLevel);
     ND280NamedLog("test","A log message that should be printed");
     ND280NamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel("test",CP::TND280Log::InfoLevel);
+    CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::InfoLevel);
     ND280NamedInfo("test","An info message that should be printed");
     ND280NamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel("test",CP::TND280Log::VerboseLevel);
+    CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::VerboseLevel);
     ND280NamedVerbose("test","A verbose message that should be printed");
     
     ND280NamedLog("test","A kilogram is " << unit::kg 
@@ -107,14 +107,14 @@ int main (int argc, char **argv) {
 #undef ND280_ERROR_OUTPUT 
 #endif
 #define ND280_ERROR_OUTPUT false
-    CP::TND280Log::SetDebugLevel(CP::TND280Log::TraceLevel);
+    CP::TCaptLog::SetDebugLevel(CP::TCaptLog::TraceLevel);
     ND280Error("AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Severe("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Warn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Debug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Trace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetDebugLevel("test",CP::TND280Log::TraceLevel);
+    CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::TraceLevel);
     ND280NamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280NamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280NamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
@@ -130,12 +130,12 @@ int main (int argc, char **argv) {
 #endif
 #define ND280_LOG_OUTPUT false
 
-    CP::TND280Log::SetLogLevel(CP::TND280Log::VerboseLevel);
+    CP::TCaptLog::SetLogLevel(CP::TCaptLog::VerboseLevel);
     ND280Log("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Info("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280Verbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
-    CP::TND280Log::SetLogLevel("test",CP::TND280Log::VerboseLevel);
+    CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::VerboseLevel);
     ND280NamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280NamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
     ND280NamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");

@@ -32,7 +32,7 @@ public:
     }
 
     bool operator () (CP::TEvent& event) {
-        if (CP::TND280Log::GetLogLevel()>CP::TND280Log::QuietLevel && !fQuiet) {
+        if (CP::TCaptLog::GetLogLevel()>CP::TCaptLog::QuietLevel && !fQuiet) {
             event.ls(fLSOption.c_str());
         }
         if (fPrintList) {

@@ -12,7 +12,7 @@
 #include "TOADatabase.hxx"
 #undef private
 #undef protected
-#include "TND280Log.hxx"
+#include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "TGeomIdManager.hxx"
 #include "ND280GeomId.hxx"
