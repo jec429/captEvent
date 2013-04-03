@@ -15,7 +15,7 @@ class TGeoManager;
 #include "TSHA1.hxx"
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
-#include "TND280Context.hxx"
+#include "TEventContext.hxx"
 
 namespace CP {
     class TGeomIdFinder;
@@ -285,10 +285,10 @@ private:
     TGeoManager* GetGeoManager();
 
     /// Set the geometry time stamp.
-    void SetGeomEventContext(const CP::TND280Context& c) {fGeomEventContext=c;}
+    void SetGeomEventContext(const CP::TEventContext& c) {fGeomEventContext=c;}
 
     /// Get the geometry time stamp.
-    const CP::TND280Context& GetGeomEventContext() const {
+    const CP::TEventContext& GetGeomEventContext() const {
         return fGeomEventContext;
     }
 
@@ -315,7 +315,7 @@ private:
     /// The context of the last event that was checked to make sure that the
     /// geometry was valid.  This is used to short circuit the geometry check
     /// when the event geometry hash code and alignment id haven't been set.
-    CP::TND280Context fGeomEventContext;
+    CP::TEventContext fGeomEventContext;
 
     /// The class to calculate the SHA1 message digest.  This is used in
     /// RecurseHashCode.

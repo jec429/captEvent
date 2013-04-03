@@ -21,7 +21,7 @@ CP::TND280Event::TND280Event() {
     Build();
 }
 
-CP::TND280Event::TND280Event(const CP::TND280Context& context)
+CP::TND280Event::TND280Event(const CP::TEventContext& context)
     : fContext(context){
     /// All other fields are self initializing.
     Build();
@@ -32,8 +32,8 @@ CP::TND280Event::~TND280Event() {
 }
 
 void CP::TND280Event::Build(void) {
-    if (GetRunId() == CP::TND280Context::Invalid
-        || GetEventId() == CP::TND280Context::Invalid) {
+    if (GetRunId() == CP::TEventContext::Invalid
+        || GetEventId() == CP::TEventContext::Invalid) {
         SetName("event.uninitialized");
     }
     else {

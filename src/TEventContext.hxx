@@ -1,19 +1,19 @@
-#ifndef TND280Context_hxx_seen
-#define TND280Context_hxx_seen
+#ifndef TEventContext_hxx_seen
+#define TEventContext_hxx_seen
 
 #include <TROOT.h>
 #include <TObject.h>
 
 namespace CP {
-    class TND280Context;
+    class TEventContext;
 };
 
 /// Define the context of an event.  The event context uniquely identifies an
 /// event within T2K (ND280).  Due to the way events are formed, not all event
 /// (or slow control data) will have all fields of the context information
 /// defined.  Fields that do not contain valid data should be marked using the
-/// value CP::TND280Context::Invalid.
-class CP::TND280Context {
+/// value CP::TEventContext::Invalid.
+class CP::TEventContext {
 public:
     typedef unsigned int Time;
     
@@ -21,14 +21,14 @@ public:
     static const int Invalid;
     
     /// Construct an empty context.
-    TND280Context();
+    TEventContext();
 
     /// Construct a context.
-    TND280Context(int partition, 
+    TEventContext(int partition, 
                   int run, int subRun, int event, 
                   int spill, int stamp);
 
-    virtual ~TND280Context();
+    virtual ~TEventContext();
 
     enum {
         /// DAQ running in global mode.
@@ -69,8 +69,8 @@ public:
     /// valid before the individual bits are checked.
     ///
     /// \code
-    /// if (context.GetPartition() != CP::TND280Context::Invalid
-    ///     && (context.GetPartition & CP::TND280Context::kGlobalPartition)) {
+    /// if (context.GetPartition() != CP::TEventContext::Invalid
+    ///     && (context.GetPartition & CP::TEventContext::kGlobalPartition)) {
     ///     // The data is for the global partition.
     /// }
     /// \endcode
@@ -143,8 +143,8 @@ private:
     /// The unix time stamp associated with this context
     Time fTimeStamp;
 
-    ClassDef(TND280Context,1);
+    ClassDef(TEventContext,1);
 };
 
-std::ostream& operator<<(std::ostream& s, const CP::TND280Context& c);
+std::ostream& operator<<(std::ostream& s, const CP::TEventContext& c);
 #endif

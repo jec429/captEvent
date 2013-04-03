@@ -11,7 +11,7 @@
 #include "THandle.hxx"
 #include "THitSelection.hxx"
 #include "TAlgorithmResult.hxx"
-#include "TND280Context.hxx"
+#include "TEventContext.hxx"
 #include "TDigitContainer.hxx"
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
@@ -58,12 +58,12 @@ public:
     TND280Event();
 
     /// Create a new TND280Event with the context, but not the header, filled.
-    TND280Event(const CP::TND280Context& context);
+    TND280Event(const CP::TEventContext& context);
 
     virtual ~TND280Event();
 
     /// Get the context for this event.
-    const CP::TND280Context& GetContext() const {return fContext;}
+    const CP::TEventContext& GetContext() const {return fContext;}
 
     /// Get the hash value of the geometry associated with this event.  If the
     /// event doesn't have a particular geometry associated with it, then
@@ -85,7 +85,7 @@ public:
     const CP::TAlignmentId& GetAlignmentId() const {return fAlignmentId;}
 
     /// Set the context for this event.
-    void SetContext(CP::TND280Context context) {
+    void SetContext(CP::TEventContext context) {
         fContext = context;
         Build();
     }
@@ -146,7 +146,7 @@ public:
 private:
 
     /// The context for this event.
-    TND280Context fContext;
+    TEventContext fContext;
 
     /// The hash value of the geometry that should be associated with this
     /// event.  This must be set during calibration.

@@ -132,7 +132,7 @@ void CP::TGeomIdManager::ResetGeometry() {
     fGeomIdHashCode = TSHAHashValue();
     fGeomIdChangedHash = TSHAHashValue();
     fGeomIdAlignmentId = TAlignmentId();
-    fGeomEventContext = TND280Context();
+    fGeomEventContext = TEventContext();
     SetGeoManager(gGeoManager);
     if (!gGeoManager) {
         ND280NamedDebug("Geometry","ResetGeometry with invalid gGeoManager");
@@ -992,7 +992,7 @@ bool CP::TGeomIdManager::CheckGeometry(const CP::TND280Event* const event) {
     // geometry manager has seen a valid event, and then don't check the
     // geometry if the run numbers match.
     if (!event->GetGeometryHash().Valid()
-        && GetGeomEventContext().GetRun() != CP::TND280Context::Invalid
+        && GetGeomEventContext().GetRun() != CP::TEventContext::Invalid
         && GetGeomEventContext().GetRun() == event->GetContext().GetRun()) {
         return false; 
     }
