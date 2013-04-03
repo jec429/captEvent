@@ -256,7 +256,6 @@ private:
     ClassDef(TDataVector,4);
 };
 
-/// As per the STL.
 namespace CP {
     template <typename BaseIterator, typename Type>
     class TDataVectorIterator

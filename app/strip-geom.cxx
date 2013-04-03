@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
     // Override the name of the geometry to use the old form of the name.
     // This allows the geometry files to be used with older (per v8) oaEvent
     // libraries.
-    gGeoManager->SetName("ND280Geometry");
+    gGeoManager->SetName("CAPTAINGeometry");
 
     gGeoManager->Write();
     outputFile.Close();

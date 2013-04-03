@@ -72,7 +72,7 @@ bool CP::TRootInput::IsAttached(void) {
 
     // Make sure that we have the event tree.
     if (!fEventTree) {
-        fEventTree = dynamic_cast<TTree*>(fFile->Get("ND280Events"));
+        fEventTree = dynamic_cast<TTree*>(fFile->Get("EventTree"));
         if (!fEventTree) throw ENoEvents();
     }
 

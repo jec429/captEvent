@@ -7,7 +7,7 @@ namespace std {
 
     /// The std::vector template is part of the C++ standard library and
     /// provides a variable length array.  This documentation is part of the
-    /// ND280 software, and is not intended as a replacement for the C++
+    /// CAPTAIN software, and is not intended as a replacement for the C++
     /// reference manual.  If you are not familiar with std::vector, you \em
     /// need to get a C++ tutorial and learn all about it.  It's one of those
     /// things you must understand to program in C++.  The documentation
@@ -73,7 +73,7 @@ namespace std {
     };
 
     /// The std::map template is part of the C++ standard library and provides
-    /// an "associative array".  This documentation is part of the ND280
+    /// an "associative array".  This documentation is part of the CAPTAIN
     /// software, and is not intended as a replacement for the C++ reference
     /// manual.  If you are not familiar with std::map, take a looke at a C++
     /// tutorial and learn all about it.  It's one of those things that is
@@ -134,7 +134,7 @@ namespace std {
     };
 
     /// A std::pair is a pair of values used (among other places) in std::map.
-    /// This documentation is part of the ND280 software, and is not intended
+    /// This documentation is part of the CAPTAIN software, and is not intended
     /// as a replacement for the C++ reference manual.  If you are not
     /// familiar with std::pair, take a looke at a C++ tutorial and learn all
     /// about it.  It's one of those things that is very helpful to understand

@@ -1,12 +1,12 @@
-/*! \page understandingTDatum Understanding the ND280 Event Structure
+/*! \page understandingTDatum Understanding the CAPTAIN Event Structure
 
-ND280 event data is stored in a tree of named objects and accessed using
-the object name.  If you are running on a system where the ND280 software
+Event data is stored in a tree of named objects and accessed using
+the object name.  If you are running on a system where the CAPTAIN software
 is already installed, you can find out the objects that are saved in an
 event file using the program \c dump-event.exe
 
-The ND280 event data structure is based on a system rather similar to the
-ROOT TFolder or TDirectory classes.  What differs is that the ND280
+The CAPTAIN event data structure is based on a system rather similar to the
+ROOT TFolder or TDirectory classes.  What differs is that the CAPTAIN
 structure doesn't depend on global variables to record the current location
 within a data structure, and each object contained within a data structure
 records the event to which it belongs.  Our event structure is implemented
@@ -19,18 +19,18 @@ from a TDataVector.  Users will often interact with a TDataVector since it
 is the base class for TEvent, TAlgorithmResult, and TOATrack.
 
 The TDatum class is a light weight extension of the ROOT TNamed class that
-provides the lowest level support for the ND280 data structure.  It is the
-base class for (almost) all other ND280 classes.  While TDatum is almost
+provides the lowest level support for the CAPTAIN data structure.  It is the
+base class for (almost) all other CAPTAIN classes.  While TDatum is almost
 ubiquitous our code, most of your interaction will be through the
 TDataVector class which is derived from TDatum.
 
 Events are saved in a root TTree object, and can be accessed using any of
-the normal ROOT methods.  A typical ND280 event file will contain (at
-least) two objects, ND280Events, and ND280Geometry.  The first object is a
+the normal ROOT methods.  A typical CAPTAIN event file will contain (at
+least) two objects, EventTree, and CAPTAINGeometry.  The first object is a
 TTree with a single branch containing all of the events in the file.  There
 is a small amount of bookkeeping required to correctly read events from a
 file, mostly involving keeping the TOADatabase synchronized with the
-event.  This can be handled by reading the ND280Events TTree object using
+event.  This can be handled by reading the EventTree TTree object using
 the TRootInput class.  
 
 \section accessingTDatum The TEvent Has, Get, and Use methods
@@ -73,7 +73,7 @@ if (sbcat) {
 
 \section designRequirementsTDatum Design of the Event Structure
 
-The ND280 event structure was developed according to several design
+The CAPTAIN event structure was developed according to several design
 criteria.  
 
 -# Access to data within an event must be simple.  While the learning curve
@@ -107,14 +107,14 @@ management rules.  The ROOT community recognizes these significant
 problems, and they are being addressed by the adoption of well know C++
 template based coding techniques.
 
-It is difficult to describe to ROOT as lightweight, but GAUDI is intended as a
-layer *on top* of ROOT.  One of GAUDI's original goals is to hide the
-underlying data storage format.  However, after those design goals were
-developed, ROOT has become the clear "best in class" for small to medium
-sized experiment data storage.  ROOT I/O is fast, and has a relatively
-small size overhead.
+It is difficult to describe to ROOT as lightweight, but GAUDI and ART are
+intended as a layer *on top* of ROOT.  One of GAUDI's original goals is to
+hide the underlying data storage format.  However, after those design goals
+were developed, ROOT has become the clear "best in class" for small to
+medium sized experiment data storage.  ROOT I/O is fast, and has a
+relatively small size overhead.
 
-\subsection designTDatum The ND280 TDatum and TDataVector classes
+\subsection designTDatum The CAPTAIN TDatum and TDataVector classes
 
 The event data structure design has been address by creating two small base
 classes (Less than 450 lines of code, 300 lines of comments) which extend

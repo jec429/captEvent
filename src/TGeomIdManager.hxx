@@ -108,7 +108,7 @@ public:
     /// Provide a standard method to load the geometry out of a TFile.  The
     /// TFile must be open for input before this is called.  This will return
     /// true if the geometry was found and it matched the hash code (or there
-    /// was a geometry in the file named "ND280Geometry"), otherwise it will
+    /// was a geometry in the file named "CAPTAINGeometry"), otherwise it will
     /// return false.  If false is returned, then the gGeoManager pointer will
     /// not have changed.  This uses ResetGeometry to update the state of the
     /// geometry manager GeometryId tables and hash codes.
@@ -128,7 +128,7 @@ public:
     /// (e.g. to update the TGeomIdManager to match the MC geometry in
     /// ND280MC). After this has been successfully called (returned true),
     /// gGeoManager will point to a geometry named
-    /// ND280Geometry-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" where "x"
+    /// CAPTAINGeometry-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" where "x"
     /// stands for a lower case hexidecimal digit.
     void ResetGeometry();
 

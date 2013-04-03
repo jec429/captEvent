@@ -30,9 +30,8 @@
 #define HEP_UNITS_HXX
 
 namespace unit {
-    //
-    // Factors
-    //
+    /// Order of magnitude factors.
+    ///@{
     const double yotta  = 1.e+24;
     const double zetta  = 1.e+21;
     const double exa    = 1.e+18;
@@ -53,10 +52,10 @@ namespace unit {
     const double atto   = 1.e-18;
     const double zepto  = 1.e-21;
     const double yocto  = 1.e-24;
+    ///@}
 
-    //
-    // Length [L]
-    //
+    /// Length [L]
+    ///@{
     const double millimeter  = 1.;                        
     const double millimeter2 = millimeter*millimeter;
     const double millimeter3 = millimeter*millimeter*millimeter;
@@ -101,12 +100,13 @@ namespace unit {
     const double km  = kilometer;                   
     const double km2 = kilometer2;
     const double km3 = kilometer3;
+    ///@}
 
-    //
-    // Angle
-    //
+    /// Angle Unit
+    ///@{
     const double radian      = 1.;                  
     const double milliradian = milli*radian;
+    // Pi is hand coded so this doesn't have dependencies.
     const double degree = (3.14159265358979323846/180.0)*radian;
 
     const double   steradian = 1.;
@@ -116,10 +116,10 @@ namespace unit {
     const double mrad = milliradian;
     const double sr   = steradian;
     const double deg  = degree;
+    ///@}
 
-    //
-    // Time [T]
-    //
+    /// Time [T]
+    ///@{
     const double nanosecond  = 1.;
     const double second      = 1.e+9 *nanosecond;
     const double millisecond = milli*second;
@@ -134,10 +134,10 @@ namespace unit {
     const double ns = nanosecond;			
     const double  s = second;
     const double ms = millisecond;
+    ///@}
 
-    //
-    // Electric charge [Q]
-    //
+    /// Electric charge [Q]
+    ///@{
     const double eplus = 1. ;		    // positron charge
     const double e_SI  = 1.60217733e-19;    // positron charge in coulomb
     const double coulomb = eplus/e_SI;	    // coulomb = 6.24150 e+18 * eplus
@@ -146,10 +146,10 @@ namespace unit {
 
     // symbols
     const double fC = femtocoulomb;
+    ///@}
 
-    //
-    // Energy [E]
-    //
+    /// Energy [E]
+    ///@{
     const double megaelectronvolt = 1. ;
     const double     electronvolt = 1.e-6*megaelectronvolt;
     const double kiloelectronvolt = kilo*electronvolt;
@@ -166,10 +166,10 @@ namespace unit {
     const double GeV = gigaelectronvolt;
     const double TeV = teraelectronvolt;
     const double PeV = petaelectronvolt;
+    ///@}
 
-    //
-    // Mass [E][T^2][L^-2]
-    //
+    /// Mass [E][T^2][L^-2]
+    ///@{
     const double  kilogram = joule*second*second/(meter*meter);   
     const double      gram = 1.e-3*kilogram;
     const double milligram = milli*gram;
@@ -178,112 +178,113 @@ namespace unit {
     const double  kg = kilogram;
     const double   g = gram;
     const double  mg = milligram;
+    ///@}
 
-    //
-    // Power [E][T^-1]
-    //
+    /// Power [E][T^-1]
+    ///@{
     const double watt = joule/second;	// watt = 6.24150 e+3 * MeV/ns
+    ///@}
 
-    //
-    // Force [E][L^-1]
-    //
+    /// Force [E][L^-1]
+    ///@{
     const double newton = joule/meter;	// newton = 6.24150 e+9 * MeV/mm
+    ///@}
 
-    //
-    // Pressure [E][L^-3]
-    //
+    /// Pressure [E][L^-3]
+    ///@{
     const double pascal = newton/m2;	     // pascal = 6.24150 e+3 * MeV/mm3
     const double bar        = 100000*pascal; // bar    = 6.24150 e+8 * MeV/mm3
     const double atmosphere = 101325*pascal; // atm    = 6.32420 e+8 * MeV/mm3
+    ///@}
 
-    //
-    // Electric current [Q][T^-1]
-    //
+    /// Electric current [Q][T^-1]
+    ///@{
     const double    ampere = coulomb/second; // ampere = 6.24150 e+9 * eplus/ns
     const double milliampere = milli*ampere;
     const double microampere = micro*ampere;
     const double  nanoampere = nano*ampere;
+    ///@}
 
-    //
-    // Electric potential [E][Q^-1]
-    //
+    /// Electric potential [E][Q^-1]
+    ///@{
     const double megavolt = megaelectronvolt/eplus;
     const double kilovolt = 1.e-3*megavolt;
     const double     volt = 1.e-6*megavolt;
+    ///@}
 
-    //
-    // Electric resistance [E][T][Q^-2]
-    //
+    /// Electric resistance [E][T][Q^-2]
+    ///@{
     const double ohm = volt/ampere; // ohm = 1.60217e-16*(MeV/eplus)/(eplus/ns)
+    ///@}
 
-    //
-    // Electric capacitance [Q^2][E^-1]
-    //
+    /// Electric capacitance [Q^2][E^-1]
+    ///@{
     const double farad = coulomb/volt;	// farad = 6.24150e+24 * eplus/Megavolt
     const double millifarad = milli*farad;
     const double microfarad = micro*farad;
     const double  nanofarad = nano*farad;
     const double  picofarad = pico*farad;
+    ///@}
 
-    //
-    // Magnetic Flux [T][E][Q^-1]
-    //
+    /// Magnetic Flux [T][E][Q^-1]
+    ///@{
     const double weber = volt*second;	// weber = 1000*megavolt*ns
+    ///@}
 
-    //
-    // Magnetic Field [T][E][Q^-1][L^-2]
-    //
+    /// Magnetic Field [T][E][Q^-1][L^-2]
+    ///@{
     const double tesla    = volt*second/meter2;// tesla =0.001*megavolt*ns/mm2
 
     const double gauss    = 1.e-4*tesla;
     const double kilogauss = 1.e-1*tesla;
+    ///@}
 
-    //
-    // Inductance [T^2][E][Q^-2]
-    //
+    /// Inductance [T^2][E][Q^-2]
+    ///@{
     const double henry = weber/ampere;	// henry = 1.60217e-7*MeV*(ns/eplus)**2
+    ///@}
 
-    //
-    // Temperature
-    //
+    /// Temperature
+    ///@{
     const double kelvin = 1.;
+    ///@}
 
-    //
-    // Amount of substance
-    //
+    /// Amount of substance
+    ///@{
     const double mole = 1.;
+    ///@}
 
-    //
-    // Activity [T^-1]
-    //
+    /// Activity [T^-1]
+    ///@{
     const double becquerel = 1./second ;
     const double curie = 3.7e+10 * becquerel;
+    ///@}
 
-    //
-    // Absorbed dose [L^2][T^-2]
-    //
+    /// Absorbed dose [L^2][T^-2]
+    ///@{
     const double gray = joule/kilogram ;
+    ///@}
 
-    //
-    // Luminous intensity [I]
-    //
+    /// Luminous intensity [I]
+    ///@{
     const double candela = 1.;
+    ///@}
 
-    //
-    // Luminous flux [I]
-    //
+    /// Luminous flux [I]
+    ///@{
     const double lumen = candela*steradian;
+    ///@}
 
-    //
-    // Illuminance [I][L^-2]
-    //
+    /// Illuminance [I][L^-2]
+    ///@{
     const double lux = lumen/meter2;
+    ///@}
 
-    //
-    // Miscellaneous
-    //
+    /// Miscellaneous
+    ///@{
     const double perCent     = 0.01 ;
     const double perThousand = 0.001;
     const double perMillion  = 0.000001;
+    ///@}
 }
 #endif

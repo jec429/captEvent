@@ -165,7 +165,7 @@ bool CP::TGeomIdManager::LoadGeometry(TFile& file,
 
     std::ostringstream rexp;
     rexp << std::hex << std::nouppercase << std::setfill('0');
-    rexp << "^ND280Geometry-";
+    rexp << "^CAPTAINGeometry-";
     if (hc(0) != 0) rexp << std::setw(8) << hc(0);
     else rexp << "[[:xdigit:]]{8}";
 
@@ -207,7 +207,7 @@ bool CP::TGeomIdManager::LoadGeometry(TFile& file,
     TIter next(file.GetListOfKeys());
     TKey* key;
     while ((key = dynamic_cast<TKey*>(next()))) {
-        if (!defaultKey && std::string(key->GetName()) == "ND280Geometry") {
+        if (!defaultKey && std::string(key->GetName()) == "CAPTAINGeometry") {
             defaultKey = key;
         }
         if (!geometryKey && TString(key->GetName()).Contains(geometryRegExp)) {
@@ -328,7 +328,7 @@ void CP::TGeomIdManager::SaveHashCode(const TSHAHashValue& hc) {
     std::string name(gGeoManager->GetName());
 
     // Make sure we are starting from a standarized name.
-    if (name.find("ND280Geometry-")!=0) name = "ND280Geometry-";
+    if (name.find("CAPTAINGeometry-")!=0) name = "CAPTAINGeometry-";
 
     hash << std::hex << std::nouppercase << std::setfill('0');
     hash << "-" << std::setw(8) << hc(0);
@@ -349,7 +349,7 @@ bool CP::TGeomIdManager::GetHashCode(CP::TSHAHashValue& hc) const {
     hc = CP::TSHAHashValue();
     std::string name(gGeoManager->GetName());
     // Check that the name is "reasonable".
-    if (name.find("ND280Geometry-") != 0) {
+    if (name.find("CAPTAINGeometry-") != 0) {
         return false;
     }
     if (name.size() < 58) {
@@ -368,7 +368,7 @@ void CP::TGeomIdManager::SaveAlignmentCode(const CP::TAlignmentId& aid) {
     std::string name(gGeoManager->GetName());
 
     // Make sure we are starting from a standarized name.
-    if (name.find("ND280Geometry-")!=0) {
+    if (name.find("CAPTAINGeometry-")!=0) {
         CaptSevere("Cannot save alignment id.  Invalid geometry name");
         return;
     }
@@ -410,7 +410,7 @@ bool CP::TGeomIdManager::GetAlignmentCode(CP::TAlignmentId& aid) const {
     aid = CP::TAlignmentId();
     std::string name(gGeoManager->GetName());
     // Check that the name is "reasonable".
-    if (name.find("ND280Geometry-") != 0) {
+    if (name.find("CAPTAINGeometry-") != 0) {
         return false;
     }
     if (name.find(":") != 58) {

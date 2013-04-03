@@ -1,30 +1,30 @@
-/*! \mainpage The oaEvent Library
+/*! \mainpage The captEvent Library
   
-  \section oaEvent Introduction
+  \section captEvent Introduction
 
-  This library provides the basic I/O functions for T2K ND280 software.
+  This library provides the basic I/O functions for the CAPTAIN software.
 
   The I/O is provided by ROOT which is used to save CP::TEvent objects and
   the TGeoManager description of the detector geometry.  The output to log
   files, and for debugging is controlled by the CP::TCaptLog class.  All of
   the classes are in the ND namespace.  This namespace should contain all
-  ND280 code.  
+  CAPTAIN code.  
 
   This library also provides the ability to read a MIDAS raw data file
   sequentially and return each record as a CP::TND280RawEvent. This object gives
   access to raw MIDAS banks but in order to interpret this data the, soon to
   be developed, oaRawEvent package must be present.
 
-  \subsection eventFiles The ND280 Offline Event File Format
+  \subsection eventFiles The CAPTAIN Offline Event File Format
 
-  ND280 event files are vanilla root files containing two objects,
-  ND280Events, and ND280Geometry.  The first object is a TTree with a single
+  CAPTAIN event files are vanilla root files containing two objects,
+  EventTree, and CAPTAINGeometry.  The first object is a TTree with a single
   branch containing events.  The second object is the geometry manager with
   the detector geometry used to generate the events.  The detector geometry
   can be browsed using the ROOT TBrowser, but due to a problem in the current
   ROOT (as of 5.10), you must be careful and only access the geometry using
   the right "All Folders" panel.  The event tree can be browsed, but it is not
-  very useful since you can The best way to read and write ND280 event files
+  very useful since you can The best way to read and write CAPTAIN event files
   is to use the CP::TRootInput and CP::TRootOutput classes.  These provide an
   interface to the TFile class and take care of some of the basic bookkeeping
   needed to process events.
@@ -124,9 +124,9 @@ CP::TOADatabase::RegisterGeometryCalback().  This class will then be used
 to update the tables whenever the geometry has been changed.  See the
 CP::TOADatabase::GeometryChange class for more details and an example.
 
-\subsection systemOfUnits The ND280 System of Units.
+\subsection systemOfUnits The System of Units.
 
-The ND280 code uses the same unit definitions as CLHEP.  These units are
+The CAPTAIN code uses the same unit definitions as CLHEP.  These units are
 standard within G4, and the large LHC experiments.  The unit values are
 defined in HEPUnits.hxx and are in the unit namespace. 
 
@@ -166,8 +166,10 @@ HEPConstants.hxx file.
 
 \subsection compiledVersion Tracking the compiled library version.
 
+THIS MAY NOT BE USED FOR CAPTAIN...
+
 Each packages should provide a "version" class that is named by the convention
-"T[package]" (for instance, ToaEvent, TeventDisplay, etc).  The simplest
+"T[package]" (for instance, TcaptEvent, TeventDisplay, etc).  The simplest
 version of this class can be implemented by copying ToaUtility.hxx and
 ToaUtility.cxx to your package and replace "oaUtility" with the appropriate
 package name.
@@ -177,7 +179,7 @@ When a executable uses a package, it should create an instance of
 
 In addition to tracking the version of code used in an executable, the
 "T[package].hxx" file should be used to document the package.  See the
-ToaEvent.hxx file for an example.  The main package page should contained
+TcaptEvent.hxx file for an example.  The main package page should contained
 information on how to use the package and what it is for.  It should also
 point to the most important classes so that the user doesn't have to
 speculate. 
@@ -206,5 +208,8 @@ class bogus {
 
 
 
-See related pages for release history, Recon Object Design and Usage, Understanding the ND280 Event Structure, Todo List,  Deprecated List and Bug list.
+See related pages for release history, Recon Object Design and Usage,
+Understanding the CAPTAIN Event Structure, Todo List, Deprecated List and
+Bug list.  
+
 */

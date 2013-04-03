@@ -5,9 +5,8 @@ results of recon algorithms.  They also pass intermediate results between
 algorithms.  The \ref recObjRequirements are listed at the bottom of this
 page.
 
-<em>This is a work in progress, and is extremely incomplete.  Don't be
-alarmed if something is missing!  Any contributions, suggestions, and
-comments are welcome.</em>
+<em>This the original design document and needs to be improved.  Any
+contributions, and comments are welcome.</em>
 
 \section recIntro Prologue: Scope and Intention of the Recon Object Design
 
@@ -20,8 +19,6 @@ scope is limited to parameters that can be inferred directly from the data
 types like "quasi-elastic").
 
 \section recDesign Design and Implementation
-
-For now, cheat and put the design and implementation stuff in one section.
 
 \subsection recObjStateDesign The TReconState Design
 
@@ -54,20 +51,21 @@ a parameter is hidden from the user.
 
 \subsubsection recObjProg Programming Constraints
 
-Recon objects are part of the oaEvent library which provides the
-core input and output for the ND280 off-line software.  As a result, this
-imposes several programming constraints.
+Recon objects were designed as part of the oaEvent library which provides
+the core input and output for the ND280 off-line software.  They have now
+been transferred to CAPTAIN.  As a result, this imposes several programming
+constraints.
 
- - The oaEvent library dependencies are limited to ROOT.
- - The oaEvent package dependencies are limited to the ROOT, captainPolicy and
+ - The library dependencies are limited to ROOT.
+ - The package dependencies are limited to the ROOT, captainPolicy and
    testBase packages
- - The objects must be suitable for output to the ND280 off-line event
+ - The objects must be suitable for output to the off-line event
    files.
 
-In addition, the oaEvent library should not change very much so that we can
+In addition, the captEvent library should not change very much so that we can
 have a stable output format.  This implies that the recon object
 classes should be relatively small, but also provide flexibility so that
-they can be adapted without requiring a new version of oaEvent.
+they can be adapted without requiring a new version of captEvent.
 
 \subsubsection recObjSize Size Constraints
 
@@ -177,12 +175,16 @@ the listed parameters.  (It needs to be made clear that each "physics"
 recon object class will only have information for one of the categories
 below.)
 
-\paragraph reconVertex TReconVertex: An interaction
+\paragraph reconVertex TReconVertex: A reconstructed vertex
 
 This is implemented by CP::TReconVertex.
 
 There needs to be a representation of a reconstructed interaction vertex.
-This is described by the position, time, and particles leaving the vertex.  
+This is described by the position, time, and particles leaving the vertex.
+A vertex can also have CP::TReconTrack and CP::TReconShower objects
+attached.  (It's really just a position and a CP::TReconObjectContainer, so
+any object derived from a CP::TReconBase can be attached to a
+CP::TReconVertex).  
 
 \paragraph reconParticle TReconParticle: A particle
 
@@ -195,13 +197,6 @@ corresponds to the likelihood that the observed charge distribution.  The
 particle type should be one of a predefined set.  A possible set might be
 EM, electron, gamma, pi-zero, light-charged, heavy-charged, muon, pion, and
 proton (determined by the capabilities of the ND280 detectors).
-
-\paragraph reconMissing Other stuff that needs to be represented
-
-Do we need to have a representation for a set of hypothesized interactions or
-particles?  I think this would just be a vector of candidate TReconVertex or
-TReconParticle objects, and not a recon object.  How does a vector of
-candidate TReconParticle objects interact with a TReconVertex object?  &c.
 
 \subsection recObjState Recon Object State Representation Requirements
 

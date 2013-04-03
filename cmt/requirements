@@ -14,6 +14,9 @@ package captEvent
 #
 author Clark McGrew <clark.mcgrew@stonybrook.edu>
 
+# This is required for the documentation.
+manager Clark McGrew <clark.mcgrew@stonybrook.edu>
+
 # The packages used by this one.  Only direct dependencies should be
 # included. 
 use ROOT * LCG_Interfaces
@@ -34,7 +37,7 @@ document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
 
 # The library to build
 library captEvent bogusVariable=helloBogus *.cxx *.hxx $(bin)dict/*.cxx
-dependency target=captEvent depends=linkdef
+apply_pattern dependency target=captEvent depends=linkdef
 
 # Build information used by packages that use this one.
 macro captEvent_cppflags " -DCAPTEVENT_USED "
@@ -51,17 +54,17 @@ path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)" \
 
 # Applications to build
 application dump-event ../app/dump-event.cxx
-dependency target=dump-event depends=captEvent
+apply_pattern dependency target=dump-event depends=captEvent
 
 application strip-geom ../app/strip-geom.cxx 
-dependency target=strip-geom depends=captEvent
+apply_pattern dependency target=strip-geom depends=captEvent
 
 application validate-geometry ../app/validate-geometry.cxx
-dependency target=validate-geometry depends=captEvent
+apply_pattern dependency target=validate-geometry depends=captEvent
 
 # Test applications to build
 application captEventTUT -check ../test/captEventTUT.cxx ../test/tut*.cxx
-dependency target=captEventTUT depends=captEvent
+apply_pattern dependency target=captEventTUT depends=captEvent
 
 # Register fragments needed to register libraries with TOADatabase.
 make_fragment register -header=register_header -trailer=register_trailer
