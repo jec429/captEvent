@@ -1,5 +1,5 @@
-#ifndef TND280Event_hxx_seen
-#define TND280Event_hxx_seen
+#ifndef TEvent_hxx_seen
+#define TEvent_hxx_seen
 
 #include <string>
 
@@ -18,7 +18,7 @@
 
 /// The standard namespace for captain offline software (see \ref namespaces).  
 namespace CP {
-    class TND280Event;
+    class TEvent;
 }
 
 /// The event container (get the current event using
@@ -32,7 +32,7 @@ namespace CP {
 /// number.  For example, an event that is read will appear as a folder,
 /// "//root/Events/event.0.00023.00001324".
 ///
-/// The TND280Event class provides the following event structure.
+/// The TEvent class provides the following event structure.
 ///
 /// - event/
 ///   - digits/ Raw data for the sensor hits.  This is a copy of the data 
@@ -44,7 +44,7 @@ namespace CP {
 ///   - fits/   Results from fitters.  This is a data vector full of results 
 ///             saved from any fitter run on this event.
 ///
-/// TND280Event objects are usually read from an input file using a
+/// TEvent objects are usually read from an input file using a
 /// TRootInput object (output is with a TRootOutput).  The last event read
 /// will be available from TEventFolder::GetCurrentEvent() which is a static
 /// method.  Interactive programs which want to provide a method to keep
@@ -53,14 +53,14 @@ namespace CP {
 /// be saved automatically into a root folder by calling the
 /// TEventFolder::GetEventFolder() static method.
 ///
-class CP::TND280Event: public TDataVector {
+class CP::TEvent: public TDataVector {
 public:
-    TND280Event();
+    TEvent();
 
-    /// Create a new TND280Event with the context, but not the header, filled.
-    TND280Event(const CP::TEventContext& context);
+    /// Create a new TEvent with the context, but not the header, filled.
+    TEvent(const CP::TEventContext& context);
 
-    virtual ~TND280Event();
+    virtual ~TEvent();
 
     /// Get the context for this event.
     const CP::TEventContext& GetContext() const {return fContext;}
@@ -159,6 +159,6 @@ private:
     /// Build internal structure of the event.
     void Build();
 
-    ClassDef(TND280Event,8);
+    ClassDef(TEvent,8);
 };
 #endif

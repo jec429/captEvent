@@ -36,7 +36,7 @@ public:
     /// ENextEventLoopFile exception.  If the daughter class defines this
     /// method, it should not define the operator ().  The index of the output
     /// file is determined by the order on the command line.
-    virtual int Process(TND280Event& event, int outputFiles) {
+    virtual int Process(TEvent& event, int outputFiles) {
         return -1;
     }
 

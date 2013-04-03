@@ -20,7 +20,7 @@ class TGeoMatrix;
 
 namespace CP {
     class TTPCPadManager;
-    class TND280Event;
+    class TEvent;
     class TOADatabase;
     class TDigitManager;
     class TGeomIdManager;
@@ -78,7 +78,7 @@ public:
     /// \code
     /// class MyChangeClass: public CP::TOADatabase::GeometryChange {
     /// public:
-    ///    void Callback(const CP::TND280Event* const event) {
+    ///    void Callback(const CP::TEvent* const event) {
     ///        // Do something with the current geometry
     ///        TGeoManager* newGeom = CP::TOADatabase::Get().Geometry();
     ///    }
@@ -105,7 +105,7 @@ public:
         // alignment has been applied.  This method should not modify the
         // event.  In addition, don't depend on the order in which the
         // registered callbacks will be executed.
-        virtual void Callback(const CP::TND280Event* const event) = 0;
+        virtual void Callback(const CP::TEvent* const event) = 0;
     };
 
     /// A base class to be registered to find the geometry associated with an
@@ -130,7 +130,7 @@ public:
         /// explicitly using CP::TOADatabase::SetGeometryHash().
         /// 
         /// This class is used in the FindEventGeometry method.
-        virtual TSHAHashValue GetHash(const CP::TND280Event* const event) {
+        virtual TSHAHashValue GetHash(const CP::TEvent* const event) {
             return TSHAHashValue();
         }
     };
@@ -154,7 +154,7 @@ public:
         /// alignment should be reapplied this will return true.  If the
         /// geometry has been changed, then the alignment will be reapplied
         /// regardless of the CheckAlignment return value.
-        virtual bool CheckAlignment(const CP::TND280Event* const event) {
+        virtual bool CheckAlignment(const CP::TEvent* const event) {
             return true; 
         }
         
@@ -164,7 +164,7 @@ public:
         /// alignment should not be applied, then this should return an empty
         /// alignment.
         virtual CP::TAlignmentId 
-        StartAlignment(const CP::TND280Event* const event) {
+        StartAlignment(const CP::TEvent* const event) {
             return CP::TAlignmentId();
         }
         
@@ -179,7 +179,7 @@ public:
         /// The returned alignment is relative to the nominal position and
         /// rotation of the volume, and is specified in the master coordinate
         /// system.  
-        virtual TGeoMatrix* Align(const CP::TND280Event* const event,
+        virtual TGeoMatrix* Align(const CP::TEvent* const event,
                                   TGeometryId& geomId) {return NULL;}
     };
 
@@ -243,7 +243,7 @@ public:
     /// CP::TOADatabase::GeometryChange class using
     /// CP::TOADatabase::RegisterGeometryCallback.  See the
     /// CP::TOADatabase::GeometryChange for details and an example.
-    TGeoManager* Geometry(TND280Event* event=NULL);
+    TGeoManager* Geometry(TEvent* event=NULL);
 
     /// Return a pointer to the correct TPC pad information for the event.  If
     /// the argument is NULL, the pad information from the current event (as
@@ -253,7 +253,7 @@ public:
     /// exception; however, since not having pad information is a very serious
     /// error you will probably want your program to crash so you don't need
     /// to catch the ENoTPCPads exception.
-    TTPCPadManager& TPCPads(TND280Event* event=NULL);
+    TTPCPadManager& TPCPads(TEvent* event=NULL);
 
     /// Return a reference to the ROOT TDatabasePDG.
     TDatabasePDG& ParticleData(void);
@@ -318,7 +318,7 @@ public:
     /// If this applies an alignment, it will return the TAlignmentId
     /// associated with the new alignment.  Otherwise, it will return an
     /// invalid alignment.
-    virtual void AlignGeometry(const CP::TND280Event* const event);
+    virtual void AlignGeometry(const CP::TEvent* const event);
 
 private:
     TOADatabase();
@@ -330,19 +330,19 @@ private:
     /// If the event hash code is not found, then this returns an invalid hash
     /// code.  This is used by TGeomIdManager to access the GeometryLookup
     /// class.
-    TSHAHashValue FindEventGeometry(const TND280Event *const event) const;
+    TSHAHashValue FindEventGeometry(const TEvent *const event) const;
 
     /// Call the registered geometry callbacks.  This is used by
     /// TGeomIdManager to notify the user routines when the geometry changes.
-    void ApplyGeometryCallbacks(const CP::TND280Event* event);
+    void ApplyGeometryCallbacks(const CP::TEvent* event);
 
     /// Use the AlignmentLookup method to check if a new alignment should be
     /// applied.  If this returns true, the we need a new alignment.  This is
     /// used by TGeomIdManager to short circuit the alignment application.
-    bool CheckAlignment(const CP::TND280Event* const event);
+    bool CheckAlignment(const CP::TEvent* const event);
 
     /// Use the AlignmentLookup class to get the actual alignment.
-    virtual CP::TAlignmentId ApplyAlignmentLookup(const CP::TND280Event* event);
+    virtual CP::TAlignmentId ApplyAlignmentLookup(const CP::TEvent* event);
 
     /// Set the current input file for the data base.  This must be set for
     /// many of the methods to work correctly.  This is used by TRootInput to

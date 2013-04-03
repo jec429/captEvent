@@ -11,7 +11,7 @@ class TTree;
 class TGeoManager;
 
 namespace CP {
-    class TND280Event;
+    class TEvent;
     class TTPCPadManager;
     class TRootOutput;
 
@@ -48,7 +48,7 @@ public:
     virtual int GetEventsWritten(void);
     
     /// Write an event to the current output file. 
-    virtual void WriteEvent(TND280Event& event);
+    virtual void WriteEvent(TEvent& event);
     
     /// Write the geometry data base to the output file.
     virtual void WriteGeometry(TGeoManager* geom);
@@ -70,7 +70,7 @@ private:
     TRootOutput(const TRootOutput& aFile);
     
     TTree *fEventTree;          // The tree with events. 
-    TND280Event *fEventPointer; // A memory location for the event pointer.
+    TEvent *fEventPointer; // A memory location for the event pointer.
     
     bool fAttached;             // True if the file is ready for writing.
     int fEventsWritten;         // Number of events written to file.

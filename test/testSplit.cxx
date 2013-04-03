@@ -18,7 +18,7 @@ public:
 
     virtual ~TTestSplit() {};
 
-    virtual int Process(CP::TND280Event& event, int outputFiles) {
+    virtual int Process(CP::TEvent& event, int outputFiles) {
         int temp = fCount;
         if (outputFiles>1) fCount = (fCount+1) % outputFiles;
         return temp;

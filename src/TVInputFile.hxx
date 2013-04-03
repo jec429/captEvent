@@ -3,13 +3,13 @@
 
 namespace CP {
     class TVInputFile;
-    class TND280Event;
+    class TEvent;
 };
 
-/// An abstract base class for input files that produce TND280Event objects.
+/// An abstract base class for input files that produce TEvent objects.
 /// There are currently two derived class TRootInput which is the normal way
 /// to read an offline event file, and TMidasFile which is the normal way to
-/// read a MIDAS .mid file and convert the raw data into TND280Event objects.  
+/// read a MIDAS .mid file and convert the raw data into TEvent objects.  
 class CP::TVInputFile {
 public:
     TVInputFile() {};
@@ -18,11 +18,11 @@ public:
     /// Return the first event in the input file.  If the file does not
     /// support rewind, then this should throw an exception if it is called a
     /// second time.
-    virtual CP::TND280Event* FirstEvent() = 0;
+    virtual CP::TEvent* FirstEvent() = 0;
 
     /// Get the next event from the input file.  If skip is greater than zero,
     /// then skip this many events before returning.
-    virtual CP::TND280Event* NextEvent(int skip=0) = 0;
+    virtual CP::TEvent* NextEvent(int skip=0) = 0;
     
     /// Return the position of the event just read in the file.  A position of
     /// zero means that the first event was read.  A position of -1 means that

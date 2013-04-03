@@ -8,14 +8,14 @@
 class TFolder;
 
 namespace CP {
-    class TND280Event;
+    class TEvent;
     class TEventFolder;
 }
 
 /// Provide management for events read using the TRootInput object and kept
 /// in the //root/Events folder.
 ///
-/// TND280Event objects are usually read from an input file using a
+/// TEvent objects are usually read from an input file using a
 /// TRootInput object (output is with a TRootOutput).  The last event read
 /// will be available from TEventFolder::GetCurrentEvent() which is a static
 /// method.  Interactive programs which want to provide a method to keep
@@ -64,22 +64,22 @@ public:
     /// \endcode
     /// Accessing GetCurrentEvent through TEventFolder will cause significant
     /// code slow downs.
-    static TND280Event* GetCurrentEvent(void);
+    static TEvent* GetCurrentEvent(void);
 
     /// Set the pointer to the current event.  The event will become the
     /// current event if it is saved in the event folder.  If it is not in the
     /// event folder, then this does nothing.
-    void SetCurrentEvent(TND280Event* event);
+    void SetCurrentEvent(TEvent* event);
 
-    /// Register an event with event folder.  This is used in the TND280Event
+    /// Register an event with event folder.  This is used in the TEvent
     /// constructor to make sure that TEventFolder knows about the new event.  
-    static void RegisterEvent(TND280Event* event);
+    static void RegisterEvent(TEvent* event);
 
     /// Delete an event from the event folder.  Root will handle removing an
     /// event if the folder is active, but since we may be working in a
     /// non-interactive program, that isn't good enough.  This is used in the
-    /// TND280Event distructor to tell TEventFolder when an event goes away.
-    static void RemoveEvent(TND280Event* event);
+    /// TEvent distructor to tell TEventFolder when an event goes away.
+    static void RemoveEvent(TEvent* event);
 
     /// Return the actual folder which can be NULL if //root/Events does not
     /// exist.  
@@ -87,10 +87,10 @@ public:
 
     /// The current (most recent) event.  If there is no current event, this
     /// will return zero.
-    virtual TND280Event* GetEvent(int prev = 0) const;
+    virtual TEvent* GetEvent(int prev = 0) const;
 
     /// Find a particular event.
-    virtual TND280Event* FindEvent(int run, int evt) const;
+    virtual TEvent* FindEvent(int run, int evt) const;
 
     /// A slot to capture the event selected in the root browser.  This is
     /// connected when the event folder is constructed.
@@ -101,7 +101,7 @@ public:
 
 private:
     static TEventFolder* fEventFolder; 
-    static TND280Event* fCurrentEvent;
+    static TEvent* fCurrentEvent;
     TFolder* fFolderOfEvents;
     ClassDef(TEventFolder,2);  
 };

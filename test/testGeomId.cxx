@@ -182,7 +182,7 @@ public:
         }
     }
 
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
         return false;
     }
 };

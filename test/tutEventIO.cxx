@@ -8,7 +8,7 @@
 #include <vector>
 #include <tut.h>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TRootInput.hxx"
 #include "TRootOutput.hxx"
 #include "TMCHit.hxx"
@@ -58,7 +58,7 @@ namespace {
         }
     }
 
-    void CreateTruth(CP::TND280Event& event) {
+    void CreateTruth(CP::TEvent& event) {
         event.push_back(new CP::TDataVector("truth"));
         CP::THandle<CP::TDataVector> truth 
             = event.Get<CP::TDataVector>("truth");
@@ -66,7 +66,7 @@ namespace {
         CreateTG4Hits(*truth,"fgd");
     }
 
-    void CreateHits(CP::TND280Event& event, std::string name) {
+    void CreateHits(CP::TEvent& event, std::string name) {
         std::string g4Name = "truth/g4Hits/" + name;
         CP::THandle<CP::TG4HitContainer> g4Hits 
             = event.Get<CP::TG4HitContainer>(g4Name);
@@ -95,7 +95,7 @@ namespace {
         }
     }
 
-    void CreateWaveform(CP::TND280Event& event, std::string name) {
+    void CreateWaveform(CP::TEvent& event, std::string name) {
         std::string g4Name = "truth/g4Hits/" + name;
         CP::THandle<CP::TG4HitContainer> g4Hits 
             = event.Get<CP::TG4HitContainer>(g4Name);
@@ -128,7 +128,7 @@ namespace {
         }
     }
 
-    void CreateResults(CP::TND280Event& event) {
+    void CreateResults(CP::TEvent& event) {
         // Create a simple algorithm result.
         CP::TAlgorithmResult *result
             = new CP::TAlgorithmResult("firstResult",
@@ -169,12 +169,12 @@ namespace {
         event.AddFit(result);
     }
 
-    void CreateTemporary(CP::TND280Event& event) {
+    void CreateTemporary(CP::TEvent& event) {
         CP::TDatum* d1 = new CP::TDatum("temporaryObject");
         event.AddDatum(d1);
     }
 
-    void FillEvent(CP::TND280Event& event) {
+    void FillEvent(CP::TEvent& event) {
         CreateTruth(event);
         CreateHits(event,"p0d");
         CreateWaveform(event,"fgd");
@@ -185,8 +185,8 @@ namespace {
 
 namespace tut {
     struct baseEventIO {
-        static std::vector<CP::TND280Event*> outputEvents;
-        static std::vector<CP::TND280Event*> inputEvents;
+        static std::vector<CP::TEvent*> outputEvents;
+        static std::vector<CP::TEvent*> inputEvents;
         baseEventIO() {
             // Run before each test.
             const char* fileName = "./tutEventIO.root";
@@ -196,7 +196,7 @@ namespace tut {
                     CP::TRootOutput* output 
                         = new CP::TRootOutput(fileName,"RECREATE");
                     for (int i=0; i<5; ++i) {
-                        CP::TND280Event* event = new CP::TND280Event();
+                        CP::TEvent* event = new CP::TEvent();
                         event->SetRunId(1);
                         event->SetEventId(i);
                         ND280Trace("Write event");
@@ -219,7 +219,7 @@ namespace tut {
                 if (inputEvents.size()<1) {
                     // Read the event back.
                     CP::TRootInput* input = new CP::TRootInput(fileName,"OLD");
-                    for (CP::TND280Event* event = input->FirstEvent();
+                    for (CP::TEvent* event = input->FirstEvent();
                          !input->EndOfFile();
                          event = input->NextEvent()) {
                         ND280Trace("Read event");
@@ -240,17 +240,17 @@ namespace tut {
         }
     };
 
-    std::vector<CP::TND280Event*> baseEventIO::outputEvents;
-    std::vector<CP::TND280Event*> baseEventIO::inputEvents;
+    std::vector<CP::TEvent*> baseEventIO::outputEvents;
+    std::vector<CP::TEvent*> baseEventIO::inputEvents;
 
     void EventIO_Finalization(void) {
         // Delete the events saved in the input and output event vectors.
-        for (std::vector<CP::TND280Event*>::iterator e 
+        for (std::vector<CP::TEvent*>::iterator e 
                  = baseEventIO::outputEvents.begin();
              e != baseEventIO::outputEvents.end();
              ++e) delete (*e);
 
-        for (std::vector<CP::TND280Event*>::iterator e
+        for (std::vector<CP::TEvent*>::iterator e
                  = baseEventIO::inputEvents.begin();
              e != baseEventIO::inputEvents.end();
              ++e) delete (*e);
@@ -275,9 +275,9 @@ namespace tut {
     // Test that event number and run number match.
     template<> template<>
     void testEventIO::test<2> () {
-        std::vector<CP::TND280Event*>::iterator out
+        std::vector<CP::TEvent*>::iterator out
             = baseEventIO::outputEvents.begin();
-        std::vector<CP::TND280Event*>::iterator in
+        std::vector<CP::TEvent*>::iterator in
             = baseEventIO::inputEvents.begin();
 
         for (;out != baseEventIO::outputEvents.end();
@@ -292,9 +292,9 @@ namespace tut {
     // Test that the basic event structure was created.
     template<> template<>
     void testEventIO::test<3> () {
-        std::vector<CP::TND280Event*>::iterator out
+        std::vector<CP::TEvent*>::iterator out
             = baseEventIO::outputEvents.begin();
-        std::vector<CP::TND280Event*>::iterator in
+        std::vector<CP::TEvent*>::iterator in
             = baseEventIO::inputEvents.begin();
 
         for (;out != baseEventIO::outputEvents.end();
@@ -314,9 +314,9 @@ namespace tut {
     // Test the input TG4Hits match the output TG4Hits.
     template<> template<>
     void testEventIO::test<4> () {
-        std::vector<CP::TND280Event*>::iterator out
+        std::vector<CP::TEvent*>::iterator out
             = baseEventIO::outputEvents.begin();
-        std::vector<CP::TND280Event*>::iterator in
+        std::vector<CP::TEvent*>::iterator in
             = baseEventIO::inputEvents.begin();
 
         for (;out != baseEventIO::outputEvents.end();
@@ -352,9 +352,9 @@ namespace tut {
     // Check that the hits match in the output and input objects.
     template<> template<>
     void testEventIO::test<5> () {
-        std::vector<CP::TND280Event*>::iterator out
+        std::vector<CP::TEvent*>::iterator out
             = baseEventIO::outputEvents.begin();
-        std::vector<CP::TND280Event*>::iterator in
+        std::vector<CP::TEvent*>::iterator in
             = baseEventIO::inputEvents.begin();
 
         for (;out != baseEventIO::outputEvents.end();
@@ -460,9 +460,9 @@ namespace tut {
     // share the same hits. 
     template<> template<>
     void testEventIO::test<8> () {
-        std::vector<CP::TND280Event*>::iterator out
+        std::vector<CP::TEvent*>::iterator out
             = baseEventIO::outputEvents.begin();
-        std::vector<CP::TND280Event*>::iterator in
+        std::vector<CP::TEvent*>::iterator in
             = baseEventIO::inputEvents.begin();
 
         for (;out != baseEventIO::outputEvents.end();
@@ -492,7 +492,7 @@ namespace tut {
     // Test that a simple CP::TAlgorithmResult object was correctly saved.
     template<> template<>
     void testEventIO::test<9> () {
-        for (std::vector<CP::TND280Event*>::iterator in
+        for (std::vector<CP::TEvent*>::iterator in
                  = baseEventIO::inputEvents.begin();
              in != baseEventIO::inputEvents.end();
              ++in) {
@@ -546,7 +546,7 @@ namespace tut {
     // Test that a temporary objects are not saved in output file.
     template<> template<>
     void testEventIO::test<10> () {
-        for (std::vector<CP::TND280Event*>::iterator out
+        for (std::vector<CP::TEvent*>::iterator out
                  = baseEventIO::outputEvents.begin();
              out != baseEventIO::outputEvents.end();
              ++out) {
@@ -554,7 +554,7 @@ namespace tut {
                 = (*out)->Get<CP::TDatum>("temporaryObject");
             ensure("Temporary object exists in output",tmp);
         }
-        for (std::vector<CP::TND280Event*>::iterator in
+        for (std::vector<CP::TEvent*>::iterator in
                  = baseEventIO::inputEvents.begin();
              in != baseEventIO::inputEvents.end();
              ++in) {
@@ -568,7 +568,7 @@ namespace tut {
     // output object.
     template<> template<>
     void testEventIO::test<11> () {
-        for (std::vector<CP::TND280Event*>::iterator in
+        for (std::vector<CP::TEvent*>::iterator in
                  = baseEventIO::outputEvents.begin();
              in != baseEventIO::outputEvents.end();
              ++in) {

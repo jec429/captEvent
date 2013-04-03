@@ -16,7 +16,7 @@ The TDataVector class can be thought of as a map or a dictionary (similar
 to the STL map).  It owns any object that it contains, and is designed to
 work with the ROOT browser.  Most classes saved in an event will be derived
 from a TDataVector.  Users will often interact with a TDataVector since it
-is the base class for TND280Event, TAlgorithmResult, and TOATrack.
+is the base class for TEvent, TAlgorithmResult, and TOATrack.
 
 The TDatum class is a light weight extension of the ROOT TNamed class that
 provides the lowest level support for the ND280 data structure.  It is the
@@ -33,7 +33,7 @@ file, mostly involving keeping the TOADatabase synchronized with the
 event.  This can be handled by reading the ND280Events TTree object using
 the TRootInput class.  
 
-\section accessingTDatum The TND280Event Has, Get, and Use methods
+\section accessingTDatum The TEvent Has, Get, and Use methods
 
 Information in an event is accessed using the TDatum::Has(), TDatum::Get(),
 and TDatum::Use() methods. These methods are actually member templates and

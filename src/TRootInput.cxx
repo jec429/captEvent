@@ -9,7 +9,7 @@
 
 #include "TRootInput.hxx"
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TOADatabase.hxx"
 #include "TND280Log.hxx"
 
@@ -108,17 +108,17 @@ bool CP::TRootInput::EndOfFile(void) {
     return false;
 }
 
-CP::TND280Event* CP::TRootInput::NextEvent(int skip) {
+CP::TEvent* CP::TRootInput::NextEvent(int skip) {
     if (skip>0) fSequence += skip;
     return ReadEvent(++fSequence);
 }
 
-CP::TND280Event* CP::TRootInput::PreviousEvent(int skip) {
+CP::TEvent* CP::TRootInput::PreviousEvent(int skip) {
     if (skip>0) fSequence -= skip;
     return ReadEvent(--fSequence);
 }
 
-CP::TND280Event* CP::TRootInput::ReadEvent(Int_t n) {
+CP::TEvent* CP::TRootInput::ReadEvent(Int_t n) {
     // Read the n'th event (starting from 0) in the file
     fSequence = n;
     if (fSequence<0) {
@@ -129,7 +129,7 @@ CP::TND280Event* CP::TRootInput::ReadEvent(Int_t n) {
     if (!IsAttached()) return NULL;
 
     // Set up for a new event structure to be allocated.
-    fEventPointer = new CP::TND280Event;
+    fEventPointer = new CP::TEvent;
     fEventTree->SetBranchAddress("ND280Event",&fEventPointer);
 
     // Read the new event.

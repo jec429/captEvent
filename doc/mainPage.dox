@@ -4,7 +4,7 @@
 
   This library provides the basic I/O functions for T2K ND280 software.
 
-  The I/O is provided by ROOT which is used to save CP::TND280Event objects and
+  The I/O is provided by ROOT which is used to save CP::TEvent objects and
   the TGeoManager description of the detector geometry.  The output to log
   files, and for debugging is controlled by the CP::TND280Log class.  All of
   the classes are in the ND namespace.  This namespace should contain all
@@ -40,14 +40,14 @@
   both ROOT and MIDAS format), output to one or more files, loading of the
   geometry, and filtering of the trigger type.
 
-  Events are saved using in TND280Event which are derived from the
+  Events are saved using in TEvent which are derived from the
   TDataVector class.  TDataVector derived classes provide a name space for
   information within an event where the naming rules are very similar to
   the unix file system naming rules.  For instance, the "sbCATxz"
   CP::TAlgorithmResult object can be found in an event at "~/fits/sbCATxz".
   This refers to the "sbCATxz" TAlgorithmResult found in the "fits"
   CP::TDataVector object which in turn is contained in the over all
-  CP::TND280Event object.  Data within an event is accessed using the
+  CP::TEvent object.  Data within an event is accessed using the
   CP::TDatum::Use() or CP::TDatum::Get() methods.  The CP::TAlgorithmResult
   object mentioned above can be accessed as follows:
 

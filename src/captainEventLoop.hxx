@@ -11,7 +11,7 @@ namespace CP {
 /// \code
 /// class TDumpEvent: public CP::TEventLoopFunction {
 /// public:
-///     bool operator () (CP::TND280Event& event) {
+///     bool operator () (CP::TEvent& event) {
 ///         // User Code
 ///         return true;
 ///     }

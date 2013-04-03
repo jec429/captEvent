@@ -66,10 +66,10 @@ namespace tut {
         std::vector< std::pair<CP::TGeometryId,double> > fGeomIdYShift;
         AlignmentLookup() {}
         virtual ~AlignmentLookup() {}
-        bool CheckAlignment(const CP::TND280Event* const event) {
+        bool CheckAlignment(const CP::TEvent* const event) {
             return true;
         }
-        CP::TAlignmentId StartAlignment(const CP::TND280Event* const event) {
+        CP::TAlignmentId StartAlignment(const CP::TEvent* const event) {
             fCalls = 0;
             unsigned int aid[5] = {0,0,0,0,0};
             aid[0] = fGeomIdYShift.size();
@@ -78,7 +78,7 @@ namespace tut {
             }
             return CP::TAlignmentId(aid);
         }
-        TGeoMatrix* Align(const CP::TND280Event* const event,
+        TGeoMatrix* Align(const CP::TEvent* const event,
                           CP::TGeometryId& geomId) {
             TGeoMatrix* result = NULL;
             if (fCalls<fGeomIdYShift.size()) {
@@ -263,7 +263,7 @@ namespace tut {
     class LocalGeometryChange: public CP::TOADatabase::GeometryChange {
     public:
         LocalGeometryChange() : fCallCount(0) {}
-        void Callback(const CP::TND280Event* const event) {++fCallCount;}
+        void Callback(const CP::TEvent* const event) {++fCallCount;}
         int fCallCount;
     };
     LocalGeometryChange localGeometryChange;

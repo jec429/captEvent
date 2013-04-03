@@ -31,7 +31,7 @@ public:
     /// event should be saved to the output file.  If the remainder of the
     /// current file should be skipped, this should through the
     /// ENextEventLoopFile exception.
-    bool operator () (TND280Event& event) {
+    bool operator () (TEvent& event) {
         // Get the P0D hits
 	TBorrowed<THitSelection*> p0d(event.GetHitSelection("p0d"));
 	// Update Tree values

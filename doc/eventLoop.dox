@@ -129,7 +129,7 @@ you the available command options and then exit.
 Your version of mySimpleEventLoop.cxx is a full event loop program that can
 read event files, but it doesn't do anything yet.  To access the data, you
 need to add user code to the TMySimpleEventLoop class.  This is done by
-adding a TMySimpleEventLoop::operator()(TND280Event&) to your class.  This
+adding a TMySimpleEventLoop::operator()(TEvent&) to your class.  This
 operator is called for each event in a file.  As a simple example of using
 this operator, the following TMySimpleEventLoop class dumps the event
 information for each event in a file.
@@ -139,7 +139,7 @@ class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
         event.ls();
 	return true;
     }
@@ -149,7 +149,7 @@ public:
 Add this operator to your \c mySimpleEventLoop.cxx and compile.  You can
 now run mySimpleEventLoop.exe on an event file and get tons of information.
 The TMySimpleEventLoop::operator() has access to any information in the
-event, so see the documentation for TND280Event.
+event, so see the documentation for TEvent.
 
 Most useful code will need to create histograms and do other initialization
 before the first event, and then save information after the last event.
@@ -178,7 +178,7 @@ public:
         fP0DHits = new TH1F("p0dHits", "Hits in the P0D",10000,0,10000);
     }
 
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
 
         // Get the list of P0D hits from the event.
 	CP::THandle<CP::THitSelection> p0d(event.GetHitSelection("p0d"));
@@ -269,7 +269,7 @@ public:
         fOutputTree->Branch("NP0DHits", &fNP0DHits, "NP0DHits/I");
     }
 
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
        // Get the P0D hits
        CP::THandle<CP::THitSelection> p0d(event.GetHitSelection("p0d"));
        // Update Tree values
@@ -311,7 +311,7 @@ name.  That will help keep the doxygen documentation useful.
 Occasionally, events from a set of input files will need to be written into
 multiple output files.  An example might be splitting the data into
 different trigger types, or saving a separate file of rejected events for
-debugging.  This can be done by defining the TND280EventLoop::Process()
+debugging.  This can be done by defining the TEventLoop::Process()
 method.  As a trivial example, here is a program to save all beam spill 
 triggers, pedestal triggers into a separate file, and reject all other
 trigger types.  For a better way to do this see, \ref triggerSelection.
@@ -324,7 +324,7 @@ public:
     TMySimpleEventLoop() {}
     virtual ~TMySimpleEventLoop() {}
 
-    int Process () (CP::TND280Event& event, int availableOutputs) {
+    int Process () (CP::TEvent& event, int availableOutputs) {
     	if (event.CheckTrigger(CP::Trigger::kBeamSpill)) return 0;
     	if (event.CheckTrigger(CP::Trigger::kPedestal)) return 1;
         return -1;

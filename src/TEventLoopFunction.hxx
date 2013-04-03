@@ -3,7 +3,7 @@
 
 #include "EoaCore.hxx"
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 
 namespace CP {
     class TEventLoopFunction;
@@ -18,10 +18,10 @@ namespace CP {
 
 /// A base class for use with the CP::captainEventLoop() which defines the
 /// command line options.  User classes should implement the
-/// operator()(TND280Event& event) method that returns true if the event
+/// operator()(TEvent& event) method that returns true if the event
 /// should be saved to an output file.  If false is returned, then the event
 /// is not saved.  If you want to have multiple output files, you can use the
-/// Process(TND280Event&, int files) method which should return -1 (to not
+/// Process(TEvent&, int files) method which should return -1 (to not
 /// save the event), or the index of the file to save the event into [0 to
 /// files-1].  This should throw an ENextEventLoopFile to stop processing a
 /// particular file.  Documentation on writing and using event loops is
@@ -35,7 +35,7 @@ namespace CP {
 ///     void Initialize() {
 ///         // Do something
 ///     }
-///     bool operator () (TND280Event& event) {
+///     bool operator () (TEvent& event) {
 ///         // User Code
 ///         return true;
 ///     }
@@ -75,7 +75,7 @@ public:
     /// current file should be skipped, this should through the
     /// ENextEventLoopFile exception.  if the daughter class defines this
     /// operator, it should not define the Process() method.
-    virtual bool operator () (TND280Event& event);
+    virtual bool operator () (TEvent& event);
 
     /// Process a file and write into multiple output files.  This is called
     /// for each event inside the event loop, and return the index of the file
@@ -88,7 +88,7 @@ public:
     /// ENextEventLoopFile exception.  If the daughter class defines this
     /// method it should not define the operator ().  The index of the output
     /// file is determined by the order on the command line.
-    virtual int Process(TND280Event& event, int outputFiles);
+    virtual int Process(TEvent& event, int outputFiles);
 
     /// Called after the arguments are processes, and before the first event
     /// is read.  Any output files are open before Initialize is called, so

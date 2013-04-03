@@ -116,7 +116,7 @@ public:
     /// conventions.  A typical usage might look something like this:
     ///
     /// \code
-    ///  myFunc(TND280Event& evt) {
+    ///  myFunc(TEvent& evt) {
     ///      THandle<TG4TrajectoryContainer> trajectories 
     ///          = evt.Get<TG4TrajectoryContainer>("truth/G4Trajectories");
     ///      if (trajectories) {
@@ -172,7 +172,7 @@ public:
     /// class.  A typical usage might look something like this:
     ///
     /// \code
-    ///  myFunc(TND280Event& evt) {
+    ///  myFunc(TEvent& evt) {
     ///      try {
     ///          TG4TrajectoryContainer& trajectories 
     ///              = evt.Use<TG4TrajectoryContainer>("truth/G4Trajectories");

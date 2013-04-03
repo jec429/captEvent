@@ -13,7 +13,7 @@ namespace CP {
     OA_EXCEPTION(ENoND280InputFile,END280Input);
     OA_EXCEPTION(ENoEvents,END280Input);
 
-    class TND280Event;
+    class TEvent;
     class TRootInput;
 }
 
@@ -59,21 +59,21 @@ public:
     virtual bool EndOfFile(void);
 
     /// Return the first event in the file.
-    virtual TND280Event* FirstEvent(void) {return ReadEvent(0);}
+    virtual TEvent* FirstEvent(void) {return ReadEvent(0);}
 
     /// Read the next event in the file.
-    virtual TND280Event* NextEvent(int skip = 0);
+    virtual TEvent* NextEvent(int skip = 0);
 
     /// Read the previous event in the file.
-    virtual TND280Event* PreviousEvent(int skip = 0);
+    virtual TEvent* PreviousEvent(int skip = 0);
 
     /// Return the first event in the file.
-    virtual TND280Event* LastEvent(void) {
+    virtual TEvent* LastEvent(void) {
         return ReadEvent(GetEventsInFile()-1);
     }
 
     /// Read the n'th event in the file.  The events are counted from zero.
-    virtual TND280Event* ReadEvent(Int_t n);
+    virtual TEvent* ReadEvent(Int_t n);
 
     /// Make sure that the file is closed.  This method is specific to
     /// TRootInput.
@@ -100,7 +100,7 @@ private:
     Int_t fSequence;            // The sequence number of the last event read.
 
     TTree* fEventTree;          // the TTTree of event objects. 
-    TND280Event* fEventPointer; //! the last event read.
+    TEvent* fEventPointer; //! the last event read.
     
     Int_t fEventsRead;          //! count of events read from file
     bool fAttached;             //! are we prepared to read from the file?

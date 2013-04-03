@@ -25,7 +25,7 @@
 #include <TGeoMatrix.h>
 #include <TGeoPhysicalNode.h>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
 #include "TEventFolder.hxx"
@@ -135,7 +135,7 @@ namespace {
 
         // Return the geometry matching the event context.
         virtual CP::TSHAHashValue GetHash(
-            const CP::TND280Event* const event) {
+            const CP::TEvent* const event) {
             if (fHashs.empty()) return CP::TSHAHashValue();
             // If no event so no default geometry.
             if (!event) return CP::TSHAHashValue();
@@ -178,7 +178,7 @@ CP::TOADatabase& CP::TOADatabase::Get(void) {
     return *fOADatabase;
 }
 
-TGeoManager* CP::TOADatabase::Geometry(CP::TND280Event* event) {
+TGeoManager* CP::TOADatabase::Geometry(CP::TEvent* event) {
     // If an event wasn't provided, then try getting the current event.
     if (!event) event = CP::TEventFolder::GetCurrentEvent();
     TGeoManager* geom = GeomId().GetGeometry(event);
@@ -217,7 +217,7 @@ void CP::TOADatabase::ClearGeometryCallbacks() {
     fGeometryCallbacks.clear();
 }
 
-void CP::TOADatabase::ApplyGeometryCallbacks(const CP::TND280Event* event) {
+void CP::TOADatabase::ApplyGeometryCallbacks(const CP::TEvent* event) {
     for (std::set<CP::TOADatabase::GeometryChange*>::iterator 
              c = fGeometryCallbacks.begin();
          c != fGeometryCallbacks.end();
@@ -241,7 +241,7 @@ CP::TOADatabase::GeometryLookup* CP::TOADatabase::RegisterGeometryLookup(
 }
 
 CP::TSHAHashValue CP::TOADatabase::FindEventGeometry(
-    const CP::TND280Event *const event) const {
+    const CP::TEvent *const event) const {
     TSHAHashValue hashValue;
     if (!fGeometryLookup) {
         if (!gDefaultGeometryLookup) {
@@ -266,12 +266,12 @@ CP::TOADatabase::AlignmentLookup* CP::TOADatabase::RegisterAlignmentLookup(
     return old;
 }
 
-void CP::TOADatabase::AlignGeometry(const CP::TND280Event* const event) {
+void CP::TOADatabase::AlignGeometry(const CP::TEvent* const event) {
     GeomId().ApplyAlignment(event);
 }
 
 CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
-    const CP::TND280Event* const event) {
+    const CP::TEvent* const event) {
     CP::TAlignmentId id;
 
     GeomId().GetGeoManager();
@@ -350,12 +350,12 @@ CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
     return id;
 }
 
-bool CP::TOADatabase::CheckAlignment(const CP::TND280Event* const event) {
+bool CP::TOADatabase::CheckAlignment(const CP::TEvent* const event) {
     if (!fAlignmentLookup) return false;
     return fAlignmentLookup->CheckAlignment(event);
 }
 
-CP::TTPCPadManager& CP::TOADatabase::TPCPads(CP::TND280Event* event) {
+CP::TTPCPadManager& CP::TOADatabase::TPCPads(CP::TEvent* event) {
     if (!fPadManager) {
         // create the tpc pad information into memory.  The default values
         // almost never change, so they are not saved in the data file.

@@ -5,13 +5,13 @@ CP::TEventLoopFunction::TEventLoopFunction() {}
 
 CP::TEventLoopFunction::~TEventLoopFunction() {}
 
-bool CP::TEventLoopFunction::operator () (TND280Event& event) {
+bool CP::TEventLoopFunction::operator () (TEvent& event) {
     ND280Warn("Event loop without processing operator " 
               << event.GetName());
     return true;
 }
 
-int CP::TEventLoopFunction::Process(TND280Event& event, int outputFiles) {
+int CP::TEventLoopFunction::Process(TEvent& event, int outputFiles) {
     if (operator()(event)) return 0;
     return -1;
 }

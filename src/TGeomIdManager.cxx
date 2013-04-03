@@ -22,7 +22,7 @@
 #include "TGeomIdManager.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TGeomIdFinder.hxx"
 #include "TP0DIdFinder.hxx"
 
@@ -764,7 +764,7 @@ TGeoManager* CP::TGeomIdManager::GetGeoManager() {
     return gGeoManager;
 }
 
-bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TND280Event* event) {
+bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     // Check to see if the geometry has already been overloaded
     if (GetGeometryHashOverride().Equivalent(GetHash())) {
         ND280NamedDebug("Geometry","Correct geometry override already loaded");
@@ -860,7 +860,7 @@ namespace {
     int LocalGeometryLock::fLockCount=0;
 };
 
-TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TND280Event* event) {
+TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     LocalGeometryLock geomLock;
     if (geomLock.IsLocked()) {
         // The geometry is currently being accessed, so don't do any geometry
@@ -946,7 +946,7 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TND280Event* event) {
     return GetGeoManager();
 }
 
-bool CP::TGeomIdManager::CheckGeometry(const CP::TND280Event* const event) {
+bool CP::TGeomIdManager::CheckGeometry(const CP::TEvent* const event) {
     // Check to see if the geometry has been overriden
     if (GetGeometryHashOverride().Equivalent(GetHash())) {
         return false;
@@ -1000,7 +1000,7 @@ bool CP::TGeomIdManager::CheckGeometry(const CP::TND280Event* const event) {
     return true;
 }
 
-bool CP::TGeomIdManager::CheckAlignment(const CP::TND280Event* const event) {
+bool CP::TGeomIdManager::CheckAlignment(const CP::TEvent* const event) {
     // We don't have an alignment yet so we need to load one.
     if (!GetAlignmentId().Valid()) return true;
 
@@ -1020,7 +1020,7 @@ bool CP::TGeomIdManager::CheckAlignment(const CP::TND280Event* const event) {
     return CP::TOADatabase::Get().CheckAlignment(event);
 }
 
-void CP::TGeomIdManager::ApplyAlignment(const CP::TND280Event* const event) {
+void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
     if (!gGeoManager) {
         ND280Severe("ApplyAlignment called with invalid geometry");
         return;

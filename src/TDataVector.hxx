@@ -36,7 +36,7 @@ namespace CP {
 /// might be:
 ///
 /// \code
-/// int trajectoryCount(TND280Event& evt) {
+/// int trajectoryCount(TEvent& evt) {
 ///     try {
 ///         TG4TrajectoryContainer& trajectories
 ///             = evt.Use<TG4TrajectoryContainer>("~/truth/G4Trajectories");

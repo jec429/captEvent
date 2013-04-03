@@ -11,7 +11,7 @@
 #include <TKey.h>
 
 #include "TRootOutput.hxx"
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TOADatabase.hxx"
 #include "TTPCPadManager.hxx"
 #include "TND280Log.hxx"
@@ -53,7 +53,7 @@ bool CP::TRootOutput::IsAttached(void) {
         fEventTree = new TTree("ND280Events", "ND280 Event Tree");
     }
     ND280Trace("Add the branch pointer");
-    fEventTree->Branch("ND280Event","CP::TND280Event",&fEventPointer,128000,0);
+    fEventTree->Branch("ND280Event","CP::TEvent",&fEventPointer,128000,0);
     fEventPointer = NULL;       // Make sure it's empty.
     fAttached = true;
 
@@ -63,7 +63,7 @@ bool CP::TRootOutput::IsAttached(void) {
 
 int CP::TRootOutput::GetEventsWritten(void) {return fEventsWritten;}
 
-void CP::TRootOutput::WriteEvent(CP::TND280Event& event) {
+void CP::TRootOutput::WriteEvent(CP::TEvent& event) {
     if (!IsAttached()) return;
     // Copy the pointer into the location attached to the file.
     fEventPointer = &event;

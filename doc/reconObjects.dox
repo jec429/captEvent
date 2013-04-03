@@ -90,10 +90,10 @@ in the code.
 
 \paragraph recObjIO Input and Output of Recon Objects
 
-The recon objects must be saved in a CP::TND280Event object.  For
+The recon objects must be saved in a CP::TEvent object.  For
 efficiency, this implies that they are derived from either TObject,
 CP::TDatum, or CP::TDataVector.  The recon object should also be available
-within the CP::TND280Event name hierarchy, and support a namespace hierarchy so
+within the CP::TEvent name hierarchy, and support a namespace hierarchy so
 that algorithms can store arbitrary information.
 
 \subsubsection recObjBase Information shared by all Recon Objects

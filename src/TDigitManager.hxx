@@ -6,7 +6,7 @@
 
 #include "EoaCore.hxx"
 #include "TDigit.hxx"
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TDigitContainer.hxx"
 #include "TDigitProxy.hxx"
 #include "THandle.hxx"
@@ -30,7 +30,7 @@ namespace CP {
 /// using oaRawEvent.  The oaUnpack library will implement a digit factory
 /// for each class of data and register them with TDigitManager.  The digit
 /// factory type is given by the name of the TDigitContainer that will be
-/// generated in the TND280Event.
+/// generated in the TEvent.
 class CP::TDigitFactory {
 public:
     explicit TDigitFactory(std::string name);
@@ -81,8 +81,8 @@ public:
     /// used as a diagnostic tool.
     void PersistentDigits(void) {fPersistentDigits=true;}
 
-    /// @{A Low level interface used to implement TND280Event::GetDigits().
-    /// The higher level digit interface, TND280Event::GetDigits() should be
+    /// @{A Low level interface used to implement TEvent::GetDigits().
+    /// The higher level digit interface, TEvent::GetDigits() should be
     /// prefered.  This gets the digit container for a type of data ("fgd",
     /// "p0d", &c).  If the digits are available, this will return a valid
     /// handle to the container, otherwise it will return a "NULL" handle.
@@ -92,7 +92,7 @@ public:
     /// digits are saved as temporary banks, but can be made persistent using
     /// TOADatabase::Get().Digits().PersistentDigits().
     CP::THandle<CP::TDigitContainer> CacheDigits(std::string type);
-    CP::THandle<CP::TDigitContainer> CacheDigits(CP::TND280Event& event,
+    CP::THandle<CP::TDigitContainer> CacheDigits(CP::TEvent& event,
                                                  std::string type);
     /// @}
 

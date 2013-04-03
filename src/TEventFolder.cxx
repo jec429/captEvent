@@ -10,12 +10,12 @@
 #include <TFolder.h>
 #include <TQObject.h>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TEventFolder.hxx"
 #include "TND280Log.hxx"
 
 CP::TEventFolder* CP::TEventFolder::fEventFolder = NULL;
-CP::TND280Event* CP::TEventFolder::fCurrentEvent = NULL;
+CP::TEvent* CP::TEventFolder::fCurrentEvent = NULL;
 
 CP::TEventFolder::TEventFolder() {
     fFolderOfEvents = NULL;
@@ -52,17 +52,17 @@ CP::TEventFolder* CP::TEventFolder::GetEventFolder(void) {
     return fEventFolder;
 }
 
-CP::TND280Event* CP::TEventFolder::GetEvent(int indx) const {
+CP::TEvent* CP::TEventFolder::GetEvent(int indx) const {
     if (!fFolderOfEvents) return NULL;
     TList* folder = dynamic_cast<TList*>(fFolderOfEvents->GetListOfFolders());
     if (!folder) return NULL;
-    CP::TND280Event* current = NULL;
+    CP::TEvent* current = NULL;
     int count = 0;
 
     for ( TObjLink* objlink = folder->LastLink();
           objlink != NULL;
           objlink = objlink->Prev()) {
-        current = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
+        current = dynamic_cast<CP::TEvent*>(objlink->GetObject());
         if (current) ++count;
         if (count > indx) break;
     }
@@ -70,17 +70,17 @@ CP::TND280Event* CP::TEventFolder::GetEvent(int indx) const {
     return current;
 }
 
-void CP::TEventFolder::SetCurrentEvent(CP::TND280Event* event) {
+void CP::TEventFolder::SetCurrentEvent(CP::TEvent* event) {
     if (!event) return;
     if (!fFolderOfEvents) return;
     TList* folder = dynamic_cast<TList*>(fFolderOfEvents->GetListOfFolders());
     if (!folder) return;
 
-    CP::TND280Event* oldEvent = fCurrentEvent;
+    CP::TEvent* oldEvent = fCurrentEvent;
     for (TObjLink* objlink = folder->LastLink();
           objlink != NULL;
           objlink = objlink->Prev()) {
-        CP::TND280Event* inList = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
+        CP::TEvent* inList = dynamic_cast<CP::TEvent*>(objlink->GetObject());
         if (inList == event) {
             fCurrentEvent = event;
         }
@@ -89,15 +89,15 @@ void CP::TEventFolder::SetCurrentEvent(CP::TND280Event* event) {
               << " to " << fCurrentEvent);
 }
 
-CP::TND280Event* CP::TEventFolder::FindEvent(int, int) const {
+CP::TEvent* CP::TEventFolder::FindEvent(int, int) const {
     return NULL;
 }
 
-CP::TND280Event* CP::TEventFolder::GetCurrentEvent(void) {
+CP::TEvent* CP::TEventFolder::GetCurrentEvent(void) {
     return fCurrentEvent;
 }
 
-void CP::TEventFolder::RegisterEvent(CP::TND280Event* event) {
+void CP::TEventFolder::RegisterEvent(CP::TEvent* event) {
     fCurrentEvent = event;
     if (fCurrentEvent && fEventFolder && fEventFolder->fFolderOfEvents) {
         fEventFolder->fFolderOfEvents->Add(event);
@@ -105,7 +105,7 @@ void CP::TEventFolder::RegisterEvent(CP::TND280Event* event) {
     }
 }
 
-void CP::TEventFolder::RemoveEvent(CP::TND280Event* event) {
+void CP::TEventFolder::RemoveEvent(CP::TEvent* event) {
     // Check if the event is the current event.
     if (fCurrentEvent == event) fCurrentEvent = NULL;
 
@@ -121,7 +121,7 @@ void CP::TEventFolder::RemoveEvent(CP::TND280Event* event) {
     for (TObjLink* objlink = folder->LastLink(); 
          objlink != NULL;       
          objlink = objlink->Prev()) {
-        fCurrentEvent = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
+        fCurrentEvent = dynamic_cast<CP::TEvent*>(objlink->GetObject());
         // Any event is OK as long as it's not the event being removed.
         if (fCurrentEvent != event) break;
     }
@@ -130,7 +130,7 @@ void CP::TEventFolder::RemoveEvent(CP::TND280Event* event) {
 void CP::TEventFolder::EventSelected(TObject* theObject) {
     ND280Info("EventFolder had " << theObject->ClassName()  
               << " at " << theObject << " selected");
-    CP::TND280Event* event = dynamic_cast<CP::TND280Event*>(theObject);
+    CP::TEvent* event = dynamic_cast<CP::TEvent*>(theObject);
     SetCurrentEvent(event);
 }
 

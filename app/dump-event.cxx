@@ -31,7 +31,7 @@ public:
         return true;
     }
 
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
         if (CP::TND280Log::GetLogLevel()>CP::TND280Log::QuietLevel && !fQuiet) {
             event.ls(fLSOption.c_str());
         }

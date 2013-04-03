@@ -11,7 +11,7 @@
 #undef private
 #undef protected
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TOADatabase.hxx"
 #include "TDataHit.hxx"
 #include "TGeometryId.hxx"
@@ -126,7 +126,7 @@ namespace tut {
          ensure("Test TDigitFactory is available",
                CP::TOADatabase::Get().Digits().FactoryAvailable("test"));
 
-         CP::TND280Event event;
+         CP::TEvent event;
 
          CP::THandle<CP::TDigitContainer> digits = 
              CP::TOADatabase::Get().Digits().CacheDigits("test");
@@ -157,7 +157,7 @@ namespace tut {
     // Test the TDigitProxy.
     template <> template <>
     void testTDigit::test<7> () {
-         CP::TND280Event event;
+         CP::TEvent event;
          CP::THandle<CP::TDigitContainer> digits = event.GetDigits("test");
          ensure("Digit container was created",digits);
 
@@ -190,7 +190,7 @@ namespace tut {
     // Test the digit access routines for TDigitProxy.
     template <> template <>
     void testTDigit::test<8> () {
-         CP::TND280Event event;
+         CP::TEvent event;
          CP::THandle<CP::TDigitContainer> digits = event.GetDigits("test");
          ensure("Digit container was created",digits);
 
@@ -207,7 +207,7 @@ namespace tut {
     // Test the digit proxies in THits.
     template <> template <>
     void testTDigit::test<9> () {
-         CP::TND280Event event;
+         CP::TEvent event;
          CP::THandle<CP::TDigitContainer> digits = event.GetDigits("test");
          CP::THandle<CP::THitSelection> hits(new CP::THitSelection("test"));
 
@@ -255,7 +255,7 @@ namespace tut {
     // constructors are the same.
     template <> template <>
     void testTDigit::test<10> () {
-         CP::TND280Event event;
+         CP::TEvent event;
          CP::THandle<CP::TDigitContainer> digits = event.GetDigits("test");
          ensure("Digit container was created",digits);
 

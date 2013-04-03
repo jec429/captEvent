@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////
-// $Id: TND280Event.cxx,v 1.39 2011/12/07 21:53:26 mcgrew Exp $
+// $Id: TEvent.cxx,v 1.39 2011/12/07 21:53:26 mcgrew Exp $
 //
 #include <sstream>
 #include <iostream>
 #include <iomanip>
 #include <string>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TEventFolder.hxx"
 #include "THitSelection.hxx"
 #include "TAlgorithmResult.hxx"
@@ -14,24 +14,24 @@
 #include "TDigitManager.hxx"
 #include "TDigitContainer.hxx"
 
-ClassImp(CP::TND280Event);
+ClassImp(CP::TEvent);
 
-CP::TND280Event::TND280Event() {
+CP::TEvent::TEvent() {
     /// All other fields are self initializing.
     Build();
 }
 
-CP::TND280Event::TND280Event(const CP::TEventContext& context)
+CP::TEvent::TEvent(const CP::TEventContext& context)
     : fContext(context){
     /// All other fields are self initializing.
     Build();
 }
 
-CP::TND280Event::~TND280Event() {
+CP::TEvent::~TEvent() {
     CP::TEventFolder::RemoveEvent(this);
 }
 
-void CP::TND280Event::Build(void) {
+void CP::TEvent::Build(void) {
     if (GetRunId() == CP::TEventContext::Invalid
         || GetEventId() == CP::TEventContext::Invalid) {
         SetName("event.uninitialized");
@@ -55,7 +55,7 @@ void CP::TND280Event::Build(void) {
     Register();
 }
 
-void CP::TND280Event::ls(Option_t* opt) const {
+void CP::TEvent::ls(Option_t* opt) const {
     CP::TDatum::ls(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
@@ -87,15 +87,15 @@ void CP::TND280Event::ls(Option_t* opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-void CP::TND280Event::Register(void) {
+void CP::TEvent::Register(void) {
     CP::TEventFolder::RegisterEvent(this);
 }
 
-CP::THandle<CP::TDigitContainer> CP::TND280Event::GetDigits(const char* name) {
+CP::THandle<CP::TDigitContainer> CP::TEvent::GetDigits(const char* name) {
     return CP::TOADatabase::Get().Digits().CacheDigits(*this,name);
 }
 
-CP::THandle<CP::THitSelection> CP::TND280Event::GetHitSelection(const char* name) 
+CP::THandle<CP::THitSelection> CP::TEvent::GetHitSelection(const char* name) 
     const {
     std::string hitName("hits/");
     hitName += name;
@@ -104,17 +104,17 @@ CP::THandle<CP::THitSelection> CP::TND280Event::GetHitSelection(const char* name
     return Get<CP::THitSelection>(hitName.c_str());
 }
 
-CP::THandle<CP::TAlgorithmResult> CP::TND280Event::GetFit(const char* name) const {
+CP::THandle<CP::TAlgorithmResult> CP::TEvent::GetFit(const char* name) const {
     std::string fitName = "~/fits/";
     return Get<CP::TAlgorithmResult>(fitName + name);
 }
 
-void CP::TND280Event::AddFit(CP::TAlgorithmResult* fit, const char* name) {
+void CP::TEvent::AddFit(CP::TAlgorithmResult* fit, const char* name) {
     CP::THandle<CP::TDataVector> fits = Get<CP::TDataVector>("~/fits");
     fits->AddDatum(fit,name);
 }
 
-void CP::TND280Event::AddFit(CP::THandle<CP::TAlgorithmResult> fit, const char* name) {
+void CP::TEvent::AddFit(CP::THandle<CP::TAlgorithmResult> fit, const char* name) {
     CP::THandle<CP::TDataVector> fits = Get<CP::TDataVector>("~/fits");
     fit.Release();
     fits->AddDatum(GetPointer(fit),name);

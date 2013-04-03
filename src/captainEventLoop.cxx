@@ -13,7 +13,7 @@
 
 #include "EoaCore.hxx"
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TRootInput.hxx"
 #include "TRootOutput.hxx"
 #include "TOADatabase.hxx"
@@ -418,7 +418,7 @@ int CP::captainEventLoop(int argc, char** argv,
             if (!outputFiles.empty()) outputFiles.front()->cd();
             userCode.BeginFile(input.get());
             
-            std::auto_ptr<TND280Event> event(input->FirstEvent());
+            std::auto_ptr<TEvent> event(input->FirstEvent());
 
             // Position to the first event in the file to read.  This might
             // leave the file positioned at the end of file.

@@ -21,7 +21,7 @@ namespace CP {
     class TGeomIdFinder;
     class TGeomIdManager;
     class TOADatabase;
-    class TND280Event;
+    class TEvent;
 };
 
 /// Translate TGeometryId objects into TGeoNode pointers used with
@@ -260,21 +260,21 @@ private:
     /// ReadGeometry, LoadGeometry and ResetGeometry to load the actual
     /// geometry manager so the geometry id and hash code tables are updated
     /// by this method.
-    bool FindAndLoadGeometry(CP::TND280Event* event);
+    bool FindAndLoadGeometry(CP::TEvent* event);
 
     /// Determine if the geometry should be looked for.  If this returns true,
     /// the a new geometry should be loaded.
-    bool CheckGeometry(const CP::TND280Event* const event);
+    bool CheckGeometry(const CP::TEvent* const event);
 
     /// Check if the alignment might have changed.
-    bool CheckAlignment(const CP::TND280Event* const event);
+    bool CheckAlignment(const CP::TEvent* const event);
 
     /// This applies the alignment.
-    void ApplyAlignment(const CP::TND280Event* const event);
+    void ApplyAlignment(const CP::TEvent* const event);
 
     /// Load the correct geometry.  This is provided to TOADatabase to
     /// implement CP::TOADatabase::Geometry().
-    TGeoManager* GetGeometry(CP::TND280Event* event);
+    TGeoManager* GetGeometry(CP::TEvent* event);
 
     /// Set the pointer to the current geometry manager.  This sets both the
     /// fGeoManager field and the gGeoManager global.

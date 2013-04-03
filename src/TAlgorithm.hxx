@@ -5,7 +5,7 @@
 #include <TTask.h>
 #include <TGeoManager.h>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "THitSelection.hxx"
 #include "TAlgorithmTag.hxx"
 #include "TAlgorithmResult.hxx"
@@ -120,7 +120,7 @@ protected:
     /// A convenient way to get the event being processed by the algorithm.
     /// The returned event is only valid during a single call to Process so
     /// the pointer can not be saved in a field.
-    CP::TND280Event& GetEvent() const;
+    CP::TEvent& GetEvent() const;
     
     /// A convenient way to get the correct geometry for the current event.
     /// If there isn't a valid geometry available, this will return NULL.  As

@@ -32,7 +32,7 @@ public:
     /// current file should be skipped, this should through the
     /// ENextEventLoopFile exception.  If the daughter class defines this
     /// operator, it should not define the Process() method.
-    bool operator () (CP::TND280Event& event) {
+    bool operator () (CP::TEvent& event) {
         return true;
     }
 

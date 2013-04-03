@@ -66,8 +66,8 @@ CP::TAlgorithmTag CP::TAlgorithm::GetTag() const {
     return CP::TAlgorithmTag(*this);
 }
 
-CP::TND280Event& CP::TAlgorithm::GetEvent() const {
-    TND280Event* event = CP::TEventFolder::GetCurrentEvent();
+CP::TEvent& CP::TAlgorithm::GetEvent() const {
+    TEvent* event = CP::TEventFolder::GetCurrentEvent();
     if (!event) {
         ND280Error("No current event");
         throw EAlgorithmWithoutEvent();

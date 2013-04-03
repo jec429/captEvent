@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "TND280Event.hxx"
+#include "TEvent.hxx"
 #include "TEventFolder.hxx"
 #include "TOADatabase.hxx"
 #include "TDigitManager.hxx"
@@ -26,7 +26,7 @@ bool CP::TDigitManager::FactoryAvailable(std::string type) const {
 CP::THandle<CP::TDigitContainer> 
 CP::TDigitManager::CacheDigits(std::string type) {
     // Check to see if the digits already exist in the current event.
-    CP::TND280Event* event = TEventFolder::GetCurrentEvent();
+    CP::TEvent* event = TEventFolder::GetCurrentEvent();
     if (!event) {
         throw EDigitEventMissing();
     }
@@ -34,7 +34,7 @@ CP::TDigitManager::CacheDigits(std::string type) {
 }
 
 CP::THandle<CP::TDigitContainer> 
-CP::TDigitManager::CacheDigits(CP::TND280Event& event,
+CP::TDigitManager::CacheDigits(CP::TEvent& event,
                                std::string type) {
 
     CP::THandle<CP::TDigitContainer> digits = 
