@@ -1,35 +1,27 @@
-#ifndef TND280MCHeader_hxx_seen
-#define TND280MCHeader_hxx_seen
+#ifndef TMCHeader_hxx_seen
+#define TMCHeader_hxx_seen
 
 #include "TDataVector.hxx"
 #include "THandle.hxx"
 #include "TSHAHashValue.hxx"
 
 namespace CP {
-    class TND280MCHeader;
+    class TMCHeader;
 };
 
-/// Save information about how the MC was run.  This save information that
-/// might be thought of as "MC Global Slow Control" like the magnetic field
-/// used in the magnet.
-class CP::TND280MCHeader: public CP::TDataVector {
+/// Save information about how the MC was run.  This saves information that
+/// might be thought of as "MC Global Slow Control".
+class CP::TMCHeader: public CP::TDataVector {
 public:
-    TND280MCHeader();
-    TND280MCHeader(const char* name, const char* title);
-    virtual ~TND280MCHeader();
+    TMCHeader();
+    TMCHeader(const char* name, const char* title);
+    virtual ~TMCHeader();
 
-    /// Get the nominal magnetic field for the off-axis detector.  
-    double GetOffAxisField() const {return fOffAxisField;}
-
-    /// Set the magnetic field for the off-axis detector.
-    void SetOffAxisField(double f) {fOffAxisField = f;}
-
-    /// Set "Intensity" for the event.  For the beam spill MC, this should be
-    /// the protons per pulse.
+    /// Set "Intensity" for the event.  The meaning is defined by the usage,
+    /// but for a beam spill MC, this should be the protons per pulse.
     void SetIntensity(double val) {fIntensity = val;}
 
-    /// Get "Intensity" for the event.  For the beam spill MC, this should be
-    /// the protons per pulse.
+    /// Get "Intensity" for the event.
     double GetIntensity() const {return fIntensity;}
 
     /// Get the SHA hash value for the geometry used to generate the event.
@@ -43,10 +35,6 @@ public:
 
 private:
 
-    /// The magnetic field used in the off-axis detector.  This is the
-    /// "nominal" field, but there may be distortions that need to be applied. 
-    float fOffAxisField;
-
     /// The intensity used to generate this event.  The definition of the
     /// intensity can depend on the MC run type, but for a beam spill run, it
     /// will contain the number of protons per pulse. 
@@ -55,7 +43,7 @@ private:
     /// The hash value for the geometry that generated the event.
     TSHAHashValue fGeometryHash;
 
-    ClassDef(TND280MCHeader,3);
+    ClassDef(TMCHeader,1);
 };
 
 #endif
