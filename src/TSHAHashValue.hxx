@@ -9,6 +9,13 @@
 
 namespace CP {
     class TSHAHashValue;
+    std::ostream& operator<<(std::ostream& s, const CP::TSHAHashValue& c);
+    bool operator<(const CP::TSHAHashValue& lhs,
+                   const CP::TSHAHashValue& rhs);
+    bool operator==(const CP::TSHAHashValue& lhs, 
+                    const CP::TSHAHashValue& rhs);
+    bool operator!=(const CP::TSHAHashValue& lhs, 
+                    const CP::TSHAHashValue& rhs);
 };
 
 /// Save a SHA hash code value.  The hashcode value can be ordered using the
@@ -63,18 +70,4 @@ private:
     ClassDef(TSHAHashValue,1);
 };
 
-// Provide a "less than" comparison so the hash value can be stuck in a map.
-bool operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs);
-
-// Add an equality comparison.
-bool operator==(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs);
-
-// Add an inequality comparision.
-inline bool operator!=(const CP::TSHAHashValue& lhs, 
-                       const CP::TSHAHashValue& rhs) {
-    return !(lhs == rhs);
-}
-
-// Provide output to a stream.
-std::ostream& operator<<(std::ostream& s, const CP::TSHAHashValue& c);
 #endif

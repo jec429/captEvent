@@ -18,15 +18,13 @@ namespace CP {
 /// output file.  It contains the information that all hits from the
 /// simulation should save into the output file, and allows the rest of the
 /// code to handle hits in a polymorphic way.  It must be inherited by an
-/// specific instance class to actually save MC information.  The ND280MC
-/// expects the electronics response to be simulated off-line, and to assign
-/// the sensor identifiers to each hit.
+/// specific instance class to actually save MC hit information.
 ///
-/// In the ND280MC, this class is multiply inherited with G4VHit to create a
-/// class that can be used in a G4HitCollection.  The behavior is designed so
-/// that the TG4VHit inherited classes in oaEvent contain all of the payload
-/// for the hit, and class in ND280mc contains all of the interface related to
-/// the G4 infrastructure.
+/// In the the simulation, this class is multiply inherited with G4VHit to
+/// create a class that can be used in a G4HitCollection.  The behavior is
+/// designed so that the TG4VHit inherited classes in captEvent contain all of
+/// the payload for the hit, and class in the simulation contains all of the
+/// interface related to the G4 infrastructure.
 class CP::TG4VHit: public TObject {
 public:
     TG4VHit();

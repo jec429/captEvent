@@ -61,7 +61,7 @@ bool CP::TEventContext::Valid() const {
     return false;
 }
 
-std::ostream& operator<<(std::ostream& s, const CP::TEventContext& c) {
+std::ostream& CP::operator<<(std::ostream& s, const CP::TEventContext& c) {
     s << "<";
     bool valid = false;
     if (c.GetPartition()!=CP::TEventContext::Invalid) {

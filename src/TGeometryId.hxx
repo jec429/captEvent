@@ -29,6 +29,10 @@ namespace CP {
     class TTECalIdFinder;
     class TTPCIdFinder;
     class TSMRDIdFinder;
+
+    bool operator ==(const CP::TGeometryId& a, const CP::TGeometryId& b);
+    bool operator !=(const CP::TGeometryId& a, const CP::TGeometryId& b);
+    std::ostream& operator<<(std::ostream& s, const CP::TGeometryId& id);
 };
 
 /// Geometry identifier class to uniquely identify a particular volume within
@@ -157,7 +161,4 @@ protected:
     ClassDef(TGeometryId, 1)
 };
 
-bool operator ==(const CP::TGeometryId& a, const CP::TGeometryId& b);
-bool operator !=(const CP::TGeometryId& a, const CP::TGeometryId& b);
-std::ostream& operator<<(std::ostream& s, const CP::TGeometryId& id);
 #endif

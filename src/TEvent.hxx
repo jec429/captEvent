@@ -24,8 +24,8 @@ namespace CP {
 /// The event container (get the current event using
 /// TEventFolder::GetCurrentEvent()).
 ///
-/// Provide the highest level event container for ND280 off-axis events.  This
-/// is a TDataVector and provides an effective "root directory" for all of the
+/// Provide the highest level event container for events.  This is a
+/// TDataVector and provides an effective "root directory" for all of the
 /// information saved with an event.  This also contains the infrastructure to
 /// interface with TEventFolder class that couples events to the ROOT browser
 /// and will appear as a root folder in //root/Events/ named by the event
@@ -117,15 +117,8 @@ public:
     int GetEventId(void) const {return fContext.GetEvent();}
 
     /// Get the digit container by name (may not exist).  This will get the
-    /// digits for a sub-detector.  They will be available for if oaUnpack can
-    /// be loaded, or if digits were saved by the elecSim.  
-    /// 
-    /// \note (For advanced users) If the event contains the raw data, this
-    /// will try to unpack the digits from MIDAS using oaUnpack.  By default,
-    /// the cached digits are saved as temporary datum, but can be made
-    /// persistent using TOADatabase::Get().Digits().PersistentDigits().  If
-    /// the digits are made to be persistent, then they will continue to be
-    /// available even if the TND280RawEvent datum is deleted.
+    /// digits for a sub-detector.  They may not be saved since we often need
+    /// to save space.
     THandle<CP::TDigitContainer> GetDigits(const char *name);
 
     /// Get the hit selection by name.

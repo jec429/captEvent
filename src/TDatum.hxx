@@ -38,7 +38,7 @@ namespace CP {
 
 #define TDATUM_TITLE "Event Datum"
 
-/// The base class for ND280 data with access provided using the Use() and
+/// The base class for event data with access provided using the Use() and
 /// Get() methods.  In some ways this is analogous to the root TObject class,
 /// except that this is specialize for saving event to a file.  A TDatum
 /// represents a single piece of information.  This is supplemented by the

@@ -67,7 +67,7 @@ bool CP::TSHAHashValue::Valid() const {
     return (fHash[0] || fHash[1] || fHash[2] || fHash[3] || fHash[4]);
 }
     
-bool operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
+bool CP::operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
     for (int i=0; i<5; ++i) {
         if (lhs(i) > rhs(i)) return false;
         if (lhs(i) < rhs(i)) return true;
@@ -75,14 +75,20 @@ bool operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
     return false;
 }
 
-bool operator==(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
+bool CP::operator==(const CP::TSHAHashValue& lhs, 
+                    const CP::TSHAHashValue& rhs) {
     for (int i=0; i<5; ++i) {
         if (lhs(i) != rhs(i)) return false;
     }
     return true;
 }
 
-std::ostream& operator<<(std::ostream& s, const CP::TSHAHashValue& c) {
+bool CP::operator!=(const CP::TSHAHashValue& lhs, 
+                    const CP::TSHAHashValue& rhs) {
+    return !(lhs == rhs);
+}
+
+std::ostream& CP::operator<<(std::ostream& s, const CP::TSHAHashValue& c) {
     s << "<";
     s << c.AsString();
     s << ">";

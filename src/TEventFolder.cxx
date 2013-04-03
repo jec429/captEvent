@@ -38,7 +38,7 @@ CP::TEventFolder* CP::TEventFolder::GetEventFolder(void) {
     }
     if (!fEventFolder->fFolderOfEvents) {
         fEventFolder->fFolderOfEvents
-            = gROOT->GetRootFolder()->AddFolder("Events","ND280 Events");
+            = gROOT->GetRootFolder()->AddFolder("Events","Folder of Events");
         gROOT->GetListOfBrowsables()->Add(fEventFolder->fFolderOfEvents,
                                           "Events");
         gROOT->GetListOfCleanups()->Add(fEventFolder->fFolderOfEvents);

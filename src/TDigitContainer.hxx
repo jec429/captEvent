@@ -14,14 +14,10 @@ namespace CP {
 };
 
 /// A container for TDigit and TDigitHeader objects.  The TDigitContainer
-/// class holds a representation of the uncalibrated electronics data and is
-/// generated from two sources.  For data, the TDigitContainer is dynamically
-/// generated from the MIDAS information saved in TND280RawEvent.  For Monte
-/// Carlo, the TDigitContainer is saved with the event (instead of saving a
-/// TND280RawEvent).  The information inside of the TDigitContainer is usually
-/// only accessed by the calibration routines, but can be accessed from the
-/// final THitObjects using the TDigitProxy which references the contributing
-/// TDigit.
+/// class holds a representation of the uncalibrated electronics data.  The
+/// information inside of the TDigitContainer is usually only accessed by the
+/// calibration routines, but can be accessed from the final THitObjects using
+/// the TDigitProxy which references the contributing TDigit.
 class CP::TDigitContainer 
     : public CP::TDatum, public std::vector<CP::TDigit*> {
 public:

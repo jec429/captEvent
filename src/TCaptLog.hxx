@@ -10,11 +10,8 @@ namespace CP {
     class TCaptLog;
 }
 
-////////////////////////////////////////////////////////////
-// $Id: TCaptLog.hxx,v 1.11 2010/02/22 17:18:53 mcgrew Exp $
-
 /// Provide control over log and error output.  The TCaptLog class provides a
-/// set of static methods which control the amount of output from the ND280
+/// set of static methods which control the amount of output from the CAPTAIN
 /// logging macros.  These macros come in two varieties (logging macros, and
 /// error reporting macros).  The level of output from the logging and error
 /// macros is controlled separately.
@@ -85,7 +82,7 @@ namespace CP {
 /// % The answer is 42.
 /// \endcode
 ///
-/// But if the logging level is set to TND280::VerboseLevel, this writes:
+/// But if the logging level is set to TCaptLog::VerboseLevel, this writes:
 ///
 /// \code
 /// % The answer is 42.
@@ -281,8 +278,8 @@ namespace CP {
 ///   Messages from CaptTrace() and CaptNamedTrace() are printed.
 ///
 /// TCaptLog is singleton class that controls the level of output from the
-/// ND280 error and logging statements.  All of the user visible
-/// functions are static.
+/// CAPTAIN error and logging statements.  All of the user visible functions
+/// are static.
 ///
 /// \section trace Trace Name
 ///

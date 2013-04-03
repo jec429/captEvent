@@ -11,17 +11,18 @@ namespace CP {
 
 /// DO NOT USE THIS CLASS IN ANALYSIS CODE.
 ///
-/// This is a base class used to save G4Hit objects into a root output file.
-/// It contains the global position of the starting point and stopping point
-/// of the track segment that created the hit, plus the fields provided by
-/// TG4VHit.  The ND280MC expects the electronics response to be simulated
-/// off-line, and to assign the sensor identifiers to each hit.
+/// This is a base class used to save G4Hit objects into a root output file
+/// when the detector simulation expects the electronics to be smulated off
+/// line.  It contains the global position of the starting point and stopping
+/// point of the track segment that created the hit, plus the fields provided
+/// by TG4VHit.  The detector simulation expects the electronics response
+/// simulation to assign the sensor identifiers to each hit.
 ///
-/// In the ND280MC, this class is multiply inherited with ND280HitSegment to
-/// implement a G4VHit derived class that can be used in a G4HitCollection.
-/// The behavior is designed so that TG4HitSegment contains all of the payload
-/// for the hit, and ND280HitSegment contains all of the interface related to
-/// the G4 infrastructure.
+/// In the simulation, this class is multiply inherited with a G4VHit derived
+/// class that can be used in a G4HitCollection.  The behavior is designed so
+/// that TG4HitSegment contains all of the payload for the hit, and detector
+/// simulation class contains all of the interface related to the G4
+/// infrastructure.
 class CP::TG4HitSegment: public TG4VHit {
 public:
     TG4HitSegment();

@@ -6,13 +6,14 @@
 
 namespace CP {
     class TEventContext;
+    std::ostream& operator<<(std::ostream& s, const CP::TEventContext& c);
 };
 
 /// Define the context of an event.  The event context uniquely identifies an
-/// event within T2K (ND280).  Due to the way events are formed, not all event
-/// (or slow control data) will have all fields of the context information
-/// defined.  Fields that do not contain valid data should be marked using the
-/// value CP::TEventContext::Invalid.
+/// event.  Due to the way events are formed, not all event (or slow control
+/// data) will have all fields of the context information defined.  Fields
+/// that do not contain valid data should be marked using the value
+/// CP::TEventContext::Invalid.
 class CP::TEventContext {
 public:
     typedef unsigned int Time;
@@ -31,32 +32,6 @@ public:
     virtual ~TEventContext();
 
     enum {
-        /// DAQ running in global mode.
-        kGlobalPartition       = 1,
-
-        /// The P0D clock module bank is present in the event.  If not running
-        /// in global mode, this in P0D local mode.
-        kP0DClockPresent       = 1<<1,
-
-        /// The TPC clock module bank is present in the event.  If not running
-        /// in global mode, this in TPC local mode.
-        kTPCClockPresent       = 1<<2,
-
-        /// The FGD clock module bank is present in the event.  If not running
-        /// in global mode, this in FGD local mode.
-        kFGDClockPresent       = 1<<3,
-
-        /// The ECal clock module bank is present in the event.  If not running
-        /// in global mode, this in ECal local mode.
-        kECalClockPresent      = 1<<4,
-
-        /// The SMRD clock module bank is present in the event.  If not running
-        /// in global mode, this in SRMD local mode.
-        kSMRDClockPresent      = 1<<5,
-
-        /// The INGRID clock module bank is present in the event.
-        kINGRIDClockPresent    = 1<<6,
-
         /// This context is for MC data.  If this is detector data, then this
         /// bit will be 0.  If this is MC data, then this bit will be 1.
         kMCData           = 1<<16,
@@ -145,6 +120,4 @@ private:
 
     ClassDef(TEventContext,1);
 };
-
-std::ostream& operator<<(std::ostream& s, const CP::TEventContext& c);
 #endif

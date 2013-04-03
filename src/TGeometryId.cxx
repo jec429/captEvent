@@ -120,15 +120,15 @@ TVector3 CP::TGeometryId::GetPosition() const {
     return position;
 }
 
-bool operator==(const CP::TGeometryId& a, const CP::TGeometryId& b) {
+bool CP::operator==(const CP::TGeometryId& a, const CP::TGeometryId& b) {
     return (a.AsInt() == b.AsInt());
 }
 
-bool operator!=(const CP::TGeometryId& a, const CP::TGeometryId& b) {
+bool CP::operator!=(const CP::TGeometryId& a, const CP::TGeometryId& b) {
     return (a.AsInt() != b.AsInt());
 }
 
-std::ostream& operator<<(std::ostream& s, const CP::TGeometryId& id) {
+std::ostream& CP::operator<<(std::ostream& s, const CP::TGeometryId& id) {
     try {
         CP::TOADatabase::Get().Geometry();
         std::string name = id.GetName();
