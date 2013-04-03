@@ -80,7 +80,7 @@ public:
     virtual void Close(Option_t* opt = "");
 
     /// The generic way to close the file.  This is inherited from TVInputFile
-    /// and must be provided for captainEventLoop (it's pure virtual).
+    /// and must be provided for eventLoop (it's pure virtual).
     virtual void CloseFile() {Close();}
 
     /// Return the entry number of the event within the tree.

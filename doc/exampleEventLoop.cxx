@@ -1,7 +1,7 @@
 #include <memory>
 #include <iostream>
 
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 /// User code for the event loop.  This can be copied and used as a skeleton
 /// for generic user loop programs.
@@ -55,5 +55,5 @@ private:
 
 int main(int argc, char **argv) {
     TUserLoop userLoop;
-    captainEventLoop(argc,argv,userLoop);
+    CP::eventLoop(argc,argv,userLoop);
 }

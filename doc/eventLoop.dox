@@ -3,7 +3,7 @@
 While ND280 events can be accessed inside of a larger framework using a
 ROOT selector and PROOF (a path towards instant gridification), as of now
 the easiest access is through an event loop using the using the
-CP::captainEventLoop() template and a class derived from
+CP::eventLoop() template and a class derived from
 CP::TEventLoopFunction base class.  The user will then need to provide
 a short (as in four line) main program which can then be compiled and run
 using the \ref oaEvent library.  This creates creates a stand-alone
@@ -81,13 +81,13 @@ cmt config
 source setup.sh
 \endcode
 
-An captainEventLoop() program consists of a user class derived from
+An CP::eventLoop() program consists of a user class derived from
 CP::TEventLoopFunction, and a very small main program.  The user class is
 only needs to implement a constructor and a destructor, neither of which
 need to do anything.  The simplest skeleton program is 
 
 \code
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
@@ -97,7 +97,7 @@ public:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    captainEventLoop(argc,argv,userCode);
+    CP::eventLoop(argc,argv,userCode);
 }
 \endcode
 
@@ -163,7 +163,7 @@ will histogram the number of hits in the P0D.
 #include <memory>
 
 // Include to get Event Loop.
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 // Includes for ROOT classes
 #include <TH1F.h>
@@ -210,7 +210,7 @@ private:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    captainEventLoop(argc,argv,userCode);
+    CP::eventLoop(argc,argv,userCode);
 }
 
 \endcode
@@ -255,7 +255,7 @@ TMySimpleEventLoop.  The code below uses the same information we looked at
 before (number of hits in P0D), but stores it in the TTree.
 
 \code
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 #include <memory>
 #include <TTree.h>
 
@@ -291,7 +291,7 @@ private:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    captainEventLoop(argc,argv,userCode);
+    CP::eventLoop(argc,argv,userCode);
 }
 \endcode 
 
@@ -317,7 +317,7 @@ triggers, pedestal triggers into a separate file, and reject all other
 trigger types.  For a better way to do this see, \ref triggerSelection.
 
 \code
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 class TMySimpleEventLoop: public CP::TEventLoopFunction {
 public:
@@ -333,7 +333,7 @@ public:
 
 int main(int argc, char **argv) {
     TMySimpleEventLoop userCode;
-    captainEventLoop(argc,argv,userCode);
+    CP::eventLoop(argc,argv,userCode);
 }
 \endcode 
 

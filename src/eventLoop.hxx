@@ -1,10 +1,10 @@
-#ifndef captainEventLoop_hxx_seen
-#define captainEventLoop_hxx_seen
+#ifndef eventLoop_hxx_seen
+#define eventLoop_hxx_seen
 
 #include "TEventLoopFunction.hxx"
 
 namespace CP {
-/// The CP::captainEventLoop() function provides a basic event loop that will call
+/// The CP::eventLoop() function provides a basic event loop that will call
 /// user code for each event.  See CP::TEventLoopFunction for a base class
 /// that can be used with this event loop.  This is used in code like this:
 ///
@@ -19,12 +19,12 @@ namespace CP {
 ///
 /// int main(int argc, char **argv) {
 ///     TDumpEvent userCode;
-///     return CP::captainEventLoop(argc,argv,userCode);
+///     return CP::eventLoop(argc,argv,userCode);
 /// }
 /// \endcode
 ///
 /// The default number of events to be processed can be specified as the
-/// fourth argument to CP::captainEventLoop().  If the argument is not
+/// fourth argument to CP::eventLoop().  If the argument is not
 /// specified, or is less than or equal to zero, then all events in the file
 /// will be read.  See \ref eventLoop for more usage documentation.
 ///
@@ -73,7 +73,7 @@ namespace CP {
 /// global search and replace on "UserLoop", changing it to some more useful
 /// name.  That will help keep the doxygen documentation useful.
 /// \endhtmlonly
-    int captainEventLoop(int argc, char** argv, 
+    int eventLoop(int argc, char** argv, 
                         CP::TEventLoopFunction& userCode, 
                         int defaultReadCount=0);
 };

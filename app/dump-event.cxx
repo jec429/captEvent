@@ -1,6 +1,6 @@
 #include <TROOT.h>
 
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 class TDumpEvent: public CP::TEventLoopFunction {
 public:
@@ -56,6 +56,6 @@ private:
 
 int main(int argc, char **argv) {
     TDumpEvent userCode;
-    CP::captainEventLoop(argc,argv,userCode,1);
+    CP::eventLoop(argc,argv,userCode,1);
 }
 

@@ -20,10 +20,10 @@
 #include "THandleHack.hxx"
 #include "TND280Log.hxx"
 #include "TMemoryUsage.hxx"
-#include "captainEventLoop.hxx"
+#include "eventLoop.hxx"
 
 namespace {
-    void captainEventLoopUsage(std::string programName, 
+    void eventLoopUsage(std::string programName, 
                              CP::TEventLoopFunction& userCode,
                              int readCount) {
         std::cout << "usage: " << programName 
@@ -104,7 +104,7 @@ namespace {
     }
 };
 
-int CP::captainEventLoop(int argc, char** argv,
+int CP::eventLoop(int argc, char** argv,
                        CP::TEventLoopFunction& userCode, 
                        int defaultReadCount) {
     if (defaultReadCount<0) defaultReadCount = 0;
@@ -179,7 +179,7 @@ int CP::captainEventLoop(int argc, char** argv,
                     namedDebugLevel[name.c_str()] = CP::TND280Log::TraceLevel;
                     break;
                 default:
-                    captainEventLoopUsage(programName,userCode,defaultReadCount);
+                    eventLoopUsage(programName,userCode,defaultReadCount);
                 }
             }
             break;
@@ -245,7 +245,7 @@ int CP::captainEventLoop(int argc, char** argv,
                 std::cerr << "ERROR: Illegal user option: " << option;
                 if (value != "") std::cerr << "   Value: " << value;
                 std::cerr << std::endl;
-                captainEventLoopUsage(programName,userCode,defaultReadCount);
+                eventLoopUsage(programName,userCode,defaultReadCount);
             }
             break;
         }
@@ -302,13 +302,13 @@ int CP::captainEventLoop(int argc, char** argv,
                     namedLogLevel[name.c_str()] = CP::TND280Log::VerboseLevel;
                     break;
                 default:
-                    captainEventLoopUsage(programName,userCode,defaultReadCount);
+                    eventLoopUsage(programName,userCode,defaultReadCount);
                 }
             }
             break;
         }
         default:
-            captainEventLoopUsage(programName,userCode,defaultReadCount);
+            eventLoopUsage(programName,userCode,defaultReadCount);
         }
     }
     
@@ -374,7 +374,7 @@ int CP::captainEventLoop(int argc, char** argv,
     // Check that there is an input file to open.
     if (argc<=optind) {
         std::cerr << "ERROR: No input file" << std::endl << std::endl;
-        captainEventLoopUsage(programName,userCode,defaultReadCount);
+        eventLoopUsage(programName,userCode,defaultReadCount);
     }
     
     if (!outputFiles.empty()) outputFiles.front()->cd();

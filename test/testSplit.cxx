@@ -8,7 +8,7 @@
 
 #include <TROOT.h>
 
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 class TTestSplit: public CP::TEventLoopFunction {
 public:
@@ -30,7 +30,7 @@ private:
 
 int main(int argc, char **argv) {
     TTestSplit userCode;
-    captainEventLoop(argc,argv,userCode);
+    CP::eventLoop(argc,argv,userCode);
 }
 
 

@@ -5,7 +5,7 @@
 #include "TGeomIdManager.hxx"
 #include "ND280GeomId.hxx"
 
-#include <captainEventLoop.hxx>
+#include <eventLoop.hxx>
 
 class TTestGeomId: public CP::TEventLoopFunction {
 public:
@@ -189,6 +189,6 @@ public:
 
 int main(int argc, char **argv) {
     TTestGeomId userCode;
-    captainEventLoop(argc,argv,userCode,1);
+    CP::eventLoop(argc,argv,userCode,1);
 }
 
