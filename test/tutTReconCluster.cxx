@@ -28,7 +28,7 @@ namespace tut {
     // Test the TReconCluster constructor and destructor.
     template<> template<>
     void testTReconCluster::test<1> () {
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
 
         ensure_distance("Default quality is zero", 
                         cluster.GetQuality(), 0.0, 
@@ -39,10 +39,10 @@ namespace tut {
 
         ensure("Default state",cluster.GetState());
 
-        ND::THandle<ND::TClusterState> clusterState = cluster.GetState();
+        CP::THandle<CP::TClusterState> clusterState = cluster.GetState();
         ensure("Default state is TClusterState",clusterState);
 
-        ND::THandle<ND::TTrackState> trackState = cluster.GetState();
+        CP::THandle<CP::TTrackState> trackState = cluster.GetState();
         ensure("Default state is not TTrackState",!trackState);
 
         ensure_equals("Default TReconNodesContainer has size zero",
@@ -54,8 +54,8 @@ namespace tut {
     // Test the state definition.
     template<> template<>
     void testTReconCluster::test<2> () {
-        ND::TReconCluster recObj;
-        ND::THandle<ND::TClusterState> recState = recObj.GetState();
+        CP::TReconCluster recObj;
+        CP::THandle<CP::TClusterState> recState = recObj.GetState();
 
         ensure("The state is valid", recState);
 
@@ -67,45 +67,45 @@ namespace tut {
     // an associated object.
     template<> template<>
     void testTReconCluster::test<3> () {
-        ND::TReconCluster recObj;
-        ND::TReconNodeContainer& recNodes = recObj.GetNodes();
-        ND::THandle<ND::TReconNode> recNode;
-        ND::THandle<ND::TReconBase> recTrack(new ND::TReconTrack);
-        ND::THandle<ND::TReconState> recState(new ND::TClusterState);
+        CP::TReconCluster recObj;
+        CP::TReconNodeContainer& recNodes = recObj.GetNodes();
+        CP::THandle<CP::TReconNode> recNode;
+        CP::THandle<CP::TReconBase> recTrack(new CP::TReconTrack);
+        CP::THandle<CP::TReconState> recState(new CP::TClusterState);
 
         ensure_equals("Node container starts empty.",recNodes.size(),
                       (unsigned)0);
 
 #ifdef MISSING_STATE_CHECK
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetObject(recTrack);
             recNodes.push_back(recNode);
             fail("TReconNodeContainer node state is empty");
         } 
-        catch (ND::EWrongStateType& ex) {
+        catch (CP::EWrongStateType& ex) {
             // OK!
             std::cout << std::endl << "Caught " << ex.what() << std::endl;
         }
 #endif
 
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetState(recState);
-            ND::TND280Log::ErrorPriority lvl = ND::TND280Log::GetDebugLevel();
-            ND::TND280Log::SetDebugLevel(ND::TND280Log::SilentLevel);
+            CP::TND280Log::ErrorPriority lvl = CP::TND280Log::GetDebugLevel();
+            CP::TND280Log::SetDebugLevel(CP::TND280Log::SilentLevel);
             recNodes.push_back(recNode);
-            ND::TND280Log::SetDebugLevel(lvl);
+            CP::TND280Log::SetDebugLevel(lvl);
             recNode->ls();
             fail("TReconNodeContainer object is empty");
         } 
-        catch (ND::EObjectEmpty& ex) {
+        catch (CP::EObjectEmpty& ex) {
             // OK!
             std::cout << std::endl << "Caught " << ex.what() << std::endl;
         }
 
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetObject(recTrack);
             recNode->SetState(recState);
             recNodes.push_back(recNode);
@@ -118,8 +118,8 @@ namespace tut {
     // Test the getters and setters.
     template<> template<>
     void testTReconCluster::test<4> () {
-        ND::TReconCluster recObj;
-        ND::THandle<ND::TClusterState> recState = recObj.GetState();
+        CP::TReconCluster recObj;
+        CP::THandle<CP::TClusterState> recState = recObj.GetState();
 
         ensure("The state is valid", recState);
 
@@ -133,8 +133,8 @@ namespace tut {
 
         int posIndex = recState->GetPositionIndex();
         double posVar = 0.0;
-        for (int i=0; i<ND::TMPositionState::GetSize(); ++i) {
-            for (int j=i; j<ND::TMPositionState::GetSize(); ++j) {
+        for (int i=0; i<CP::TMPositionState::GetSize(); ++i) {
+            for (int j=i; j<CP::TMPositionState::GetSize(); ++j) {
                 posVar += 1.0;
                 recState->SetCovarianceValue(i+posIndex,j+posIndex,posVar);
                 double val 
@@ -150,7 +150,7 @@ namespace tut {
         ensure_lessthan("Cluster position saved",
                         (recObj.GetPosition()-pos).Mag(), 0.0001);
 
-        ND::THandle<ND::TClusterState> s1 = recObj.GetState();
+        CP::THandle<CP::TClusterState> s1 = recObj.GetState();
         ensure_equals("Cluster state always the same",
                       s1, recState);
         
@@ -158,8 +158,8 @@ namespace tut {
                         s1->GetEDepositVariance(), energyVar, 0.0001);
 
         posVar = 0.0;
-        for (int i=0; i<ND::TMPositionState::GetSize(); ++i) {
-            for (int j=i; j<ND::TMPositionState::GetSize(); ++j) {
+        for (int i=0; i<CP::TMPositionState::GetSize(); ++i) {
+            for (int j=i; j<CP::TMPositionState::GetSize(); ++j) {
                 posVar += 1.0;
                 double val 
                     = recState->GetCovarianceValue(i+posIndex,j+posIndex);
@@ -174,24 +174,24 @@ namespace tut {
     void testTReconCluster::test<5> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster1;
+        CP::TReconCluster cluster1;
         cluster1.FillFromHits("inputs1", inputHits);
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster2;
+        CP::TReconCluster cluster2;
         cluster2.FillFromHits("inputs2", inputHits);
 
         ensure_distance("One Layer Cluster (1 hit/layer) matches Hit X",
@@ -236,21 +236,21 @@ namespace tut {
     void testTReconCluster::test<6> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,1));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,1));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
         cluster.FillFromHits("inputs3", inputHits);
 
         ensure_distance("One Layer Cluster (2 hit/layer) Matches Hit X",
@@ -269,21 +269,21 @@ namespace tut {
     void testTReconCluster::test<7> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,1));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,1));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
         cluster.FillFromHits("inputs4", inputHits);
 
         ensure_distance("Two Layer Moments (XX)",
@@ -353,21 +353,21 @@ namespace tut {
     void testTReconCluster::test<8> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,1,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,1,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
         cluster.FillFromHits("inputs4", inputHits);
 
         ensure_distance("Two Layer Cluster (1 hit/layer) matches Hit X",
@@ -401,23 +401,23 @@ namespace tut {
     void testTReconCluster::test<9> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(6,0,1));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(6,0,1));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
         cluster.FillFromHits("inputs5", inputHits);
-        ND::THandle<ND::TClusterState> state = cluster.GetState();
+        CP::THandle<CP::TClusterState> state = cluster.GetState();
 
         ensure_distance("Two Layer Cluster (1 hit/layer) matches Hit X",
                         cluster.GetPosition().X(), 
@@ -482,21 +482,21 @@ namespace tut {
     void testTReconCluster::test<10> () {
         // Make a writable hit by first setting the "standard" values.  These
         // are constant for all hits to checking the output values easier.
-        ND::TWritableMCHit wHit;
+        CP::TWritableMCHit wHit;
         wHit.SetCharge(40);
         wHit.SetChargeValidity(true);
         wHit.SetTime(1000);
         wHit.SetTimeValidity(true);
 
         // Build the hit selection
-        ND::THitSelection inputHits;
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(5,0,0));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        CP::THitSelection inputHits;
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(5,0,0));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        wHit.SetGeomId(ND::GeomId::P0D::Bar(6,0,1));
-        inputHits.push_back(ND::THandle<ND::THit>(new ND::TMCHit(wHit)));
+        wHit.SetGeomId(CP::GeomId::P0D::Bar(6,0,1));
+        inputHits.push_back(CP::THandle<CP::THit>(new CP::TMCHit(wHit)));
 
-        ND::TReconCluster cluster;
+        CP::TReconCluster cluster;
         cluster.FillFromHits("inputs5", inputHits);
 
         cluster.GetMoments().Print();

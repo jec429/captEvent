@@ -7,7 +7,7 @@
 
 #include "TDatum.hxx"
 
-namespace ND {
+namespace CP {
     class TG4VHit;
     class TG4HitContainer;
 }
@@ -27,7 +27,7 @@ namespace ND {
 /// that the TG4VHit inherited classes in oaEvent contain all of the payload
 /// for the hit, and class in ND280mc contains all of the interface related to
 /// the G4 infrastructure.
-class ND::TG4VHit: public TObject {
+class CP::TG4VHit: public TObject {
 public:
     TG4VHit();
     virtual ~TG4VHit();
@@ -40,7 +40,7 @@ protected:
 };
 
 /// A container for the G4 hit detector element information. 
-class ND::TG4HitContainer : public TDatum, public std::vector<TG4VHit*> {
+class CP::TG4HitContainer : public TDatum, public std::vector<TG4VHit*> {
 public:
     TG4HitContainer(const char* name="G4hits", 
                         const char* title="G4 Hit Information") 

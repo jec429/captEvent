@@ -1,6 +1,6 @@
 // $Id: TND280Output.cxx,v 1.11 2011/09/07 21:55:44 mcgrew Exp $
 //
-// Implement the ND::TND280Output class which is a specialization of the
+// Implement the CP::TND280Output class which is a specialization of the
 // TEventOutput class that writes the events in a root format.  This is the
 // native format.
 //
@@ -16,9 +16,9 @@
 #include "TTPCPadManager.hxx"
 #include "TND280Log.hxx"
 
-ClassImp(ND::TND280Output);
+ClassImp(CP::TND280Output);
 
-ND::TND280Output::TND280Output(const char *fileName,
+CP::TND280Output::TND280Output(const char *fileName,
                                Option_t* opt, 
                                int compress) 
     : TFile(fileName, opt, "ROOT Output File", compress),
@@ -28,11 +28,11 @@ ND::TND280Output::TND280Output(const char *fileName,
     IsAttached();
 }
 
-ND::TND280Output::~TND280Output(void) {
+CP::TND280Output::~TND280Output(void) {
     if (IsOpen()) Close();
 }
 
-bool ND::TND280Output::IsAttached(void) {
+bool CP::TND280Output::IsAttached(void) {
     if (!IsOpen()) return false;
     if (gFile != this) {
         if (gFile) {
@@ -53,7 +53,7 @@ bool ND::TND280Output::IsAttached(void) {
         fEventTree = new TTree("ND280Events", "ND280 Event Tree");
     }
     ND280Trace("Add the branch pointer");
-    fEventTree->Branch("ND280Event","ND::TND280Event",&fEventPointer,128000,0);
+    fEventTree->Branch("ND280Event","CP::TND280Event",&fEventPointer,128000,0);
     fEventPointer = NULL;       // Make sure it's empty.
     fAttached = true;
 
@@ -61,23 +61,23 @@ bool ND::TND280Output::IsAttached(void) {
     return fAttached;
 }
 
-int ND::TND280Output::GetEventsWritten(void) {return fEventsWritten;}
+int CP::TND280Output::GetEventsWritten(void) {return fEventsWritten;}
 
-void ND::TND280Output::WriteEvent(ND::TND280Event& event) {
+void CP::TND280Output::WriteEvent(CP::TND280Event& event) {
     if (!IsAttached()) return;
     // Copy the pointer into the location attached to the file.
     fEventPointer = &event;
     // Put the event into the tree;
     if (fEventTree->Fill()<0) {
         ND280Error("Error while writing an event");
-        throw ND::END280OutputWriteFailed();
+        throw CP::END280OutputWriteFailed();
     }
     // Empty out the fEventPointer so that it can't be written twice.
     fEventPointer = NULL;
 }
 
 // Save a geometry to the output file.
-void ND::TND280Output::WriteGeometry(TGeoManager* geom) {
+void CP::TND280Output::WriteGeometry(TGeoManager* geom) {
     if (!IsAttached()) return;
     if (!geom) return;
     TKey *key = FindKey(geom->GetName());
@@ -85,25 +85,25 @@ void ND::TND280Output::WriteGeometry(TGeoManager* geom) {
     fGeometry = geom;
     if (geom->Write()<1) {
         ND280Error("Error while writing geometry");
-        throw ND::END280OutputWriteFailed();
+        throw CP::END280OutputWriteFailed();
     }
     Flush();
     ND280Log("** Geometry " << geom->GetName() << " written to output file ");
 }
 
-bool ND::TND280Output::GeometryWritten(void) {
+bool CP::TND280Output::GeometryWritten(void) {
     return fGeometry;
 }
     
-void ND::TND280Output::Commit(void) {
+void CP::TND280Output::Commit(void) {
     if (!IsAttached()) return;
     fEventTree->AutoSave();
     Flush();
 }
 
-void ND::TND280Output::Close(Option_t* opt) {
+void CP::TND280Output::Close(Option_t* opt) {
     Write();
-    if (ND::TND280Log::LogLevel <= ND::TND280Log::GetLogLevel()) {
+    if (CP::TND280Log::LogLevel <= CP::TND280Log::GetLogLevel()) {
         TFile::ls();
     }
     TFile::Close(opt);

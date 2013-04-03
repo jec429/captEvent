@@ -6,7 +6,7 @@
 #include "TND280Event.hxx"
 #include "method_deprecated.hxx"
 
-namespace ND {
+namespace CP {
     class TND280EventLoopFunction;
     class TVInputFile;
     class TND280Output;
@@ -17,7 +17,7 @@ namespace ND {
     OA_EXCEPTION(ENextEventLoopFile,EoaCore);
 };
 
-/// A base class for use with the ND::nd280EventLoop() which defines the
+/// A base class for use with the CP::nd280EventLoop() which defines the
 /// command line options.  User classes should implement the
 /// operator()(TND280Event& event) method that returns true if the event
 /// should be saved to an output file.  If false is returned, then the event
@@ -47,7 +47,7 @@ namespace ND {
 ///
 /// int main(int argc, char **argv) {
 ///     TUserCode userCode;
-///     ND::nd280EventLoop(argc,argv,userCode);
+///     CP::nd280EventLoop(argc,argv,userCode);
 /// }
 /// \endcode
 ///
@@ -65,7 +65,7 @@ namespace ND {
  * name.  That will help keep the doxygen documentation useful.
  * \endhtmlonly
  */
-class ND::TND280EventLoopFunction {
+class CP::TND280EventLoopFunction {
 public:
 
     TND280EventLoopFunction ();
@@ -144,13 +144,13 @@ public:
     virtual void EndFile(TVInputFile *const);
 
     /// Method has been deprecated and will be removed after v8r9.
-    /// User code should prefer the Finalize(ND::TND280Output*const) method.
+    /// User code should prefer the Finalize(CP::TND280Output*const) method.
     /// This is called before a valid output file is being closed, but only if
-    /// the Finalize(ND::TND280Output*const) method is undefined in the user
+    /// the Finalize(CP::TND280Output*const) method is undefined in the user
     /// code, and an output file is open.  If those conditions are met, then
     /// it will be called once per open file.  If you want to have a finalized
     /// method that is called even if there isn't an output file use the
-    /// Finalize(ND::TND280Output * const file) version.
+    /// Finalize(CP::TND280Output * const file) version.
     virtual void Finalize(TND280Output& file) METHOD_DEPRECATED;
 
     /// Called after the last event has been processed, but before any open

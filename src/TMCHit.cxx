@@ -6,19 +6,19 @@
 #include "HEPUnits.hxx"
 #include "TG4VHit.hxx"
 
-ClassImp(ND::TMCHit);
-ClassImp(ND::TWritableMCHit);
+ClassImp(CP::TMCHit);
+ClassImp(CP::TWritableMCHit);
 
-ND::TMCHit::TMCHit() {}
+CP::TMCHit::TMCHit() {}
 
-ND::TMCHit::TMCHit(const ND::TWritableMCHit& h) 
-    : ND::TSingleHit(h), fContributors(h.fContributors) { }
+CP::TMCHit::TMCHit(const CP::TWritableMCHit& h) 
+    : CP::TSingleHit(h), fContributors(h.fContributors) { }
 
-ND::TMCHit::~TMCHit() { }
+CP::TMCHit::~TMCHit() { }
 
 /// Print the hit information.
-void ND::TMCHit::ls(Option_t *opt) const {
-    ND::THit::ls(opt);
+void CP::TMCHit::ls(Option_t *opt) const {
+    CP::THit::ls(opt);
     std::string option(opt);
     if (option.find("dump") != std::string::npos) {
         TROOT::IncreaseDirLevel();
@@ -32,28 +32,28 @@ void ND::TMCHit::ls(Option_t *opt) const {
     }
 }
 
-ND::TWritableMCHit::TWritableMCHit() {}
-ND::TWritableMCHit::TWritableMCHit(const ND::TWritableMCHit& h) : ND::TMCHit(h) {}
-ND::TWritableMCHit::~TWritableMCHit() {}
+CP::TWritableMCHit::TWritableMCHit() {}
+CP::TWritableMCHit::TWritableMCHit(const CP::TWritableMCHit& h) : CP::TMCHit(h) {}
+CP::TWritableMCHit::~TWritableMCHit() {}
 
 //////////////////////////////////////////////////
-// Setter methods for ND::TWritableMCHit
+// Setter methods for CP::TWritableMCHit
 //////////////////////////////////////////////////
 
-void ND::TWritableMCHit::SetGeomId(ND::TGeometryId id) {
+void CP::TWritableMCHit::SetGeomId(CP::TGeometryId id) {
     fGeomId = id.AsInt();
 }
 
-void ND::TWritableMCHit::SetCharge(double q) {fCharge = q;}
+void CP::TWritableMCHit::SetCharge(double q) {fCharge = q;}
 
-void ND::TWritableMCHit::SetTime(double t) {fTime = t;}
+void CP::TWritableMCHit::SetTime(double t) {fTime = t;}
 
-void ND::TWritableMCHit::SetChannelId(ND::TChannelId id) {fChannelId = id;}
+void CP::TWritableMCHit::SetChannelId(CP::TChannelId id) {fChannelId = id;}
 
-void ND::TWritableMCHit::SetChargeValidity(bool valid) {
-    ND::THit::SetChargeValidity(valid);
+void CP::TWritableMCHit::SetChargeValidity(bool valid) {
+    CP::THit::SetChargeValidity(valid);
 }
 
-void ND::TWritableMCHit::SetTimeValidity(bool valid) {
-    ND::THit::SetTimeValidity(valid);
+void CP::TWritableMCHit::SetTimeValidity(bool valid) {
+    CP::THit::SetTimeValidity(valid);
 }

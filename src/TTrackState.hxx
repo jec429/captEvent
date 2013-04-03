@@ -4,13 +4,13 @@
 #include "TReconState.hxx"
 #include "TReconNode.hxx"
 
-namespace ND {
+namespace CP {
     class TTrackState;
 }
 
 /// A state holding parameters associated with a TReconTrack, and the
 /// intermediate states.
-class ND::TTrackState: public TReconState,
+class CP::TTrackState: public TReconState,
                        virtual public TMReconState,
                        virtual public TMEDepositState,
                        virtual public TMPosDirCurvState,
@@ -30,7 +30,7 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<ND::TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
     ClassDef(TTrackState,1);
 };

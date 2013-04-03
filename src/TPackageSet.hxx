@@ -8,7 +8,7 @@
 #include "TPackageVersion.hxx"
 #include <set>
 
-namespace ND {
+namespace CP {
     /// The set of package versions used in the currently running executable.
     typedef std::set < TPackageVersion * > TPackageSet;
 }

@@ -14,9 +14,9 @@
 #include "TOADatabase.hxx"
 #include "TGeomIdManager.hxx"
 
-ClassImp(ND::TComboHit);
+ClassImp(CP::TComboHit);
 
-ND::TComboHit::TComboHit()
+CP::TComboHit::TComboHit()
     : fHitsOpen(true), fGeomId(0),
       fCharge(0), fTime(0), fPosition(0,0,0),
       fSpread(100*unit::meter,100*unit::meter,100*unit::meter),
@@ -27,8 +27,8 @@ ND::TComboHit::TComboHit()
     SetBit(kCanDelete,true);
 }
 
-ND::TComboHit::TComboHit(const ND::TComboHit& h) 
-    : ND::THit(h), fHitsOpen(true), fHits(h.fHits), fGeomId(0),
+CP::TComboHit::TComboHit(const CP::TComboHit& h) 
+    : CP::THit(h), fHitsOpen(true), fHits(h.fHits), fGeomId(0),
       fCharge(0), fTime(0), fPosition(0,0,0),
       fSpread(100*unit::meter,100*unit::meter,100*unit::meter),
       fUncertainty(100*unit::meter,100*unit::meter,100*unit::meter),
@@ -37,91 +37,91 @@ ND::TComboHit::TComboHit(const ND::TComboHit& h)
     SetBit(kCanDelete,true);
 }
 
-ND::TComboHit::~TComboHit() {}
+CP::TComboHit::~TComboHit() {}
 
 //////////////////////////////////////////////////
-// Getter methods for ND::TComboHit
+// Getter methods for CP::TComboHit
 //////////////////////////////////////////////////
 
-ND::TGeometryId ND::TComboHit::GetGeomId(void) const {
+CP::TGeometryId CP::TComboHit::GetGeomId(void) const {
     if (fHitsOpen) CloseHits();
     return fGeomId;
 }
 
-const TVector3& ND::TComboHit::GetPosition(void) const {
+const TVector3& CP::TComboHit::GetPosition(void) const {
     if (fHitsOpen) CloseHits();
     return fPosition;
 }
 
-double ND::TComboHit::GetCharge(void) const {
+double CP::TComboHit::GetCharge(void) const {
     if (fHitsOpen) CloseHits();
     return fCharge;
 }
 
-double ND::TComboHit::GetTime(void) const {
+double CP::TComboHit::GetTime(void) const {
     if (fHitsOpen) CloseHits();
     return fTime;
 }
 
 
-const TVector3& ND::TComboHit::GetSpread(void) const {
+const TVector3& CP::TComboHit::GetSpread(void) const {
     if (fHitsOpen) CloseHits();
     return fSpread;
 }
 
-const TVector3& ND::TComboHit::GetUncertainty(void) const {
+const TVector3& CP::TComboHit::GetUncertainty(void) const {
     if (fHitsOpen) CloseHits();
     return fUncertainty;
 }
 
-double ND::TComboHit::GetTimeUncertainty(void) const {
+double CP::TComboHit::GetTimeUncertainty(void) const {
     if (fHitsOpen) CloseHits();
     return fTimeUncertainty;
 }
 
-bool ND::TComboHit::IsXHit(void) const {
+bool CP::TComboHit::IsXHit(void) const {
     if (fHitsOpen) CloseHits();
     return fIsXHit;
 }
 
-bool ND::TComboHit::IsYHit(void) const {
+bool CP::TComboHit::IsYHit(void) const {
     if (fHitsOpen) CloseHits();
     return fIsYHit;
 }
 
-bool ND::TComboHit::IsZHit(void) const {
+bool CP::TComboHit::IsZHit(void) const {
     if (fHitsOpen) CloseHits();
     return fIsZHit;
 }
 
-TGeoNode* ND::TComboHit::GetParentNode(int i) const {
+TGeoNode* CP::TComboHit::GetParentNode(int i) const {
     if (fHitsOpen) CloseHits();
     if (i<0) return NULL;
     if (i>=(int) fParentNodes.size()) return fParentNodes.back();
     return fParentNodes[i];
 }
 
-const ND::THitSelection& ND::TComboHit::GetHits(void) const {
+const CP::THitSelection& CP::TComboHit::GetHits(void) const {
     return fHits;
 }
 
 //////////////////////////////////////////////////
 // Setter methods to add hits to the TComboHit.
 //////////////////////////////////////////////////
-void ND::TComboHit::AddHit(ND::THandle<ND::THit>& hit) {
+void CP::TComboHit::AddHit(CP::THandle<CP::THit>& hit) {
     OpenHits();
     fHits.push_back(hit);
 }
 
-void ND::TComboHit::AddHitSelection(ND::THitSelection& hits) {
-    for (ND::THitSelection::iterator h = hits.begin();
+void CP::TComboHit::AddHitSelection(CP::THitSelection& hits) {
+    for (CP::THitSelection::iterator h = hits.begin();
          h != hits.end();
          ++h) {
         AddHit(*h);
     }
 }
 
-void ND::TComboHit::OpenHits() {
+void CP::TComboHit::OpenHits() {
     fHitsOpen = true;
 }
 
@@ -129,7 +129,7 @@ void ND::TComboHit::OpenHits() {
 // since the averages and variances are calculated in individual variables,
 // and not in matrices.  It's an artifact of how the code evolved [i.e. cope,
 // or fix it.]
-void ND::TComboHit::CloseHits() const {
+void CP::TComboHit::CloseHits() const {
     if (!fHitsOpen) return;
     if (fHits.size()<1) return;
     fHitsOpen = false;
@@ -159,7 +159,7 @@ void ND::TComboHit::CloseHits() const {
     // averages will be the same if the fundamental position uncertainty is
     // proportional to 1/sqrt(charge).
     double weightXSum=0, weightYSum=0, weightZSum=0, weightTSum=0;
-    for (ND::THitSelection::const_iterator h = fHits.begin();
+    for (CP::THitSelection::const_iterator h = fHits.begin();
          h != fHits.end();
          ++h) {
         double hitCharge = (*h)->GetCharge();
@@ -206,7 +206,7 @@ void ND::TComboHit::CloseHits() const {
     // The weighting for the position uncertainties.
     double wghXX=0, wghYY=0, wghZZ=0; 
     double wghXY=0, wghXZ=0, wghYZ=0; 
-    for (ND::THitSelection::const_iterator h = fHits.begin();
+    for (CP::THitSelection::const_iterator h = fHits.begin();
          h != fHits.end();
          ++h) {
         double dx = (*h)->GetPosition().X() - fPosition.X();
@@ -290,11 +290,11 @@ void ND::TComboHit::CloseHits() const {
     fUncertainty.SetXYZ(sqrt(uncXX),sqrt(uncYY),sqrt(uncZZ));
     fTimeUncertainty = sqrt(fTimeUncertainty);
 
-    ND::TOADatabase::Get().GeomId().GetGeometryId(
+    CP::TOADatabase::Get().GeomId().GetGeometryId(
         fPosition.X(), fPosition.Y(), fPosition.Z(), fGeomId);
 
     // Get the parent stack for this cluster.
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     fParentNodes.clear();
     if (fHits.size()>0) {
         geom->PushPoint();
@@ -312,8 +312,8 @@ void ND::TComboHit::CloseHits() const {
 }
 
 /// Return a hit that is contributing to this cluster;
-void ND::TComboHit::ls(Option_t *opt) const {
-    ND::THit::ls(opt);
+void CP::TComboHit::ls(Option_t *opt) const {
+    CP::THit::ls(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << "Hits in collection: " << fHits.size() << std::endl;

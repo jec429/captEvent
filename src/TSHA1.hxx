@@ -1,7 +1,7 @@
 #ifndef _TSHA1_HXX_
 #define _TSHA1_HXX_
 
-namespace ND {
+namespace CP {
     class TSHA1;
 }
 
@@ -32,7 +32,7 @@ namespace ND {
 //     Many of the variable names in this class, especially the single
 //     character names, were used because those were the names used
 //     in the publication.
-class ND::TSHA1 {
+class CP::TSHA1 {
 
 public:
 

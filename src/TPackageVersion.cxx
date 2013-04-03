@@ -1,7 +1,7 @@
 #include "TPackageVersion.hxx"
 
-ClassImp(ND::TPackageVersion);
+ClassImp(CP::TPackageVersion);
 
-ND::TPackageVersion::TPackageVersion() {};
+CP::TPackageVersion::TPackageVersion() {};
 
-ND::TPackageVersion::~TPackageVersion() {};
+CP::TPackageVersion::~TPackageVersion() {};

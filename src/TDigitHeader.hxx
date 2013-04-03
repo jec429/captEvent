@@ -8,7 +8,7 @@
 #include <TDatum.hxx>
 #include <TDataVector.hxx>
 
-namespace ND {
+namespace CP {
     class TDigitHeader;
 };
 
@@ -16,7 +16,7 @@ namespace ND {
 /// TDigitContainer.  The TDigitHeader only has validity within the
 /// TDigitContainer that owns it.  This class is for saving header information
 /// required to calibrate the TDigit objects in the TDigitContainer.
-class ND::TDigitHeader {
+class CP::TDigitHeader {
 public:
     TDigitHeader();
     virtual ~TDigitHeader();
@@ -62,16 +62,16 @@ public:
     /// provide a specialized insertion method that is optimized for
     /// the class, but this provides a default interface that can be
     /// used in most circumstances.
-    virtual void AddDatum(ND::TDatum* val, const char* name=NULL);
+    virtual void AddDatum(CP::TDatum* val, const char* name=NULL);
 
     /// A default way to add a THandle<TDatum>.  This takes over memory
     /// management of the handle and will throw the EBadInsertion
     /// exception if the insertion fails.
-    virtual void AddDatum(ND::THandle<ND::TDatum> handle,
+    virtual void AddDatum(CP::THandle<CP::TDatum> handle,
                           const char* name=NULL);
     
-    template <class T> ND::THandle<T> Get(const char* name=".") const {
-        if (!fDataVector) return ND::THandle<T>(NULL);
+    template <class T> CP::THandle<T> Get(const char* name=".") const {
+        if (!fDataVector) return CP::THandle<T>(NULL);
         return fDataVector->Get<T>(name);
     }
 
@@ -89,7 +89,7 @@ private:
     /// valid.
     unsigned fEndValid;
 
-    ND::TDataVector* fDataVector;
+    CP::TDataVector* fDataVector;
 
     ClassDef(TDigitHeader, 1);
 };

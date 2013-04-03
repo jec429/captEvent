@@ -8,7 +8,7 @@
 #include <vector>
 #include <TObject.h>
 
-namespace ND {
+namespace CP {
     class TPackageVersion;
 }
 
@@ -17,7 +17,7 @@ namespace ND {
 /// should be included in the implementation of classes which inherit from
 /// this one.  The information in that include file allows useful information
 /// to be returned from the Getter methods.
-class ND::TPackageVersion: public TObject {
+class CP::TPackageVersion: public TObject {
 public:
     TPackageVersion();
     virtual ~ TPackageVersion();

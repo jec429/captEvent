@@ -5,20 +5,20 @@
 #include "TCorrValues.hxx"
 #include "TND280Log.hxx"
 
-ClassImp(ND::TCorrValues);
+ClassImp(CP::TCorrValues);
 
 /// Set the variance value for a free parameter.  The value is about 1E+154
 /// (1E+19) for a double (float).
-const ND::TCorrValues::Element ND::TCorrValues::kFreeValue = 
+const CP::TCorrValues::Element CP::TCorrValues::kFreeValue = 
     std::sqrt(std::numeric_limits<float>::max());
-const ND::TCorrValues::Element ND::TCorrValues::kFreeThreshold =
-    0.1*ND::TCorrValues::kFreeValue;
-const ND::TCorrValues::Element 
-    ND::TCorrValues::kFixedValue = 1.0/ND::TCorrValues::kFreeValue;
-const ND::TCorrValues::Element 
-    ND::TCorrValues::kFixedThreshold = 1.0/ND::TCorrValues::kFreeThreshold;
+const CP::TCorrValues::Element CP::TCorrValues::kFreeThreshold =
+    0.1*CP::TCorrValues::kFreeValue;
+const CP::TCorrValues::Element 
+    CP::TCorrValues::kFixedValue = 1.0/CP::TCorrValues::kFreeValue;
+const CP::TCorrValues::Element 
+    CP::TCorrValues::kFixedThreshold = 1.0/CP::TCorrValues::kFreeThreshold;
 
-ND::TCorrValues::TCorrValues(int n) 
+CP::TCorrValues::TCorrValues(int n) 
     : fVector(n), fMatrix(n), fNDOF(0), fTypeHash(0), fHessian(NULL) {
     // All parameters are initially free.
     for (int i=0; i<GetDimensions(); ++i) {
@@ -26,17 +26,17 @@ ND::TCorrValues::TCorrValues(int n)
     }
 }
 
-ND::TCorrValues::TCorrValues(double value, double uncertainty)
+CP::TCorrValues::TCorrValues(double value, double uncertainty)
     : fVector(1), fMatrix(1), fNDOF(1), fTypeHash(0), fHessian(NULL) {
     SetValue(0,value);
     SetCovarianceValue(0,0,uncertainty*uncertainty);
 }
 
-ND::TCorrValues::TCorrValues(const TCorrValues& hv) 
+CP::TCorrValues::TCorrValues(const TCorrValues& hv) 
     : TObject(hv), fVector(hv.fVector), fMatrix(hv.fMatrix), 
       fNDOF(hv.fNDOF), fTypeHash(hv.fTypeHash), fHessian(NULL) {}
 
-ND::TCorrValues::TCorrValues(const TVectorT<float>& v) 
+CP::TCorrValues::TCorrValues(const TVectorT<float>& v) 
     : fVector(v), fMatrix(v.GetNoElements()),
       fNDOF(0), fTypeHash(0), fHessian(NULL) {
     // All parameters are initially free.
@@ -45,7 +45,7 @@ ND::TCorrValues::TCorrValues(const TVectorT<float>& v)
     }
 }
 
-ND::TCorrValues::TCorrValues(const TVectorT<float>& v,
+CP::TCorrValues::TCorrValues(const TVectorT<float>& v,
                                const TVectorT<float>& err) 
     : fVector(v), fMatrix(v.GetNoElements()),
       fNDOF(0), fTypeHash(0), fHessian(NULL) {
@@ -58,7 +58,7 @@ ND::TCorrValues::TCorrValues(const TVectorT<float>& v,
     }
 }
 
-ND::TCorrValues::TCorrValues(const TVectorT<float>& v,
+CP::TCorrValues::TCorrValues(const TVectorT<float>& v,
                                const TMatrixTSym<float>& cov) 
     : fVector(v), fMatrix(cov),
       fNDOF(0), fTypeHash(0), fHessian(NULL) {
@@ -72,18 +72,18 @@ ND::TCorrValues::TCorrValues(const TVectorT<float>& v,
     }
 }
 
-void ND::TCorrValues::SetValues(const TVectorT<float>& v) {
+void CP::TCorrValues::SetValues(const TVectorT<float>& v) {
     fVector = v;
 }
 
-void ND::TCorrValues::SetCovariance(const TMatrixTSym<float>& m) {
+void CP::TCorrValues::SetCovariance(const TMatrixTSym<float>& m) {
     fMatrix = m;
     fNDOF = 0;
     if (fHessian) delete fHessian;
     fHessian = NULL;
 }
 
-void ND::TCorrValues::SetValue(int i, double v) {
+void CP::TCorrValues::SetValue(int i, double v) {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -96,7 +96,7 @@ void ND::TCorrValues::SetValue(int i, double v) {
     fVector[i] = v;
 }
 
-double ND::TCorrValues::GetValue(int i) const {
+double CP::TCorrValues::GetValue(int i) const {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -109,7 +109,7 @@ double ND::TCorrValues::GetValue(int i) const {
     return fVector[i];
 }
 
-void ND::TCorrValues::SetCovarianceValue(int i, int j, double v) {
+void CP::TCorrValues::SetCovarianceValue(int i, int j, double v) {
     if (i<0 || j<0) {
         ND280Error("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
@@ -125,7 +125,7 @@ void ND::TCorrValues::SetCovarianceValue(int i, int j, double v) {
     fHessian = NULL;
 }
 
-double ND::TCorrValues::GetCovarianceValue(int i, int j) const {
+double CP::TCorrValues::GetCovarianceValue(int i, int j) const {
     if (i<0 || j<0) {
         ND280Error("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
@@ -137,13 +137,13 @@ double ND::TCorrValues::GetCovarianceValue(int i, int j) const {
     return fMatrix(i,j);
 }
 
-double ND::TCorrValues::GetUncertainty(int i) const {
+double CP::TCorrValues::GetUncertainty(int i) const {
     double val = GetCovarianceValue(i,i);
     if (val>0) val = std::sqrt(val);
     return val;
 }
 
-void ND::TCorrValues::SetValue(double v) {
+void CP::TCorrValues::SetValue(double v) {
     if (GetDimensions() != 1) {
         ND280Error("Not 1 dimensional");
         throw ECorrValuesRange();
@@ -151,7 +151,7 @@ void ND::TCorrValues::SetValue(double v) {
     SetValue(0,v);
 }
 
-double ND::TCorrValues::GetValue() const {
+double CP::TCorrValues::GetValue() const {
     if (GetDimensions() != 1) {
         ND280Error("Not 1 dimensional");
         throw ECorrValuesRange();
@@ -159,7 +159,7 @@ double ND::TCorrValues::GetValue() const {
     return GetValue(0);
 }
 
-void ND::TCorrValues::SetUncertainty(double v) {
+void CP::TCorrValues::SetUncertainty(double v) {
     if (GetDimensions() != 1) {
         ND280Error("Not 1 dimensional");
         throw ECorrValuesRange();
@@ -167,7 +167,7 @@ void ND::TCorrValues::SetUncertainty(double v) {
     SetCovarianceValue(0,0,v*v);
 }
 
-double ND::TCorrValues::GetUncertainty() const {
+double CP::TCorrValues::GetUncertainty() const {
     if (GetDimensions() != 1) {
         ND280Error("Not 1 dimensional");
         throw ECorrValuesRange();
@@ -175,7 +175,7 @@ double ND::TCorrValues::GetUncertainty() const {
     return GetUncertainty(0);
 }
 
-void ND::TCorrValues::ResizeTo(int n) {
+void CP::TCorrValues::ResizeTo(int n) {
     fVector.ResizeTo(n);
     fMatrix.ResizeTo(n,n);
     fNDOF = 0;
@@ -187,11 +187,11 @@ void ND::TCorrValues::ResizeTo(int n) {
     fHessian = NULL;
 }
 
-int ND::TCorrValues::GetDimensions(void) const {
+int CP::TCorrValues::GetDimensions(void) const {
     return fVector.GetNoElements();
 }
 
-int ND::TCorrValues::GetNDOF() {
+int CP::TCorrValues::GetNDOF() {
     if (fNDOF < 1) { 
         fNDOF = 0;
         for (int i=0; i<GetDimensions(); ++i) {
@@ -203,7 +203,7 @@ int ND::TCorrValues::GetNDOF() {
     return fNDOF;
 }
 
-void ND::TCorrValues::SetType(const char* type) {
+void CP::TCorrValues::SetType(const char* type) {
     // Use a modified Fowler, Noll, and Vo hash type 1a (FNV-1).  This is the
     // hash function uses the prime and offset suggested in TR1 for strings.
     // Note: The offset value for the normal FNV-1a is chosen so that an empty
@@ -224,7 +224,7 @@ void ND::TCorrValues::SetType(const char* type) {
     }
 }
 
-void ND::TCorrValues::SetFixed(int i) {
+void CP::TCorrValues::SetFixed(int i) {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -240,7 +240,7 @@ void ND::TCorrValues::SetFixed(int i) {
     fMatrix(i,i) = kFixedValue;
 }
 
-bool ND::TCorrValues::IsFixed(int i) const {
+bool CP::TCorrValues::IsFixed(int i) const {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -254,7 +254,7 @@ bool ND::TCorrValues::IsFixed(int i) const {
     return false;
 }
 
-void ND::TCorrValues::SetFree(int i) {
+void CP::TCorrValues::SetFree(int i) {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -270,7 +270,7 @@ void ND::TCorrValues::SetFree(int i) {
     fMatrix(i,i) = kFreeValue;
 }
 
-bool ND::TCorrValues::IsFree(int i) const {
+bool CP::TCorrValues::IsFree(int i) const {
     if (i<0) {
         ND280Error("Negative element index: " << i);
         throw ECorrValuesRange();
@@ -283,7 +283,7 @@ bool ND::TCorrValues::IsFree(int i) const {
     return IsFree(fMatrix(i,i));
 }
 
-ND::TCorrValues ND::TCorrValues::Sum() const {
+CP::TCorrValues CP::TCorrValues::Sum() const {
     double val = 0;
     double var = 0;
 
@@ -298,16 +298,16 @@ ND::TCorrValues ND::TCorrValues::Sum() const {
     return TCorrValues(val,var);
 }
 
-void ND::TCorrValues::ls(Option_t *opt) const {
+void CP::TCorrValues::ls(Option_t *opt) const {
     fVector.ls(opt);
     fMatrix.ls(opt);
 }
 
-void ND::TCorrValues::Print(Option_t *opt) const {
+void CP::TCorrValues::Print(Option_t *opt) const {
     fVector.Print(opt);
     fMatrix.Print(opt);
 }
-bool ND::TCorrValues::Validate(bool fix) {
+bool CP::TCorrValues::Validate(bool fix) {
     int dim = GetDimensions();
     if (dim<1) return false;
     bool ok = true;
@@ -337,7 +337,7 @@ bool ND::TCorrValues::Validate(bool fix) {
     return ok;
 }
 
-const TMatrixTSym<float>& ND::TCorrValues::GetHessian() const {
+const TMatrixTSym<float>& CP::TCorrValues::GetHessian() const {
     if (fHessian) return (*fHessian);
     fHessian = new TMatrixTSym<float>(GetDimensions());
 
@@ -374,7 +374,7 @@ const TMatrixTSym<float>& ND::TCorrValues::GetHessian() const {
     return (*fHessian);
 }
 
-const ND::TCorrValues& ND::TCorrValues::operator =(const ND::TCorrValues&
+const CP::TCorrValues& CP::TCorrValues::operator =(const CP::TCorrValues&
                                                      rhs) {
     int dim = rhs.GetDimensions();
     
@@ -397,14 +397,14 @@ const ND::TCorrValues& ND::TCorrValues::operator =(const ND::TCorrValues&
     return rhs;
 }
 
-ND::TCorrValues operator +(const ND::TCorrValues& a, 
-                           const ND::TCorrValues& b) {
+CP::TCorrValues operator +(const CP::TCorrValues& a, 
+                           const CP::TCorrValues& b) {
     if (a.GetDimensions() != b.GetDimensions()) {
         ND280Error("Dimensions mismatch: " 
                    << a.GetDimensions() << " != " << b.GetDimensions());
-        throw ND::ECorrValuesRange();
+        throw CP::ECorrValuesRange();
     }
-    ND::TCorrValues result(a);
+    CP::TCorrValues result(a);
 
     int dim = a.GetDimensions();
     for (int i=0; i<dim; ++i) {
@@ -418,23 +418,23 @@ ND::TCorrValues operator +(const ND::TCorrValues& a,
     return result;
 }
     
-ND::TCorrValues operator +(double a, const ND::TCorrValues& b) {
-    ND::TCorrValues result(b);
+CP::TCorrValues operator +(double a, const CP::TCorrValues& b) {
+    CP::TCorrValues result(b);
     int dim = b.GetDimensions();
     for (int i = 0; i<dim; ++i) result.SetValue(i,a + b.GetValue(i));
     return result;
 }
 
-ND::TCorrValues operator +(const ND::TCorrValues& a, double b) {return b + a;}
+CP::TCorrValues operator +(const CP::TCorrValues& a, double b) {return b + a;}
 
-ND::TCorrValues operator -(const ND::TCorrValues& a, 
-                           const ND::TCorrValues& b) {
+CP::TCorrValues operator -(const CP::TCorrValues& a, 
+                           const CP::TCorrValues& b) {
     if (a.GetDimensions() != b.GetDimensions()) {
         ND280Error("Dimensions mismatch: " 
                    << a.GetDimensions() << " != " << b.GetDimensions());
-        throw ND::ECorrValuesRange();
+        throw CP::ECorrValuesRange();
     }
-    ND::TCorrValues result(a);
+    CP::TCorrValues result(a);
 
     int dim = a.GetDimensions();
     for (int i=0; i<dim; ++i) {
@@ -448,22 +448,22 @@ ND::TCorrValues operator -(const ND::TCorrValues& a,
     return result;
 }
 
-ND::TCorrValues operator -(double a, const ND::TCorrValues& b) {
-    ND::TCorrValues result(b);
+CP::TCorrValues operator -(double a, const CP::TCorrValues& b) {
+    CP::TCorrValues result(b);
     int dim = b.GetDimensions();
     for (int i = 0; i<dim; ++i) result.SetValue(i,a - b.GetValue(i));
     return result;
 }
 
-ND::TCorrValues operator -(const ND::TCorrValues& a, double b)  {
-    ND::TCorrValues result(a);
+CP::TCorrValues operator -(const CP::TCorrValues& a, double b)  {
+    CP::TCorrValues result(a);
     int dim = a.GetDimensions();
     for (int i = 0; i<dim; ++i) result.SetValue(i,a.GetValue(i)-b);
     return result;
 }
 
-ND::TCorrValues operator *(double a, const ND::TCorrValues& b) {
-    ND::TCorrValues result(b);
+CP::TCorrValues operator *(double a, const CP::TCorrValues& b) {
+    CP::TCorrValues result(b);
     int dim = b.GetDimensions();
     for (int i=0; i<dim; ++i) {
         result.SetValue(i,a*b.GetValue(i));
@@ -474,16 +474,16 @@ ND::TCorrValues operator *(double a, const ND::TCorrValues& b) {
     return result;
 }
 
-ND::TCorrValues operator *(const ND::TCorrValues& b, double a) {
+CP::TCorrValues operator *(const CP::TCorrValues& b, double a) {
     return (a*b);
 }
 
-ND::TCorrValues operator /(const ND::TCorrValues& b, double a) {
+CP::TCorrValues operator /(const CP::TCorrValues& b, double a) {
     return ((1/a)*b);
 }
 
-ND::TCorrValues operator /(double a, const ND::TCorrValues& x) {
-    ND::TCorrValues result(x);
+CP::TCorrValues operator /(double a, const CP::TCorrValues& x) {
+    CP::TCorrValues result(x);
     int dim = x.GetDimensions();
     for (int i=0; i<dim; ++i) {
         result.SetValue(i,a/x.GetValue(i));
@@ -497,14 +497,14 @@ ND::TCorrValues operator /(double a, const ND::TCorrValues& x) {
     return result;
 }
 
-ND::TCorrValues operator *(const ND::TCorrValues& x, 
-                           const ND::TCorrValues& y) {
+CP::TCorrValues operator *(const CP::TCorrValues& x, 
+                           const CP::TCorrValues& y) {
     if (x.GetDimensions() != y.GetDimensions()) {
         ND280Error("Dimensions mismatch: " 
                    << x.GetDimensions() << " != " << y.GetDimensions());
-        throw ND::ECorrValuesRange();
+        throw CP::ECorrValuesRange();
     }
-    ND::TCorrValues result(x);
+    CP::TCorrValues result(x);
 
     int dim = y.GetDimensions();
     for (int i=0; i<dim; ++i) {
@@ -520,8 +520,8 @@ ND::TCorrValues operator *(const ND::TCorrValues& x,
     return result;
 }
 
-ND::TCorrValues operator /(const ND::TCorrValues& x, 
-                           const ND::TCorrValues& y) {
+CP::TCorrValues operator /(const CP::TCorrValues& x, 
+                           const CP::TCorrValues& y) {
     return x * (1.0/y);
 }
 

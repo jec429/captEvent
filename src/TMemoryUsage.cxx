@@ -20,24 +20,24 @@ namespace {
     };
 }
 
-ND::TMemoryUsage::TMemoryUsage(): fEnabled(false) {}
+CP::TMemoryUsage::TMemoryUsage(): fEnabled(false) {}
 
-ND::TMemoryUsage::~TMemoryUsage() {}
+CP::TMemoryUsage::~TMemoryUsage() {}
 
-void ND::TMemoryUsage::Enable(bool enable) {
+void CP::TMemoryUsage::Enable(bool enable) {
     if (enable) ND280NamedInfo("MEM","Enabling logging of memory usage");
     else ND280NamedInfo("MEM","Disabling logging of memory usage");
     fEnabled = enable;
 }
 
-void ND::TMemoryUsage::LogMemory() {
+void CP::TMemoryUsage::LogMemory() {
     if (!fEnabled) return;
     ProcInfo_t info;
     gSystem->GetProcInfo(&info);
     fEventMemory.push_back(info);
 }
 
-void ND::TMemoryUsage::Write(ND::TND280Output* output) {
+void CP::TMemoryUsage::Write(CP::TND280Output* output) {
     if (!fEnabled) return;
 
     if (output && output->IsOpen()) {

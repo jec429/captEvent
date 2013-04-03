@@ -5,14 +5,14 @@
 #include "THandle.hxx"
 #include "TSHAHashValue.hxx"
 
-namespace ND {
+namespace CP {
     class TND280MCHeader;
 };
 
 /// Save information about how the MC was run.  This save information that
 /// might be thought of as "MC Global Slow Control" like the magnetic field
 /// used in the magnet.
-class ND::TND280MCHeader: public ND::TDataVector {
+class CP::TND280MCHeader: public CP::TDataVector {
 public:
     TND280MCHeader();
     TND280MCHeader(const char* name, const char* title);

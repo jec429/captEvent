@@ -11,7 +11,7 @@
 #include "TDatum.hxx"
 #include "THit.hxx"
 
-namespace ND {
+namespace CP {
     class THitSelection;
     OA_EXCEPTION(EHitSelection,EoaCore);
 
@@ -22,7 +22,7 @@ namespace ND {
 
 /// A container of THitHandle objects for the hit detector information.  This
 /// is an enhanced vector that works well with ROOT.
-class ND::THitSelection : public TDatum, public std::vector< THandle<THit> > {
+class CP::THitSelection : public TDatum, public std::vector< THandle<THit> > {
 public:
     THitSelection(const char* name="hits", 
                   const char* title="Hit Handles");
@@ -30,17 +30,17 @@ public:
 
     /// This is the usual std::vector::push_back, but enhanced to make
     /// sure that only valid hits are inserted into the THitSelection.
-    virtual void push_back(const ND::THandle<ND::THit>& hit);
+    virtual void push_back(const CP::THandle<CP::THit>& hit);
 
     /// A convenience method to make sure that a hit is only added to the
     /// THitSelection once.  The AddHit method is much slower than a
     /// push_back(), so it should only be used when the hit might already be
     /// in the selection.
-    virtual void AddHit(const ND::THandle<ND::THit>&);
+    virtual void AddHit(const CP::THandle<CP::THit>&);
 
     /// A convenience method to make sure that a hit is not in a
     /// THitSelection.
-    virtual void RemoveHit(const ND::THandle<ND::THit>&);
+    virtual void RemoveHit(const CP::THandle<CP::THit>&);
 
     /// Print the data vector information.
     virtual void ls(Option_t* opt = "") const;

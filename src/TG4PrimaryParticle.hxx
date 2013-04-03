@@ -9,14 +9,14 @@
 
 #include "TDatum.hxx"
 
-namespace ND {
+namespace CP {
     class TG4PrimaryParticle;
     typedef std::vector<TG4PrimaryParticle> TG4PrimaryParticleContainer;
 }
 
 /// A class to save a G4 primary particle into a root output file without
 /// linking to geant.
-class ND::TG4PrimaryParticle: public TDatum {
+class CP::TG4PrimaryParticle: public TDatum {
 public:
     TG4PrimaryParticle(void);
     virtual ~TG4PrimaryParticle();

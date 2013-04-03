@@ -4,15 +4,15 @@
 #include "HEPUnits.hxx"
 
 ///////////////////////////////////////////////////////
-ClassImp(ND::TPIDState);
+ClassImp(CP::TPIDState);
 
-ND::TPIDState::TPIDState(): TMReconState(this) {
+CP::TPIDState::TPIDState(): TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
     Init();
 }
 
-ND::TPIDState::TPIDState(const ND::TTrackState& tstate): TMReconState(this) {
+CP::TPIDState::TPIDState(const CP::TTrackState& tstate): TMReconState(this) {
 
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -95,7 +95,7 @@ ND::TPIDState::TPIDState(const ND::TTrackState& tstate): TMReconState(this) {
 }
 
 
-ND::TPIDState::TPIDState(const ND::TShowerState& tstate): TMReconState(this) {
+CP::TPIDState::TPIDState(const CP::TShowerState& tstate): TMReconState(this) {
 
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -149,7 +149,7 @@ ND::TPIDState::TPIDState(const ND::TShowerState& tstate): TMReconState(this) {
     SetFree(GetChargeIndex());
 }
 
-ND::TPIDState::TPIDState(const ND::TPIDState& init)
+CP::TPIDState::TPIDState(const CP::TPIDState& init)
   : TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -167,7 +167,7 @@ ND::TPIDState::TPIDState(const ND::TPIDState& init)
     
 }
 
-ND::TPIDState& ND::TPIDState::operator=(const ND::TPIDState& rhs) {
+CP::TPIDState& CP::TPIDState::operator=(const CP::TPIDState& rhs) {
     if (this == &rhs) return *this;
 
     for (int i=0; i<GetSize(); ++i) {
@@ -183,10 +183,10 @@ ND::TPIDState& ND::TPIDState::operator=(const ND::TPIDState& rhs) {
     return *this;
 }
 
-ND::TPIDState::~TPIDState() {}
+CP::TPIDState::~TPIDState() {}
 
-ND::TCorrValues ND::TPIDState::ProjectState(
-    const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TPIDState::ProjectState(
+    const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TPIDState::GetSize());
     values.SetType("X Y Z T DX DY DZ Momentum Charge");
     const TMPositionState* posState 

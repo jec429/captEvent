@@ -7,18 +7,18 @@
 #include "TOADatabase.hxx"
 #include "TGeomIdManager.hxx"
 
-ClassImp(ND::TGeometryId);
+ClassImp(CP::TGeometryId);
 
-ND::TGeometryId::TGeometryId() : fGeometryId(ND::GeomId::Def::kEmptyId) {}
+CP::TGeometryId::TGeometryId() : fGeometryId(CP::GeomId::Def::kEmptyId) {}
 
-ND::TGeometryId::TGeometryId(int i) : fGeometryId(i) {}
+CP::TGeometryId::TGeometryId(int i) : fGeometryId(i) {}
 
-ND::TGeometryId::TGeometryId(const TGeometryId& geom) 
+CP::TGeometryId::TGeometryId(const TGeometryId& geom) 
     : fGeometryId(geom.fGeometryId) {}
 
-ND::TGeometryId::~TGeometryId() {}
+CP::TGeometryId::~TGeometryId() {}
 
-void ND::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
+void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     // Make sure the bit range is valid.
     if (msb<lsb || msb>31 || lsb <0) {
         ND280Error("Invalid bit field range -- MSB: " << msb
@@ -50,36 +50,36 @@ void ND::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     }
 }
 
-int ND::TGeometryId::GetFieldSafe(int msb, int lsb) const {
+int CP::TGeometryId::GetFieldSafe(int msb, int lsb) const {
     if (msb<lsb || msb>31 || lsb <0) throw EGeomIdMSBLSB();
     int field = fGeometryId >> lsb;
     int mask = (1<<(msb-lsb+1))-1;
     return (field & mask);
 }
 
-int ND::TGeometryId::GetSubsystemId() const {
-    return GetFieldSafe(ND::GeomId::Def::kDetectorIdMSB,
-                    ND::GeomId::Def::kDetectorIdLSB);
+int CP::TGeometryId::GetSubsystemId() const {
+    return GetFieldSafe(CP::GeomId::Def::kDetectorIdMSB,
+                    CP::GeomId::Def::kDetectorIdLSB);
 }
 
-const bool ND::TGeometryId::IsValid() const {
+const bool CP::TGeometryId::IsValid() const {
     if (fGeometryId < 0) return false;
 
-    int field = fGeometryId >> ND::GeomId::Def::kDetectorIdLSB;
-    int mask = (1<<(ND::GeomId::Def::kDetectorIdMSB
-                    - ND::GeomId::Def::kDetectorIdLSB+1))-1;
+    int field = fGeometryId >> CP::GeomId::Def::kDetectorIdLSB;
+    int mask = (1<<(CP::GeomId::Def::kDetectorIdMSB
+                    - CP::GeomId::Def::kDetectorIdLSB+1))-1;
     int sys = (field & mask);
 
     switch (sys) {
-    case ND::GeomId::Def::kP0D:
-    case ND::GeomId::Def::kTPC:
-    case ND::GeomId::Def::kFGD:
-    case ND::GeomId::Def::kDSECal:
-    case ND::GeomId::Def::kTECal:
-    case ND::GeomId::Def::kPECal:
-    case ND::GeomId::Def::kSMRD:
-    case ND::GeomId::Def::kINGRID:
-    case ND::GeomId::Def::kROOTGeoNodeId:
+    case CP::GeomId::Def::kP0D:
+    case CP::GeomId::Def::kTPC:
+    case CP::GeomId::Def::kFGD:
+    case CP::GeomId::Def::kDSECal:
+    case CP::GeomId::Def::kTECal:
+    case CP::GeomId::Def::kPECal:
+    case CP::GeomId::Def::kSMRD:
+    case CP::GeomId::Def::kINGRID:
+    case CP::GeomId::Def::kROOTGeoNodeId:
         return true;
     default:
         return false;
@@ -88,49 +88,49 @@ const bool ND::TGeometryId::IsValid() const {
     return false;
 }
 
-std::string ND::TGeometryId::GetName() const {
+std::string CP::TGeometryId::GetName() const {
     return TOADatabase::Get().GeomId().GetPath(*this);
 }
 
-std::string ND::TGeometryId::GetSubsystemName() const {
-    int sys = GetFieldSafe(ND::GeomId::Def::kDetectorIdMSB,
-                       ND::GeomId::Def::kDetectorIdLSB);
+std::string CP::TGeometryId::GetSubsystemName() const {
+    int sys = GetFieldSafe(CP::GeomId::Def::kDetectorIdMSB,
+                       CP::GeomId::Def::kDetectorIdLSB);
 
     switch (sys) {
-    case ND::GeomId::Def::kP0D: return "P0D";
-    case ND::GeomId::Def::kTPC: return "TPC";
-    case ND::GeomId::Def::kFGD: return "FGD";
-    case ND::GeomId::Def::kDSECal: return "DSECal";
-    case ND::GeomId::Def::kTECal: return "TECal";
-    case ND::GeomId::Def::kPECal: return "PECal";
-    case ND::GeomId::Def::kSMRD: return "SMRD";
-    case ND::GeomId::Def::kINGRID: return "INGRID";
-    case ND::GeomId::Def::kROOTGeoNodeId: return "node";
+    case CP::GeomId::Def::kP0D: return "P0D";
+    case CP::GeomId::Def::kTPC: return "TPC";
+    case CP::GeomId::Def::kFGD: return "FGD";
+    case CP::GeomId::Def::kDSECal: return "DSECal";
+    case CP::GeomId::Def::kTECal: return "TECal";
+    case CP::GeomId::Def::kPECal: return "PECal";
+    case CP::GeomId::Def::kSMRD: return "SMRD";
+    case CP::GeomId::Def::kINGRID: return "INGRID";
+    case CP::GeomId::Def::kROOTGeoNodeId: return "node";
     }
 
     return "unknown";
 }
 
-TVector3 ND::TGeometryId::GetPosition() const {
+TVector3 CP::TGeometryId::GetPosition() const {
     TVector3 position(0,0,0);
     if (!TOADatabase::Get().GeomId().GetPosition(*this,position)) {
         ND280Warn("Position for invalid geometry id was requested");
-        throw ND::EGeomIdInvalid();
+        throw CP::EGeomIdInvalid();
     }
     return position;
 }
 
-bool operator==(const ND::TGeometryId& a, const ND::TGeometryId& b) {
+bool operator==(const CP::TGeometryId& a, const CP::TGeometryId& b) {
     return (a.AsInt() == b.AsInt());
 }
 
-bool operator!=(const ND::TGeometryId& a, const ND::TGeometryId& b) {
+bool operator!=(const CP::TGeometryId& a, const CP::TGeometryId& b) {
     return (a.AsInt() != b.AsInt());
 }
 
-std::ostream& operator<<(std::ostream& s, const ND::TGeometryId& id) {
+std::ostream& operator<<(std::ostream& s, const CP::TGeometryId& id) {
     try {
-        ND::TOADatabase::Get().Geometry();
+        CP::TOADatabase::Get().Geometry();
         std::string name = id.GetName();
         int len = name.size();
         int maxlen = 50;

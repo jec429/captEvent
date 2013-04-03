@@ -4,13 +4,13 @@
 #include <vector>
 #include <TDigitHeader.hxx>
 
-namespace ND {
+namespace CP {
         class TCMBDigitHeader;
     class TFGDDigitHeader;
 };
 
 /// Header information for a single CMB (Crate Master Board).
-class ND::TCMBDigitHeader{
+class CP::TCMBDigitHeader{
 
 public:
 
@@ -46,7 +46,7 @@ private:
 
 /// Header information for FGD:
 /// essentially just a vector of CMB header information.
-class ND::TFGDDigitHeader : public ND::TDigitHeader{
+class CP::TFGDDigitHeader : public CP::TDigitHeader{
 
 public:
 
@@ -54,25 +54,25 @@ public:
 
     virtual ~TFGDDigitHeader();
 
-    std::vector<ND::TCMBDigitHeader> const GetCMBHeaders() const {return fCMBHeaders;}
+    std::vector<CP::TCMBDigitHeader> const GetCMBHeaders() const {return fCMBHeaders;}
 
-    ND::TCMBDigitHeader const  GetCMBHeader(int cmb) const {
+    CP::TCMBDigitHeader const  GetCMBHeader(int cmb) const {
 
         // Find the right header, else return blank.
         for(unsigned int i = 0 ; i < fCMBHeaders.size(); i++){
             if(fCMBHeaders[i].GetMinicrate() == cmb)
                 return fCMBHeaders[i];
         }
-        return ND::TCMBDigitHeader();
+        return CP::TCMBDigitHeader();
     }
 
-    void AddCMBHeader(ND::TCMBDigitHeader header){
+    void AddCMBHeader(CP::TCMBDigitHeader header){
         fCMBHeaders.push_back(header);        
     }
 
 private:
 
-    std::vector<ND::TCMBDigitHeader> fCMBHeaders;
+    std::vector<CP::TCMBDigitHeader> fCMBHeaders;
 
     ClassDef(TFGDDigitHeader, 1);
 

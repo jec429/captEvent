@@ -9,11 +9,11 @@
 #include "TTPCPadManager.hxx"
 #include "TND280Log.hxx"
 
-ClassImp(ND::TTPCPadManager);
+ClassImp(CP::TTPCPadManager);
 
-ND::TTPCPadManager::~TTPCPadManager() { }
+CP::TTPCPadManager::~TTPCPadManager() { }
 
-ND::TTPCPadManager::TTPCPadManager()
+CP::TTPCPadManager::TTPCPadManager()
     : TNamed("ND280TPCPadManager","TPC Pad Information"),
       fPadRows(48), fPadColumns(36), 
       // this is not the pad size but the pad pitch !!!!
@@ -23,12 +23,12 @@ ND::TTPCPadManager::TTPCPadManager()
     fLocalYMax = 0.5*(fPadYPitch*(fPadRows-1));
 }
 
-int ND::TTPCPadManager::ChannelToPad(int, int key) const {
+int CP::TTPCPadManager::ChannelToPad(int, int key) const {
     return key;
 }
 
-TGeoNode* ND::TTPCPadManager::ChannelToModuleNode(int node, int) const {
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+TGeoNode* CP::TTPCPadManager::ChannelToModuleNode(int node, int) const {
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
     geom->CdNode(node);
     TGeoNode* moduleNode = geom->GetCurrentNode();
@@ -38,9 +38,9 @@ TGeoNode* ND::TTPCPadManager::ChannelToModuleNode(int node, int) const {
     return moduleNode;
 }
 
-bool ND::TTPCPadManager::ChannelToGlobalXYZ(int node, int key,
+bool CP::TTPCPadManager::ChannelToGlobalXYZ(int node, int key,
                                             TVector3& global) const {
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     TGeoNode* moduleNode = ChannelToModuleNode(node,key);
     if (!moduleNode) return false;
     int pad = ChannelToPad(node,key);
@@ -58,11 +58,11 @@ bool ND::TTPCPadManager::ChannelToGlobalXYZ(int node, int key,
     return true;
 }
 
-bool ND::TTPCPadManager::GlobalXYZToChannel(const TVector3& global, 
+bool CP::TTPCPadManager::GlobalXYZToChannel(const TVector3& global, 
                                             int& node, int& key) const {
     node = -1;
     key = 0;
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     // Find the node with this global position.
     geom->PushPath();
     TGeoNode* moduleNode = geom->FindNode(global.X(), global.Y(), global.Z());
@@ -88,63 +88,63 @@ bool ND::TTPCPadManager::GlobalXYZToChannel(const TVector3& global,
     return true;
 }
 
-double ND::TTPCPadManager::ColumnToLocalX(int column) const {
+double CP::TTPCPadManager::ColumnToLocalX(int column) const {
     return fLocalXMax - column*fPadXPitch;
 }
 
-double ND::TTPCPadManager::RowToLocalY(int row) const {
+double CP::TTPCPadManager::RowToLocalY(int row) const {
     return fLocalYMax - row*fPadYPitch;
 }
 
-int ND::TTPCPadManager::LocalXToColumn(double X) const {
+int CP::TTPCPadManager::LocalXToColumn(double X) const {
     return int(0.5+(fLocalXMax-X)/fPadXPitch);
 }
 
-int ND::TTPCPadManager::LocalYToRow(double Y) const {
+int CP::TTPCPadManager::LocalYToRow(double Y) const {
     return int(0.5+(fLocalYMax-Y)/fPadYPitch);
 }
 
-bool ND::TTPCPadManager::LocalXYInPad(double x, double y, int pad) const {
+bool CP::TTPCPadManager::LocalXYInPad(double x, double y, int pad) const {
     return ((std::abs(x-PadToLocalX(pad)) < 0.5*(fPadXPitch-fPadGap))
             && (std::abs(y-PadToLocalY(pad)) < 0.5*(fPadYPitch-fPadGap)));
 }
 
-int ND::TTPCPadManager::RowAndColumnToPad(int row, int column) const {
+int CP::TTPCPadManager::RowAndColumnToPad(int row, int column) const {
     return row + column*fPadRows;
 }
 
-int ND::TTPCPadManager::PadToRow(int pad) const {return pad % fPadRows;}
+int CP::TTPCPadManager::PadToRow(int pad) const {return pad % fPadRows;}
 
-int ND::TTPCPadManager::PadToColumn(int pad) const {return pad / fPadRows;}
+int CP::TTPCPadManager::PadToColumn(int pad) const {return pad / fPadRows;}
 
-void ND::TTPCPadManager::SetPadXPitch(double xPitch) {
+void CP::TTPCPadManager::SetPadXPitch(double xPitch) {
     fPadXPitch = xPitch;
     fLocalXMax = 0.5*(fPadXPitch*(fPadColumns-1));
 }
 
-void ND::TTPCPadManager::SetPadColumns(int columns) {
+void CP::TTPCPadManager::SetPadColumns(int columns) {
     fPadColumns = columns;
     fLocalXMax = 0.5*(fPadXPitch*(fPadColumns-1));
 }
 
-void ND::TTPCPadManager::SetPadYPitch(double yPitch) {
+void CP::TTPCPadManager::SetPadYPitch(double yPitch) {
     fPadYPitch = yPitch;
     fLocalYMax = 0.5*(fPadYPitch*(fPadRows-1));
 }
 
-void ND::TTPCPadManager::SetPadRows(int rows) {
+void CP::TTPCPadManager::SetPadRows(int rows) {
     fPadRows = rows;
     fLocalYMax = 0.5*(fPadYPitch*(fPadRows-1));
 }    
 
-void ND::TTPCPadManager::SetPadGap(double gap) {
+void CP::TTPCPadManager::SetPadGap(double gap) {
     fPadGap = gap;
 }
 
-void ND::TTPCPadManager::SetLocalXMax(double x) {
+void CP::TTPCPadManager::SetLocalXMax(double x) {
     fLocalXMax = x;
 }
 
-void ND::TTPCPadManager::SetLocalYMax(double y) {
+void CP::TTPCPadManager::SetLocalYMax(double y) {
     fLocalYMax = y;
 }

@@ -4,23 +4,23 @@
 
 #include "TSHAHashValue.hxx"
 
-ClassImp(ND::TSHAHashValue);
+ClassImp(CP::TSHAHashValue);
 
-ND::TSHAHashValue::~TSHAHashValue() {}
+CP::TSHAHashValue::~TSHAHashValue() {}
 
-ND::TSHAHashValue::TSHAHashValue() {
+CP::TSHAHashValue::TSHAHashValue() {
     for(int i=0; i<5; ++i) fHash[i] = 0;
 }
 
-ND::TSHAHashValue::TSHAHashValue(const TSHAHashValue& hc) {
+CP::TSHAHashValue::TSHAHashValue(const TSHAHashValue& hc) {
     for(int i=0; i<5; ++i) fHash[i] = hc(i);
 }
 
-ND::TSHAHashValue::TSHAHashValue(unsigned int hc[5]) {
+CP::TSHAHashValue::TSHAHashValue(unsigned int hc[5]) {
     for(int i=0; i<5; ++i) fHash[i] = hc[i];
 }
 
-ND::TSHAHashValue::TSHAHashValue(unsigned int hc0, 
+CP::TSHAHashValue::TSHAHashValue(unsigned int hc0, 
                                  unsigned int hc1, 
                                  unsigned int hc2, 
                                  unsigned int hc3, 
@@ -32,7 +32,7 @@ ND::TSHAHashValue::TSHAHashValue(unsigned int hc0,
     fHash[4] = hc4;
 }
 
-std::string ND::TSHAHashValue::AsString() const {
+std::string CP::TSHAHashValue::AsString() const {
     std::ostringstream nameStream;
     nameStream << std::hex << std::nouppercase << std::setfill('0');
     if (fHash[0]) nameStream << std::setw(8) << fHash[0];
@@ -52,7 +52,7 @@ std::string ND::TSHAHashValue::AsString() const {
     return nameStream.str();
 }
 
-bool ND::TSHAHashValue::Equivalent(const TSHAHashValue& hc) const {
+bool CP::TSHAHashValue::Equivalent(const TSHAHashValue& hc) const {
     bool valid = false;
     for (int i=0; i<5; ++i) {
         if (!fHash[i]) continue;
@@ -63,11 +63,11 @@ bool ND::TSHAHashValue::Equivalent(const TSHAHashValue& hc) const {
     return valid;
 }
 
-bool ND::TSHAHashValue::Valid() const {
+bool CP::TSHAHashValue::Valid() const {
     return (fHash[0] || fHash[1] || fHash[2] || fHash[3] || fHash[4]);
 }
     
-bool operator<(const ND::TSHAHashValue& lhs, const ND::TSHAHashValue& rhs) {
+bool operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
     for (int i=0; i<5; ++i) {
         if (lhs(i) > rhs(i)) return false;
         if (lhs(i) < rhs(i)) return true;
@@ -75,14 +75,14 @@ bool operator<(const ND::TSHAHashValue& lhs, const ND::TSHAHashValue& rhs) {
     return false;
 }
 
-bool operator==(const ND::TSHAHashValue& lhs, const ND::TSHAHashValue& rhs) {
+bool operator==(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs) {
     for (int i=0; i<5; ++i) {
         if (lhs(i) != rhs(i)) return false;
     }
     return true;
 }
 
-std::ostream& operator<<(std::ostream& s, const ND::TSHAHashValue& c) {
+std::ostream& operator<<(std::ostream& s, const CP::TSHAHashValue& c) {
     s << "<";
     s << c.AsString();
     s << ">";

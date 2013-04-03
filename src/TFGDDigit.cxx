@@ -1,15 +1,15 @@
 #include "TFGDDigit.hxx"
 
-ClassImp(ND::TFGDDigit);
+ClassImp(CP::TFGDDigit);
 
-ND::TFGDDigit::TFGDDigit() {}
+CP::TFGDDigit::TFGDDigit() {}
 
-ND::TFGDDigit::TFGDDigit(ND::TChannelId chan, 
+CP::TFGDDigit::TFGDDigit(CP::TChannelId chan, 
                          short startTime, short pulseTime, short pulseCharge, 
                          std::vector<unsigned short> adc, short dataType)
     : TDigit(chan), fFirstTimeSample(startTime), fPulseTime(pulseTime),
       fPulseCharge(pulseCharge), 
       fADCs(adc), fDataType(dataType) {}
 
-ND::TFGDDigit::~TFGDDigit() {}
+CP::TFGDDigit::~TFGDDigit() {}
 

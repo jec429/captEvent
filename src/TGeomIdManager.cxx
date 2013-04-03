@@ -26,33 +26,33 @@
 #include "TGeomIdFinder.hxx"
 #include "TP0DIdFinder.hxx"
 
-ND::TGeomIdManager::TGeomIdManager() {
+CP::TGeomIdManager::TGeomIdManager() {
     ResetGeometry();
 }
 
-ND::TGeomIdManager::~TGeomIdManager() {}
+CP::TGeomIdManager::~TGeomIdManager() {}
 
-bool ND::TGeomIdManager::CdId(TGeometryId id) const {
+bool CP::TGeomIdManager::CdId(TGeometryId id) const {
     GeomIdKey gid = MakeGeomIdKey(id);
     GeomIdMap::const_iterator pair = fGeomIdMap.find(gid);
     if (pair != fGeomIdMap.end()) return CdKey(pair->second);
     // The geometry id was not found.  Check to see if this is one of the
     // special cases.
-    if (ND::GeomId::TPC::IsPad(id)) {
+    if (CP::GeomId::TPC::IsPad(id)) {
         /// This is a pad, so handle the special case by masking out the pad
         /// bits to find the ROOT key.
         gid = MakeGeomIdKey(id) 
-            & ~(ND::GeomId::Def::TPC::Pad::kPadFlagMask
-                | ND::GeomId::Def::TPC::Pad::kPadMask);
+            & ~(CP::GeomId::Def::TPC::Pad::kPadFlagMask
+                | CP::GeomId::Def::TPC::Pad::kPadMask);
         pair = fGeomIdMap.find(gid);
         if (pair != fGeomIdMap.end()) return CdKey(pair->second);
     }
     return false;
 }
 
-bool ND::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
+bool CP::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
     // Save the current node.
-    ND::TOADatabase::Get().Geometry();
+    CP::TOADatabase::Get().Geometry();
     gGeoManager->PushPath();
 
     bool success = true;
@@ -80,17 +80,17 @@ bool ND::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
     return success;
 }
 
-bool ND::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
-    ND::TOADatabase::Get().Geometry();
+bool CP::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
+    CP::TOADatabase::Get().Geometry();
     bool success = false;
-    if (ND::GeomId::TPC::IsPad(id)) {
+    if (CP::GeomId::TPC::IsPad(id)) {
         GeomIdKey gid = MakeGeomIdKey(id) 
-            & ~(ND::GeomId::Def::TPC::Pad::kPadFlagMask
-                | ND::GeomId::Def::TPC::Pad::kPadMask);
+            & ~(CP::GeomId::Def::TPC::Pad::kPadFlagMask
+                | CP::GeomId::Def::TPC::Pad::kPadMask);
         GeomIdMap::const_iterator pair = fGeomIdMap.find(gid);
         if (pair == fGeomIdMap.end()) return false;
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
-        int pad = MakeGeomIdKey(id) & ND::GeomId::Def::TPC::Pad::kPadMask;
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
+        int pad = MakeGeomIdKey(id) & CP::GeomId::Def::TPC::Pad::kPadMask;
         success = pads.ChannelToGlobalXYZ(pair->second, pad, position);
         return success;
     }
@@ -104,21 +104,21 @@ bool ND::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
     return success;
 }
 
-bool ND::TGeomIdManager::GetGeometryId(double x, double y, double z, 
+bool CP::TGeomIdManager::GetGeometryId(double x, double y, double z, 
                                        TGeometryId& id) const {
-    ND::TOADatabase::Get().Geometry();
+    CP::TOADatabase::Get().Geometry();
     gGeoManager->PushPath();
     gGeoManager->FindNode(x,y,z);
     bool success = FindGeometryId(id);
     // Check to see if the id might be a TPC pad.
-    if (success && ND::GeomId::TPC::IsMicroMega(id)) {
+    if (success && CP::GeomId::TPC::IsMicroMega(id)) {
         int node, key;
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
         success = pads.GlobalXYZToChannel(TVector3(x,y,z), node, key);
         if (success) {
             GeomIdKey gid = MakeGeomIdKey(id);
-            gid |= ND::GeomId::Def::TPC::Pad::kPadFlagMask;
-            gid |= (ND::GeomId::Def::TPC::Pad::kPadMask & key);
+            gid |= CP::GeomId::Def::TPC::Pad::kPadFlagMask;
+            gid |= (CP::GeomId::Def::TPC::Pad::kPadMask & key);
             id = TGeometryId(gid);
         }
     }        
@@ -126,7 +126,7 @@ bool ND::TGeomIdManager::GetGeometryId(double x, double y, double z,
     return success;
 }
 
-void ND::TGeomIdManager::ResetGeometry() {
+void CP::TGeomIdManager::ResetGeometry() {
     fGeomIdMap.clear();
     fRootIdMap.clear();
     fGeomIdHashCode = TSHAHashValue();
@@ -154,9 +154,9 @@ void ND::TGeomIdManager::ResetGeometry() {
     gGeoManager->LockGeometry();
 }
     
-bool ND::TGeomIdManager::LoadGeometry(TFile& file, 
-                                      const ND::TSHAHashValue& hc,
-                                      const ND::TAlignmentId& align) {
+bool CP::TGeomIdManager::LoadGeometry(TFile& file, 
+                                      const CP::TSHAHashValue& hc,
+                                      const CP::TAlignmentId& align) {
     if (!file.IsOpen()) {
         ND280Error("Geometry file not available");
         return false;
@@ -257,7 +257,7 @@ bool ND::TGeomIdManager::LoadGeometry(TFile& file,
 }
 
 std::string
-ND::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
+CP::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
     std::string result = "";
 
     std::string oaEventRoot(gSystem->Getenv("OAEVENTROOT"));
@@ -303,7 +303,7 @@ ND::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
     return result;
 }
 
-bool ND::TGeomIdManager::ReadGeometry(const ND::TSHAHashValue& hc) {
+bool CP::TGeomIdManager::ReadGeometry(const CP::TSHAHashValue& hc) {
     std::string inputName = FindGeometryFile(hc);
     if (inputName.empty()) {
         ND280Severe("No geometry matchs hash: " << hc);
@@ -318,7 +318,7 @@ bool ND::TGeomIdManager::ReadGeometry(const ND::TSHAHashValue& hc) {
     return LoadGeometry(*inFile,hc);
 }
 
-void ND::TGeomIdManager::SaveHashCode(const TSHAHashValue& hc) {
+void CP::TGeomIdManager::SaveHashCode(const TSHAHashValue& hc) {
     std::ostringstream hash;
     if (!hc.Valid()) {
         ND280Severe("Trying to save invalid hash code");
@@ -345,8 +345,8 @@ void ND::TGeomIdManager::SaveHashCode(const TSHAHashValue& hc) {
     gGeoManager->SetName(name.c_str());
 }
 
-bool ND::TGeomIdManager::GetHashCode(ND::TSHAHashValue& hc) const {
-    hc = ND::TSHAHashValue();
+bool CP::TGeomIdManager::GetHashCode(CP::TSHAHashValue& hc) const {
+    hc = CP::TSHAHashValue();
     std::string name(gGeoManager->GetName());
     // Check that the name is "reasonable".
     if (name.find("ND280Geometry-") != 0) {
@@ -363,7 +363,7 @@ bool ND::TGeomIdManager::GetHashCode(ND::TSHAHashValue& hc) const {
     return true;
 }
 
-void ND::TGeomIdManager::SaveAlignmentCode(const ND::TAlignmentId& aid) {
+void CP::TGeomIdManager::SaveAlignmentCode(const CP::TAlignmentId& aid) {
     std::ostringstream hash;
     std::string name(gGeoManager->GetName());
 
@@ -406,8 +406,8 @@ void ND::TGeomIdManager::SaveAlignmentCode(const ND::TAlignmentId& aid) {
     gGeoManager->SetName(name.c_str());
 }
 
-bool ND::TGeomIdManager::GetAlignmentCode(ND::TAlignmentId& aid) const {
-    aid = ND::TAlignmentId();
+bool CP::TGeomIdManager::GetAlignmentCode(CP::TAlignmentId& aid) const {
+    aid = CP::TAlignmentId();
     std::string name(gGeoManager->GetName());
     // Check that the name is "reasonable".
     if (name.find("ND280Geometry-") != 0) {
@@ -427,8 +427,8 @@ bool ND::TGeomIdManager::GetAlignmentCode(ND::TAlignmentId& aid) const {
     return true;
 }
 
-bool ND::TGeomIdManager::ParseHashCode(std::string name,
-                                       ND::TSHAHashValue& hc) const {
+bool CP::TGeomIdManager::ParseHashCode(std::string name,
+                                       CP::TSHAHashValue& hc) const {
     unsigned int htemp[5];
 
     std::string parseName = name;
@@ -482,12 +482,12 @@ bool ND::TGeomIdManager::ParseHashCode(std::string name,
     std::istringstream hash4(parseName);
     hash4 >> std::hex >> htemp[4];
 
-    hc = ND::TSHAHashValue(htemp);
+    hc = CP::TSHAHashValue(htemp);
 
     return true;
 }
 
-bool ND::TGeomIdManager::CdKey(const RootGeoKey& key) const {
+bool CP::TGeomIdManager::CdKey(const RootGeoKey& key) const {
     // This is the only place that should need to be changed if the RootGeoKey
     // type is redefined.
     int nodeid = key;
@@ -495,14 +495,14 @@ bool ND::TGeomIdManager::CdKey(const RootGeoKey& key) const {
     return true;
 }
 
-ND::TGeomIdManager::RootGeoKey ND::TGeomIdManager::MakeRootGeoKey() const {
+CP::TGeomIdManager::RootGeoKey CP::TGeomIdManager::MakeRootGeoKey() const {
     // This knows how to translate the current TGeoManager node into a
     // RootGeoKey object.  The initial implementation is trivially simple.
     return gGeoManager->GetCurrentNodeId();
 }
 
-ND::TGeomIdManager::GeomIdKey 
-ND::TGeomIdManager::MakeGeomIdKey(TGeometryId id) const {
+CP::TGeomIdManager::GeomIdKey 
+CP::TGeomIdManager::MakeGeomIdKey(TGeometryId id) const {
     // This knows how to take TGeometryId object and translate it into a
     // GeomIdKey that can be used with the fGeomIdMap.  For some values of the
     // TGeometryId objects, this will have to apply a mask to the integer
@@ -512,13 +512,13 @@ ND::TGeomIdManager::MakeGeomIdKey(TGeometryId id) const {
     return gik;
 }
 
-ND::TGeometryId ND::TGeomIdManager::MakeGeometryId(GeomIdKey key) const {
+CP::TGeometryId CP::TGeomIdManager::MakeGeometryId(GeomIdKey key) const {
     // This knows how to take a GeomIdKey and translate it into a
     // TGeometryId object.
     return TGeometryId(key);
 }
 
-void ND::TGeomIdManager::BuildGeomIdMap() {
+void CP::TGeomIdManager::BuildGeomIdMap() {
     // DO NOT CALL TOADatabase::Get().Geometry() HERE
 
     // Make sure that the node id array has been initialized in the
@@ -581,7 +581,7 @@ void ND::TGeomIdManager::BuildGeomIdMap() {
 
 }
 
-int ND::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
+int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
                                           int keepGoing) {
     // DO NOT CALL TOADatabase::Get().Geometry() HERE
 
@@ -650,7 +650,7 @@ int ND::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
     return keepGoing;
 }
 
-void ND::TGeomIdManager::BuildHashCode() {
+void CP::TGeomIdManager::BuildHashCode() {
     // DO NOT CALL TOADatabase::Get().Geometry() HERE
 
     // Make sure that the node id array has been initialized in the
@@ -707,7 +707,7 @@ void ND::TGeomIdManager::BuildHashCode() {
     gGeoManager->PopPath();
 }
 
-void ND::TGeomIdManager::RecurseHashCode(std::vector<std::string>& names) {
+void CP::TGeomIdManager::RecurseHashCode(std::vector<std::string>& names) {
     // DO NOT CALL TOADatabase::Get().Geometry() HERE
 
     TGeoNode* node = gGeoManager->GetCurrentNode();
@@ -732,7 +732,7 @@ void ND::TGeomIdManager::RecurseHashCode(std::vector<std::string>& names) {
     names.pop_back();
 }
 
-std::string ND::TGeomIdManager::GetPath(TGeometryId id) const {
+std::string CP::TGeomIdManager::GetPath(TGeometryId id) const {
     if (!gGeoManager) return "not-available";
     if (fGeomIdMap.empty()) return "not-available";
     if (id == TGeometryId()) return "empty";
@@ -744,8 +744,8 @@ std::string ND::TGeomIdManager::GetPath(TGeometryId id) const {
         return "invalid";
     }
     std::string result = gGeoManager->GetPath();
-    if (ND::GeomId::TPC::IsPad(id)) {
-        int pad = MakeGeomIdKey(id) & ND::GeomId::Def::TPC::Pad::kPadMask;
+    if (CP::GeomId::TPC::IsPad(id)) {
+        int pad = MakeGeomIdKey(id) & CP::GeomId::Def::TPC::Pad::kPadMask;
         std::stringstream padStr;
         padStr << "/Pad_" << pad;
         result = result + padStr.str();
@@ -754,17 +754,17 @@ std::string ND::TGeomIdManager::GetPath(TGeometryId id) const {
     return result;
 }
 
-void ND::TGeomIdManager::SetGeoManager(TGeoManager* g) {
+void CP::TGeomIdManager::SetGeoManager(TGeoManager* g) {
     gGeoManager = fGeoManager = g;
 }
 
 
-TGeoManager* ND::TGeomIdManager::GetGeoManager() {
+TGeoManager* CP::TGeomIdManager::GetGeoManager() {
     gGeoManager = fGeoManager;
     return gGeoManager;
 }
 
-bool ND::TGeomIdManager::FindAndLoadGeometry(ND::TND280Event* event) {
+bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TND280Event* event) {
     // Check to see if the geometry has already been overloaded
     if (GetGeometryHashOverride().Equivalent(GetHash())) {
         ND280NamedDebug("Geometry","Correct geometry override already loaded");
@@ -784,7 +784,7 @@ bool ND::TGeomIdManager::FindAndLoadGeometry(ND::TND280Event* event) {
             }
             else {
                 std::auto_ptr<TFile> file(filePtr);        
-                if (LoadGeometry(*file,ND::TSHAHashValue())) {
+                if (LoadGeometry(*file,CP::TSHAHashValue())) {
                     ND280NamedInfo("Geometry","Override geometry from "
                                    << file->GetName());
                     SetGeometryHashOverride(GetHash());
@@ -829,7 +829,7 @@ bool ND::TGeomIdManager::FindAndLoadGeometry(ND::TND280Event* event) {
     // As a last resort, try to use the geometry that was specified as the
     // default.  While this is the last resort, this is the "normal" code
     // path. 
-    hc = ND::TOADatabase::Get().FindEventGeometry(event);
+    hc = CP::TOADatabase::Get().FindEventGeometry(event);
     if (hc.Valid() && !GetHash().Equivalent(hc)) {
         ND280NamedInfo("Geometry","Look for geometry with " << hc);
         if (ReadGeometry(hc)) {
@@ -860,7 +860,7 @@ namespace {
     int LocalGeometryLock::fLockCount=0;
 };
 
-TGeoManager* ND::TGeomIdManager::GetGeometry(ND::TND280Event* event) {
+TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TND280Event* event) {
     LocalGeometryLock geomLock;
     if (geomLock.IsLocked()) {
         // The geometry is currently being accessed, so don't do any geometry
@@ -936,7 +936,7 @@ TGeoManager* ND::TGeomIdManager::GetGeometry(ND::TND280Event* event) {
     // "changed hash".
     if (geometryChanging || !fGeomIdChangedHash.Equivalent(GetHash())) {
         fGeomIdChangedHash = GetHash();
-        ND::TOADatabase::Get().ApplyGeometryCallbacks(event);
+        CP::TOADatabase::Get().ApplyGeometryCallbacks(event);
         ND280Log("Loaded " << GetGeoManager()->GetName());
     }
 
@@ -946,7 +946,7 @@ TGeoManager* ND::TGeomIdManager::GetGeometry(ND::TND280Event* event) {
     return GetGeoManager();
 }
 
-bool ND::TGeomIdManager::CheckGeometry(const ND::TND280Event* const event) {
+bool CP::TGeomIdManager::CheckGeometry(const CP::TND280Event* const event) {
     // Check to see if the geometry has been overriden
     if (GetGeometryHashOverride().Equivalent(GetHash())) {
         return false;
@@ -963,7 +963,7 @@ bool ND::TGeomIdManager::CheckGeometry(const ND::TND280Event* const event) {
 #ifndef LOAD_DEFAULT_GEOMETRY
         return false;
 #else
-        ND280NamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the ND::TOADatabase::GeometryLookup class so that it is notified when the geometry changed.");
+        ND280NamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TOADatabase::GeometryLookup class so that it is notified when the geometry changed.");
 #endif
     }
     
@@ -992,7 +992,7 @@ bool ND::TGeomIdManager::CheckGeometry(const ND::TND280Event* const event) {
     // geometry manager has seen a valid event, and then don't check the
     // geometry if the run numbers match.
     if (!event->GetGeometryHash().Valid()
-        && GetGeomEventContext().GetRun() != ND::TND280Context::Invalid
+        && GetGeomEventContext().GetRun() != CP::TND280Context::Invalid
         && GetGeomEventContext().GetRun() == event->GetContext().GetRun()) {
         return false; 
     }
@@ -1000,7 +1000,7 @@ bool ND::TGeomIdManager::CheckGeometry(const ND::TND280Event* const event) {
     return true;
 }
 
-bool ND::TGeomIdManager::CheckAlignment(const ND::TND280Event* const event) {
+bool CP::TGeomIdManager::CheckAlignment(const CP::TND280Event* const event) {
     // We don't have an alignment yet so we need to load one.
     if (!GetAlignmentId().Valid()) return true;
 
@@ -1017,10 +1017,10 @@ bool ND::TGeomIdManager::CheckAlignment(const ND::TND280Event* const event) {
     // alignment.  Use the database code to see if the alignment needs to be
     // checked.  If this returns false we will keep the current alignment.  If
     // it returns true the geometry will be realigned.
-    return ND::TOADatabase::Get().CheckAlignment(event);
+    return CP::TOADatabase::Get().CheckAlignment(event);
 }
 
-void ND::TGeomIdManager::ApplyAlignment(const ND::TND280Event* const event) {
+void CP::TGeomIdManager::ApplyAlignment(const CP::TND280Event* const event) {
     if (!gGeoManager) {
         ND280Severe("ApplyAlignment called with invalid geometry");
         return;
@@ -1033,7 +1033,7 @@ void ND::TGeomIdManager::ApplyAlignment(const ND::TND280Event* const event) {
 
     ND280NamedDebug("Geometry","Apply alignment to event");
 
-    fGeomIdAlignmentId = ND::TOADatabase::Get().ApplyAlignmentLookup(event);
+    fGeomIdAlignmentId = CP::TOADatabase::Get().ApplyAlignmentLookup(event);
 
     SaveAlignmentCode(fGeomIdAlignmentId);
 }

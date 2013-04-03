@@ -7,7 +7,7 @@
 #include "TAlgorithmTag.hxx"
 #include "EoaCore.hxx"
 
-namespace ND {
+namespace CP {
     class TAlgorithmResult;
     class TAlgorithm;
 
@@ -39,7 +39,7 @@ namespace ND {
 /// used to specify which cuts an event has passed.  Typically, an algorithm
 /// should create a status string, and added information using the "+="
 /// operator. 
-class ND::TAlgorithmResult : public TDataVector {
+class CP::TAlgorithmResult : public TDataVector {
 public:
     TAlgorithmResult();
     explicit TAlgorithmResult(const TAlgorithm& algo);
@@ -102,7 +102,7 @@ public:
     void AddResultsContainer(TReconObjectContainer* container); 
     
     /// Get a reconstruction object container out of this TAlgorithmResult.
-    THandle<ND::TReconObjectContainer> 
+    THandle<CP::TReconObjectContainer> 
     GetResultsContainer(const char* track="results") const;
     
     /// Set the default reconstruction object container.
@@ -115,7 +115,7 @@ public:
     void AddHitSelection(THitSelection* hitselection); 
     
     /// Get a hit selection out of this TAlgorithmResult.
-    ND::THandle<ND::THitSelection> 
+    CP::THandle<CP::THitSelection> 
     GetHitSelection(const char* hit="hits") const;
     
     /// Set the default set of hits.  

@@ -11,7 +11,7 @@ class TBrowser;
 
 #include "TDatum.hxx"
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(EBadSymLink,EDatum);
     class TDataSymLink;
 }
@@ -21,7 +21,7 @@ namespace ND {
 /// The TDataSymLink class provides a way to reference a TDatum object in a
 /// TData tree without having the TData object become the parent.  This is
 /// conceptually similar to a symbolic link in a unix file system.
-class ND::TDataSymLink : public TDatum {
+class CP::TDataSymLink : public TDatum {
 private:
     /// The datum which this is a link too.
     TString fLink;

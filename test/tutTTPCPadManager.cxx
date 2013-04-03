@@ -25,7 +25,7 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTTPCPadManager::test<1> () {
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
         std::string name = pads.GetName();
         ensure_equals("TPC pad manager name is correct", 
                       name, "ND280TPCPadManager");
@@ -34,7 +34,7 @@ namespace tut {
     // Test the pad to row/column translation.
     template<> template<>
     void testTTPCPadManager::test<2> () {
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
         for (int pad = 0; pad<pads.GetPadCount(); ++pad) {
             int row = pads.PadToRow(pad);
             int column = pads.PadToColumn(pad);
@@ -48,7 +48,7 @@ namespace tut {
     // Test the default local XY max and min.
     template<> template<>
     void testTTPCPadManager::test<3> () {
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
         ensure_distance("Default local X maximum and minimum are equal",
                         -pads.GetLocalXMin(), 
                         pads.GetLocalXMax(), 
@@ -62,7 +62,7 @@ namespace tut {
     // Test the pad to local X and local Y translation.
     template<> template<>
     void testTTPCPadManager::test<4> () {
-        ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
         for (int pad = 0; pad<pads.GetPadCount(); ++pad) {
             double localX = pads.PadToLocalX(pad);
             double localY = pads.PadToLocalY(pad);

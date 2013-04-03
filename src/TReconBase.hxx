@@ -11,7 +11,7 @@
 #include "THitSelection.hxx"
 #include "TReconState.hxx"
 
-namespace ND {
+namespace CP {
     class TReconBase;
     class TReconObjectContainer;
     class TReconNodeContainer;
@@ -29,7 +29,7 @@ namespace ND {
 /// functionality.  Each TReconBase object has it's TObject::fUniqueID value
 /// set.  These values can be used to associate global reconstruction objects
 /// to sub-detector reconstruction objects.
-class ND::TReconBase : public TDataVector {
+class CP::TReconBase : public TDataVector {
 public:
     /// The bits defining the state of the reconstruction that created this
     /// object.  The state bits come in two flavors: Status bits are used to
@@ -188,28 +188,28 @@ public:
 
     /// Check the status of the reconstruction that created this
     /// reconstruction result.  This method checks if any of the bit
-    bool CheckStatus(ND::TReconBase::Status status) const;
+    bool CheckStatus(CP::TReconBase::Status status) const;
 
     /// Set the status of the algorithm that generated this object.
-    void SetStatus(ND::TReconBase::Status status);
+    void SetStatus(CP::TReconBase::Status status);
 
     /// Clear the status of the algorithm that generated this object.
-    void ClearStatus(ND::TReconBase::Status status);
+    void ClearStatus(CP::TReconBase::Status status);
 
     /// Get the status field for this object.
-    ND::TReconBase::Status GetStatus() const;
+    CP::TReconBase::Status GetStatus() const;
 
     /// Get the detector bits that are set for this object.
-    ND::TReconBase::Status GetDetectors() const;
+    CP::TReconBase::Status GetDetectors() const;
 
     /// Return true if the object uses a particular detector
-    bool UsesDetector(ND::TReconBase::Status detector) const;
+    bool UsesDetector(CP::TReconBase::Status detector) const;
 
     /// Add one or more detector to the object.
-    void AddDetector(ND::TReconBase::Status detector);
+    void AddDetector(CP::TReconBase::Status detector);
 
     /// Remove a detector from the object.
-    void RemoveDetector(ND::TReconBase::Status detector);
+    void RemoveDetector(CP::TReconBase::Status detector);
 
     /// Return the goodness of fit for the reconstruction.
     double GetQuality() const {return fQuality;}
@@ -225,11 +225,11 @@ public:
 
     /// Get the state associated with this reconstruction object.  The state
     /// is created by the derived class.  This should generally be used in
-    /// user code with a specific ND::THandle type.  For instance, if you want
-    /// to access a ND::TReconCluster state, you should write code like:
+    /// user code with a specific CP::THandle type.  For instance, if you want
+    /// to access a CP::TReconCluster state, you should write code like:
     ///
     /// \code
-    /// ND::THandle<ND::TClusterState> state = recObj->GetState();
+    /// CP::THandle<CP::TClusterState> state = recObj->GetState();
     /// if (state) {
     ///    // the state
     /// }
@@ -242,7 +242,7 @@ public:
     /// And is used to get and set the values and covariances.  As an example,
     /// to set the direction of the TReconTrack object:
     /// \code
-    /// ND::THandle<ND::TTrackState> trackState = reconTrack->GetState();
+    /// CP::THandle<CP::TTrackState> trackState = reconTrack->GetState();
     /// TVector3 theDir(0,0,1);
     /// trackState->SetDirection(theDir); // This works  
     /// trackState->SetDirection(0,0,1);  // This also works.
@@ -255,13 +255,13 @@ public:
     ///     }
     /// }
     /// \endcode
-    ND::THandle<ND::TReconState> GetState() const {
+    CP::THandle<CP::TReconState> GetState() const {
         if (!fState) {
             ND280Error("TReconBase with NULL State: "
                        << "State must be created in the derived class.");
             throw EReconObject();
         }
-        return ND::THandle<ND::TReconState>(fState,false);
+        return CP::THandle<CP::TReconState>(fState,false);
     }
 
     /// Get the parameter values at each stage of the reconstruction.
@@ -272,7 +272,7 @@ public:
     ///   stage of the fit.
     /// - For other objects, the parameter values will be associated with the
     ///   reconstruction objects that have been added to the fit.
-    const ND::TReconNodeContainer& GetNodes() const {
+    const CP::TReconNodeContainer& GetNodes() const {
         if (!fNodes) {
             ND280Error("TReconBase without a TReconNodeContainer:"
                        << "Must be created in derived class constructor");
@@ -283,7 +283,7 @@ public:
 
     /// Provide a non-constant version of the node container so that nodes can
     /// be added.
-    ND::TReconNodeContainer& GetNodes() {
+    CP::TReconNodeContainer& GetNodes() {
         if (!fNodes) {
             ND280Error("TReconBase without a TReconNodeContainer:"
                        << "Must be created in derived class constructor");
@@ -295,31 +295,31 @@ public:
     /// Provide the hits associated with this recon object.  The hits are
     /// saved as an entry in the data vector (with name "hits"), and may not
     /// be present for all objects.
-    ND::THandle<ND::THitSelection> GetHits() const;
+    CP::THandle<CP::THitSelection> GetHits() const;
 
     /// Add a hit selection to the recon object.  The recon object takes
     /// ownership of the hit (as per the ND280 pointer ownership policy), so
     /// you must not add a hit selection currently owned by another object.
     /// The name of the hit selection will be changed to "hits".
-    void AddHits(ND::THitSelection* hits);
+    void AddHits(CP::THitSelection* hits);
 
     /// Provide the reconstruction objects used in the algorithm that created
     /// this object.  The consituients are used to help understand how the
     /// object was fit, and are different from the nodes which represent
     /// actual intermediate steps of the fitting process.
-    ND::THandle<ND::TReconObjectContainer> GetConstituents() const;
+    CP::THandle<CP::TReconObjectContainer> GetConstituents() const;
 
     /// Add a new constituent to the TReconObject.  This stores the
     /// constituents in the order in which they are added.  The constituents
     /// are saved in a TReconObjectContainer, and are available using the
     /// GetConstituents method, or using the normal TDatum::Get<> method.
     /// This will create a constituents sub-object if one doesn't exist.
-    void AddConstituent(ND::THandle<ND::TReconBase> obj);
+    void AddConstituent(CP::THandle<CP::TReconBase> obj);
 
   
     /// Add several constituents in one go by adding all objects in a 
     /// TReconObjectContainer
-    void AddConstituents(ND::THandle<ND::TReconObjectContainer> objs);
+    void AddConstituents(CP::THandle<CP::TReconObjectContainer> objs);
 
     /// @{Override methods in the base TObject class.
     virtual void ls(Option_t* opt = "") const; 
@@ -344,7 +344,7 @@ protected:
                         const char* title = "Reconstruction Object");
 
     /// Copy the object (this is not a deep copy).
-    TReconBase(const ND::TReconBase& object);
+    TReconBase(const CP::TReconBase& object);
 
     /// Implement the listing of the base class fields.  This is used by ls()
     void ls_base(Option_t* opt) const;
@@ -353,13 +353,13 @@ protected:
     float fQuality;
 
     /// The state for this object.
-    ND::TReconState* fState;
+    CP::TReconState* fState;
 
     /// The nodes for the object.
-    ND::TReconNodeContainer* fNodes;
+    CP::TReconNodeContainer* fNodes;
 
     /// The status of the reconstruction
-    ND::TReconBase::Status fStatus;
+    CP::TReconBase::Status fStatus;
 
     /// The number of degrees of freedom.
     int fNDOF;
@@ -372,15 +372,15 @@ protected:
 
 /// A container class for reconstruction objects inheriting from a std::vector
 /// of THandle<TReconBase>.
-class ND::TReconObjectContainer 
-    : public TDatum, public std::vector< ND::THandle<ND::TReconBase> > {
+class CP::TReconObjectContainer 
+    : public TDatum, public std::vector< CP::THandle<CP::TReconBase> > {
 public:
     TReconObjectContainer();
     TReconObjectContainer(const char* name,
                           const char* title = "Recon Object Container");
     virtual ~TReconObjectContainer();
 
-    virtual void push_back(ND::THandle<ND::TReconBase> data);
+    virtual void push_back(CP::THandle<CP::TReconBase> data);
 
     /// @{Override methods in the base TObject class.
     virtual void ls(Option_t* opt = "") const; 

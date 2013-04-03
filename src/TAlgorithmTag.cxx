@@ -8,22 +8,22 @@
 #include "TOADatabase.hxx"
 #include "TPackageSet.hxx"
 
-ClassImp(ND::TAlgorithmTag);
+ClassImp(CP::TAlgorithmTag);
 
-ND::TAlgorithmTag::~TAlgorithmTag() {}
+CP::TAlgorithmTag::~TAlgorithmTag() {}
 
-ND::TAlgorithmTag::TAlgorithmTag() 
+CP::TAlgorithmTag::TAlgorithmTag() 
     : TNamed("unnamed","Algorithm Tag") { }
 
-ND::TAlgorithmTag::TAlgorithmTag(const ND::TAlgorithm& algo) 
+CP::TAlgorithmTag::TAlgorithmTag(const CP::TAlgorithm& algo) 
     : TNamed(algo.GetName(), "T2K Algorithm Tag") {
 
     std::string tag = 
         std::string(algo.GetName()) + ", " + std::string(algo.GetVersion());
     Add(tag);
 
-    const ND::TPackageSet& packages = ND::TOADatabase::Get().PackageSet();
-    for (ND::TPackageSet::const_iterator p = packages.begin();
+    const CP::TPackageSet& packages = CP::TOADatabase::Get().PackageSet();
+    for (CP::TPackageSet::const_iterator p = packages.begin();
          p != packages.end();
          ++p) {
         tag = std::string((*p)->GetName())
@@ -33,16 +33,16 @@ ND::TAlgorithmTag::TAlgorithmTag(const ND::TAlgorithm& algo)
     }
 }
 
-void ND::TAlgorithmTag::Add(const char* info) {
+void CP::TAlgorithmTag::Add(const char* info) {
     fTag.push_back(info);
 }
 
-void ND::TAlgorithmTag::Add(const std::string& info) {
+void CP::TAlgorithmTag::Add(const std::string& info) {
     fTag.push_back(info);
 }
 
-void ND::TAlgorithmTag::ls(Option_t* opt) const {
-    ND::ls_header(this,opt);
+void CP::TAlgorithmTag::ls(Option_t* opt) const {
+    CP::ls_header(this,opt);
     std::cout << ": \"" << GetTitle() << "\""
               << std::endl;
     std::string option(opt);

@@ -16,7 +16,7 @@
 #include "THandle.hxx"
 #include "TND280Log.hxx"
 
-namespace ND {
+namespace CP {
     class TReconState;
     class TMReconState;
     class TMEDepositState;
@@ -47,10 +47,10 @@ namespace ND {
 /// derived from, and it provides minimal operations.  The main purpose of
 /// this class is to allow polymorphic vectors of states.  However, it
 /// provides some minimal access to the contained data.
-class ND::TReconState: public TObject {
+class CP::TReconState: public TObject {
 public:
     TReconState();
-    TReconState(const ND::TReconState& state);
+    TReconState(const CP::TReconState& state);
     virtual ~TReconState();
 
     /// Return a string with all of the state field names.  This name is used
@@ -62,12 +62,12 @@ public:
 
     /// Not the preferred interface, but get the value by index.  The best way
     /// to get a value is through the Get method provided by the mix-in
-    /// classes (e.g. ND::TMEDepositState::GetEDeposit()).
+    /// classes (e.g. CP::TMEDepositState::GetEDeposit()).
     double GetValue(int i) const;
     
     /// Not the preferred interface, but set the value by index.    The best way
     /// to get a value is through the Set method provided by the mix-in
-    /// classes (e.g. ND::TMEDepositState::SetEDeposit()).
+    /// classes (e.g. CP::TMEDepositState::SetEDeposit()).
     void SetValue(int i, double value);
 
     /// Not the preferred interface: get the covariance by index.
@@ -77,7 +77,7 @@ public:
     void SetCovarianceValue(int i, int j, double value);
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
     /// Set a parameter to be free (unconstrained).
     void SetFree(int i);
@@ -137,7 +137,7 @@ protected:
 };
 
 /// A mixable base class
-class ND::TMReconState {
+class CP::TMReconState {
 public:
     TMReconState();
     TMReconState(TReconState* state);
@@ -163,7 +163,7 @@ protected:
 /// before particle ID in the P0D, the deposit is in photo-electrons.  After
 /// particle ID, the deposit can be in uncalibrated or calibrated energy.  In
 /// the TPC the deposit might be in terms of fempto-coulombs.
-class ND::TMEDepositState: virtual public TMReconState {
+class CP::TMEDepositState: virtual public TMReconState {
 public:
     TMEDepositState();
 
@@ -189,7 +189,7 @@ public:
     static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the EDeposit field in the TCorrValues object.
@@ -201,7 +201,7 @@ protected:
 /// A mixable base class that adds the position property to a state.  The
 /// position state is defined as a four vector (X,Y,Z,T) and the associated
 /// uncertainties. 
-class ND::TMPositionState: virtual public TMReconState {
+class CP::TMPositionState: virtual public TMReconState {
 public:
     TMPositionState();
 
@@ -244,7 +244,7 @@ public:
     static int GetSize() {return 4;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
 
@@ -258,7 +258,7 @@ protected:
 /// direction state is defined as a three vector (dX,dY,dZ) and the associated
 /// uncertainties.  The corelations between the components are enforced in the
 /// covariance matrix.
-class ND::TMDirectionState: virtual public TMReconState {
+class CP::TMDirectionState: virtual public TMReconState {
 public:
     TMDirectionState();
     virtual ~TMDirectionState();
@@ -294,7 +294,7 @@ public:
     static int GetSize() {return 3;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Direction field in the TCorrValues object.
@@ -305,7 +305,7 @@ protected:
 
 /// A mixable base class that adds the position and direction properties to a
 /// state using the TPositionState and TDirectionState classes.
-class ND::TMPositionDirectionState: virtual public TMPositionState, 
+class CP::TMPositionDirectionState: virtual public TMPositionState, 
                                     virtual public TMDirectionState {
 public:
     TMPositionDirectionState() {};
@@ -321,13 +321,13 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
     // ClassDef(TMPositionDirectionState,0);
 };
 
 /// A mixable base class that adds the opening angle of a TReconShower object.
-class ND::TMConeState: virtual public TMReconState {
+class CP::TMConeState: virtual public TMReconState {
 public:
     TMConeState();
     virtual ~TMConeState();
@@ -352,7 +352,7 @@ public:
     static int GetSize() {return 2;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Cone field in the TCorrValues object.
@@ -364,7 +364,7 @@ protected:
 /// A mixable base class that adds the curvature property to a state.  The
 /// curvature state is defined around the X axis and also holds the associated
 /// uncertainties.
-class ND::TMCurvatureState: virtual public TMReconState {
+class CP::TMCurvatureState: virtual public TMReconState {
 public:
     TMCurvatureState();
 
@@ -390,7 +390,7 @@ public:
     static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Curvature field in the TCorrValues object.
@@ -402,7 +402,7 @@ protected:
 /// A mixable base class that adds the position, direction and curvature
 /// properties to a state using the TMPositionDirectionState and
 /// TMCurvatureState classes.
-class ND::TMPosDirCurvState: virtual public TMPositionDirectionState,
+class CP::TMPosDirCurvState: virtual public TMPositionDirectionState,
                              virtual public TMCurvatureState {
 public:
     TMPosDirCurvState() {}
@@ -418,7 +418,7 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
     // ClassDef(TMPosDirCurvState,0);
 };
@@ -427,7 +427,7 @@ public:
 /// property to a state.  The width is a 2 component vector the extent of an
 /// energy deposition perpendicular to local direction and the associated
 /// uncertainties.
-class ND::TMWidthState: virtual public TMReconState {
+class CP::TMWidthState: virtual public TMReconState {
 public:
     TMWidthState();
 
@@ -453,7 +453,7 @@ public:
     static int GetSize() {return 2;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Width field in the TCorrValues object.
@@ -464,7 +464,7 @@ protected:
 
 /// A mixable base class that adds a property for the magnitude of the
 /// momentum to a state.  
-class ND::TMMomentumState: virtual public TMReconState {
+class CP::TMMomentumState: virtual public TMReconState {
 public:
     TMMomentumState();
 
@@ -490,7 +490,7 @@ public:
     static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Momentum field in the TCorrValues object.
@@ -501,7 +501,7 @@ protected:
 
 /// A mixable base class that adds a property for the magnitude of the
 /// particle charge to a state.  
-class ND::TMChargeState: virtual public TMReconState {
+class CP::TMChargeState: virtual public TMReconState {
 public:
     TMChargeState();
 
@@ -527,7 +527,7 @@ public:
     static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
     /// The index of the Charge field in the TCorrValues object.

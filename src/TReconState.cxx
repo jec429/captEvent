@@ -7,16 +7,16 @@
 #include "TND280Log.hxx"
 #include "TReconState.hxx"
 
-ClassImp(ND::TReconState);
+ClassImp(CP::TReconState);
 
-ND::TReconState::TReconState() { }
+CP::TReconState::TReconState() { }
 
-ND::TReconState::TReconState(const TReconState& state) 
+CP::TReconState::TReconState(const TReconState& state) 
     : TObject(state), fValues(state.fValues), fFieldNames(state.fFieldNames) { }
 
-ND::TReconState::~TReconState() { }
+CP::TReconState::~TReconState() { }
 
-std::string ND::TReconState::GetStateFields(void) const {
+std::string CP::TReconState::GetStateFields(void) const {
     // Construct a type name out of the field names.  This in turn is used by
     // the TCorrValues class to construct a type hash which is used to make
     // sure that operations are done on compatible TCorrValues objects.
@@ -31,65 +31,65 @@ std::string ND::TReconState::GetStateFields(void) const {
 }
 
 // Build the internal state vector.
-void ND::TReconState::Init() {
+void CP::TReconState::Init() {
     fValues.ResizeTo(fFieldNames.size());
     fValues.SetType(GetStateFields().c_str());
 }
 
-int ND::TReconState::GetDimensions() const {
+int CP::TReconState::GetDimensions() const {
     return fValues.GetDimensions();
 }
 
-double ND::TReconState::GetValue(int i) const {
+double CP::TReconState::GetValue(int i) const {
     return fValues.GetValue(i);
 }
 
-void ND::TReconState::SetValue(int i, double val) {
+void CP::TReconState::SetValue(int i, double val) {
     return fValues.SetValue(i, val);
 }
 
-double ND::TReconState::GetCovarianceValue(int i, int j) const {
+double CP::TReconState::GetCovarianceValue(int i, int j) const {
     return fValues.GetCovarianceValue(i,j);
 }
 
-void ND::TReconState::SetCovarianceValue(int i, int j, double val) {
+void CP::TReconState::SetCovarianceValue(int i, int j, double val) {
     fValues.SetCovarianceValue(i,j,val);
 }
 
-void ND::TReconState::SetFree(int i) {
+void CP::TReconState::SetFree(int i) {
     fValues.SetFree(i);
 }
 
-bool ND::TReconState::IsFree(int i) const {
+bool CP::TReconState::IsFree(int i) const {
     return fValues.IsFree(i);
 }
 
-bool ND::TReconState::IsFree(double v) const {
+bool CP::TReconState::IsFree(double v) const {
     return fValues.IsFree(v);
 }
 
-void ND::TReconState::SetFixed(int i) {
+void CP::TReconState::SetFixed(int i) {
     fValues.SetFixed(i);
 }
 
-bool ND::TReconState::IsFixed(int i) const {
+bool CP::TReconState::IsFixed(int i) const {
     return fValues.IsFixed(i);
 }
 
-bool ND::TReconState::IsFixed(double v) const {
+bool CP::TReconState::IsFixed(double v) const {
     return fValues.IsFixed(v);
 }
 
-void ND::TReconState::Validate() {
+void CP::TReconState::Validate() {
     fValues.Validate(true);
 }
 
-ND::TCorrValues ND::TReconState::ProjectState(const ND::THandle<ND::TReconState>& state) {
+CP::TCorrValues CP::TReconState::ProjectState(const CP::THandle<CP::TReconState>& state) {
     return state->fValues;
 }
 
 /// Print the object information.
-void ND::TReconState::ls(Option_t*) const {
+void CP::TReconState::ls(Option_t*) const {
     TROOT::IndentLevel();
     std::cout << ClassName() << "(" << this << ")::" << std::endl;
     TROOT::IncreaseDirLevel();
@@ -118,13 +118,13 @@ void ND::TReconState::ls(Option_t*) const {
 }
 
 ////////////////////////////////////////////////////////
-ND::TMReconState::~TMReconState() {}
+CP::TMReconState::~TMReconState() {}
 
-ND::TMReconState::TMReconState(): fThis(NULL) {}
+CP::TMReconState::TMReconState(): fThis(NULL) {}
 
-ND::TMReconState::TMReconState(TReconState* state): fThis(state) {}
+CP::TMReconState::TMReconState(TReconState* state): fThis(state) {}
 
-ND::TReconState& ND::TMReconState::GetThis() const {
+CP::TReconState& CP::TMReconState::GetThis() const {
     if (!fThis) {
         ND280Error("Base pointer (fThis) is NULL");
     }
@@ -132,30 +132,30 @@ ND::TReconState& ND::TMReconState::GetThis() const {
 }
 
 ///////////////////////////////////////////////////////
-ND::TMEDepositState::~TMEDepositState() {}
+CP::TMEDepositState::~TMEDepositState() {}
 
-ND::TMEDepositState::TMEDepositState() {
+CP::TMEDepositState::TMEDepositState() {
     fEDepositIndex = fLocalNames.size();
     fLocalNames.push_back("EDeposit");
 }
 
-double ND::TMEDepositState::GetEDeposit() const {
+double CP::TMEDepositState::GetEDeposit() const {
     return GetThis().GetValue(fEDepositIndex);
 }
 
-void ND::TMEDepositState::SetEDeposit(double enr) {
+void CP::TMEDepositState::SetEDeposit(double enr) {
     GetThis().SetValue(fEDepositIndex,enr);
 }
 
-double ND::TMEDepositState::GetEDepositVariance() const {
+double CP::TMEDepositState::GetEDepositVariance() const {
     return GetThis().GetCovarianceValue(fEDepositIndex,fEDepositIndex);
 }
 
-void ND::TMEDepositState::SetEDepositVariance(double var) {
+void CP::TMEDepositState::SetEDepositVariance(double var) {
     GetThis().SetCovarianceValue(fEDepositIndex,fEDepositIndex,var);
 }
 
-ND::TCorrValues ND::TMEDepositState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMEDepositState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMEDepositState::GetSize());
     values.SetType("EDeposit ");
     const TMEDepositState* eDepositState 
@@ -180,9 +180,9 @@ ND::TCorrValues ND::TMEDepositState::ProjectState(const ND::THandle<ND::TReconSt
 }
 
 ///////////////////////////////////////////////////////
-ND::TMPositionState::~TMPositionState() {}
+CP::TMPositionState::~TMPositionState() {}
 
-ND::TMPositionState::TMPositionState() {
+CP::TMPositionState::TMPositionState() {
     fPositionIndex = fLocalNames.size();
     fLocalNames.push_back("X");
     fLocalNames.push_back("Y");
@@ -190,14 +190,14 @@ ND::TMPositionState::TMPositionState() {
     fLocalNames.push_back("T");
 }
 
-TLorentzVector ND::TMPositionState::GetPosition() const {
+TLorentzVector CP::TMPositionState::GetPosition() const {
     return TLorentzVector(GetThis().GetValue(fPositionIndex),
                           GetThis().GetValue(fPositionIndex+1),
                           GetThis().GetValue(fPositionIndex+2),
                           GetThis().GetValue(fPositionIndex+3));
 }
 
-void ND::TMPositionState::SetPosition(double x, double y,
+void CP::TMPositionState::SetPosition(double x, double y,
                                       double z, double t) {
     GetThis().SetValue(fPositionIndex,x);
     GetThis().SetValue(fPositionIndex+1,y);
@@ -205,11 +205,11 @@ void ND::TMPositionState::SetPosition(double x, double y,
     GetThis().SetValue(fPositionIndex+3,t);
 }
 
-void ND::TMPositionState::SetPosition(const TLorentzVector& pos) {
+void CP::TMPositionState::SetPosition(const TLorentzVector& pos) {
     SetPosition(pos.X(), pos.Y(), pos.Z(), pos.T());
 }
 
-TLorentzVector ND::TMPositionState::GetPositionVariance() const {
+TLorentzVector CP::TMPositionState::GetPositionVariance() const {
     return TLorentzVector(
         GetThis().GetCovarianceValue(fPositionIndex,
                                              fPositionIndex),
@@ -221,7 +221,7 @@ TLorentzVector ND::TMPositionState::GetPositionVariance() const {
                                              fPositionIndex+3));
 }
 
-void ND::TMPositionState::SetPositionVariance(double x, double y, 
+void CP::TMPositionState::SetPositionVariance(double x, double y, 
                                               double z, double t) {
     GetThis().SetCovarianceValue(fPositionIndex,
                                fPositionIndex,x);
@@ -233,16 +233,16 @@ void ND::TMPositionState::SetPositionVariance(double x, double y,
                                fPositionIndex+3,t);
 }
 
-void ND::TMPositionState::SetPositionCovariance(int i, int j, double v) {
+void CP::TMPositionState::SetPositionCovariance(int i, int j, double v) {
     GetThis().SetCovarianceValue(fPositionIndex+i,fPositionIndex+j,v);
 }
 
-double ND::TMPositionState::GetPositionCovariance(int i, int j) {
+double CP::TMPositionState::GetPositionCovariance(int i, int j) {
     return GetThis().GetCovarianceValue(fPositionIndex+i,fPositionIndex+j);
 }
 
-ND::TCorrValues
-ND::TMPositionState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues
+CP::TMPositionState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMPositionState::GetSize());
     values.SetType("X Y Z T ");
     const TMPositionState* posState 
@@ -265,33 +265,33 @@ ND::TMPositionState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
 }
 
 ///////////////////////////////////////////////////////
-ND::TMDirectionState::~TMDirectionState() {}
+CP::TMDirectionState::~TMDirectionState() {}
 
-ND::TMDirectionState::TMDirectionState() {
+CP::TMDirectionState::TMDirectionState() {
     fDirectionIndex = fLocalNames.size();
     fLocalNames.push_back("DX");
     fLocalNames.push_back("DY");
     fLocalNames.push_back("DZ");
 }
 
-TVector3 ND::TMDirectionState::GetDirection() const {
+TVector3 CP::TMDirectionState::GetDirection() const {
     return TVector3(GetThis().GetValue(fDirectionIndex),
                     GetThis().GetValue(fDirectionIndex+1),
                     GetThis().GetValue(fDirectionIndex+2));
 }
 
-void ND::TMDirectionState::SetDirection(double x, double y,
+void CP::TMDirectionState::SetDirection(double x, double y,
                                       double z) {
     GetThis().SetValue(fDirectionIndex,x);
     GetThis().SetValue(fDirectionIndex+1,y);
     GetThis().SetValue(fDirectionIndex+2,z);
 }
 
-void ND::TMDirectionState::SetDirection(const TVector3& dir) {
+void CP::TMDirectionState::SetDirection(const TVector3& dir) {
     SetDirection(dir.X(), dir.Y(), dir.Z());
 }
 
-TVector3 ND::TMDirectionState::GetDirectionVariance() const {
+TVector3 CP::TMDirectionState::GetDirectionVariance() const {
     return TVector3(GetThis().GetCovarianceValue(fDirectionIndex,
                                                     fDirectionIndex),
                     GetThis().GetCovarianceValue(fDirectionIndex+1,
@@ -300,7 +300,7 @@ TVector3 ND::TMDirectionState::GetDirectionVariance() const {
                                                     fDirectionIndex+2));
 }
 
-void ND::TMDirectionState::SetDirectionVariance(double x, double y, 
+void CP::TMDirectionState::SetDirectionVariance(double x, double y, 
                                                 double z) {
     GetThis().SetCovarianceValue(fDirectionIndex,
                                     fDirectionIndex,x);
@@ -310,16 +310,16 @@ void ND::TMDirectionState::SetDirectionVariance(double x, double y,
                                     fDirectionIndex+2,z);
 }
 
-void ND::TMDirectionState::SetDirectionCovariance(int i, int j, double v) {
+void CP::TMDirectionState::SetDirectionCovariance(int i, int j, double v) {
     GetThis().SetCovarianceValue(fDirectionIndex+i,fDirectionIndex+j,v);
 }
 
-double ND::TMDirectionState::GetDirectionCovariance(int i, int j) {
+double CP::TMDirectionState::GetDirectionCovariance(int i, int j) {
     return GetThis().GetCovarianceValue(fDirectionIndex+i,fDirectionIndex+j);
 }
 
-ND::TCorrValues 
-ND::TMDirectionState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues 
+CP::TMDirectionState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMDirectionState::GetSize());
     values.SetType("DX DY DZ ");
     const TMDirectionState* dirState 
@@ -342,30 +342,30 @@ ND::TMDirectionState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
 }
 
 ///////////////////////////////////////////////////////
-ND::TMMomentumState::~TMMomentumState() {}
+CP::TMMomentumState::~TMMomentumState() {}
 
-ND::TMMomentumState::TMMomentumState() {
+CP::TMMomentumState::TMMomentumState() {
     fMomentumIndex = fLocalNames.size();
     fLocalNames.push_back("Momentum");
 }
 
-double ND::TMMomentumState::GetMomentum() const {
+double CP::TMMomentumState::GetMomentum() const {
     return GetThis().GetValue(fMomentumIndex);
 }
 
-void ND::TMMomentumState::SetMomentum(double enr) {
+void CP::TMMomentumState::SetMomentum(double enr) {
     GetThis().SetValue(fMomentumIndex,enr);
 }
 
-double ND::TMMomentumState::GetMomentumVariance() const {
+double CP::TMMomentumState::GetMomentumVariance() const {
     return GetThis().GetCovarianceValue(fMomentumIndex,fMomentumIndex);
 }
 
-void ND::TMMomentumState::SetMomentumVariance(double var) {
+void CP::TMMomentumState::SetMomentumVariance(double var) {
     GetThis().SetCovarianceValue(fMomentumIndex,fMomentumIndex,var);
 }
 
-ND::TCorrValues ND::TMMomentumState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMMomentumState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMMomentumState::GetSize());
     values.SetType("Momentum ");
     const TMMomentumState* momState 
@@ -388,30 +388,30 @@ ND::TCorrValues ND::TMMomentumState::ProjectState(const ND::THandle<ND::TReconSt
 }
 
 ///////////////////////////////////////////////////////
-ND::TMChargeState::~TMChargeState() {}
+CP::TMChargeState::~TMChargeState() {}
 
-ND::TMChargeState::TMChargeState() {
+CP::TMChargeState::TMChargeState() {
     fChargeIndex = fLocalNames.size();
     fLocalNames.push_back("Charge");
 }
 
-double ND::TMChargeState::GetCharge() const {
+double CP::TMChargeState::GetCharge() const {
     return GetThis().GetValue(fChargeIndex);
 }
 
-void ND::TMChargeState::SetCharge(double enr) {
+void CP::TMChargeState::SetCharge(double enr) {
     GetThis().SetValue(fChargeIndex,enr);
 }
 
-double ND::TMChargeState::GetChargeVariance() const {
+double CP::TMChargeState::GetChargeVariance() const {
     return GetThis().GetCovarianceValue(fChargeIndex,fChargeIndex);
 }
 
-void ND::TMChargeState::SetChargeVariance(double var) {
+void CP::TMChargeState::SetChargeVariance(double var) {
     GetThis().SetCovarianceValue(fChargeIndex,fChargeIndex,var);
 }
 
-ND::TCorrValues ND::TMChargeState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMChargeState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMChargeState::GetSize());
     values.SetType("Charge ");
     const TMChargeState* chgState 
@@ -434,31 +434,31 @@ ND::TCorrValues ND::TMChargeState::ProjectState(const ND::THandle<ND::TReconStat
 }
 
 ///////////////////////////////////////////////////////
-ND::TMCurvatureState::~TMCurvatureState() {}
+CP::TMCurvatureState::~TMCurvatureState() {}
 
-ND::TMCurvatureState::TMCurvatureState() {
+CP::TMCurvatureState::TMCurvatureState() {
     fCurvatureIndex = fLocalNames.size();
     fLocalNames.push_back("Curvature");
 }
 
-double ND::TMCurvatureState::GetCurvature() const {
+double CP::TMCurvatureState::GetCurvature() const {
     return GetThis().GetValue(fCurvatureIndex);
 }
 
-void ND::TMCurvatureState::SetCurvature(double enr) {
+void CP::TMCurvatureState::SetCurvature(double enr) {
     GetThis().SetValue(fCurvatureIndex,enr);
 }
 
-double ND::TMCurvatureState::GetCurvatureVariance() const {
+double CP::TMCurvatureState::GetCurvatureVariance() const {
     return GetThis().GetCovarianceValue(fCurvatureIndex,
                                                 fCurvatureIndex);
 }
 
-void ND::TMCurvatureState::SetCurvatureVariance(double var) {
+void CP::TMCurvatureState::SetCurvatureVariance(double var) {
     GetThis().SetCovarianceValue(fCurvatureIndex,fCurvatureIndex,var);
 }
 
-ND::TCorrValues ND::TMCurvatureState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMCurvatureState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMCurvatureState::GetSize());
     values.SetType("Curvature ");
     const TMCurvatureState* curvState 
@@ -481,26 +481,26 @@ ND::TCorrValues ND::TMCurvatureState::ProjectState(const ND::THandle<ND::TReconS
 }
 
 ///////////////////////////////////////////////////////
-ND::TMConeState::~TMConeState() {}
+CP::TMConeState::~TMConeState() {}
 
-ND::TMConeState::TMConeState() {
+CP::TMConeState::TMConeState() {
     fConeIndex = fLocalNames.size();
     fLocalNames.push_back("C1");
     fLocalNames.push_back("C2");
 }
 
-TVector3 ND::TMConeState::GetCone() const {
+TVector3 CP::TMConeState::GetCone() const {
     return TVector3(GetThis().GetValue(fConeIndex),
                     GetThis().GetValue(fConeIndex+1),
                     0);
 }
 
-void ND::TMConeState::SetCone(double x, double y) {
+void CP::TMConeState::SetCone(double x, double y) {
     GetThis().SetValue(fConeIndex,x);
     GetThis().SetValue(fConeIndex+1,y);
 }
 
-TVector3 ND::TMConeState::GetConeVariance() const {
+TVector3 CP::TMConeState::GetConeVariance() const {
     return TVector3(GetThis().GetCovarianceValue(fConeIndex,
                                                     fConeIndex),
                     GetThis().GetCovarianceValue(fConeIndex+1,
@@ -508,14 +508,14 @@ TVector3 ND::TMConeState::GetConeVariance() const {
                     0);
 }
 
-void ND::TMConeState::SetConeVariance(double x, double y) {
+void CP::TMConeState::SetConeVariance(double x, double y) {
     GetThis().SetCovarianceValue(fConeIndex,
                                          fConeIndex,x);
     GetThis().SetCovarianceValue(fConeIndex+1,
                                          fConeIndex+1,y);
 }
 
-ND::TCorrValues ND::TMConeState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMConeState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMConeState::GetSize());
     values.SetType("C1 C2 ");
     const TMConeState* coneState 
@@ -538,27 +538,27 @@ ND::TCorrValues ND::TMConeState::ProjectState(const ND::THandle<ND::TReconState>
 }
 
 ///////////////////////////////////////////////////////
-ND::TMWidthState::~TMWidthState() {}
+CP::TMWidthState::~TMWidthState() {}
 
-ND::TMWidthState::TMWidthState() {
+CP::TMWidthState::TMWidthState() {
     fWidthIndex = fLocalNames.size();
     fLocalNames.push_back("W1");
     fLocalNames.push_back("W2");
 }
 
 
-TVector3 ND::TMWidthState::GetWidth() const {
+TVector3 CP::TMWidthState::GetWidth() const {
     return TVector3(GetThis().GetValue(fWidthIndex),
                     GetThis().GetValue(fWidthIndex+1),
                     0);
 }
 
-void ND::TMWidthState::SetWidth(double x, double y) {
+void CP::TMWidthState::SetWidth(double x, double y) {
     GetThis().SetValue(fWidthIndex,x);
     GetThis().SetValue(fWidthIndex+1,y);
 }
 
-TVector3 ND::TMWidthState::GetWidthVariance() const {
+TVector3 CP::TMWidthState::GetWidthVariance() const {
     return TVector3(GetThis().GetCovarianceValue(fWidthIndex,
                                                     fWidthIndex),
                     GetThis().GetCovarianceValue(fWidthIndex+1,
@@ -566,14 +566,14 @@ TVector3 ND::TMWidthState::GetWidthVariance() const {
                     0);
 }
 
-void ND::TMWidthState::SetWidthVariance(double x, double y) {
+void CP::TMWidthState::SetWidthVariance(double x, double y) {
     GetThis().SetCovarianceValue(fWidthIndex,
                                          fWidthIndex,x);
     GetThis().SetCovarianceValue(fWidthIndex+1,
                                          fWidthIndex+1,y);
 }
 
-ND::TCorrValues ND::TMWidthState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMWidthState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMWidthState::GetSize());
     values.SetType("W1 W2 ");
     const TMWidthState* wdthState 
@@ -596,9 +596,9 @@ ND::TCorrValues ND::TMWidthState::ProjectState(const ND::THandle<ND::TReconState
 }
 
 ///////////////////////////////////////////////////////
-ND::TMPositionDirectionState::~TMPositionDirectionState() {}
+CP::TMPositionDirectionState::~TMPositionDirectionState() {}
 
-ND::TCorrValues ND::TMPositionDirectionState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMPositionDirectionState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMPositionDirectionState::GetSize());
     values.SetType("X Y Z T DX DY DZ ");
     const TMPositionState* posState 
@@ -637,9 +637,9 @@ ND::TCorrValues ND::TMPositionDirectionState::ProjectState(const ND::THandle<ND:
 }
 
 ///////////////////////////////////////////////////////
-ND::TMPosDirCurvState::~TMPosDirCurvState() {}
+CP::TMPosDirCurvState::~TMPosDirCurvState() {}
 
-ND::TCorrValues ND::TMPosDirCurvState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TMPosDirCurvState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMPosDirCurvState::GetSize());
     values.SetType("X Y Z T DX DY DZ Curvature ");
     const TMPositionState* posState 

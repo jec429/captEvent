@@ -12,26 +12,26 @@
 
 namespace tut {
 
-    /// Test ND::TDatum and ND::TDataVector.  This tests the object access
+    /// Test CP::TDatum and CP::TDataVector.  This tests the object access
     /// methods of both TDatum and TDataVector (the test is badly named.).
     struct baseTDatum {
-        // A simple ND::TDataVector and a standard vector used to cross check.
-        ND::TDataVector *fVector;
-        std::vector<ND::TDatum*> fCheckVector;
+        // A simple CP::TDataVector and a standard vector used to cross check.
+        CP::TDataVector *fVector;
+        std::vector<CP::TDatum*> fCheckVector;
 
         baseTDatum() {
             // Run before each test.
-            fVector = new ND::TDataVector("parent");
+            fVector = new CP::TDataVector("parent");
             for (int i=0; i<5; ++i) {
                 std::ostringstream n1;
                 n1 << "child." << i;
-                ND::TDataVector *v1 = new ND::TDataVector(n1.str().c_str());
+                CP::TDataVector *v1 = new CP::TDataVector(n1.str().c_str());
                 fVector->push_back(v1);
                 fCheckVector.push_back(v1);
                 for (int j=0; j<5; ++j) {
                     std::ostringstream n2;
                     n2 << "child." << i << "." << j;
-                    ND::TDatum *d1 = new ND::TDatum(n2.str().c_str());
+                    CP::TDatum *d1 = new CP::TDatum(n2.str().c_str());
                     v1->push_back(d1);
                 }
             }
@@ -51,9 +51,9 @@ namespace tut {
     // Test the basic constructor and destructor.
     template<> template <>
     void testTDatum::test<1> () {
-        ND::TDatum *data = new ND::TDatum("data");
-        ND::TDataVector *vect = new ND::TDataVector("vect");
-        ND::TDataSymLink *link = new ND::TDataSymLink("lnk");
+        CP::TDatum *data = new CP::TDatum("data");
+        CP::TDataVector *vect = new CP::TDataVector("vect");
+        CP::TDataSymLink *link = new CP::TDataSymLink("lnk");
 
         ensure("TDatum constructor",data);
         ensure("TDataVector constructor", vect);
@@ -65,11 +65,11 @@ namespace tut {
     }
 
     namespace {
-        bool VectorsEqual(const std::vector<ND::TDatum*>& vect,
-                          const ND::TDataVector& data) {
+        bool VectorsEqual(const std::vector<CP::TDatum*>& vect,
+                          const CP::TDataVector& data) {
             if (vect.size() != data.size()) return false;
-            std::vector<ND::TDatum*>::const_iterator v = vect.begin();
-            ND::TDataVector::const_iterator d = data.begin();
+            std::vector<CP::TDatum*>::const_iterator v = vect.begin();
+            CP::TDataVector::const_iterator d = data.begin();
             for (; v != vect.end(); ++v, ++d) {
                 if (*v != *d) return false;
             }
@@ -84,7 +84,7 @@ namespace tut {
         ensure("Order matches insertion order", 
                VectorsEqual(fCheckVector,*fVector));
         ensure_equals("TDataVector::At()", 
-                      fCheckVector.at(2), fVector->At<ND::TDatum>(2));
+                      fCheckVector.at(2), fVector->At<CP::TDatum>(2));
         ensure_equals("TDataVector::operator[]", 
                       fCheckVector[2], fVector->operator[](2));
     }
@@ -92,11 +92,11 @@ namespace tut {
     // Test insertion
     template <> template <> 
     void testTDatum::test<3> () {
-        std::vector<ND::TDatum*>::iterator v = ++fCheckVector.begin();
-        ND::TDataVector::iterator d = ++fVector->begin();
+        std::vector<CP::TDatum*>::iterator v = ++fCheckVector.begin();
+        CP::TDataVector::iterator d = ++fVector->begin();
 
         // Check insertion.
-        ND::TDataVector *newObject = new ND::TDataVector("newObject.1");
+        CP::TDataVector *newObject = new CP::TDataVector("newObject.1");
         fCheckVector.insert(v,newObject);
 
         // The new object is now owned by fVector.
@@ -116,9 +116,9 @@ namespace tut {
     // Test erasure.
     template <> template <> 
     void testTDatum::test<4> () {
-        std::vector<ND::TDatum*>::iterator v = ++fCheckVector.begin();
+        std::vector<CP::TDatum*>::iterator v = ++fCheckVector.begin();
 
-        ND::TDatum *erasure = *v;
+        CP::TDatum *erasure = *v;
         
         // Check erasure.
         fCheckVector.erase(v);
@@ -126,44 +126,44 @@ namespace tut {
         ensure("Erase from vector", VectorsEqual(fCheckVector,*fVector));
     }
 
-    // Class to test that ND::TDataVector deletes children as well as parent.
-    class testTDatumDelete: public ND::TDatum {
+    // Class to test that CP::TDataVector deletes children as well as parent.
+    class testTDatumDelete: public CP::TDatum {
     public:
         static int count;
         testTDatumDelete() {++count;}
         testTDatumDelete(const char* name, const char* title = "testDelete")
-            : ND::TDatum(name,title) {++count;}
+            : CP::TDatum(name,title) {++count;}
         virtual ~testTDatumDelete() {--count;}
     };
     int testTDatumDelete::count = 0;
 
-    // Test that ND::TDataVector children are deleted when parent
-    // ND::TDataVector is deleted.
+    // Test that CP::TDataVector children are deleted when parent
+    // CP::TDataVector is deleted.
     template <> template <>
     void testTDatum::test<5> () {
         int count = 0;
-        ND::TDataVector *vect = new ND::TDataVector("parent");
+        CP::TDataVector *vect = new CP::TDataVector("parent");
         for (int i=0; i<4; ++i) {
             std::ostringstream name;
             name << "child." << i;
-            ND::TDatum *c1 = new testTDatumDelete(name.str().c_str());
+            CP::TDatum *c1 = new testTDatumDelete(name.str().c_str());
             ++count;
             vect->push_back(c1);
         }
 
-        ensure("Some ND::TDataVector children created", (0<count));
+        ensure("Some CP::TDataVector children created", (0<count));
         ensure_equals("TDataVector children created",
                       testTDatumDelete::count, count);
 
         delete vect;
-        ensure_equals("All ND::TDataVector children deleted",
+        ensure_equals("All CP::TDataVector children deleted",
                       testTDatumDelete::count, 0);
     }
 
     // Test the Get member template
     template <> template <> 
     void testTDatum::test<6> () {
-        ND::THandle<ND::TDatum> d1 = fVector->Get<ND::TDatum>("child.2");
+        CP::THandle<CP::TDatum> d1 = fVector->Get<CP::TDatum>("child.2");
         ensure("Name found", d1);
         ensure_equals("Name matchs", d1->GetName(), std::string("child.2"));
     }
@@ -171,8 +171,8 @@ namespace tut {
     // Test the Get member template with a recursive search
     template <> template <> 
     void testTDatum::test<7> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
         ensure("Name found", d1);
         ensure_equals("Name matchs", d1->GetName(), std::string("child.2.3"));
     }
@@ -180,10 +180,10 @@ namespace tut {
     // Test the Get member template rooted in the named parent.
     template <> template <> 
     void testTDatum::test<8> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("//parent/child.3/child.3.2");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("//parent/child.3/child.3.2");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("child.3.2"));
     }
@@ -191,10 +191,10 @@ namespace tut {
     // Test the Get member template from the top level parent (without name).
     template <> template <> 
     void testTDatum::test<9> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("~/child.3/child.3.2");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("~/child.3/child.3.2");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("child.3.2"));
     }
@@ -202,10 +202,10 @@ namespace tut {
     // Test the Get member template with a nearest parent.
     template <> template <> 
     void testTDatum::test<10> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("/child.2/child.2.2");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("/child.2/child.2.2");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("child.2.2"));
     }
@@ -213,10 +213,10 @@ namespace tut {
     // Test the Get member template with a relative search.
     template <> template <> 
     void testTDatum::test<11> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("../child.2.2");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("../child.2.2");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("child.2.2"));
     }
@@ -224,10 +224,10 @@ namespace tut {
     // Test getting the root parent.
     template <> template <> 
     void testTDatum::test<12> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("~/");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("~/");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("parent"));
     }
@@ -235,10 +235,10 @@ namespace tut {
     // Test getting the root parent.
     template <> template <> 
     void testTDatum::test<13> () {
-        ND::THandle<ND::TDatum> d1 
-            = fVector->Get<ND::TDatum>("child.2/child.2.3");
-        ND::THandle<ND::TDatum> d2 
-            = d1->Get<ND::TDatum>("//");
+        CP::THandle<CP::TDatum> d1 
+            = fVector->Get<CP::TDatum>("child.2/child.2.3");
+        CP::THandle<CP::TDatum> d2 
+            = d1->Get<CP::TDatum>("//");
         ensure("Name found", d2);
         ensure_equals("Name matchs", d2->GetName(), std::string("parent"));
     }
@@ -247,68 +247,68 @@ namespace tut {
     template <> template <> 
     void testTDatum::test<14> () {
         try {
-            ND::THandle<ND::TDataVector> d1 
-                = fVector->Get<ND::TDataVector>("child.2/child.2.3");
+            CP::THandle<CP::TDataVector> d1 
+                = fVector->Get<CP::TDataVector>("child.2/child.2.3");
             fail("Bad data conversion should fail");
         }
-        catch (ND::EBadConversion) {}
+        catch (CP::EBadConversion) {}
     }
 
     /// Test the Has member template.
     template <> template <> 
     void testTDatum::test<15> () {
         ensure("Has finds an contained element",
-               fVector->Has<ND::TDataVector>("child.2"));
+               fVector->Has<CP::TDataVector>("child.2"));
         ensure("Has reports a missing element",
-               !fVector->Has<ND::TDataVector>("notThere"));
+               !fVector->Has<CP::TDataVector>("notThere"));
     }
 
     /// Test the Use member template.
     template <> template <> 
     void testTDatum::test<16> () {
-        ND::TDataVector& child = fVector->Use<ND::TDataVector>("child.2");
+        CP::TDataVector& child = fVector->Use<CP::TDataVector>("child.2");
         ensure_equals("The child.2 element was found",
                       child.GetName(), std::string("child.2"));
         try {
-            fVector->Use<ND::TDataVector>("notThere").GetName();
+            fVector->Use<CP::TDataVector>("notThere").GetName();
             fail("Non-existent element should cause exception");
         } 
-        catch (ND::ENoSuchElement) {}
+        catch (CP::ENoSuchElement) {}
         try {
-            fVector->Use<ND::TRealDatum>("child.2").GetName();
+            fVector->Use<CP::TRealDatum>("child.2").GetName();
             fail("Wrong class element should cause exception");
         } 
-        catch (ND::EBadConversion) {}
+        catch (CP::EBadConversion) {}
     }
 
     // Test indexed access to the wrong data type.
     template <> template <> 
     void testTDatum::test<17> () {
-        ND::TDataVector* d1 = fVector->At<ND::TDataVector>(2);
+        CP::TDataVector* d1 = fVector->At<CP::TDataVector>(2);
         ensure("Indexed TDataVector was found", d1);
         try {
-            ND::TDataVector* d2 = d1->At<ND::TDataVector>(0);
+            CP::TDataVector* d2 = d1->At<CP::TDataVector>(0);
             if (d2 != NULL) fail("Bad data conversion did not fail");
             fail("Bad data conversion did not throw exception");
         }
-        catch (ND::EBadConversion) {}
+        catch (CP::EBadConversion) {}
     }
 
     // Test indexed access past end of vector.
     template <> template <> 
     void testTDatum::test<18> () {
         try {
-            ND::TDatum* d1 = fVector->At<ND::TDatum>(fVector->size());
+            CP::TDatum* d1 = fVector->At<CP::TDatum>(fVector->size());
             if (d1 != NULL) fail("Access past end of vector did not fail.");
             fail("Access past end of vector did not throw exception.");
         }
-        catch (ND::ENoSuchElement) {}
+        catch (CP::ENoSuchElement) {}
     }
 
     // Test that temporary objects can be added to the TDataVector.
     template <> template <>
     void testTDatum::test<19> () {
-        ND::TDataVector *newObject = new ND::TDataVector("newObject.1");
+        CP::TDataVector *newObject = new CP::TDataVector("newObject.1");
         fVector->AddTemporary(newObject);
         ensure("Object was added to TDataVector.",
                fVector->end() != std::find(fVector->begin(),
@@ -321,24 +321,24 @@ namespace tut {
     // Test that temporary objects found in the TDataVector.
     template <> template <>
     void testTDatum::test<20> () {
-        ND::TDataVector *newObject = new ND::TDataVector("newObject.1");
+        CP::TDataVector *newObject = new CP::TDataVector("newObject.1");
         fVector->AddTemporary(newObject);
-        ND::THandle<ND::TDataVector> obj 
-            = fVector->Get<ND::TDataVector>("newObject.1");
+        CP::THandle<CP::TDataVector> obj 
+            = fVector->Get<CP::TDataVector>("newObject.1");
         ensure("Temporary object was found in TDataVector.",obj);
     }
 
     // Test that temporary objects mask persistent objects in the TDataVector.
     template <> template <>
     void testTDatum::test<21> () {
-        ND::THandle<ND::TDataVector> persist 
-            = fVector->Get<ND::TDataVector>("child.1");
+        CP::THandle<CP::TDataVector> persist 
+            = fVector->Get<CP::TDataVector>("child.1");
         ensure("Object was found in TDataVector.",persist);
         ensure("Object is persistent",!fVector->IsTemporary(persist));
-        ND::TDataVector *newObject = new ND::TDataVector("child.1");
+        CP::TDataVector *newObject = new CP::TDataVector("child.1");
         fVector->AddTemporary(newObject);
-        ND::THandle<ND::TDataVector> temp 
-            = fVector->Get<ND::TDataVector>("child.1");
+        CP::THandle<CP::TDataVector> temp 
+            = fVector->Get<CP::TDataVector>("child.1");
         ensure("Temporary masks persistent object.",
                fVector->IsTemporary(temp));
         ensure("Temporary and persistent objects are different",
@@ -347,8 +347,8 @@ namespace tut {
         // Erase the non-persistent object from the vector and make sure that
         // the persistent one is visible.
         fVector->erase(temp);
-        ND::THandle<ND::TDataVector> exposed 
-            = fVector->Get<ND::TDataVector>("child.1");
+        CP::THandle<CP::TDataVector> exposed 
+            = fVector->Get<CP::TDataVector>("child.1");
         ensure("See original object after masking temporary is removed",
                exposed == persist);
     }
@@ -356,16 +356,16 @@ namespace tut {
     // Test that size works with temporary objects
     template <> template <>
     void testTDatum::test<22> () {
-        ND::THandle<ND::TDataVector> vector(new ND::TDataVector);
+        CP::THandle<CP::TDataVector> vector(new CP::TDataVector);
         // Insert stuff into the data vector
-        vector->AddDatum(new ND::TDatum("A"));
-        vector->AddDatum(new ND::TDatum("B"));
-        vector->AddDatum(new ND::TDatum("C"));
+        vector->AddDatum(new CP::TDatum("A"));
+        vector->AddDatum(new CP::TDatum("B"));
+        vector->AddDatum(new CP::TDatum("C"));
         ensure_equals("Vector size matches number of inserts",
                       vector->size(),(unsigned) 3);
-        vector->AddTemporary(new ND::TDatum("D"));
-        vector->AddTemporary(new ND::TDatum("E"));
-        vector->AddTemporary(new ND::TDatum("F"));
+        vector->AddTemporary(new CP::TDatum("D"));
+        vector->AddTemporary(new CP::TDatum("E"));
+        vector->AddTemporary(new CP::TDatum("F"));
         ensure_equals("Vector size with temporaries matches number of inserts",
                       vector->size(),(unsigned)6);
     }
@@ -373,19 +373,19 @@ namespace tut {
     // Test that iterator works
     template <> template <>
     void testTDatum::test<23> () {
-        ND::THandle<ND::TDataVector> vector(new ND::TDataVector);
+        CP::THandle<CP::TDataVector> vector(new CP::TDataVector);
         // Insert stuff into the data vector
-        vector->AddDatum(new ND::TDatum("A"));
-        vector->AddDatum(new ND::TDatum("B"));
-        vector->AddDatum(new ND::TDatum("C"));
+        vector->AddDatum(new CP::TDatum("A"));
+        vector->AddDatum(new CP::TDatum("B"));
+        vector->AddDatum(new CP::TDatum("C"));
         int count = 0;
-        for (ND::TDataVector::iterator v = vector->begin(); 
+        for (CP::TDataVector::iterator v = vector->begin(); 
              v != vector->end(); ++v) {
             ++count;
         }
         ensure_equals("Forward iterator went through all elements",count,3);
 
-        ND::TDataVector::iterator v = vector->begin();
+        CP::TDataVector::iterator v = vector->begin();
         ensure_equals("Element is A",
                       std::string((*v)->GetName()),std::string("A"));
         ++v;
@@ -401,19 +401,19 @@ namespace tut {
     // Test that reverse_iterator works
     template <> template <>
     void testTDatum::test<24> () {
-        ND::THandle<ND::TDataVector> vector(new ND::TDataVector);
+        CP::THandle<CP::TDataVector> vector(new CP::TDataVector);
         // Insert stuff into the data vector
-        vector->AddDatum(new ND::TDatum("A"));
-        vector->AddDatum(new ND::TDatum("B"));
-        vector->AddDatum(new ND::TDatum("C"));
+        vector->AddDatum(new CP::TDatum("A"));
+        vector->AddDatum(new CP::TDatum("B"));
+        vector->AddDatum(new CP::TDatum("C"));
         int count = 0;
-        for (ND::TDataVector::reverse_iterator v = vector->rbegin(); 
+        for (CP::TDataVector::reverse_iterator v = vector->rbegin(); 
              v != vector->rend(); ++v) {
             ++count;
         }
         ensure_equals("Reverse iterator went through all elements",count,3);
 
-        ND::TDataVector::reverse_iterator v = vector->rbegin();
+        CP::TDataVector::reverse_iterator v = vector->rbegin();
         ensure_equals("Element is C",
                       std::string((*v)->GetName()),std::string("C"));
         ++v;
@@ -429,22 +429,22 @@ namespace tut {
     // Test that iterator works with temporary objects
     template <> template <>
     void testTDatum::test<25> () {
-        ND::THandle<ND::TDataVector> vector(new ND::TDataVector);
+        CP::THandle<CP::TDataVector> vector(new CP::TDataVector);
         // Insert stuff into the data vector
-        vector->AddDatum(new ND::TDatum("A"));
-        vector->AddDatum(new ND::TDatum("B"));
-        vector->AddDatum(new ND::TDatum("C"));
-        vector->AddTemporary(new ND::TDatum("D"));
-        vector->AddTemporary(new ND::TDatum("E"));
-        vector->AddTemporary(new ND::TDatum("F"));
+        vector->AddDatum(new CP::TDatum("A"));
+        vector->AddDatum(new CP::TDatum("B"));
+        vector->AddDatum(new CP::TDatum("C"));
+        vector->AddTemporary(new CP::TDatum("D"));
+        vector->AddTemporary(new CP::TDatum("E"));
+        vector->AddTemporary(new CP::TDatum("F"));
         int count = 0;
-        for (ND::TDataVector::iterator v = vector->begin(); 
+        for (CP::TDataVector::iterator v = vector->begin(); 
              v != vector->end(); ++v) {
             ++count;
         }
         ensure_equals("Forward iterator went through all elements",count,6);
 
-        ND::TDataVector::iterator v = vector->begin();
+        CP::TDataVector::iterator v = vector->begin();
         ensure_equals("Element is A",
                       std::string((*v)->GetName()),std::string("A"));
         ++v;
@@ -469,22 +469,22 @@ namespace tut {
     // Test that reverse_iterator works with temporary objects
     template <> template <>
     void testTDatum::test<26> () {
-        ND::THandle<ND::TDataVector> vector(new ND::TDataVector);
+        CP::THandle<CP::TDataVector> vector(new CP::TDataVector);
         // Insert stuff into the data vector
-        vector->AddDatum(new ND::TDatum("A"));
-        vector->AddDatum(new ND::TDatum("B"));
-        vector->AddDatum(new ND::TDatum("C"));
-        vector->AddTemporary(new ND::TDatum("D"));
-        vector->AddTemporary(new ND::TDatum("E"));
-        vector->AddTemporary(new ND::TDatum("F"));
+        vector->AddDatum(new CP::TDatum("A"));
+        vector->AddDatum(new CP::TDatum("B"));
+        vector->AddDatum(new CP::TDatum("C"));
+        vector->AddTemporary(new CP::TDatum("D"));
+        vector->AddTemporary(new CP::TDatum("E"));
+        vector->AddTemporary(new CP::TDatum("F"));
         int count = 0;
-        for (ND::TDataVector::reverse_iterator v = vector->rbegin(); 
+        for (CP::TDataVector::reverse_iterator v = vector->rbegin(); 
              v != vector->rend(); ++v) {
             ++count;
         }
         ensure_equals("Reverse iterator went through all elements",count,6);
 
-        ND::TDataVector::reverse_iterator v = vector->rbegin();
+        CP::TDataVector::reverse_iterator v = vector->rbegin();
         ensure_equals("Element is F",
                       std::string((*v)->GetName()),std::string("F"));
         ++v;

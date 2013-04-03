@@ -5,7 +5,7 @@
 
 #include "TG4VHit.hxx"
 
-namespace ND {
+namespace CP {
     class TG4HitSegment;
 }
 
@@ -22,7 +22,7 @@ namespace ND {
 /// The behavior is designed so that TG4HitSegment contains all of the payload
 /// for the hit, and ND280HitSegment contains all of the interface related to
 /// the G4 infrastructure.
-class ND::TG4HitSegment: public TG4VHit {
+class CP::TG4HitSegment: public TG4VHit {
 public:
     TG4HitSegment();
     TG4HitSegment(const TG4HitSegment& rhs);

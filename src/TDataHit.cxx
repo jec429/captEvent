@@ -5,49 +5,49 @@
 #include "TDataHit.hxx"
 #include "HEPUnits.hxx"
 
-ClassImp(ND::TDataHit);
-ClassImp(ND::TWritableDataHit);
+ClassImp(CP::TDataHit);
+ClassImp(CP::TWritableDataHit);
 
-ND::TDataHit::TDataHit() {}
+CP::TDataHit::TDataHit() {}
 
-ND::TDataHit::TDataHit(const ND::TWritableDataHit& h) 
-    : ND::TSingleHit(h), fProxy(h.fProxy) {}
+CP::TDataHit::TDataHit(const CP::TWritableDataHit& h) 
+    : CP::TSingleHit(h), fProxy(h.fProxy) {}
 
-ND::TDataHit::~TDataHit() { }
+CP::TDataHit::~TDataHit() { }
 
-int ND::TDataHit::GetDigitCount() const {
+int CP::TDataHit::GetDigitCount() const {
     if (fProxy.IsValid()) return 1;
     else return 0;
 }
 
-const ND::TDigitProxy& ND::TDataHit::GetDigit(int i) const {
-    if (i!=0) throw ND::EHitOutOfRange();
-    if (!fProxy.IsValid()) throw ND::EHitOutOfRange();
+const CP::TDigitProxy& CP::TDataHit::GetDigit(int i) const {
+    if (i!=0) throw CP::EHitOutOfRange();
+    if (!fProxy.IsValid()) throw CP::EHitOutOfRange();
     return fProxy;
 }
 
-ND::TWritableDataHit::TWritableDataHit() {}
-ND::TWritableDataHit::TWritableDataHit(const ND::TWritableDataHit& h) 
-  : ND::TDataHit(h) {}
-ND::TWritableDataHit::~TWritableDataHit() {}
+CP::TWritableDataHit::TWritableDataHit() {}
+CP::TWritableDataHit::TWritableDataHit(const CP::TWritableDataHit& h) 
+  : CP::TDataHit(h) {}
+CP::TWritableDataHit::~TWritableDataHit() {}
 
 //////////////////////////////////////////////////
-// Setter methods for ND::TWritableDataHit
+// Setter methods for CP::TWritableDataHit
 //////////////////////////////////////////////////
 
-void ND::TWritableDataHit::SetGeomId(ND::TGeometryId id) {
+void CP::TWritableDataHit::SetGeomId(CP::TGeometryId id) {
     fGeomId = id.AsInt();
 }
 
-void ND::TWritableDataHit::SetCharge(double q) {fCharge = q;}
+void CP::TWritableDataHit::SetCharge(double q) {fCharge = q;}
 
-void ND::TWritableDataHit::SetTime(double t) {fTime = t;}
+void CP::TWritableDataHit::SetTime(double t) {fTime = t;}
 
-void ND::TWritableDataHit::SetDigit(ND::TDigitProxy proxy) {
+void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
     fProxy = proxy;
     if (fProxy.IsValid()) {
         try {
-            ND::TDigit* digit = *fProxy;
+            CP::TDigit* digit = *fProxy;
             if (digit) {
                 if (fChannelId.AsUInt() == 0) {
                     fChannelId = digit->GetChannelId();
@@ -66,12 +66,12 @@ void ND::TWritableDataHit::SetDigit(ND::TDigitProxy proxy) {
     }
 }
 
-void ND::TWritableDataHit::SetChannelId(ND::TChannelId id) {fChannelId = id;}
+void CP::TWritableDataHit::SetChannelId(CP::TChannelId id) {fChannelId = id;}
 
-void ND::TWritableDataHit::SetChargeValidity(bool valid) {
-    ND::THit::SetChargeValidity(valid);
+void CP::TWritableDataHit::SetChargeValidity(bool valid) {
+    CP::THit::SetChargeValidity(valid);
 }
 
-void ND::TWritableDataHit::SetTimeValidity(bool valid) {
-    ND::THit::SetTimeValidity(valid);
+void CP::TWritableDataHit::SetTimeValidity(bool valid) {
+    CP::THit::SetTimeValidity(valid);
 }

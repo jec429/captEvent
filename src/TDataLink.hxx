@@ -8,7 +8,7 @@
 #include <iostream>
 #include "TDatum.hxx"
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(EBadLink,EDatum);
     class TDataLink;
 }
@@ -28,10 +28,10 @@ namespace ND {
 /// the other.  This reference would be done using a TDataLink.  For example:
 ///
 /// \code
-/// trk1 = ND::THandle<ND::TReconTrack>(new ND::TReconTrack);
+/// trk1 = CP::THandle<CP::TReconTrack>(new CP::TReconTrack);
 /// objectContainer->push_back(trk1);
 ///
-/// trk2 = ND::THandle<ND::TReconTrack>(new ND::TReconTrack);
+/// trk2 = CP::THandle<CP::TReconTrack>(new CP::TReconTrack);
 /// objectContainer->push_back(trk2);
 ///
 /// trk1->AddDatum(new TDataLink("otherTrack",trk2);
@@ -41,12 +41,12 @@ namespace ND {
 /// will mean that the "otherTrack" can be accessed using
 /// 
 /// \code
-/// ND::THandle<ND::TReconTrack> otherTrack 
-///                = trk1->Get<ND::TReconTrack>("otherTrack")
+/// CP::THandle<CP::TReconTrack> otherTrack 
+///                = trk1->Get<CP::TReconTrack>("otherTrack")
 /// \endcode
 ///
 /// where this will return a handle to trk2.
-class ND::TDataLink : public ND::TDatum {
+class CP::TDataLink : public CP::TDatum {
 private:
     /// The datum which this is a link too.
     TDatum *fLink;
@@ -81,7 +81,7 @@ public:
     /// a discription of a particular type of datum.  As an example, the MC
     /// interaction data might be named "interaction" and titled "MC
     /// Interaction Data".  The default title is "Event Datum".
-    explicit TDataLink(const char* name, ND::THandle<ND::TDatum> link) 
+    explicit TDataLink(const char* name, CP::THandle<CP::TDatum> link) 
         : TDatum(name,TDATALINK_TITLE) {
         if (!link) return;
         fLink = GetPointer(link);
@@ -90,10 +90,10 @@ public:
     virtual ~TDataLink();
 
     /// Set the TDatum that is being linked.
-    virtual void SetLink(ND::TDatum *link) {fLink = link;}
+    virtual void SetLink(CP::TDatum *link) {fLink = link;}
 
     /// Set the TDatum that is being linked.
-    virtual void SetLink(ND::THandle<ND::TDatum> link) {
+    virtual void SetLink(CP::THandle<CP::TDatum> link) {
         fLink = GetPointer(link);
     }
 

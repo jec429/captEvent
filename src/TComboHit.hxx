@@ -9,7 +9,7 @@
 #include "THit.hxx"
 #include "THitSelection.hxx"
 
-namespace ND {
+namespace CP {
     class TComboHit;
     
     /// An exception flagging that hit information was accessed while the hit
@@ -23,7 +23,7 @@ namespace ND {
 
 /// A single calibrated hit detector element.  This corresponds to a real
 /// measurement inside the detector, but after it has been fully calibrated.
-class ND::TComboHit : public THit {
+class CP::TComboHit : public THit {
 public:
     TComboHit();
     TComboHit(const TComboHit& val);
@@ -32,7 +32,7 @@ public:
     /// Get the geometry id for the volume that contains this hit.  This
     /// should be handled carefully with a TComboHit since the volume
     /// containing this hit might not be enumerated.
-    virtual ND::TGeometryId GetGeomId(void) const;
+    virtual CP::TGeometryId GetGeomId(void) const;
 
     /// Return the calibrated "charge" for the hit.
     virtual double GetCharge(void) const;
@@ -70,7 +70,7 @@ public:
     virtual const THitSelection& GetHits(void) const;
 
     /// Add a hit to the combo hits.
-    virtual void AddHit(ND::THandle<ND::THit>& hit);
+    virtual void AddHit(CP::THandle<CP::THit>& hit);
 
     /// Copy a hit selection into the combo hit.
     virtual void AddHitSelection(THitSelection& hits);

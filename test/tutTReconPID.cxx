@@ -27,7 +27,7 @@ namespace tut {
     // Test the TReconPID constructor and destructor.
     template<> template<>
     void testTReconPID::test<1> () {
-        ND::TReconPID recObj;
+        CP::TReconPID recObj;
 
         ensure_distance("Default quality is zero", 
                         recObj.GetQuality(), 0.0, 
@@ -38,10 +38,10 @@ namespace tut {
 
         ensure("Default state",recObj.GetState());
 
-        ND::THandle<ND::TPIDState> recState = recObj.GetState();
+        CP::THandle<CP::TPIDState> recState = recObj.GetState();
         ensure("Default state is TPIDState",recState);
 
-        ND::THandle<ND::TClusterState> clusterState = recObj.GetState();
+        CP::THandle<CP::TClusterState> clusterState = recObj.GetState();
         ensure("Default state is not TClusterState",!clusterState);
 
         ensure_equals("Default TReconNodesContainer has size zero",
@@ -53,8 +53,8 @@ namespace tut {
     // Test the state definition.
     template<> template<>
     void testTReconPID::test<2> () {
-        ND::TReconPID recObj;
-        ND::THandle<ND::TPIDState> recState = recObj.GetState();
+        CP::TReconPID recObj;
+        CP::THandle<CP::TPIDState> recState = recObj.GetState();
 
         ensure("The state is valid", recState);
 
@@ -66,42 +66,42 @@ namespace tut {
     // an associated object.
     template<> template<>
     void testTReconPID::test<3> () {
-        ND::TReconPID recObj;
-        ND::TReconNodeContainer& recNodes = recObj.GetNodes();
-        ND::THandle<ND::TReconNode> recNode;
-        ND::THandle<ND::TReconBase> recCluster(new ND::TReconCluster);
-        ND::THandle<ND::TReconState> recState(new ND::TPIDState);
+        CP::TReconPID recObj;
+        CP::TReconNodeContainer& recNodes = recObj.GetNodes();
+        CP::THandle<CP::TReconNode> recNode;
+        CP::THandle<CP::TReconBase> recCluster(new CP::TReconCluster);
+        CP::THandle<CP::TReconState> recState(new CP::TPIDState);
 
         ensure_equals("Node container starts empty.",recNodes.size(),
                       (unsigned) 0);
 
 #ifdef CHECK_MISSING_STATE
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetObject(recCluster);
             recNodes.push_back(recNode);
             fail("TReconNodeContainer node state is empty");
         } 
-        catch (ND::EWrongStateType& ex) {
+        catch (CP::EWrongStateType& ex) {
             // OK!
             std::cout << std::endl << "Caught " << ex.what() << std::endl;
         }
 #endif
 
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetState(recState);
             recNodes.push_back(recNode);
             recNode->ls();
             fail("TReconNodeContainer object is empty");
         } 
-        catch (ND::EObjectEmpty& ex) {
+        catch (CP::EObjectEmpty& ex) {
             // OK!
             std::cout << std::endl << "Caught " << ex.what() << std::endl;
         }
 
         try {
-            recNode = ND::THandle<ND::TReconNode>(new ND::TReconNode);
+            recNode = CP::THandle<CP::TReconNode>(new CP::TReconNode);
             recNode->SetObject(recCluster);
             recNode->SetState(recState);
             recNodes.push_back(recNode);
@@ -114,8 +114,8 @@ namespace tut {
     // Test the getters and setters.
     template<> template<>
     void testTReconPID::test<4> () {
-        ND::TReconPID recObj;
-        ND::THandle<ND::TPIDState> recState = recObj.GetState();
+        CP::TReconPID recObj;
+        CP::THandle<CP::TPIDState> recState = recObj.GetState();
 
         ensure("The state is valid", recState);
 

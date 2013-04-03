@@ -7,7 +7,7 @@
 #include "TDatum.hxx"
 #include "TDigit.hxx"
 
-namespace ND {
+namespace CP {
     class TDigit;
     class TDigitHeader;
     class TDigitContainer;
@@ -22,8 +22,8 @@ namespace ND {
 /// only accessed by the calibration routines, but can be accessed from the
 /// final THitObjects using the TDigitProxy which references the contributing
 /// TDigit.
-class ND::TDigitContainer 
-    : public ND::TDatum, public std::vector<ND::TDigit*> {
+class CP::TDigitContainer 
+    : public CP::TDatum, public std::vector<CP::TDigit*> {
 public:
     TDigitContainer(const char* name = "digits", 
                     const char* title = "Digit Pointers");
@@ -31,13 +31,13 @@ public:
 
     /// Get a header out of the container.  These headers provide information
     /// needed to calibrate the digits in this container.
-    ND::TDigitHeader *const GetHeader(int i) const;
+    CP::TDigitHeader *const GetHeader(int i) const;
 
     /// Get the total number of headers in the container.
     unsigned int GetHeaderCount() const {return fHeaders.size();}
 
     /// Add a header to the container.
-    void AddHeader(ND::TDigitHeader* header);
+    void AddHeader(CP::TDigitHeader* header);
 
     /// Return the signature of this digit container.  The signature is used
     /// by the proxy to make sure that the correct TDigitContainer is being
@@ -49,7 +49,7 @@ public:
 
 private:
     /// A vector of headers.
-    std::vector<ND::TDigitHeader*> fHeaders;
+    std::vector<CP::TDigitHeader*> fHeaders;
 
     /// The signature of this container.
     mutable unsigned int fSignature; //! Do not save.

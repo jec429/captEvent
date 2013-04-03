@@ -1,17 +1,17 @@
 #include "TClusterState.hxx"
 #include "TND280Log.hxx"
 ///////////////////////////////////////////////////////
-ClassImp(ND::TClusterState);
+ClassImp(CP::TClusterState);
 
-ND::TClusterState::TClusterState(): TMReconState(this) {
+CP::TClusterState::TClusterState(): TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
     Init();
 }
 
-ND::TClusterState::~TClusterState() {}
+CP::TClusterState::~TClusterState() {}
 
-ND::TClusterState::TClusterState(const ND::TClusterState& init)
+CP::TClusterState::TClusterState(const CP::TClusterState& init)
   : TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -29,7 +29,7 @@ ND::TClusterState::TClusterState(const ND::TClusterState& init)
     
 }
 
-ND::TClusterState& ND::TClusterState::operator=(const ND::TClusterState& rhs) {
+CP::TClusterState& CP::TClusterState::operator=(const CP::TClusterState& rhs) {
     if (this == &rhs) return *this;
 
     for (int i=0; i<GetSize(); ++i) {
@@ -45,7 +45,7 @@ ND::TClusterState& ND::TClusterState::operator=(const ND::TClusterState& rhs) {
     return *this;
 }
 
-ND::TCorrValues ND::TClusterState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TClusterState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TClusterState::GetSize());
     values.SetType("EDeposit X Y Z T ");
     const TMEDepositState* eDepositState 

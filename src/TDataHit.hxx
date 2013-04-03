@@ -7,7 +7,7 @@
 #include "TSingleHit.hxx"
 #include "TDigitProxy.hxx"
 
-namespace ND {
+namespace CP {
     class TDataHit;
     class TWritableDataHit;
 }
@@ -20,7 +20,7 @@ namespace ND {
 /// If the MC has written digitized data (derived from TMCDigit), then a
 /// TDataHit will be used to hold the calibrated MC THit objects.  You can get
 /// associated MC information using the TDigitProxy saved in the hit.
-class ND::TDataHit : public TSingleHit {
+class CP::TDataHit : public TSingleHit {
 public:
     TDataHit();
     TDataHit(const TWritableDataHit& val);
@@ -28,7 +28,7 @@ public:
 
     /// Return a proxy to the digit that generated this hit.  If the index is
     /// out of range, this will throw an EHitOutOfRange exception.
-    virtual const ND::TDigitProxy& GetDigit(int i=0) const;
+    virtual const CP::TDigitProxy& GetDigit(int i=0) const;
 
     /// Return the number of digits that contribute to this hit.
     virtual int GetDigitCount() const;
@@ -42,7 +42,7 @@ protected:
 
 /// Provide a writable interface to a TDataHit that can be used to fill the
 /// object.
-class ND::TWritableDataHit : public TDataHit {
+class CP::TWritableDataHit : public TDataHit {
 public:
     TWritableDataHit();
     TWritableDataHit(const TWritableDataHit& h);
@@ -60,11 +60,11 @@ public:
 
     /// Set the digit and channel id for this hit.  If the proxy can access a
     /// valid digit, then this also sets the channel id.
-    void SetDigit(ND::TDigitProxy proxy);
+    void SetDigit(CP::TDigitProxy proxy);
 
     /// Explicitly set the channel id (shouldn't be required since also done
     /// by SetDigit).
-    void SetChannelId(ND::TChannelId id);
+    void SetChannelId(CP::TChannelId id);
 
     ClassDef(TWritableDataHit,4);
 };

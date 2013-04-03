@@ -7,7 +7,7 @@
 
 class TFolder;
 
-namespace ND {
+namespace CP {
     class TND280Event;
     class TEventFolder;
 }
@@ -23,7 +23,7 @@ namespace ND {
 /// event using the TEventFolder::GetCurrentEvent() method.  Events can then
 /// be saved automatically into a root folder by calling the
 /// TEventFolder::GetEventFolder() static method.
-class ND::TEventFolder : public TObject {
+class CP::TEventFolder : public TObject {
 
 private:
     TEventFolder(); 
@@ -53,14 +53,14 @@ public:
     virtual ~TEventFolder(void);
 
     /// A static method to return a pointer to the current event which should
-    /// be accessed as "ND::TEventFolder::GetCurrentEvent()".  This will work
+    /// be accessed as "CP::TEventFolder::GetCurrentEvent()".  This will work
     /// even if the events are not being kept in a folder since each event
     /// will handle the manipulation of this field as it is created or
     /// destroyed.  This method should not be accessed through a
-    /// ND::TEventFolder object.
+    /// CP::TEventFolder object.
     /// \code
     /// // Do not use
-    /// ND::TEventFolder::GetEventFolder()->GetCurrentEvent();
+    /// CP::TEventFolder::GetEventFolder()->GetCurrentEvent();
     /// \endcode
     /// Accessing GetCurrentEvent through TEventFolder will cause significant
     /// code slow downs.

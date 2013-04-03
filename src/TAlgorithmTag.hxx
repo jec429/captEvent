@@ -6,7 +6,7 @@
 
 #include <TNamed.h>
 
-namespace ND {
+namespace CP {
     class TAlgorithmTag;
     class TAlgorithm;
 }
@@ -18,7 +18,7 @@ namespace ND {
 /// constructor creates a filled tag.  However, this still allows the
 /// possiblity of a user to add extra information.  The public setters should
 /// be removed from the interface.
-class ND::TAlgorithmTag: public TNamed {
+class CP::TAlgorithmTag: public TNamed {
 public:
     TAlgorithmTag();
     TAlgorithmTag(const TAlgorithm& algo);

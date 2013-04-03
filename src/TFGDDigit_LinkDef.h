@@ -1,4 +1,4 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TFGDDigit+;
+#pragma link C++ class CP::TFGDDigit+;
 #endif
 

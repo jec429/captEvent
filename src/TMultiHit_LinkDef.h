@@ -1,6 +1,6 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TMultiHit+;
-#pragma link C++ class ND::THandle<ND::TMultiHit>+;
+#pragma link C++ class CP::TMultiHit+;
+#pragma link C++ class CP::THandle<CP::TMultiHit>+;
 #endif
 
 

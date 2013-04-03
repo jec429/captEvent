@@ -17,7 +17,7 @@
 #include "EoaCore.hxx"
 #include "TND280Log.hxx"
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(EDatum,EoaCore);
     OA_EXCEPTION(EBadConversion,EDatum);
     OA_EXCEPTION(EBadName,EDatum);
@@ -65,7 +65,7 @@ namespace ND {
 /// "files".  You can access "files" (i.e. any TDatum derived objects) below a
 /// current object using the Use(), or Get() methods.  You can check for the
 /// existence of a "file" using the Has() method.
-class ND::TDatum : public TNamed {
+class CP::TDatum : public TNamed {
     friend class TData;
     friend class TDataVector;
     friend class TDataSymLink;
@@ -141,7 +141,7 @@ public:
     /// library.  Notice that this has link in direction built in if the
     /// referenced object is a link reference class. WARNING: This cannot be
     /// used interactively inside of early root versions.
-    template <class T> ND::THandle<T> Get(const char* name=".") const {
+    template <class T> CP::THandle<T> Get(const char* name=".") const {
         TDatum *d = RecursiveFind(name);
         if (!d) return THandle<T>(NULL);
         T* t = dynamic_cast<T*>(d->GetThis());
@@ -160,7 +160,7 @@ public:
         return THandle<T>(t,false);
     }
 
-    template <class T> ND::THandle<T> Get(const std::string& name) const {
+    template <class T> CP::THandle<T> Get(const std::string& name) const {
         return Get<T>(name.c_str());
     }
     //@}
@@ -263,9 +263,9 @@ protected:
     /// can be seen that the Parent is being accessed as a particular
     /// type.  WARNING: This cannot be used inside of root
     /// interactively.
-    template <class T> ND::THandle<T> GetParent(void) const{
+    template <class T> CP::THandle<T> GetParent(void) const{
         if (!fParent) {
-            return ND::THandle<T>(NULL);
+            return CP::THandle<T>(NULL);
         }
         T* p = dynamic_cast<T*>(fParent);
         if (!p) {
@@ -275,7 +275,7 @@ protected:
                       << T::Class_Name());
             throw EBadConversion();
         }
-        return ND::THandle<T>(p,false);
+        return CP::THandle<T>(p,false);
     }
     
     /// Get the datum at the top of the TDatum tree.
@@ -305,7 +305,7 @@ private:
 
 /// A functor used to compare the name of a TDatum against a target
 /// name.  This is used in the find_if template. 
-class ND::TDatumCompareName {
+class CP::TDatumCompareName {
 private:
     TString fName;
 public:

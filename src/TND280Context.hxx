@@ -4,7 +4,7 @@
 #include <TROOT.h>
 #include <TObject.h>
 
-namespace ND {
+namespace CP {
     class TND280Context;
 };
 
@@ -12,8 +12,8 @@ namespace ND {
 /// event within T2K (ND280).  Due to the way events are formed, not all event
 /// (or slow control data) will have all fields of the context information
 /// defined.  Fields that do not contain valid data should be marked using the
-/// value ND::TND280Context::Invalid.
-class ND::TND280Context {
+/// value CP::TND280Context::Invalid.
+class CP::TND280Context {
 public:
     typedef unsigned int Time;
     
@@ -69,8 +69,8 @@ public:
     /// valid before the individual bits are checked.
     ///
     /// \code
-    /// if (context.GetPartition() != ND::TND280Context::Invalid
-    ///     && (context.GetPartition & ND::TND280Context::kGlobalPartition)) {
+    /// if (context.GetPartition() != CP::TND280Context::Invalid
+    ///     && (context.GetPartition & CP::TND280Context::kGlobalPartition)) {
     ///     // The data is for the global partition.
     /// }
     /// \endcode
@@ -146,5 +146,5 @@ private:
     ClassDef(TND280Context,1);
 };
 
-std::ostream& operator<<(std::ostream& s, const ND::TND280Context& c);
+std::ostream& operator<<(std::ostream& s, const CP::TND280Context& c);
 #endif

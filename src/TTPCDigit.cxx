@@ -1,34 +1,34 @@
 #include "TTPCDigit.hxx"
 
-ClassImp(ND::TTPCDigit);
+ClassImp(CP::TTPCDigit);
 
 //**********************************************
-ND::TTPCDigit::TTPCDigit() {}
+CP::TTPCDigit::TTPCDigit() {}
 //**********************************************
 
 //**********************************************
-ND::TTPCDigit::TTPCDigit(ND::TChannelId chan, short time, std::vector<short> adc) 
+CP::TTPCDigit::TTPCDigit(CP::TChannelId chan, short time, std::vector<short> adc) 
     : TDigit(chan), fFirstTimeSample(time), fADCs(adc) {}
 //**********************************************
 
 //**********************************************
-ND::TTPCDigit::~TTPCDigit() {}
+CP::TTPCDigit::~TTPCDigit() {}
 //**********************************************
 
 //**********************************************
-int ND::TTPCDigit::GetFirstTimeSample() const {
+int CP::TTPCDigit::GetFirstTimeSample() const {
 //**********************************************
   return fFirstTimeSample;
 }
 
 //**********************************************
-int ND::TTPCDigit::GetNumberOfTimeSamples() const {
+int CP::TTPCDigit::GetNumberOfTimeSamples() const {
 //**********************************************
 return fADCs.size();
 }
 
 //**********************************************
-int ND::TTPCDigit::GetADC(unsigned int t) const {
+int CP::TTPCDigit::GetADC(unsigned int t) const {
 //**********************************************
   if (t>= 0 && t<fADCs.size())  
     return fADCs[t];
@@ -37,12 +37,12 @@ int ND::TTPCDigit::GetADC(unsigned int t) const {
 
 
 //**********************************************
-std::vector<short> ND::TTPCDigit::GetADCs() const {
+std::vector<short> CP::TTPCDigit::GetADCs() const {
 //**********************************************
 return fADCs;
 }
 
-void ND::TTPCDigit::ls(Option_t* opt) const {
+void CP::TTPCDigit::ls(Option_t* opt) const {
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << GetChannelId()

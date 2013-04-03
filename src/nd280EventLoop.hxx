@@ -3,15 +3,15 @@
 
 #include "TND280EventLoopFunction.hxx"
 
-namespace ND {
-/// The ND::nd280EventLoop() function provides a basic event loop that will call
-/// user code for each event.  See ND::TND280EventLoopFunction for a base class
+namespace CP {
+/// The CP::nd280EventLoop() function provides a basic event loop that will call
+/// user code for each event.  See CP::TND280EventLoopFunction for a base class
 /// that can be used with this event loop.  This is used in code like this:
 ///
 /// \code
-/// class TDumpEvent: public ND::TND280EventLoopFunction {
+/// class TDumpEvent: public CP::TND280EventLoopFunction {
 /// public:
-///     bool operator () (ND::TND280Event& event) {
+///     bool operator () (CP::TND280Event& event) {
 ///         // User Code
 ///         return true;
 ///     }
@@ -19,12 +19,12 @@ namespace ND {
 ///
 /// int main(int argc, char **argv) {
 ///     TDumpEvent userCode;
-///     return ND::nd280EventLoop(argc,argv,userCode);
+///     return CP::nd280EventLoop(argc,argv,userCode);
 /// }
 /// \endcode
 ///
 /// The default number of events to be processed can be specified as the
-/// fourth argument to ND::nd280EventLoop().  If the argument is not
+/// fourth argument to CP::nd280EventLoop().  If the argument is not
 /// specified, or is less than or equal to zero, then all events in the file
 /// will be read.  See \ref eventLoop for more usage documentation.
 ///
@@ -74,7 +74,7 @@ namespace ND {
 /// name.  That will help keep the doxygen documentation useful.
 /// \endhtmlonly
     int nd280EventLoop(int argc, char** argv, 
-                        ND::TND280EventLoopFunction& userCode, 
+                        CP::TND280EventLoopFunction& userCode, 
                         int defaultReadCount=0);
 };
  

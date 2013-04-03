@@ -5,7 +5,7 @@
 #include "TReconBase.hxx"
 #include "TShowerState.hxx"
 
-namespace ND {
+namespace CP {
     class TReconShower;
 }
 
@@ -15,16 +15,16 @@ namespace ND {
 /// direction of the cone axis, and the opening angle of the cone (deposit,
 /// position, time, direction, opening angle).
 ///
-/// The ND::TReconShower class is intended to describe the geometry of the
+/// The CP::TReconShower class is intended to describe the geometry of the
 /// energy deposition in a detector, and not make the association with a
 /// particular particle identification.  Assignment of particle types to the
-/// detector measurements is done in the ND::TReconParticle class.
-class ND::TReconShower: public ND::TReconBase {
+/// detector measurements is done in the CP::TReconParticle class.
+class CP::TReconShower: public CP::TReconBase {
 public: 
     TReconShower();
 
     /// copy constructor
-    TReconShower(const ND::TReconShower& shower);
+    TReconShower(const CP::TReconShower& shower);
 
     virtual ~TReconShower();
 

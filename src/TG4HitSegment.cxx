@@ -4,14 +4,14 @@
 #include "HEPUnits.hxx"
 #include "TG4HitSegment.hxx"
 
-ClassImp(ND::TG4HitSegment);
+ClassImp(CP::TG4HitSegment);
 
-ND::TG4HitSegment::TG4HitSegment()
+CP::TG4HitSegment::TG4HitSegment()
     : fPrimaryId(0), fEnergyDeposit(0), fTrackLength(0), 
       fStartX(0), fStartY(0), fStartZ(0), fStartT(0),
       fStopX(0), fStopY(0), fStopZ(0), fStopT(0) {}
 
-ND::TG4HitSegment::TG4HitSegment(const ND::TG4HitSegment& rhs)
+CP::TG4HitSegment::TG4HitSegment(const CP::TG4HitSegment& rhs)
     : TG4VHit(rhs), 
       fContributors(rhs.fContributors), fPrimaryId(rhs.fPrimaryId),
       fEnergyDeposit(rhs.fEnergyDeposit), fTrackLength(rhs.fTrackLength), 
@@ -21,10 +21,10 @@ ND::TG4HitSegment::TG4HitSegment(const ND::TG4HitSegment& rhs)
       fStopZ(rhs.fStopZ), fStopT(rhs.fStopT) {}
  
 
-ND::TG4HitSegment::~TG4HitSegment() {}
+CP::TG4HitSegment::~TG4HitSegment() {}
 
-void ND::TG4HitSegment::ls(Option_t *opt) const {
-    ND::ls_header(this,opt);
+void CP::TG4HitSegment::ls(Option_t *opt) const {
+    CP::ls_header(this,opt);
     std::cout << " Primary Id: " << GetPrimaryId();
     double energy = GetEnergyDeposit();
     int prec = std::cout.precision();

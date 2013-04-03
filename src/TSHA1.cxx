@@ -70,7 +70,7 @@
  *  Comments:
  *
  */
-ND::TSHA1::TSHA1()
+CP::TSHA1::TSHA1()
 {
     Reset();
 }
@@ -90,7 +90,7 @@ ND::TSHA1::TSHA1()
  *  Comments:
  *
  */
-ND::TSHA1::~TSHA1()
+CP::TSHA1::~TSHA1()
 {
     // The destructor does nothing
 }
@@ -111,7 +111,7 @@ ND::TSHA1::~TSHA1()
  *  Comments:
  *
  */
-void ND::TSHA1::Reset()
+void CP::TSHA1::Reset()
 {
     Length_Low          = 0;
     Length_High         = 0;
@@ -145,7 +145,7 @@ void ND::TSHA1::Reset()
  *  Comments:
  *
  */
-bool ND::TSHA1::Result(unsigned *message_digest_array)
+bool CP::TSHA1::Result(unsigned *message_digest_array)
 {
     int i;                                  // Counter
 
@@ -186,7 +186,7 @@ bool ND::TSHA1::Result(unsigned *message_digest_array)
  *  Comments:
  *
  */
-void ND::TSHA1::Input(   const unsigned char *message_array,
+void CP::TSHA1::Input(   const unsigned char *message_array,
                         unsigned            length)
 {
     if (!length)
@@ -245,7 +245,7 @@ void ND::TSHA1::Input(   const unsigned char *message_array,
  *  Comments:
  *
  */
-void ND::TSHA1::Input(   const char  *message_array,
+void CP::TSHA1::Input(   const char  *message_array,
                     unsigned    length)
 {
     Input((unsigned char *) message_array, length);
@@ -267,7 +267,7 @@ void ND::TSHA1::Input(   const char  *message_array,
  *  Comments:
  *
  */
-void ND::TSHA1::Input(unsigned char message_element)
+void CP::TSHA1::Input(unsigned char message_element)
 {
     Input(&message_element, 1);
 }
@@ -288,12 +288,12 @@ void ND::TSHA1::Input(unsigned char message_element)
  *  Comments:
  *
  */
-void ND::TSHA1::Input(char message_element)
+void CP::TSHA1::Input(char message_element)
 {
     Input((unsigned char *) &message_element, 1);
 }
 
-void ND::TSHA1::Input(unsigned int integer_element) {
+void CP::TSHA1::Input(unsigned int integer_element) {
     unsigned char c = integer_element & 0x000000ffU;
     Input(c);
 
@@ -310,11 +310,11 @@ void ND::TSHA1::Input(unsigned int integer_element) {
     Input(c);
 }
 
-void ND::TSHA1::Input(int integer_element) {
+void CP::TSHA1::Input(int integer_element) {
     Input((unsigned int) integer_element);
 }
 
-void ND::TSHA1::Input(double float_element) {
+void CP::TSHA1::Input(double float_element) {
     unsigned int integer = 0;
 
     // Inspired by Bruno R. Preiss, B.A.Sc., M.A.Sc. Ph.D., P.Eng.
@@ -353,7 +353,7 @@ void ND::TSHA1::Input(double float_element) {
  *      Each character is assumed to hold 8 bits of information.
  *
  */
-ND::TSHA1& ND::TSHA1::operator<<(const char *message_array)
+CP::TSHA1& CP::TSHA1::operator<<(const char *message_array)
 {
     const char *p = message_array;
 
@@ -384,7 +384,7 @@ ND::TSHA1& ND::TSHA1::operator<<(const char *message_array)
  *      Each character is assumed to hold 8 bits of information.
  *
  */
-ND::TSHA1& ND::TSHA1::operator<<(const unsigned char *message_array)
+CP::TSHA1& CP::TSHA1::operator<<(const unsigned char *message_array)
 {
     const unsigned char *p = message_array;
 
@@ -414,7 +414,7 @@ ND::TSHA1& ND::TSHA1::operator<<(const unsigned char *message_array)
  *      The character is assumed to hold 8 bits of information.
  *
  */
-ND::TSHA1& ND::TSHA1::operator<<(const char message_element)
+CP::TSHA1& CP::TSHA1::operator<<(const char message_element)
 {
     Input((unsigned char *) &message_element, 1);
 
@@ -438,7 +438,7 @@ ND::TSHA1& ND::TSHA1::operator<<(const char message_element)
  *      The character is assumed to hold 8 bits of information.
  *
  */
-ND::TSHA1& ND::TSHA1::operator<<(const unsigned char message_element)
+CP::TSHA1& CP::TSHA1::operator<<(const unsigned char message_element)
 {
     Input(&message_element, 1);
 
@@ -464,7 +464,7 @@ ND::TSHA1& ND::TSHA1::operator<<(const unsigned char message_element)
  *      in the publication.
  *
  */
-void ND::TSHA1::ProcessMessageBlock()
+void CP::TSHA1::ProcessMessageBlock()
 {
     const unsigned K[] =    {               // Constants defined for SHA-1
                                 0x5A827999,
@@ -574,7 +574,7 @@ void ND::TSHA1::ProcessMessageBlock()
  *  Comments:
  *
  */
-void ND::TSHA1::PadMessage()
+void CP::TSHA1::PadMessage()
 {
     /**
      *  Check to see if the current message block is too small to hold
@@ -640,7 +640,7 @@ void ND::TSHA1::PadMessage()
  *  Comments:
  *
  */
-unsigned ND::TSHA1::CircularShift(int bits, unsigned word)
+unsigned CP::TSHA1::CircularShift(int bits, unsigned word)
 {
     return ((word << bits) & 0xFFFFFFFF) | ((word & 0xFFFFFFFF) >> (32-bits));
 }

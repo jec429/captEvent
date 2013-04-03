@@ -17,7 +17,7 @@ class TGeoManager;
 #include "TAlignmentId.hxx"
 #include "TND280Context.hxx"
 
-namespace ND {
+namespace CP {
     class TGeomIdFinder;
     class TGeomIdManager;
     class TOADatabase;
@@ -39,8 +39,8 @@ namespace ND {
 /// common cases (TGeomIdManager::GetPosition(), and
 /// TGeomIdManager::GetGeometryId()).  The name of the volume associated with
 /// a TGeometryId object is available through TGeometryId::GetName().
-class ND::TGeomIdManager {
-    friend class ND::TOADatabase;
+class CP::TGeomIdManager {
+    friend class CP::TOADatabase;
     friend class TGeometryId;
 
 public:
@@ -118,8 +118,8 @@ public:
     /// matching both, but does find a geometry matching the hash code, that
     /// geometry will be loaded.
     bool LoadGeometry(TFile& file, 
-                      const TSHAHashValue& hc = ND::TSHAHashValue(),
-                      const TAlignmentId& align = ND::TAlignmentId());
+                      const TSHAHashValue& hc = CP::TSHAHashValue(),
+                      const TAlignmentId& align = CP::TAlignmentId());
 
     /// Update the state of the geometry id and hash code tables using the
     /// gGeoManager geometry.  If gGeoManager isn't a valid geometry, then the
@@ -140,8 +140,8 @@ public:
     ///
     /// \code
     /// for (TGeomIdManager::GeomIdMap::iterator g 
-    ///         = ND::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
-    ///      g != ND::TOADatabase::Get().GeomId().GetGeomIdMap().end();
+    ///         = CP::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
+    ///      g != CP::TOADatabase::Get().GeomId().GetGeomIdMap().end();
     ///      ++g) {
     ///     TGeometryId gid(g->first);
     /// }
@@ -215,26 +215,26 @@ private:
     int RecurseGeomId(std::vector<std::string>& names, int keepGoing);
 
     /// Save a hash code into the current gGeoManager object name.
-    void SaveHashCode(const ND::TSHAHashValue& hc);
+    void SaveHashCode(const CP::TSHAHashValue& hc);
 
     /// Get the hash code out of the current gGeoManager object name.  This
     /// will return false if the gGeoManager object name does not contain the
     /// hash code.
-    bool GetHashCode(ND::TSHAHashValue& hc) const;
+    bool GetHashCode(CP::TSHAHashValue& hc) const;
 
     /// Save an alignment id into the current gGeoManager object name.
-    void SaveAlignmentCode(const ND::TAlignmentId& hc);
+    void SaveAlignmentCode(const CP::TAlignmentId& hc);
 
     /// Get the alignment id out of the current gGeoManager object name.  This
     /// will return false if the gGeoManager object name does not contain the
     /// id.
-    bool GetAlignmentCode(ND::TAlignmentId& hc) const;
+    bool GetAlignmentCode(CP::TAlignmentId& hc) const;
 
     /// Parse the hash code out of a string.  This will return false if the
     /// string does not contain the hash code.  The string should be stripped
     /// of all characters up to the first hexidecimal digit, and can be either
     /// a the geometry hash code or the alignment id hash code.
-    bool ParseHashCode(std::string hashCode, ND::TSHAHashValue& hc) const;
+    bool ParseHashCode(std::string hashCode, CP::TSHAHashValue& hc) const;
 
     /// Calculate the geometry hash code for the current gGeoManager.  Be
     /// aware that the result depends on the machine where it is being run.
@@ -252,7 +252,7 @@ private:
     /// an empty stream.  This requires the first hash, but the other hashs
     /// may be left to the default value.  If the other hashs have a non-zero
     /// value, then the file name is searched for that hash.
-    std::string FindGeometryFile(const ND::TSHAHashValue& hc) const;
+    std::string FindGeometryFile(const CP::TSHAHashValue& hc) const;
 
     /// Find and load the geometry that best matchs this event.  If this
     /// returns true, then a new geometry was loaded.  If event is non-null,
@@ -260,21 +260,21 @@ private:
     /// ReadGeometry, LoadGeometry and ResetGeometry to load the actual
     /// geometry manager so the geometry id and hash code tables are updated
     /// by this method.
-    bool FindAndLoadGeometry(ND::TND280Event* event);
+    bool FindAndLoadGeometry(CP::TND280Event* event);
 
     /// Determine if the geometry should be looked for.  If this returns true,
     /// the a new geometry should be loaded.
-    bool CheckGeometry(const ND::TND280Event* const event);
+    bool CheckGeometry(const CP::TND280Event* const event);
 
     /// Check if the alignment might have changed.
-    bool CheckAlignment(const ND::TND280Event* const event);
+    bool CheckAlignment(const CP::TND280Event* const event);
 
     /// This applies the alignment.
-    void ApplyAlignment(const ND::TND280Event* const event);
+    void ApplyAlignment(const CP::TND280Event* const event);
 
     /// Load the correct geometry.  This is provided to TOADatabase to
-    /// implement ND::TOADatabase::Geometry().
-    TGeoManager* GetGeometry(ND::TND280Event* event);
+    /// implement CP::TOADatabase::Geometry().
+    TGeoManager* GetGeometry(CP::TND280Event* event);
 
     /// Set the pointer to the current geometry manager.  This sets both the
     /// fGeoManager field and the gGeoManager global.
@@ -285,10 +285,10 @@ private:
     TGeoManager* GetGeoManager();
 
     /// Set the geometry time stamp.
-    void SetGeomEventContext(const ND::TND280Context& c) {fGeomEventContext=c;}
+    void SetGeomEventContext(const CP::TND280Context& c) {fGeomEventContext=c;}
 
     /// Get the geometry time stamp.
-    const ND::TND280Context& GetGeomEventContext() const {
+    const CP::TND280Context& GetGeomEventContext() const {
         return fGeomEventContext;
     }
 
@@ -315,11 +315,11 @@ private:
     /// The context of the last event that was checked to make sure that the
     /// geometry was valid.  This is used to short circuit the geometry check
     /// when the event geometry hash code and alignment id haven't been set.
-    ND::TND280Context fGeomEventContext;
+    CP::TND280Context fGeomEventContext;
 
     /// The class to calculate the SHA1 message digest.  This is used in
     /// RecurseHashCode.
-    ND::TSHA1 fSHA1;
+    CP::TSHA1 fSHA1;
 
     /// A vector of TGeomIdFinder objects.
     std::vector<TGeomIdFinder*> fFinders;

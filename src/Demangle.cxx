@@ -56,7 +56,7 @@ namespace {
 }
 
 // Demangle a type_info object.
-std::string ND::Tools::Demangle( const std::type_info & ti ) { 
+std::string CP::Tools::Demangle( const std::type_info & ti ) { 
 #if defined(_WIN32)
     static std::vector<std::string> keywords;
     if ( 0 == keywords.size() ) {

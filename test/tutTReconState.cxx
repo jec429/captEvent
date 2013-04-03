@@ -27,13 +27,13 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTReconState::test<1> () {
-        ND::TClusterState v;
+        CP::TClusterState v;
     }
 
     // Test the TClusterState projection operator.
     template<> template<>
     void testTReconState::test<2> () {
-        ND::THandle<ND::TClusterState> s(new ND::TClusterState);
+        CP::THandle<CP::TClusterState> s(new CP::TClusterState);
 
         ensure_greaterthan("TClusterState dimensionality",s->GetDimensions(),4);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -45,7 +45,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
 
-        ND::TCorrValues v = ND::TClusterState::ProjectState(s);
+        CP::TCorrValues v = CP::TClusterState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("Cluster state covariance after projection", 
@@ -63,7 +63,7 @@ namespace tut {
     // Test the TShowerState projection operator.
     template<> template<>
     void testTReconState::test<3> () {
-        ND::THandle<ND::TShowerState> s(new ND::TShowerState);
+        CP::THandle<CP::TShowerState> s(new CP::TShowerState);
 
         ensure_greaterthan("TShowerState dimensionality",s->GetDimensions(),4);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -75,7 +75,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
 
-        ND::TCorrValues v = ND::TShowerState::ProjectState(s);
+        CP::TCorrValues v = CP::TShowerState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("Shower state covariance after projection", 
@@ -93,7 +93,7 @@ namespace tut {
     // Test the TTrackState projection operator.
     template<> template<>
     void testTReconState::test<4> () {
-        ND::THandle<ND::TTrackState> s(new ND::TTrackState);
+        CP::THandle<CP::TTrackState> s(new CP::TTrackState);
 
         ensure_greaterthan("TTrackState dimensionality",s->GetDimensions(),4);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -105,7 +105,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
 
-        ND::TCorrValues v = ND::TTrackState::ProjectState(s);
+        CP::TCorrValues v = CP::TTrackState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("Track state covariance after projection", 
@@ -123,7 +123,7 @@ namespace tut {
     // Test the TVertexState projection operator.
     template<> template<>
     void testTReconState::test<5> () {
-        ND::THandle<ND::TVertexState> s(new ND::TVertexState);
+        CP::THandle<CP::TVertexState> s(new CP::TVertexState);
 
         ensure_greaterthan("TVertexState dimensionality",s->GetDimensions(),3);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -135,7 +135,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
 
-        ND::TCorrValues v = ND::TVertexState::ProjectState(s);
+        CP::TCorrValues v = CP::TVertexState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("Vertex state covariance after projection", 
@@ -153,7 +153,7 @@ namespace tut {
     // Test the TPIDState projection operator.
     template<> template<>
     void testTReconState::test<6> () {
-        ND::THandle<ND::TPIDState> s(new ND::TPIDState);
+        CP::THandle<CP::TPIDState> s(new CP::TPIDState);
 
         ensure_greaterthan("TPIDState dimensionality",s->GetDimensions(),4);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -165,7 +165,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
 
-        ND::TCorrValues v = ND::TPIDState::ProjectState(s);
+        CP::TCorrValues v = CP::TPIDState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("PID state covariance after projection", 
@@ -183,7 +183,7 @@ namespace tut {
     // Test the TVertexState projection operator.
     template<> template<>
     void testTReconState::test<7> () {
-        ND::THandle<ND::TVertexState> s(new ND::TVertexState);
+        CP::THandle<CP::TVertexState> s(new CP::TVertexState);
 
         ensure_greaterthan("TVertexState dimensionality",s->GetDimensions(),3);
         for (int i = 0; i<s->GetDimensions(); ++i) {
@@ -195,7 +195,7 @@ namespace tut {
                             double(i+1), 0.0001);
         }
  
-        ND::TCorrValues v = ND::TTrackState::ProjectState(s);
+        CP::TCorrValues v = CP::TTrackState::ProjectState(s);
 
         for (int i = 0; i<s->GetDimensions(); ++i) {
             ensure_distance("Vertex state covariance after projection", 

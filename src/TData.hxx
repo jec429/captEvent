@@ -9,7 +9,7 @@
 #include "TDatum.hxx"
 #include "THandle.hxx"
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(EData,EDatum);
     OA_EXCEPTION(EBadInsertion,EData);
     class TData;
@@ -22,7 +22,7 @@ namespace ND {
 /// inherited by classes which implement specific container behavior.  The
 /// TDataVector class behaves like a vector or dictionary (and is the most
 /// commonly used type).
-class ND::TData : public TDatum {
+class CP::TData : public TDatum {
 public:
     TData() : TDatum("",TDATA_TITLE) { };
 
@@ -51,7 +51,7 @@ public:
     /// A default way to add a THandle<TDatum>.  This takes over memory
     /// management of the handle and will throw the EBadInsertion
     /// exception if the insertion fails.
-    virtual void AddDatum(ND::THandle<ND::TDatum> handle,
+    virtual void AddDatum(CP::THandle<CP::TDatum> handle,
                           const char* name=NULL);
 
     virtual TDatum* FindDatum(const char* name);
@@ -60,7 +60,7 @@ public:
     /// is removed.  This method temporarily takes ownership of the element,
     /// and then returns the element as the method return value.  The derived
     /// classes must implement this method to actually remove the element.
-    /// See documentation for ND::TDatum::RemoveDatum() for details.
+    /// See documentation for CP::TDatum::RemoveDatum() for details.
     virtual TDatum* RemoveDatum(TDatum* element) = 0;
 
 protected:

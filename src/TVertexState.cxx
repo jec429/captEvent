@@ -1,17 +1,17 @@
 #include "TVertexState.hxx"
 
 ///////////////////////////////////////////////////////
-ClassImp(ND::TVertexState);
+ClassImp(CP::TVertexState);
 
-ND::TVertexState::TVertexState(): TMReconState(this) {
+CP::TVertexState::TVertexState(): TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
     Init();
 }
 
-ND::TVertexState::~TVertexState() {}
+CP::TVertexState::~TVertexState() {}
 
-ND::TVertexState::TVertexState(const ND::TVertexState& init)
+CP::TVertexState::TVertexState(const CP::TVertexState& init)
   : TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -29,7 +29,7 @@ ND::TVertexState::TVertexState(const ND::TVertexState& init)
     
 }
 
-ND::TVertexState& ND::TVertexState::operator=(const ND::TVertexState& rhs) {
+CP::TVertexState& CP::TVertexState::operator=(const CP::TVertexState& rhs) {
     if (this == &rhs) return *this;
 
     for (int i=0; i<GetSize(); ++i) {
@@ -45,8 +45,8 @@ ND::TVertexState& ND::TVertexState::operator=(const ND::TVertexState& rhs) {
     return *this;
 }
 
-ND::TCorrValues ND::TVertexState::ProjectState(
-    const ND::THandle<TReconState>& proj) {
+CP::TCorrValues CP::TVertexState::ProjectState(
+    const CP::THandle<TReconState>& proj) {
     TCorrValues values(TVertexState::GetSize());
     values.SetType("X Y Z T ");
     const TMPositionState* posState 

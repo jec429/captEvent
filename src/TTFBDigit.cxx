@@ -1,10 +1,10 @@
 #include "TTFBDigit.hxx"
 
-ClassImp(ND::TTFBDigit);
+ClassImp(CP::TTFBDigit);
 
-ND::TTFBDigit::TTFBDigit() {}
+CP::TTFBDigit::TTFBDigit() {}
 
-ND::TTFBDigit::TTFBDigit(ND::TChannelId chan, 
+CP::TTFBDigit::TTFBDigit(CP::TChannelId chan, 
                          int highGainADC,
                          int lowGainADC, 
                          unsigned int timeCounter,
@@ -17,9 +17,9 @@ ND::TTFBDigit::TTFBDigit(ND::TChannelId chan,
     else fBits &= 0xFB; 
 }
 
-ND::TTFBDigit::~TTFBDigit() {}
+CP::TTFBDigit::~TTFBDigit() {}
 
-void ND::TTFBDigit::ls(Option_t* opt) const {
+void CP::TTFBDigit::ls(Option_t* opt) const {
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << GetChannelId()

@@ -7,19 +7,19 @@
 #include <TChannelId.hxx>
 #include <TDigit.hxx>
 
-namespace ND {
+namespace CP {
     class TFGDDigit;
 };
 
 /// Digit for FGD based detectors.  This holds the actual digitization data
 /// for a FGD channel.
-class ND::TFGDDigit : public TDigit {
+class CP::TFGDDigit : public TDigit {
 public:
     TFGDDigit ();
     virtual ~TFGDDigit();
 
     /// Construct FGD digit.
-    TFGDDigit(ND::TChannelId chan, 
+    TFGDDigit(CP::TChannelId chan, 
               short startTime, short pulseTime, short pulseCharge, 
               std::vector<unsigned short> adcs,
               short dataType);

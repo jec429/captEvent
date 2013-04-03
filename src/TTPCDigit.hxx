@@ -7,19 +7,19 @@
 #include <TChannelId.hxx>
 #include <TDigit.hxx>
 
-namespace ND {
+namespace CP {
     class TTPCDigit;
 };
 
 /// Digit for TPC based detectors.  This holds the actual digitization data
 /// for a TPC channel.
-class ND::TTPCDigit : public TDigit {
+class CP::TTPCDigit : public TDigit {
 public:
     TTPCDigit ();
     virtual ~TTPCDigit();
 
     /// Construct a digit for a particular channel and cycle number.
-    TTPCDigit(ND::TChannelId chan, short time, std::vector<short> adcs);
+    TTPCDigit(CP::TChannelId chan, short time, std::vector<short> adcs);
 
     /// Get the first time bin
     int GetFirstTimeSample() const;

@@ -12,7 +12,7 @@
 #include "EoaCore.hxx"
 #include "TND280Log.hxx"
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(EHandle,EoaCore);
     OA_EXCEPTION(EHandleBadReference,EHandle);
 
@@ -94,13 +94,13 @@ namespace ND {
     /// Wikipedia for details).  This means that "reference loops" will
     /// prevent objects from being deleted.
     ///
-    /// A reference to a NULL THandle will throw an ND::EHandleBadReference
+    /// A reference to a NULL THandle will throw an CP::EHandleBadReference
     /// which means it won't generate a core dump.  For debugging, you can run
     /// the problem under gdb, and set a break point for the
-    /// ND::EHandleBadReference constructor.
+    /// CP::EHandleBadReference constructor.
     ///
     /// \code
-    /// catch throw 'ND::EHandleBadReference::EHandleBadReference()'
+    /// catch throw 'CP::EHandleBadReference::EHandleBadReference()'
     /// \endcode
     template <class T> 
     class THandle : public TVHandle {

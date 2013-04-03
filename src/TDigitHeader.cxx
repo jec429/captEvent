@@ -1,35 +1,35 @@
 #include "TDigitHeader.hxx"
 #include "TDataVector.hxx"
 
-ClassImp(ND::TDigitHeader);
+ClassImp(CP::TDigitHeader);
 
-ND::TDigitHeader::TDigitHeader()
+CP::TDigitHeader::TDigitHeader()
     : fName(""), fBeginValid(0), fEndValid(0), fDataVector(0) {}
 
-ND::TDigitHeader::TDigitHeader(const std::string& name)
+CP::TDigitHeader::TDigitHeader(const std::string& name)
     : fName(name), fBeginValid(0), fEndValid(0), fDataVector(0) {};
 
-ND::TDigitHeader::~TDigitHeader() {}
+CP::TDigitHeader::~TDigitHeader() {}
 
-void ND::TDigitHeader::AddDatum(ND::TDatum* val, const char* name) {
+void CP::TDigitHeader::AddDatum(CP::TDatum* val, const char* name) {
     if (!fDataVector) {
-        fDataVector = new ND::TDataVector("info",
+        fDataVector = new CP::TDataVector("info",
                                           "Digit Header Information");
     }
     fDataVector->AddDatum(val,name);
 }
 
-void ND::TDigitHeader::AddDatum(ND::THandle<ND::TDatum> val, const char* name) {
+void CP::TDigitHeader::AddDatum(CP::THandle<CP::TDatum> val, const char* name) {
     if (!fDataVector) {
-        fDataVector = new ND::TDataVector("DigitHeader",
+        fDataVector = new CP::TDataVector("DigitHeader",
                                           "Digit Header Information");
     }
     fDataVector->AddDatum(val,name);
 }
 
-void ND::TDigitHeader::ls(Option_t* opt) const {
+void CP::TDigitHeader::ls(Option_t* opt) const {
     TROOT::IndentLevel();
-    std::cout<<"ND::TDigitHeader("<<this<<"):: ";
+    std::cout<<"CP::TDigitHeader("<<this<<"):: ";
     std::cout<<GetName()<<std::endl;
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();

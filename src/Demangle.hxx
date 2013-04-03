@@ -13,7 +13,7 @@
 #include <typeinfo>
 #include <string>
 
-namespace ND {
+namespace CP {
 
    namespace Tools {
 

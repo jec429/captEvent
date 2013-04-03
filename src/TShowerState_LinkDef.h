@@ -1,5 +1,5 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TShowerState+;
-#pragma link C++ class ND::THandle<ND::TShowerState>+;
-#pragma link C++ class ND::TReconNodeContainerImpl<ND::TShowerState>+;
+#pragma link C++ class CP::TShowerState+;
+#pragma link C++ class CP::THandle<CP::TShowerState>+;
+#pragma link C++ class CP::TReconNodeContainerImpl<CP::TShowerState>+;
 #endif

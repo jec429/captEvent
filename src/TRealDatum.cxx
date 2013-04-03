@@ -1,36 +1,36 @@
 #include "TRealDatum.hxx"
 
-ClassImp(ND::TRealDatum);
+ClassImp(CP::TRealDatum);
 
-ND::TRealDatum::TRealDatum() 
-    : ND::TDatum("unnamed","Real Value") {
+CP::TRealDatum::TRealDatum() 
+    : CP::TDatum("unnamed","Real Value") {
     fValue.push_back(0);
 }
 
-ND::TRealDatum::TRealDatum(const char *name, double value) 
-    : ND::TDatum(name,"Real Value") {
+CP::TRealDatum::TRealDatum(const char *name, double value) 
+    : CP::TDatum(name,"Real Value") {
     fValue.push_back(value);
 }
 
-ND::TRealDatum::TRealDatum(const char *name, const char* title, double value) 
-    : ND::TDatum(name,title) {
+CP::TRealDatum::TRealDatum(const char *name, const char* title, double value) 
+    : CP::TDatum(name,title) {
     fValue.push_back(value);
 }
 
-ND::TRealDatum::TRealDatum(const TRealDatum& rhs)
-    : ND::TDatum(rhs.GetName(),rhs.GetTitle()), fValue(rhs.fValue) {}
+CP::TRealDatum::TRealDatum(const TRealDatum& rhs)
+    : CP::TDatum(rhs.GetName(),rhs.GetTitle()), fValue(rhs.fValue) {}
 
-ND::TRealDatum::~TRealDatum() {}
+CP::TRealDatum::~TRealDatum() {}
 
-double ND::TRealDatum::GetValue(void) const {return fValue.front();}
+double CP::TRealDatum::GetValue(void) const {return fValue.front();}
 
-void ND::TRealDatum::SetValue(double v) {fValue.front() = v;}
+void CP::TRealDatum::SetValue(double v) {fValue.front() = v;}
 
-std::vector<double>& ND::TRealDatum::GetVector(void) {return fValue;}
+std::vector<double>& CP::TRealDatum::GetVector(void) {return fValue;}
 
-const std::vector<double>& ND::TRealDatum::GetVector(void) const {return fValue;}
+const std::vector<double>& CP::TRealDatum::GetVector(void) const {return fValue;}
 
-void ND::TRealDatum::ls(Option_t* opt) const {
+void CP::TRealDatum::ls(Option_t* opt) const {
     ls_header(this, opt);
     for (std::vector<double>::const_iterator v = fValue.begin();
          v != fValue.end();

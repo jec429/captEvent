@@ -8,7 +8,7 @@
 #include "TDatum.hxx"
 #include "TG4PrimaryParticle.hxx"
 
-namespace ND {
+namespace CP {
     class TG4PrimaryVertexContainer;
     class TG4PrimaryVertex;
 }
@@ -19,7 +19,7 @@ namespace ND {
 /// absorbed by the nucleus).  It's also possible that an event could have
 /// multiple vertices (i.e. more than one interaction per spill).
 /// A container for all of the trajectory information.
-class ND::TG4PrimaryVertexContainer 
+class CP::TG4PrimaryVertexContainer 
     : public TDatum , public std::vector<TG4PrimaryVertex> {
 public:
     TG4PrimaryVertexContainer(const char* name,
@@ -38,7 +38,7 @@ private:
 
 /// A class to save a G4 primary vertex into a root output file without linking
 /// to geant.
-class ND::TG4PrimaryVertex: public TObject {
+class CP::TG4PrimaryVertex: public TObject {
 public:
     TG4PrimaryVertex(void);
     TG4PrimaryVertex(const TG4PrimaryVertex& rhs);

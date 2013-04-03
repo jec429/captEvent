@@ -10,7 +10,7 @@
 
 #include <nd280EventLoop.hxx>
 
-class TTestSplit: public ND::TND280EventLoopFunction {
+class TTestSplit: public CP::TND280EventLoopFunction {
 public:
     TTestSplit() {
         fCount = 0;
@@ -18,7 +18,7 @@ public:
 
     virtual ~TTestSplit() {};
 
-    virtual int Process(ND::TND280Event& event, int outputFiles) {
+    virtual int Process(CP::TND280Event& event, int outputFiles) {
         int temp = fCount;
         if (outputFiles>1) fCount = (fCount+1) % outputFiles;
         return temp;

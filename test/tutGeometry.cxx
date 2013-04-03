@@ -22,22 +22,22 @@ namespace tut {
     struct baseGeometry {
         baseGeometry() {
             // Run before each test.
-            ND::TOADatabase::Get().RegisterGeometryLookup(NULL);
-            ND::TOADatabase::Get().RegisterAlignmentLookup(NULL);
-            ND::TOADatabase::Get().ClearGeometryCallbacks();
+            CP::TOADatabase::Get().RegisterGeometryLookup(NULL);
+            CP::TOADatabase::Get().RegisterAlignmentLookup(NULL);
+            CP::TOADatabase::Get().ClearGeometryCallbacks();
             if (!gGeoManager) {
-                ND::TOADatabase::Get().GeomId().ReadGeometry(
-                    ND::TSHAHashValue());
+                CP::TOADatabase::Get().GeomId().ReadGeometry(
+                    CP::TSHAHashValue());
             }
             else {
-                ND::TOADatabase::Get().GeomId().ResetGeometry();
+                CP::TOADatabase::Get().GeomId().ResetGeometry();
             }
         }
         ~baseGeometry() {
             // Run after each test.
-            ND::TOADatabase::Get().RegisterGeometryLookup(NULL);
-            ND::TOADatabase::Get().RegisterAlignmentLookup(NULL);
-            ND::TOADatabase::Get().ClearGeometryCallbacks();
+            CP::TOADatabase::Get().RegisterGeometryLookup(NULL);
+            CP::TOADatabase::Get().RegisterAlignmentLookup(NULL);
+            CP::TOADatabase::Get().ClearGeometryCallbacks();
         }
     };
 
@@ -52,34 +52,34 @@ namespace tut {
     // check.
     template<> template<>
     void testGeometry::test<1> () {
-        ND::TSHAHashValue hash 
-            = ND::TOADatabase::Get().GeomId().GetHash();
-        ND::TOADatabase::Get().SetGeometryOverride(hash);
-        ND::TOADatabase::Get().Geometry();
+        CP::TSHAHashValue hash 
+            = CP::TOADatabase::Get().GeomId().GetHash();
+        CP::TOADatabase::Get().SetGeometryOverride(hash);
+        CP::TOADatabase::Get().Geometry();
     }
 
     /// Implement a GeometryLookup class that returns alignment.  This works
     /// on the default geometry.
-    class AlignmentLookup: public ND::TOADatabase::AlignmentLookup {
+    class AlignmentLookup: public CP::TOADatabase::AlignmentLookup {
         unsigned int fCalls;
     public:
-        std::vector< std::pair<ND::TGeometryId,double> > fGeomIdYShift;
+        std::vector< std::pair<CP::TGeometryId,double> > fGeomIdYShift;
         AlignmentLookup() {}
         virtual ~AlignmentLookup() {}
-        bool CheckAlignment(const ND::TND280Event* const event) {
+        bool CheckAlignment(const CP::TND280Event* const event) {
             return true;
         }
-        ND::TAlignmentId StartAlignment(const ND::TND280Event* const event) {
+        CP::TAlignmentId StartAlignment(const CP::TND280Event* const event) {
             fCalls = 0;
             unsigned int aid[5] = {0,0,0,0,0};
             aid[0] = fGeomIdYShift.size();
             for (unsigned i=0; i<fGeomIdYShift.size(); ++i) {
                 aid[1 + (i%4)] += fGeomIdYShift[i].second/unit::mm;
             }
-            return ND::TAlignmentId(aid);
+            return CP::TAlignmentId(aid);
         }
-        TGeoMatrix* Align(const ND::TND280Event* const event,
-                          ND::TGeometryId& geomId) {
+        TGeoMatrix* Align(const CP::TND280Event* const event,
+                          CP::TGeometryId& geomId) {
             TGeoMatrix* result = NULL;
             if (fCalls<fGeomIdYShift.size()) {
                 geomId = fGeomIdYShift[fCalls].first;
@@ -95,10 +95,10 @@ namespace tut {
     /// Test the basic alignment capability.
     template<> template<>
     void testGeometry::test<2> () {
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
 
         // Get the original position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::Detector());
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::Detector());
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
@@ -107,14 +107,14 @@ namespace tut {
         // Prepare the alignments.
         alignmentLookup.fGeomIdYShift.clear();
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::Detector(),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
                                               2*unit::mm));
 
-        ND::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
-        ND::TOADatabase::Get().AlignGeometry(NULL);
+        CP::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
+        CP::TOADatabase::Get().AlignGeometry(NULL);
 
         // Get the shifted position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::Detector());
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::Detector());
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -124,10 +124,10 @@ namespace tut {
     /// Test the cumulative alignment capability.
     template<> template<>
     void testGeometry::test<3> () {
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
 
         // Get the original position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
@@ -136,18 +136,18 @@ namespace tut {
         // Prepare the alignments.
         alignmentLookup.fGeomIdYShift.clear();
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::Detector(),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
                                               3*unit::mm));
 
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::P0Dule(3),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
                                               2*unit::mm));
 
-        ND::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
-        ND::TOADatabase::Get().AlignGeometry(NULL);
+        CP::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
+        CP::TOADatabase::Get().AlignGeometry(NULL);
 
         // Get the shifted position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -157,10 +157,10 @@ namespace tut {
     /// Same as test 3, but apply shifts in different order.
     template<> template<>
     void testGeometry::test<4> () {
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
 
         // Get the original position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
@@ -169,18 +169,18 @@ namespace tut {
         // Prepare the alignments.
         alignmentLookup.fGeomIdYShift.clear();
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::P0Dule(3),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
                                               2*unit::mm));
 
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::Detector(),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
                                               3*unit::mm));
 
-        ND::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
-        ND::TOADatabase::Get().AlignGeometry(NULL);
+        CP::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
+        CP::TOADatabase::Get().AlignGeometry(NULL);
 
         // Get the shifted position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -190,10 +190,10 @@ namespace tut {
     /// Apply multiple alignments to the same volume.
     template<> template<>
     void testGeometry::test<5> () {
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
 
         // Get the original position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
@@ -202,22 +202,22 @@ namespace tut {
         // Prepare the alignments.
         alignmentLookup.fGeomIdYShift.clear();
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::P0Dule(3),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
                                               2*unit::mm));
 
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::P0Dule(3),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
                                               3*unit::mm));
 
         alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<ND::TGeometryId,double>(ND::GeomId::P0D::P0Dule(3),
+            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
                                               4*unit::mm));
 
-        ND::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
-        ND::TOADatabase::Get().AlignGeometry(NULL);
+        CP::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
+        CP::TOADatabase::Get().AlignGeometry(NULL);
 
         // Get the shifted position of the P0D detector.
-        ND::TOADatabase::Get().GeomId().CdId(ND::GeomId::P0D::P0Dule(3));
+        CP::TOADatabase::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -228,42 +228,42 @@ namespace tut {
     template<> template<>
     void testGeometry::test<6> () {
         // Get the existing geometry.
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
 
-        ND::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
-        ND::TOADatabase::Get().AlignGeometry(NULL);
+        CP::TOADatabase::Get().RegisterAlignmentLookup(&alignmentLookup);
+        CP::TOADatabase::Get().AlignGeometry(NULL);
 
-        ND::TSHAHashValue hc = ND::TOADatabase::Get().GeomId().GetHash();
-        ND::TAlignmentId aid = ND::TOADatabase::Get().GeomId().GetAlignmentId();
+        CP::TSHAHashValue hc = CP::TOADatabase::Get().GeomId().GetHash();
+        CP::TAlignmentId aid = CP::TOADatabase::Get().GeomId().GetAlignmentId();
  
-        ND::TOADatabase::Get().GeomId().ResetGeometry();
+        CP::TOADatabase::Get().GeomId().ResetGeometry();
 
         ensure_equals("Hash Code before and after reset",
-                      hc, ND::TOADatabase::Get().GeomId().GetHash());
+                      hc, CP::TOADatabase::Get().GeomId().GetHash());
 
         ensure_equals("Alignment Id Code before and after reset",
-                      aid, ND::TOADatabase::Get().GeomId().GetAlignmentId());
+                      aid, CP::TOADatabase::Get().GeomId().GetAlignmentId());
 
     }        
 
     /// Make sure that the CdId method is working.
     template<> template<>
     void testGeometry::test<7> () {
-        // ND::TOADatabase::Get().Geometry();
+        // CP::TOADatabase::Get().Geometry();
         for (int i=0; i<40; ++i) {
             ensure("CdId finds volume matching geometry id.",
-                   ND::TOADatabase::Get().GeomId().CdId(
-                       ND::GeomId::P0D::P0Dule(i)));
+                   CP::TOADatabase::Get().GeomId().CdId(
+                       CP::GeomId::P0D::P0Dule(i)));
         }
         ensure("CdId returns false for non-existent volume.",
-               !ND::TOADatabase::Get().GeomId().CdId(
-                   ND::GeomId::P0D::P0Dule(40)));
+               !CP::TOADatabase::Get().GeomId().CdId(
+                   CP::GeomId::P0D::P0Dule(40)));
     }        
 
-    class LocalGeometryChange: public ND::TOADatabase::GeometryChange {
+    class LocalGeometryChange: public CP::TOADatabase::GeometryChange {
     public:
         LocalGeometryChange() : fCallCount(0) {}
-        void Callback(const ND::TND280Event* const event) {++fCallCount;}
+        void Callback(const CP::TND280Event* const event) {++fCallCount;}
         int fCallCount;
     };
     LocalGeometryChange localGeometryChange;
@@ -271,13 +271,13 @@ namespace tut {
     /// Test that the GeometryChange call back is working.
     template<> template<>
     void testGeometry::test<8> () {
-        ND::TSHAHashValue hash 
-            = ND::TOADatabase::Get().GeomId().GetHash();
-        ND::TOADatabase::Get().SetGeometryOverride(hash);
-        ND::TOADatabase::Get().RegisterGeometryCallback(&localGeometryChange);
-        ND::TOADatabase::Get().Geometry();
-        ND::TOADatabase::Get().Geometry();
-        ND::TOADatabase::Get().Geometry();
+        CP::TSHAHashValue hash 
+            = CP::TOADatabase::Get().GeomId().GetHash();
+        CP::TOADatabase::Get().SetGeometryOverride(hash);
+        CP::TOADatabase::Get().RegisterGeometryCallback(&localGeometryChange);
+        CP::TOADatabase::Get().Geometry();
+        CP::TOADatabase::Get().Geometry();
+        CP::TOADatabase::Get().Geometry();
         ensure_equals("Call backs called", localGeometryChange.fCallCount,1);
     }
 
@@ -285,12 +285,12 @@ namespace tut {
     template<> template<>
     void testGeometry::test<9> () {
         for (int i=0; i<25; ++i) {
-            ND::TGeometryId targetId = ND::GeomId::P0D::Target(i);
+            CP::TGeometryId targetId = CP::GeomId::P0D::Target(i);
             ensure("CdId find the target volume.",
-                   ND::TOADatabase::Get().GeomId().CdId(targetId));
+                   CP::TOADatabase::Get().GeomId().CdId(targetId));
         }
         ensure("CdId returns false for non-existent target.",
-               !ND::TOADatabase::Get().GeomId().CdId(
-                   ND::GeomId::P0D::Target(25)));
+               !CP::TOADatabase::Get().GeomId().CdId(
+                   CP::GeomId::P0D::Target(25)));
     }
 };

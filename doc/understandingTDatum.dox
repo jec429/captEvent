@@ -42,14 +42,14 @@ time.
 
 \code
 // Access using a pointer that may be NULL.
-ND::THandle<ND::TAlgorithmResult> sbcat = event.Get<ND::TAlgorithmResult>("fits/sbCATxz");
+CP::THandle<CP::TAlgorithmResult> sbcat = event.Get<CP::TAlgorithmResult>("fits/sbCATxz");
 if (sbcat) {
    std::cout << "result found" << std::endl;
 }
 
 // Access using a reference and an exception trap.
 try {
-    ND::TAlgorithmResult& sbcat = event.Use<ND::TAlgorithmResult>("fits/sbCATxz");
+    CP::TAlgorithmResult& sbcat = event.Use<CP::TAlgorithmResult>("fits/sbCATxz");
     std::cout << "result found" << std::endl;
 }
 catch (ENoSuchElement) {
@@ -57,15 +57,15 @@ catch (ENoSuchElement) {
 }
 
 // Access by first checking that the object exists and then using a reference.
-if (event.Has<ND::TAlgorithmResult>("fits/sbCATxz")) {
-    ND::TAlgorithmResult& sbcat = event.Use<ND::TAlgorithmResult>("fits/sbCATxz");
+if (event.Has<CP::TAlgorithmResult>("fits/sbCATxz")) {
+    CP::TAlgorithmResult& sbcat = event.Use<CP::TAlgorithmResult>("fits/sbCATxz");
     std::cout << "result found" << std::endl;
 }
 
 // Finally, there is a convenience method to access algorithm results.
 // Check the documentation for other classes.  This returns a pointer
 // result, and is otherwise the same as the TDatum::Get example.  
-ND::THandle<ND::TAlgorithmResult> sbcat = event.GetFit("sbCATxz");
+CP::THandle<CP::TAlgorithmResult> sbcat = event.GetFit("sbCATxz");
 if (sbcat) {
     std::cout << "result found" << std::endl;
 }

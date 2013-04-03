@@ -1,3 +1,3 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TND280Input;
+#pragma link C++ class CP::TND280Input;
 #endif

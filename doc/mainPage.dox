@@ -4,14 +4,14 @@
 
   This library provides the basic I/O functions for T2K ND280 software.
 
-  The I/O is provided by ROOT which is used to save ND::TND280Event objects and
+  The I/O is provided by ROOT which is used to save CP::TND280Event objects and
   the TGeoManager description of the detector geometry.  The output to log
-  files, and for debugging is controlled by the ND::TND280Log class.  All of
+  files, and for debugging is controlled by the CP::TND280Log class.  All of
   the classes are in the ND namespace.  This namespace should contain all
   ND280 code.  
 
   This library also provides the ability to read a MIDAS raw data file
-  sequentially and return each record as a ND::TND280RawEvent. This object gives
+  sequentially and return each record as a CP::TND280RawEvent. This object gives
   access to raw MIDAS banks but in order to interpret this data the, soon to
   be developed, oaRawEvent package must be present.
 
@@ -25,7 +25,7 @@
   ROOT (as of 5.10), you must be careful and only access the geometry using
   the right "All Folders" panel.  The event tree can be browsed, but it is not
   very useful since you can The best way to read and write ND280 event files
-  is to use the ND::TND280Input and ND::TND280Output classes.  These provide an
+  is to use the CP::TND280Input and CP::TND280Output classes.  These provide an
   interface to the TFile class and take care of some of the basic bookkeeping
   needed to process events.
 
@@ -35,7 +35,7 @@
   the event structure is also described.
 
   The best frame work for accessing events is using an event loop which is
-  documented in \ref eventLoop and ND::nd280EventLoop().  Programs written
+  documented in \ref eventLoop and CP::nd280EventLoop().  Programs written
   using the event loop automatically handle reading of the input file (in
   both ROOT and MIDAS format), output to one or more files, loading of the
   geometry, and filtering of the trigger type.
@@ -44,17 +44,17 @@
   TDataVector class.  TDataVector derived classes provide a name space for
   information within an event where the naming rules are very similar to
   the unix file system naming rules.  For instance, the "sbCATxz"
-  ND::TAlgorithmResult object can be found in an event at "~/fits/sbCATxz".
+  CP::TAlgorithmResult object can be found in an event at "~/fits/sbCATxz".
   This refers to the "sbCATxz" TAlgorithmResult found in the "fits"
-  ND::TDataVector object which in turn is contained in the over all
-  ND::TND280Event object.  Data within an event is accessed using the
-  ND::TDatum::Use() or ND::TDatum::Get() methods.  The ND::TAlgorithmResult
+  CP::TDataVector object which in turn is contained in the over all
+  CP::TND280Event object.  Data within an event is accessed using the
+  CP::TDatum::Use() or CP::TDatum::Get() methods.  The CP::TAlgorithmResult
   object mentioned above can be accessed as follows:
 
   \code
 // Access using a reference and an exception trap.
 try {
-   ND::TAlgorithmResult& sbcat = event.Use<ND::TAlgorithmResult>("fits/sbCATxz");
+   CP::TAlgorithmResult& sbcat = event.Use<CP::TAlgorithmResult>("fits/sbCATxz");
    std::cout << "result found" << std::endl;
 }
 catch (ENoSuchElement) {
@@ -64,15 +64,15 @@ catch (ENoSuchElement) {
 
 \code
 // Access by first checking that the object exists and then using a reference.
-if (event.Has<ND::TAlgorithmResult>("fits/sbCATxz")) {
-   ND::TAlgorithmResult& sbcat = event.Use<TAlgorithmResult>("fits/sbCATxz");
+if (event.Has<CP::TAlgorithmResult>("fits/sbCATxz")) {
+   CP::TAlgorithmResult& sbcat = event.Use<TAlgorithmResult>("fits/sbCATxz");
    std::cout << "result found" << std::endl;
 }
 \endcode
 
 \code
 // Access using a pointer that may be NULL.
-ND::THandle<ND::TAlgorithmResult> sbcat = event.Get<ND::TAlgorithmResult>("fits/sbCATxz");
+CP::THandle<CP::TAlgorithmResult> sbcat = event.Get<CP::TAlgorithmResult>("fits/sbCATxz");
 if (sbcat) {
    std::cout << "result found" << std::endl;
 }
@@ -81,14 +81,14 @@ if (sbcat) {
 \code
 // Finally, there is a convenience method available to access
 // TAlgorithmResults saved in the fits sub-directory.  
-ND::THandle<ND::TAlgorithmResult> sbcat = event.GetFit("sbCATxz");
+CP::THandle<CP::TAlgorithmResult> sbcat = event.GetFit("sbCATxz");
 if (sbcat) {
    std::cout << "result found" << std::endl;
 }
 \endcode
 
 You can get a list of the objects available within a particular event using
-the dump-event.exe executable.  This program prints a directory of ND::TDatum
+the dump-event.exe executable.  This program prints a directory of CP::TDatum
 derived objects in an event.
 
 \htmlonly
@@ -105,24 +105,24 @@ The description of the detector geometry is done using the ROOT TGeoManager
 class.  This class provides a complete description of the locations as well
 as the mass, densities, and composition of all components of the detector.
 Access to the TGeoManager class is done through the
-ND::TOADatabase::Geometry() method which makes sure the correct geometry
+CP::TOADatabase::Geometry() method which makes sure the correct geometry
 for a given event is loaded into memory.  Care should be taken using the
-ND::TOADatabase::Geometry() method since it can (and often will) change the
+CP::TOADatabase::Geometry() method since it can (and often will) change the
 geometry that is currently loaded.  It does this by checking which version
 of the geometry should be used for the current event, loads the correct
 geometry, and then applies the correct alignment constants to the
 geometry.
 
-\note ND::TOADatabase is a singleton class so this method is accessed using
-ND::TOADatabase::Get().Geometry().
+\note CP::TOADatabase is a singleton class so this method is accessed using
+CP::TOADatabase::Get().Geometry().
 
 Since the current geometry description can change many times as different
 events are accessed and lodaed, if your code needs to build tables of
 detector locations, or other geometry details, it should register an object
-derived from the ND::TOADatabase::GeometryChange class using
-ND::TOADatabase::RegisterGeometryCalback().  This class will then be used
+derived from the CP::TOADatabase::GeometryChange class using
+CP::TOADatabase::RegisterGeometryCalback().  This class will then be used
 to update the tables whenever the geometry has been changed.  See the
-ND::TOADatabase::GeometryChange class for more details and an example.
+CP::TOADatabase::GeometryChange class for more details and an example.
 
 \subsection systemOfUnits The ND280 System of Units.
 

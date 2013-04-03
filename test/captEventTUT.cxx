@@ -17,7 +17,7 @@ int main(int argc,const char* argv[]) {
     std::string group;
     int test = -1;
 
-    ND::TND280Log::Configure();
+    CP::TND280Log::Configure();
 
     command = errorFound;
 

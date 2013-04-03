@@ -26,11 +26,11 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTFGDChannelId::test<1> () {
-        ND::TFGDChannelId g1(1);
-        ND::TChannelId g2;
-        ND::TFGDChannelId g3;
+        CP::TFGDChannelId g1(1);
+        CP::TChannelId g2;
+        CP::TFGDChannelId g3;
         g2 = g1;
-        g3 = ND::TFGDChannelId(g2);
+        g3 = CP::TFGDChannelId(g2);
         ensure_equals("TFGDChannelId value matchs", g1.AsUInt(), (unsigned) 1);
         ensure_equals("TChannelId value matchs", g2.AsUInt(), (unsigned) 1);
         ensure_equals("TFGDChannelId copied value matchs", g3.AsUInt(), (unsigned) 1);
@@ -40,12 +40,12 @@ namespace tut {
     // Test the normal constructor.
     template<> template<>
     void testTFGDChannelId::test<2> () {
-        ND::TChannelId::SubDetId subDet = ND::TChannelId::kFGD;
+        CP::TChannelId::SubDetId subDet = CP::TChannelId::kFGD;
         unsigned int crate = 15;
         unsigned int feb = 2;
         unsigned int chip = 1;
         unsigned int channel = 65;
-        ND::TFGDChannelId g1(subDet,crate,feb,chip,channel);
+        CP::TFGDChannelId g1(subDet,crate,feb,chip,channel);
         ensure("TFGDChannelId is valid", g1.IsValid());
         ensure_equals("Sub-detector value matchs", g1.GetSubDetector(),subDet);
         ensure_equals("Crate value matchs", g1.GetMinicrate(),crate);
@@ -57,11 +57,11 @@ namespace tut {
     // Test the secondary constructor.
     template<> template<>
     void testTFGDChannelId::test<3> () {
-        ND::TChannelId::SubDetId subDet = ND::TChannelId::kFGD;
+        CP::TChannelId::SubDetId subDet = CP::TChannelId::kFGD;
         unsigned int crate = 2;
         unsigned int feb = 1;
         int channel = 36;
-        ND::TFGDChannelId g1(subDet,crate,feb,channel);
+        CP::TFGDChannelId g1(subDet,crate,feb,channel);
         ensure("TFGDChannelId is valid", g1.IsValid());
         ensure_equals("Sub-detector value matchs", g1.GetSubDetector(),subDet);
         ensure_equals("Crate value matchs", g1.GetMinicrate(),crate);
@@ -97,7 +97,7 @@ namespace tut {
     template<> template<>
     void testTFGDChannelId::test<10> () {
         /// \bug Maximum number of crates needs to be checked by FGD group.
-        CMP("Check Crate", ND::TFGDChannelId, 6, 64,
+        CMP("Check Crate", CP::TFGDChannelId, 6, 64,
             SetMinicrate, GetMinicrate, 
             GetSubDetector, GetFEB);
     }
@@ -105,7 +105,7 @@ namespace tut {
     template<> template<>
     void testTFGDChannelId::test<11> () {
         /// \bug Maximum number of FEB needs to be checked by FGD group.
-        CMP("Check FEB", ND::TFGDChannelId, 2, 4,
+        CMP("Check FEB", CP::TFGDChannelId, 2, 4,
             SetFEB, GetFEB, 
             GetMinicrate, GetAfterChip);
     }
@@ -113,7 +113,7 @@ namespace tut {
     template<> template<>
     void testTFGDChannelId::test<12> () {
         /// \bug Maximum number of After Chips needs to be checked by FGD group.
-        CMP("Check after chip", ND::TFGDChannelId, 1, 2, 
+        CMP("Check after chip", CP::TFGDChannelId, 1, 2, 
             SetAfterChip, GetAfterChip, 
             GetFEB, GetChannel);
     }
@@ -121,7 +121,7 @@ namespace tut {
     template<> template<>
     void testTFGDChannelId::test<13> () {
         /// \bug Maximum number of channels needs to be checked by FGD group.
-        CMP("Check channel", ND::TFGDChannelId, 7, 128,
+        CMP("Check channel", CP::TFGDChannelId, 7, 128,
             SetChannel, GetChannel, 
             GetAfterChip, GetAfterChip);
     }

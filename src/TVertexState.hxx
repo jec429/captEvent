@@ -4,12 +4,12 @@
 #include "TReconState.hxx"
 #include "TReconNode.hxx"
 
-namespace ND {
+namespace CP {
     class TVertexState;
 }
 
 /// A state holding parameters associated with a TReconVertex.
-class ND::TVertexState: public TReconState,
+class CP::TVertexState: public TReconState,
                         virtual public TMReconState,
                         virtual public TMPositionState {
 public:
@@ -25,8 +25,8 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const 
-                                        ND::THandle<ND::TReconState>& state);
+    static CP::TCorrValues ProjectState(const 
+                                        CP::THandle<CP::TReconState>& state);
     
     ClassDef(TVertexState,1);
 };

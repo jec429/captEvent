@@ -5,7 +5,7 @@
 
 class TGeoManager;
 
-namespace ND {
+namespace CP {
     class TSingleHit;
     class TMCHit;
     class TDataHit;
@@ -14,7 +14,7 @@ namespace ND {
 }
 
 /// A single hit.  This cannot be directly instantiated.  
-class ND::TSingleHit: public THit {
+class CP::TSingleHit: public THit {
 private:
     friend class TMCHit;
     friend class TDataHit;
@@ -127,7 +127,7 @@ protected:
     Float_t fTime;
 
     /// The channel id associated with this hit.
-    ND::TChannelId fChannelId;
+    CP::TChannelId fChannelId;
 
     /// This is set to true if the fast access fields below have been
     /// initialized.

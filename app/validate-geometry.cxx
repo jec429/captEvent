@@ -52,9 +52,9 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    ND::TOADatabase::Get().SetGeometryOverride(argv[optind++]);
+    CP::TOADatabase::Get().SetGeometryOverride(argv[optind++]);
 
-    ND::TOADatabase::Get().Geometry()->CheckOverlaps();
+    CP::TOADatabase::Get().Geometry()->CheckOverlaps();
     TIter next(gGeoManager->GetListOfOverlaps());
     int count = 0;
     TGeoOverlap* overlap;
@@ -71,13 +71,13 @@ int main(int argc, char** argv) {
     // Build a vector of all geometry identifiers in the TGeoManager along
     // with the position of the volume associated with the TGeometryId.  Also
     // build a map matching root node id to the geometry id.
-    std::vector< std::pair<ND::TGeometryId, TVector3> > allId;
-    std::map<int, ND::TGeometryId> rootMap;
-    for (ND::TGeomIdManager::GeomIdMap::const_iterator g
-             = ND::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
-         g != ND::TOADatabase::Get().GeomId().GetGeomIdMap().end();
+    std::vector< std::pair<CP::TGeometryId, TVector3> > allId;
+    std::map<int, CP::TGeometryId> rootMap;
+    for (CP::TGeomIdManager::GeomIdMap::const_iterator g
+             = CP::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
+         g != CP::TOADatabase::Get().GeomId().GetGeomIdMap().end();
          ++g) {
-        ND::TGeometryId geomId(g->first);
+        CP::TGeometryId geomId(g->first);
         if (!geomId.IsValid()) {
             std::cout << "Invalid geometry id" << std::endl;
             std::cout << "FAIL" << std::endl;
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
             return 1;
         }
         TVector3 pos;
-        if (!ND::TOADatabase::Get().GeomId().GetPosition(geomId, pos)) {
+        if (!CP::TOADatabase::Get().GeomId().GetPosition(geomId, pos)) {
             std::cout << "missing geometry id " 
                       << geomId.AsInt()
                       << " " << geomId.GetSubsystemName()
@@ -107,25 +107,25 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-        allId.push_back(std::pair<ND::TGeometryId,TVector3>(geomId,pos));
+        allId.push_back(std::pair<CP::TGeometryId,TVector3>(geomId,pos));
         rootMap[g->second] = geomId;
     }
 
     for (int i = 0; i<trials; ++i) {
         std::random_shuffle(allId.begin(), allId.end());
-        for (std::vector< std::pair<ND::TGeometryId, TVector3> >::iterator g
+        for (std::vector< std::pair<CP::TGeometryId, TVector3> >::iterator g
                  = allId.begin();
              g != allId.end();
              ++g) {
             TVector3 pos(g->second);
-            ND::TGeometryId target = g->first;
+            CP::TGeometryId target = g->first;
 
             // Limit the test to the "Bar_" volumes.  This excludes the
             // composite volumes like "P0D_0".
             if (target.GetName().find("/Bar_") == std::string::npos) continue;
 
-            ND::TGeometryId geomId;
-            if (!ND::TOADatabase::Get().GeomId().GetGeometryId(
+            CP::TGeometryId geomId;
+            if (!CP::TOADatabase::Get().GeomId().GetGeometryId(
                     pos.X(), pos.Y(), pos.Z(), geomId)) {
                 std::cout << "couldn't find geometry id " 
                           << target.AsInt() << " " << target

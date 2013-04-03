@@ -1,3 +1,3 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TSHAHashValue+;
+#pragma link C++ class CP::TSHAHashValue+;
 #endif

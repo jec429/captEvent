@@ -24,7 +24,7 @@
 
 namespace {
     void nd280EventLoopUsage(std::string programName, 
-                             ND::TND280EventLoopFunction& userCode,
+                             CP::TND280EventLoopFunction& userCode,
                              int readCount) {
         std::cout << "usage: " << programName 
                   << " [options] [input-file] ..." 
@@ -104,16 +104,16 @@ namespace {
     }
 };
 
-int ND::nd280EventLoop(int argc, char** argv,
-                       ND::TND280EventLoopFunction& userCode, 
+int CP::nd280EventLoop(int argc, char** argv,
+                       CP::TND280EventLoopFunction& userCode, 
                        int defaultReadCount) {
     if (defaultReadCount<0) defaultReadCount = 0;
     int readCount = defaultReadCount;
     int skipCount = 0;
     int debugLevel = 0;
-    std::map<std::string, ND::TND280Log::ErrorPriority> namedDebugLevel;
+    std::map<std::string, CP::TND280Log::ErrorPriority> namedDebugLevel;
     int logLevel = -1; // Will choose default logging level...
-    std::map<std::string, ND::TND280Log::LogPriority> namedLogLevel;
+    std::map<std::string, CP::TND280Log::LogPriority> namedLogLevel;
     std::string programName = argv[0];
     char *configName = NULL;
     std::vector<std::string> outputNames;
@@ -165,19 +165,19 @@ int ND::nd280EventLoop(int argc, char** argv,
                 std::string levelName = arg.substr(sep+1);
                 switch (levelName[0]) {
                 case 'e': case 'E':
-                    namedDebugLevel[name.c_str()] = ND::TND280Log::ErrorLevel;
+                    namedDebugLevel[name.c_str()] = CP::TND280Log::ErrorLevel;
                     break;
                 case 's': case 'S':
-                    namedDebugLevel[name.c_str()] = ND::TND280Log::SevereLevel;
+                    namedDebugLevel[name.c_str()] = CP::TND280Log::SevereLevel;
                     break;
                 case 'w': case 'W':
-                    namedDebugLevel[name.c_str()] = ND::TND280Log::WarnLevel;
+                    namedDebugLevel[name.c_str()] = CP::TND280Log::WarnLevel;
                     break;
                 case 'd': case 'D':
-                    namedDebugLevel[name.c_str()] = ND::TND280Log::DebugLevel;
+                    namedDebugLevel[name.c_str()] = CP::TND280Log::DebugLevel;
                     break;
                 case 't': case 'T':
-                    namedDebugLevel[name.c_str()] = ND::TND280Log::TraceLevel;
+                    namedDebugLevel[name.c_str()] = CP::TND280Log::TraceLevel;
                     break;
                 default:
                     nd280EventLoopUsage(programName,userCode,defaultReadCount);
@@ -291,16 +291,16 @@ int ND::nd280EventLoop(int argc, char** argv,
                 std::string levelName = arg.substr(sep+1);
                 switch (levelName[0]) {
                 case 'q': case 'Q':
-                    namedLogLevel[name.c_str()] = ND::TND280Log::QuietLevel;
+                    namedLogLevel[name.c_str()] = CP::TND280Log::QuietLevel;
                     break;
                 case 'l': case 'L':
-                    namedLogLevel[name.c_str()] = ND::TND280Log::LogLevel;
+                    namedLogLevel[name.c_str()] = CP::TND280Log::LogLevel;
                     break;
                 case 'i': case 'I':
-                    namedLogLevel[name.c_str()] = ND::TND280Log::InfoLevel;
+                    namedLogLevel[name.c_str()] = CP::TND280Log::InfoLevel;
                     break;
                 case 'v': case 'V':
-                    namedLogLevel[name.c_str()] = ND::TND280Log::VerboseLevel;
+                    namedLogLevel[name.c_str()] = CP::TND280Log::VerboseLevel;
                     break;
                 default:
                     nd280EventLoopUsage(programName,userCode,defaultReadCount);
@@ -332,11 +332,11 @@ int ND::nd280EventLoop(int argc, char** argv,
         ND280Verbose("Set log level to VerboseLevel");
     }
     
-    for (std::map<std::string,ND::TND280Log::LogPriority>::iterator i 
+    for (std::map<std::string,CP::TND280Log::LogPriority>::iterator i 
              = namedLogLevel.begin();
          i != namedLogLevel.end();
          ++i) {
-        ND::TND280Log::SetLogLevel(i->first.c_str(), i->second);
+        CP::TND280Log::SetLogLevel(i->first.c_str(), i->second);
     }
          
     if (debugLevel == 1) {
@@ -352,11 +352,11 @@ int ND::nd280EventLoop(int argc, char** argv,
         ND280Trace("Set debug level to TraceLevel");
     }
 
-    for (std::map<std::string,ND::TND280Log::ErrorPriority>::iterator i 
+    for (std::map<std::string,CP::TND280Log::ErrorPriority>::iterator i 
              = namedDebugLevel.begin();
          i != namedDebugLevel.end();
          ++i) {
-        ND::TND280Log::SetDebugLevel(i->first.c_str(), i->second);
+        CP::TND280Log::SetDebugLevel(i->first.c_str(), i->second);
     }
          
     if (!outputNames.empty()) {
@@ -400,11 +400,11 @@ int ND::nd280EventLoop(int argc, char** argv,
         int lastEventId = -1;
         int lastRunId = -1;
         try {
-            std::auto_ptr<ND::TVInputFile> input;
+            std::auto_ptr<CP::TVInputFile> input;
             switch (fileType) {
             case kRootFile:{
                 TFile* file = TFile::Open(fileName.c_str(),"OLD");
-                input.reset(new ND::TND280Input(file));
+                input.reset(new CP::TND280Input(file));
                 break;
             }
             default:
@@ -539,7 +539,7 @@ int ND::nd280EventLoop(int argc, char** argv,
     }
     
     if (!outputFiles.empty()) {
-        for (std::vector<ND::TND280Output*>::iterator file 
+        for (std::vector<CP::TND280Output*>::iterator file 
                  = outputFiles.begin();
              file != outputFiles.end(); 
              ++ file) {
@@ -548,8 +548,8 @@ int ND::nd280EventLoop(int argc, char** argv,
         }
     }
     else {
-        userCode.Finalize((ND::TND280Output*) NULL);
-        memoryUsage.Write((ND::TND280Output*) NULL);
+        userCode.Finalize((CP::TND280Output*) NULL);
+        memoryUsage.Write((CP::TND280Output*) NULL);
     }
     
     std::cout << "Total Events Read: " << totalRead << std::endl;

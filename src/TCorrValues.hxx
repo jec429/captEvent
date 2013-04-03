@@ -14,7 +14,7 @@
 
 #include "EoaCore.hxx"
 
-namespace ND {
+namespace CP {
     class TCorrValues;
 
     OA_EXCEPTION(ECorrValues, EoaCore);
@@ -64,7 +64,7 @@ namespace ND {
 ///
 /// These operations are defined for any dimension of TCorrValues.  For
 /// dimensions larger than one, the full covariance matrix is propagated.
-class ND::TCorrValues: public TObject {
+class CP::TCorrValues: public TObject {
     /// The type of vector representation.  The code assumes that one of the
     /// TVectorT<> types is used.
     typedef TVectorT<double> Vector;
@@ -251,12 +251,12 @@ private:
 /// A+X = [x1, x2] + (a,a) --> [X1 + A, X2 + A]
 /// cov(A+X) = cov(A+x1, A+x2) = cov(x1,x2)
 /// \endcode
-ND::TCorrValues operator +(const ND::TCorrValues& x, const ND::TCorrValues& y);
-ND::TCorrValues operator +(double a, const ND::TCorrValues& x);
-ND::TCorrValues operator +(const ND::TCorrValues& x, double a);
-ND::TCorrValues operator -(const ND::TCorrValues& x, const ND::TCorrValues& y);
-ND::TCorrValues operator -(double a, const ND::TCorrValues& x);
-ND::TCorrValues operator -(const ND::TCorrValues& x, double a);
+CP::TCorrValues operator +(const CP::TCorrValues& x, const CP::TCorrValues& y);
+CP::TCorrValues operator +(double a, const CP::TCorrValues& x);
+CP::TCorrValues operator +(const CP::TCorrValues& x, double a);
+CP::TCorrValues operator -(const CP::TCorrValues& x, const CP::TCorrValues& y);
+CP::TCorrValues operator -(double a, const CP::TCorrValues& x);
+CP::TCorrValues operator -(const CP::TCorrValues& x, double a);
 /// @}
 
 /// Multiplication of TCorrValues.  This is most useful for the multiplication
@@ -265,21 +265,21 @@ ND::TCorrValues operator -(const ND::TCorrValues& x, double a);
 /// \code
 /// X*Y == [x1,x2]*[y1,y2] --> [x1*y1,x2*y2]
 /// \endcode
-ND::TCorrValues operator *(const ND::TCorrValues& x, const ND::TCorrValues& y);
+CP::TCorrValues operator *(const CP::TCorrValues& x, const CP::TCorrValues& y);
 
 /// Division of a constant by a set of correlated values.  This is defined as 
 /// \code
 /// A/X = A/[X1, X2] --> [A/X1, A/X2]
 /// cov(A/X) = cov(A/X1, A/X2) = A*cov(1/X1, 1/X2)
 /// \endcode
-ND::TCorrValues operator /(double a, const ND::TCorrValues& x);
+CP::TCorrValues operator /(double a, const CP::TCorrValues& x);
 
 /// Division of TCorrValues.  This is defined in terms of 
 /// \code
 /// X/Y = X*(1.0/Y)
 /// \endcode
 /// and yields a correlated value of dimension one.
-ND::TCorrValues operator /(const ND::TCorrValues& x, const ND::TCorrValues& y);
+CP::TCorrValues operator /(const CP::TCorrValues& x, const CP::TCorrValues& y);
 
 /// @{ Define basic multiplication by a constant.  These operators are defined
 /// similar to vector multiplication by a constant.
@@ -287,8 +287,8 @@ ND::TCorrValues operator /(const ND::TCorrValues& x, const ND::TCorrValues& y);
 /// A*X = A*[x1, x2]  --> [A*X1, A*X2]
 /// cov(A*X) = cov(A*x1, A*x2) = A*cov(x1,x2)
 /// \endcode
-ND::TCorrValues operator *(double a, const ND::TCorrValues& x);
-ND::TCorrValues operator *(const ND::TCorrValues& x, double a);
-ND::TCorrValues operator /(const ND::TCorrValues& x, double a);
+CP::TCorrValues operator *(double a, const CP::TCorrValues& x);
+CP::TCorrValues operator *(const CP::TCorrValues& x, double a);
+CP::TCorrValues operator /(const CP::TCorrValues& x, double a);
 /// @}
 #endif

@@ -1,4 +1,4 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TDigitHeader+;
+#pragma link C++ class CP::TDigitHeader+;
 #endif
 

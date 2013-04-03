@@ -26,7 +26,7 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTSHAHashValue::test<1> () {
-        ND::TSHAHashValue g1;
+        CP::TSHAHashValue g1;
 
         ensure_equals("Default element is zero",g1(0),(unsigned) 0);
         ensure_equals("Default element is zero",g1(1),(unsigned) 0);
@@ -39,7 +39,7 @@ namespace tut {
     // Test the value constructor.
     template<> template<>
     void testTSHAHashValue::test<2> () {
-        ND::TSHAHashValue g1(1,2,3,4,5);
+        CP::TSHAHashValue g1(1,2,3,4,5);
 
         ensure_equals("Constructed hash value is correct",g1(0),(UInt_t)1);
         ensure_equals("Constructed hash value is correct",g1(1),(UInt_t)2);
@@ -52,14 +52,14 @@ namespace tut {
     // Test the < comparison 
     template<> template<>
     void testTSHAHashValue::test<3> () {
-        ND::TSHAHashValue g1;
-        ND::TSHAHashValue g2;
+        CP::TSHAHashValue g1;
+        CP::TSHAHashValue g2;
 
         ensure("Default is not less than itself",!(g1<g2));
         ensure("Default is not less than itself",!(g2<g1));
 
-        ND::TSHAHashValue g3(1,2,3,4,5);
-        ND::TSHAHashValue g4(1,2,3,4,5);
+        CP::TSHAHashValue g3(1,2,3,4,5);
+        CP::TSHAHashValue g4(1,2,3,4,5);
 
         ensure("Equal hash values are not less than itself",!(g3<g4));
         ensure("Equal hash values are not less than itself",!(g4<g3));
@@ -67,7 +67,7 @@ namespace tut {
         ensure("Default less than all other hashs.",(g1<g3));
         ensure("Default not greater than all other hashs.",!(g3<g1));
         
-        ND::TSHAHashValue g5(1,2,3,4,6);
+        CP::TSHAHashValue g5(1,2,3,4,6);
 
         ensure("Test less than", (g4<g5));
         ensure("Test less than (inverted)", !(g5<g4));
@@ -76,13 +76,13 @@ namespace tut {
 
     template<> template<>
     void testTSHAHashValue::test<4> () {
-        ND::TSHAHashValue g1;
-        ND::TSHAHashValue g2;
+        CP::TSHAHashValue g1;
+        CP::TSHAHashValue g2;
 
         ensure("Default value equal to itself",(g1==g2));
 
-        ND::TSHAHashValue g3(1,2,3,4,5);
-        ND::TSHAHashValue g4(1,2,3,4,5);
+        CP::TSHAHashValue g3(1,2,3,4,5);
+        CP::TSHAHashValue g4(1,2,3,4,5);
 
         ensure("Set value equal to itself", (g3==g4));
 

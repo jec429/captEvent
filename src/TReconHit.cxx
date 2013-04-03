@@ -4,14 +4,14 @@
 #include "TOADatabase.hxx"
 #include "TGeomIdManager.hxx"
 
-ClassImp(ND::TReconHit);
-ClassImp(ND::TWritableReconHit);
+ClassImp(CP::TReconHit);
+ClassImp(CP::TWritableReconHit);
 
-ND::TReconHit::TReconHit() {
+CP::TReconHit::TReconHit() {
     fInitialized = false;
 }
 
-ND::TReconHit::TReconHit(const ND::TWritableReconHit& h)  
+CP::TReconHit::TReconHit(const CP::TWritableReconHit& h)  
     : fCharge(h.fCharge), fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
       fReconPosition(h.fReconPosition), fReconUncertainty(h.fReconUncertainty),
       fConstituents(h.fConstituents) {
@@ -19,10 +19,10 @@ ND::TReconHit::TReconHit(const ND::TWritableReconHit& h)
     fInitialized = false;
 }
 
-ND::TReconHit::~TReconHit() { }
+CP::TReconHit::~TReconHit() { }
 
 // Initialization method for TReconHits.
-void ND::TReconHit::Initialize(){
+void CP::TReconHit::Initialize(){
     // Initalize the recon hit information from the consituants and stored
     // data.  All constituents must be from the same geometry object.  This is
     // checked in the constructor and setters.
@@ -34,7 +34,7 @@ void ND::TReconHit::Initialize(){
     fSpread = fConstituents.at(0)->GetSpread();
 
     // To do positions we need the geometry.
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
     TOADatabase::Get().GeomId().CdId(fGeomId);
     double local[3] = {fReconPosition.X(),
@@ -64,59 +64,59 @@ void ND::TReconHit::Initialize(){
 }
 
 // Getter methods.
-ND::TGeometryId ND::TReconHit::GetGeomId(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+CP::TGeometryId CP::TReconHit::GetGeomId(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fGeomId;
 }
 
-double ND::TReconHit::GetCharge(void) const {return fCharge;}
+double CP::TReconHit::GetCharge(void) const {return fCharge;}
 
-double ND::TReconHit::GetTime(void) const {return fTime;}
+double CP::TReconHit::GetTime(void) const {return fTime;}
 
-const TVector3& ND::TReconHit::GetPosition(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+const TVector3& CP::TReconHit::GetPosition(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fPosition;
 }
 
-const TVector3& ND::TReconHit::GetSpread(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+const TVector3& CP::TReconHit::GetSpread(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fSpread;
 }
 
-const TVector3& ND::TReconHit::GetUncertainty(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+const TVector3& CP::TReconHit::GetUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fUncertainty;
 }
 
-double ND::TReconHit::GetTimeUncertainty(void) const {return fTimeUncertainty;}
+double CP::TReconHit::GetTimeUncertainty(void) const {return fTimeUncertainty;}
 
-bool ND::TReconHit::IsXHit(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+bool CP::TReconHit::IsXHit(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fIsXHit;
 }
-bool ND::TReconHit::IsYHit(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+bool CP::TReconHit::IsYHit(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fIsYHit;
 }
-bool ND::TReconHit::IsZHit(void) const {
-    if (!fInitialized) const_cast<ND::TReconHit*>(this)->Initialize();
+bool CP::TReconHit::IsZHit(void) const {
+    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fIsZHit;
 }
 
-ND::THandle <ND::THit> ND::TReconHit::GetContributor(int i) const {
+CP::THandle <CP::THit> CP::TReconHit::GetContributor(int i) const {
     if (i<0 || fConstituents.size()<= (unsigned) i) throw EHitOutOfRange();
     return fConstituents[i];
 }
 
-int ND::TReconHit::GetContributorCount() const {
+int CP::TReconHit::GetContributorCount() const {
     return fConstituents.size();
 }
 
 // TWritableReconHits.
-ND::TWritableReconHit::TWritableReconHit(const ND::TWritableReconHit& h) 
-    : ND::TReconHit(h) {}
+CP::TWritableReconHit::TWritableReconHit(const CP::TWritableReconHit& h) 
+    : CP::TReconHit(h) {}
 
-ND::TWritableReconHit::TWritableReconHit(ND::THandle<ND::THit> hit) {
+CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
     fGeomId=hit->GetGeomId();
     fConstituents.push_back(hit);
     fCharge = -9999.;
@@ -124,8 +124,8 @@ ND::TWritableReconHit::TWritableReconHit(ND::THandle<ND::THit> hit) {
     fTimeUncertainty = -9999;
 }
 
-ND::TWritableReconHit::TWritableReconHit(ND::THandle<ND::THit> hit1,
-                                         ND::THandle<ND::THit> hit2) {
+CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
+                                         CP::THandle<CP::THit> hit2) {
     // Check that the hits are on the same bar
     if (hit1->GetGeomId() != hit2->GetGeomId()){
         ND280Error("TReconHits can only be created from hits"
@@ -140,7 +140,7 @@ ND::TWritableReconHit::TWritableReconHit(ND::THandle<ND::THit> hit1,
     fTimeUncertainty = -9999;
 }
 
-void ND::TWritableReconHit::AddHit(ND::THandle<ND::THit> hit) {
+void CP::TWritableReconHit::AddHit(CP::THandle<CP::THit> hit) {
     // Check that the hits are on the same bar
     if (fGeomId != hit->GetGeomId()){
         ND280Error("TReconHits can only be created from hits"
@@ -150,27 +150,27 @@ void ND::TWritableReconHit::AddHit(ND::THandle<ND::THit> hit) {
     fConstituents.push_back(hit);
 }
 
-ND::TWritableReconHit::~TWritableReconHit() {}
+CP::TWritableReconHit::~TWritableReconHit() {}
 
 //////////////////////////////////////////////////
-// Setter methods for ND::TWritableReconHit
+// Setter methods for CP::TWritableReconHit
 //////////////////////////////////////////////////
 
-void ND::TWritableReconHit::SetCharge(double q) {fCharge = q;}
+void CP::TWritableReconHit::SetCharge(double q) {fCharge = q;}
 
-void ND::TWritableReconHit::SetTime(double t) {fTime = t;}
+void CP::TWritableReconHit::SetTime(double t) {fTime = t;}
 
-void ND::TWritableReconHit::SetTimeUncertainty(double tunc) {
+void CP::TWritableReconHit::SetTimeUncertainty(double tunc) {
     fTimeUncertainty = tunc;
 }
 
-void ND::TWritableReconHit::SetPosition(TVector3& pos){
+void CP::TWritableReconHit::SetPosition(TVector3& pos){
     // Need to store in local position.
     
     // To do positions we need the geometry.
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
-    ND::TOADatabase::Get().GeomId().CdId(fGeomId);
+    CP::TOADatabase::Get().GeomId().CdId(fGeomId);
     double local[3] = {0,0,0};
     double master[3] = {pos.X(),pos.Y(),pos.Z()};
     geom->MasterToLocal(master,local);
@@ -178,13 +178,13 @@ void ND::TWritableReconHit::SetPosition(TVector3& pos){
     geom->PopPath();
 }
 
-void ND::TWritableReconHit::SetUncertainty(TVector3& unc){
+void CP::TWritableReconHit::SetUncertainty(TVector3& unc){
     // Save the 1 sigma offset in local.
   
     // To do positions we need the geometry.
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
-    ND::TOADatabase::Get().GeomId().CdId(fGeomId);
+    CP::TOADatabase::Get().GeomId().CdId(fGeomId);
 
     /// \bug Shouldn't the conversion of the global coordinates uncertainty to
     /// the the local coordinates uncertainty be done using
@@ -198,11 +198,11 @@ void ND::TWritableReconHit::SetUncertainty(TVector3& unc){
     geom->PopPath();
 }
 
-void ND::TReconHit::ls(Option_t *opt) const {
-    ND::THit::ls(opt);
+void CP::TReconHit::ls(Option_t *opt) const {
+    CP::THit::ls(opt);
 
     TROOT::IncreaseDirLevel();
-    for (std::vector< ND::THandle < ND::THit > >::const_iterator h
+    for (std::vector< CP::THandle < CP::THit > >::const_iterator h
              = fConstituents.begin();
          h != fConstituents.end();
          ++h) {

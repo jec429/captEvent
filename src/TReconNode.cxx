@@ -1,14 +1,14 @@
 
 #include "TReconNode.hxx"
 
-ClassImp(ND::TReconNode);
+ClassImp(CP::TReconNode);
 
-ND::TReconNode::TReconNode()
+CP::TReconNode::TReconNode()
     : fQuality(0.) { }
 
-ND::TReconNode::~TReconNode() {}
+CP::TReconNode::~TReconNode() {}
 
-void ND::TReconNode::ls(Option_t *opt) const {
+void CP::TReconNode::ls(Option_t *opt) const {
     TROOT::IndentLevel();
     std::cout << ClassName() << "(" << this << ")::" << std::endl;
     TROOT::IncreaseDirLevel();
@@ -31,17 +31,17 @@ void ND::TReconNode::ls(Option_t *opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-ClassImp(ND::TReconNodeContainer);
+ClassImp(CP::TReconNodeContainer);
 
-ND::TReconNodeContainer::TReconNodeContainer() {}
+CP::TReconNodeContainer::TReconNodeContainer() {}
 
-ND::TReconNodeContainer::~TReconNodeContainer() {}
+CP::TReconNodeContainer::~TReconNodeContainer() {}
 
-void ND::TReconNodeContainer::ls(Option_t *opt) const {
+void CP::TReconNodeContainer::ls(Option_t *opt) const {
     TROOT::IndentLevel();
     std::cout << ClassName() << "(" << this << ")::" << std::endl;
     TROOT::IncreaseDirLevel();
-    for (ND::TReconNodeContainer::const_iterator n = begin();
+    for (CP::TReconNodeContainer::const_iterator n = begin();
          n != end();
          ++n) {
         (*n)->ls(opt);

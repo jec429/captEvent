@@ -3,13 +3,13 @@
 
 #include "TSHAHashValue.hxx"
 
-namespace ND {
+namespace CP {
     class TAlignmentId;
 }
 
 /// Identify a set of alignment constants so we can keep track of which
 /// constants are applied to a particular geometry.
-class ND::TAlignmentId : public ND::TSHAHashValue {
+class CP::TAlignmentId : public CP::TSHAHashValue {
 public:
     TAlignmentId();
     TAlignmentId(const TAlignmentId& hc);

@@ -3,11 +3,11 @@
 
 #include <TDigitHeader.hxx>
 
-namespace ND {
+namespace CP {
     class TTPCDigitHeader;
 };
 
-class ND::TTPCDigitHeader : public ND::TDigitHeader{
+class CP::TTPCDigitHeader : public CP::TDigitHeader{
 public:
     TTPCDigitHeader();
     TTPCDigitHeader(bool comp, bool lflag, bool sync);

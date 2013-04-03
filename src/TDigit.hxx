@@ -8,7 +8,7 @@
 #include "TChannelId.hxx"
 #include "TDigitContainer.hxx"
 
-namespace ND {
+namespace CP {
     /// Base class for all exceptions associated with the TDigit classes.
     OA_EXCEPTION(EDigit,EoaCore);
 
@@ -26,23 +26,23 @@ namespace ND {
 /// An abstract base class for raw digits.  This base class for detector
 /// specific digit classes.  There are derived classes which define the
 /// methods, and which actually contain the data associated with the object.
-class ND::TDigit {
+class CP::TDigit {
 public:
     TDigit ();
     /// Construct a digit for a particular channel and cycle number.
-    explicit TDigit(const ND::TChannelId& channel);
+    explicit TDigit(const CP::TChannelId& channel);
 
     virtual ~TDigit();
 
     /// Return the channel identifier for this digit.
-    const ND::TChannelId& GetChannelId() const;
+    const CP::TChannelId& GetChannelId() const;
 
     /// Print the digit information.
     virtual void ls(Option_t* opt = "") const;
     
 protected: 
     /// The electronics id number.
-    ND::TChannelId fChannelId;
+    CP::TChannelId fChannelId;
 
     ClassDef(TDigit,1);
 };

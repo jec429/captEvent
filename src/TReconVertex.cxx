@@ -1,47 +1,47 @@
 #include "TReconVertex.hxx"
 
-ClassImp(ND::TReconVertex);
+ClassImp(CP::TReconVertex);
 
-ND::TReconVertex::TReconVertex() {
+CP::TReconVertex::TReconVertex() {
     fState = new TVertexState;
-    fNodes = new TReconNodeContainerImpl<ND::TVertexState>;
+    fNodes = new TReconNodeContainerImpl<CP::TVertexState>;
 }
 
-ND::TReconVertex::~TReconVertex() {}
+CP::TReconVertex::~TReconVertex() {}
 
-TLorentzVector ND::TReconVertex::GetPosition() const {
+TLorentzVector CP::TReconVertex::GetPosition() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TVertexState> state = GetState();
+    THandle<CP::TVertexState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPosition();
 }
 
-TLorentzVector ND::TReconVertex::GetPositionVariance() const {
+TLorentzVector CP::TReconVertex::GetPositionVariance() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TVertexState> state = GetState();
+    THandle<CP::TVertexState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPositionVariance();
 }
 
-bool ND::TReconVertex::IsXVertex() const {
+bool CP::TReconVertex::IsXVertex() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.X())) return false;
+    if (CP::TCorrValues::IsFree(var.X())) return false;
     return true;
 }
 
-bool ND::TReconVertex::IsYVertex() const {
+bool CP::TReconVertex::IsYVertex() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Y())) return false;
+    if (CP::TCorrValues::IsFree(var.Y())) return false;
     return true;
 }
 
-bool ND::TReconVertex::IsZVertex() const {
+bool CP::TReconVertex::IsZVertex() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Z())) return false;
+    if (CP::TCorrValues::IsFree(var.Z())) return false;
     return true;
 }
 
-int ND::TReconVertex::GetDimensions() const{
+int CP::TReconVertex::GetDimensions() const{
     TLorentzVector var = GetPositionVariance();
     int dim = 0;
     if (IsXVertex()) ++dim;

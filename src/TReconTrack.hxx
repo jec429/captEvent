@@ -8,7 +8,7 @@
 #include "TReconBase.hxx"
 #include "TTrackState.hxx"
 
-namespace ND {
+namespace CP {
     class TReconTrack;
 }
 
@@ -21,16 +21,16 @@ namespace ND {
 /// of the energy deposit (dEdX), position, time, direction, curvature, and
 /// width.  The detector hits are associated with each node along the track.
 ///
-/// The ND::TReconTrack class is intended to describe the geometry of the
+/// The CP::TReconTrack class is intended to describe the geometry of the
 /// energy deposition in a detector, and not make the association with a
 /// particular particle identification.  Assignment of particle types to the
-/// detector measurements is done in the ND::TReconParticle class.
-class ND::TReconTrack: public ND::TReconBase {
+/// detector measurements is done in the CP::TReconParticle class.
+class CP::TReconTrack: public CP::TReconBase {
 public: 
     TReconTrack();
 
     /// copy constructor
-    TReconTrack(const ND::TReconTrack& track);
+    TReconTrack(const CP::TReconTrack& track);
 
     virtual ~TReconTrack();
 

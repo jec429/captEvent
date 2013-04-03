@@ -22,6 +22,6 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testPackageVersion::test<1> () {
-        ND::TOADatabase::Get().PackageSet();
+        CP::TOADatabase::Get().PackageSet();
     }
 };

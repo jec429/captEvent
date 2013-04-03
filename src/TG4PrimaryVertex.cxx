@@ -11,15 +11,15 @@
 #include "HEPUnits.hxx"
 #include "TG4PrimaryVertex.hxx"
 
-ClassImp(ND::TG4PrimaryVertex);
-ClassImp(ND::TG4PrimaryVertexContainer);
+ClassImp(CP::TG4PrimaryVertex);
+ClassImp(CP::TG4PrimaryVertexContainer);
 
-ND::TG4PrimaryVertex::TG4PrimaryVertex(void)
+CP::TG4PrimaryVertex::TG4PrimaryVertex(void)
     : fPosition(0,0,0,0), fGeneratorName("none"),
       fInteractionNumber(0), fCrossSection(0.0), fDiffCrossSection(0.0),
       fWeight(0.0), fProbability(0.0) {}
 
-ND::TG4PrimaryVertex::TG4PrimaryVertex(const ND::TG4PrimaryVertex& rhs) 
+CP::TG4PrimaryVertex::TG4PrimaryVertex(const CP::TG4PrimaryVertex& rhs) 
     : TObject(rhs),
       fPosition(rhs.fPosition), fPrimaryParticles(rhs.fPrimaryParticles),
       fGeneratorName(rhs.fGeneratorName), fReaction(rhs.fReaction), 
@@ -29,10 +29,10 @@ ND::TG4PrimaryVertex::TG4PrimaryVertex(const ND::TG4PrimaryVertex& rhs)
       fDiffCrossSection(rhs.fDiffCrossSection),
       fWeight(rhs.fWeight), fProbability(rhs.fWeight) {}
 
-ND::TG4PrimaryVertex::~TG4PrimaryVertex() { }
+CP::TG4PrimaryVertex::~TG4PrimaryVertex() { }
 
-void ND::TG4PrimaryVertex::ls(Option_t* opt) const {
-    ND::ls_header(this,opt);
+void CP::TG4PrimaryVertex::ls(Option_t* opt) const {
+    CP::ls_header(this,opt);
     std::cout << " #" << fInteractionNumber 
               << " at: (" << fPosition.X()/unit::cm
               << "," << fPosition.Y()/unit::cm
@@ -68,7 +68,7 @@ void ND::TG4PrimaryVertex::ls(Option_t* opt) const {
                   << "  Weight: "  << fWeight
                   << std::endl;
     }
-    for (ND::TG4PrimaryParticleContainer::const_iterator v 
+    for (CP::TG4PrimaryParticleContainer::const_iterator v 
              = fPrimaryParticles.begin();
          v != fPrimaryParticles.end(); 
          ++v) {
@@ -82,8 +82,8 @@ void ND::TG4PrimaryVertex::ls(Option_t* opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-void ND::TG4PrimaryVertexContainer::ls(Option_t* opt) const {
-    ND::TDatum::ls(opt);
+void CP::TG4PrimaryVertexContainer::ls(Option_t* opt) const {
+    CP::TDatum::ls(opt);
     TROOT::IncreaseDirLevel();
     for (const_iterator v = begin();
          v != end(); 
@@ -93,18 +93,18 @@ void ND::TG4PrimaryVertexContainer::ls(Option_t* opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-void ND::TG4PrimaryVertex::SetGeneratorName(const char *name) {
+void CP::TG4PrimaryVertex::SetGeneratorName(const char *name) {
     fGeneratorName = name;
 }
 
-void ND::TG4PrimaryVertex::SetReaction(const char *reaction) {
+void CP::TG4PrimaryVertex::SetReaction(const char *reaction) {
     fReaction = reaction;
 }
 
-void ND::TG4PrimaryVertex::SetInfoVertex(const ND::TG4PrimaryVertexContainer& info) {
+void CP::TG4PrimaryVertex::SetInfoVertex(const CP::TG4PrimaryVertexContainer& info) {
     fInformational = info;
 }
 
-void ND::TG4PrimaryVertex::SetFilename(const char *filename) {
+void CP::TG4PrimaryVertex::SetFilename(const char *filename) {
     fFilename = filename;
 }

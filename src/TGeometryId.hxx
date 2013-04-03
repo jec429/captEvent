@@ -8,7 +8,7 @@
 #include "EoaCore.hxx"
 #include "method_deprecated.hxx"
 
-namespace ND {
+namespace CP {
     /// Base class for all exceptions associated with the TGeometryId classe.
     OA_EXCEPTION(EGeomId,EoaCore);
 
@@ -35,19 +35,19 @@ namespace ND {
 /// the detector.  This is an opaque type used to index the databases.  It
 /// should be queried using the GetName() method which returns the volume path
 /// within the current detector geometry.  The TGeomIdManager and the
-/// functions in the ND::GeomId namespace provide additional ways to query the
+/// functions in the CP::GeomId namespace provide additional ways to query the
 /// identifier.  
 ///
 /// Examples:
 ///
 /// To set the id to a P0D P0D scintillator bar:
 /// \code
-/// TGeometryId id = ND::GeomId::P0D::Bar(p0duleNumber, xyLayer, bar);
+/// TGeometryId id = CP::GeomId::P0D::Bar(p0duleNumber, xyLayer, bar);
 /// \endcode
 ///
 /// To set the id to a TPC pad:
 /// \code
-/// TGeometryId id = ND::GeomId::TPC::Pad(tpc, half, mm, pad);
+/// TGeometryId id = CP::GeomId::TPC::Pad(tpc, half, mm, pad);
 /// \endcode
 ///
 /// Find the detector element:
@@ -78,7 +78,7 @@ namespace ND {
 /// TOADatabase::Get().GeomId().GetGeometryId(x,y,z,geomId);
 /// \endcode
 ///
-class ND::TGeometryId {
+class CP::TGeometryId {
 public:
     TGeometryId();
     TGeometryId(const TGeometryId& geom);
@@ -107,15 +107,15 @@ public:
     /// Get the subsystem index.  The values are defined in ND280GeomIdDef.hxx
     /// and are
     ///
-    ///    * ND::GeomId::Def::kP0D           -- The P0D
-    ///    * ND::GeomId::Def::kTPC           -- The TPC
-    ///    * ND::GeomId::Def::kFGD           -- The FGD
-    ///    * ND::GeomId::Def::kDSECal        -- The DSECal
-    ///    * ND::GeomId::Def::kTECal         -- The TECal
-    ///    * ND::GeomId::Def::kPECal         -- The PECal
-    ///    * ND::GeomId::Def::kSMRD          -- The SMRD
-    ///    * ND::GeomId::Def::kINGRID        -- The INGRID
-    ///    * ND::GeomId::Def::kROOTGeoNodeId -- A general ROOT node
+    ///    * CP::GeomId::Def::kP0D           -- The P0D
+    ///    * CP::GeomId::Def::kTPC           -- The TPC
+    ///    * CP::GeomId::Def::kFGD           -- The FGD
+    ///    * CP::GeomId::Def::kDSECal        -- The DSECal
+    ///    * CP::GeomId::Def::kTECal         -- The TECal
+    ///    * CP::GeomId::Def::kPECal         -- The PECal
+    ///    * CP::GeomId::Def::kSMRD          -- The SMRD
+    ///    * CP::GeomId::Def::kINGRID        -- The INGRID
+    ///    * CP::GeomId::Def::kROOTGeoNodeId -- A general ROOT node
     ///
     /// Any other value is invalid.
     int GetSubsystemId() const;
@@ -127,18 +127,18 @@ public:
     /// it should be preferred.
     TVector3 GetPosition() const;
 
-    bool operator <(const ND::TGeometryId& rhs) const {
+    bool operator <(const CP::TGeometryId& rhs) const {
         return AsInt() < rhs.AsInt();
     }
 
     /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the ND280GeomId ND::GeomId
+    /// release.  Use the functions provided in the ND280GeomId CP::GeomId
     /// namespace to set the TGeometryId fields.
     void SetField(int val, int msb, int lsb) METHOD_DEPRECATED
         {SetFieldSafe(val,msb,lsb);}
 
     /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the ND280GeomId ND::GeomId
+    /// release.  Use the functions provided in the ND280GeomId CP::GeomId
     /// namespace to get the TGeometryId fields.
     int GetField(int msb, int lsb) const METHOD_DEPRECATED
         {return GetFieldSafe(msb,lsb);}
@@ -157,7 +157,7 @@ protected:
     ClassDef(TGeometryId, 1)
 };
 
-bool operator ==(const ND::TGeometryId& a, const ND::TGeometryId& b);
-bool operator !=(const ND::TGeometryId& a, const ND::TGeometryId& b);
-std::ostream& operator<<(std::ostream& s, const ND::TGeometryId& id);
+bool operator ==(const CP::TGeometryId& a, const CP::TGeometryId& b);
+bool operator !=(const CP::TGeometryId& a, const CP::TGeometryId& b);
+std::ostream& operator<<(std::ostream& s, const CP::TGeometryId& id);
 #endif

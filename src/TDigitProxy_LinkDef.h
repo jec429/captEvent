@@ -1,4 +1,4 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TDigitProxy+;
+#pragma link C++ class CP::TDigitProxy+;
 #endif
 

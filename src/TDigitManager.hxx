@@ -11,7 +11,7 @@
 #include "TDigitProxy.hxx"
 #include "THandle.hxx"
 
-namespace ND {
+namespace CP {
     /// An exception from the digit manager.
     OA_EXCEPTION(EDigitManager, EDigit);
 
@@ -31,7 +31,7 @@ namespace ND {
 /// for each class of data and register them with TDigitManager.  The digit
 /// factory type is given by the name of the TDigitContainer that will be
 /// generated in the TND280Event.
-class ND::TDigitFactory {
+class CP::TDigitFactory {
 public:
     explicit TDigitFactory(std::string name);
     virtual ~TDigitFactory();
@@ -44,7 +44,7 @@ public:
     /// Return a pointer to a new TDigitContainer.  The name of the
     /// TDigitContainer will be set by the TDigitManager.  If the factory
     /// fails for any reason, a NULL should be returned.
-    virtual ND::TDigitContainer* MakeDigits() = 0;
+    virtual CP::TDigitContainer* MakeDigits() = 0;
 
 private:
     
@@ -59,9 +59,9 @@ private:
 /// TDigitProxy class and to provide a connection to the raw data access in
 /// oaRawEvent (using oaUnpack).  This class will not be directly used by most
 /// people.  The TDigitManager is owned by TOADatabase.
-class ND::TDigitManager {
-    friend class ND::TOADatabase;
-    friend class ND::TDigitProxy;
+class CP::TDigitManager {
+    friend class CP::TOADatabase;
+    friend class CP::TDigitProxy;
 
 public: 
     ~TDigitManager();
@@ -70,7 +70,7 @@ public:
     /// fill the cache of digits.  The will be registered by oaUnpack, and
     /// called as required by oaEvent to fill the digit cache.  This method
     /// takes ownership of the digit factory.
-    void RegisterFactory(ND::TDigitFactory* factory);
+    void RegisterFactory(CP::TDigitFactory* factory);
 
     /// Save digits in the event as a temporary bank (default).
     void TemporaryDigits(void) {fPersistentDigits=false;}
@@ -91,8 +91,8 @@ public:
     /// will use the factories to find the digits.  By default, the cached
     /// digits are saved as temporary banks, but can be made persistent using
     /// TOADatabase::Get().Digits().PersistentDigits().
-    ND::THandle<ND::TDigitContainer> CacheDigits(std::string type);
-    ND::THandle<ND::TDigitContainer> CacheDigits(ND::TND280Event& event,
+    CP::THandle<CP::TDigitContainer> CacheDigits(std::string type);
+    CP::THandle<CP::TDigitContainer> CacheDigits(CP::TND280Event& event,
                                                  std::string type);
     /// @}
 
@@ -100,7 +100,7 @@ public:
     bool FactoryAvailable(std::string type) const;
 
 private: 
-    typedef std::map<std::string, ND::TDigitFactory*> FactoryMap;
+    typedef std::map<std::string, CP::TDigitFactory*> FactoryMap;
 
     /// Construct a new TDigitManager.  This is private since it should only
     /// be constructed by the friend class TOADatabase.
@@ -118,7 +118,7 @@ private:
     /// TDigitContainer which will be valid if the digits are found.  This is
     /// used to implement TDigitManager::GetDigit().  Users should use
     /// TDigitManager::CacheDigits() to access the TDigitContainer objects.
-    ND::THandle<ND::TDigitContainer> FindDigits(const TDigitProxy& proxy);
+    CP::THandle<CP::TDigitContainer> FindDigits(const TDigitProxy& proxy);
 
     /// A map of factories available to build the cache of digits.
     FactoryMap fFactories;

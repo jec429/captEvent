@@ -21,15 +21,15 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTCorrValues::test<1> () {
-        ND::TCorrValues v;
+        CP::TCorrValues v;
         ensure_equals("Correlated values dimension", 0, v.GetDimensions());
     }
 
     // Test the constructor with a dimension.
     template<> template<>
     void testTCorrValues::test<2> () {
-        ND::TCorrValues v(2);
-        ND::TCorrValues w(20);
+        CP::TCorrValues v(2);
+        CP::TCorrValues w(20);
         ensure_equals("Correlated values dimension", 2, v.GetDimensions());
         ensure_equals("Correlated values dimension", 20, w.GetDimensions());
         ensure_equals("Correlated values vector dimension",w.GetDimensions(), 
@@ -43,9 +43,9 @@ namespace tut {
     // Test the copy constructor.
     template<> template<>
     void testTCorrValues::test<3> () {
-        ND::TCorrValues w(20);
-        ND::TCorrValues x(w);
-        ND::TCorrValues y;
+        CP::TCorrValues w(20);
+        CP::TCorrValues x(w);
+        CP::TCorrValues y;
         y = w;
         ensure_equals("Correlated values dimension", 20, w.GetDimensions());
         ensure_equals("Correlated values copied dimension", x.GetDimensions(), 
@@ -58,7 +58,7 @@ namespace tut {
     template<> template<>
     void testTCorrValues::test<4> () {
         TVectorD vec(10);
-        ND::TCorrValues v(vec);
+        CP::TCorrValues v(vec);
         ensure_equals("Vector dimension", 10, vec.GetNoElements());
         ensure_equals("Correlated values dimension", vec.GetNoElements(),
                       v.GetDimensions());
@@ -73,8 +73,8 @@ namespace tut {
     // Test the construction of a hash value.
     template<> template<>
     void testTCorrValues::test<5> () {
-        ND::TCorrValues v(3);
-        ND::TCorrValues w(3);
+        CP::TCorrValues v(3);
+        CP::TCorrValues w(3);
         const char* val = "A type value";
 
         ensure_equals("Default type hash value", v.GetTypeHash(), (unsigned)0);
@@ -89,7 +89,7 @@ namespace tut {
     // Test an invalid covariance matrix
     template<> template<>
     void testTCorrValues::test<6> () {
-        ND::TCorrValues v(4);
+        CP::TCorrValues v(4);
 
         TMatrixTSym<float> hess(v.GetDimensions());
 
@@ -98,8 +98,8 @@ namespace tut {
             for (int col = 0; col < hess.GetNcols(); ++col) {
                 ensure_distance("Hessian is zero for zero covariance",
                                 hess(row,col), 
-                                (ND::TCorrValues::Element) 0.0, 
-                                (ND::TCorrValues::Element) 0.00001);
+                                (CP::TCorrValues::Element) 0.0, 
+                                (CP::TCorrValues::Element) 0.00001);
             }
         }
 
@@ -113,14 +113,14 @@ namespace tut {
                 if (row == col) {
                     ensure_distance("Hessian is 1 for 1 covariance",
                                     hess(row,col), 
-                                    (ND::TCorrValues::Element) 1.0, 
-                                    (ND::TCorrValues::Element) 0.00001);
+                                    (CP::TCorrValues::Element) 1.0, 
+                                    (CP::TCorrValues::Element) 0.00001);
                     continue;
                 }
                 ensure_distance("Hessian is zero for zero covariance",
                                 hess(row,col), 
-                                (ND::TCorrValues::Element) 0.0, 
-                                std::numeric_limits<ND::TCorrValues::Element>::epsilon());
+                                (CP::TCorrValues::Element) 0.0, 
+                                std::numeric_limits<CP::TCorrValues::Element>::epsilon());
             }
         }
     }
@@ -129,7 +129,7 @@ namespace tut {
     // that SetFree and SetFixed work properly.
     template<> template<>
     void testTCorrValues::test<7> () {
-        ND::TCorrValues v(3);
+        CP::TCorrValues v(3);
 
         for (int i=0; i<v.GetDimensions(); ++i) {
             ensure("Parameter is free", v.IsFree(i));
@@ -139,7 +139,7 @@ namespace tut {
     // Check that SetFree and SetFixed work properly.
     template<> template<>
     void testTCorrValues::test<8> () {
-        ND::TCorrValues v(3);
+        CP::TCorrValues v(3);
         v.SetFixed(1);
         ensure("Parameter 0 is free", v.IsFree(0));
         ensure("Parameter 1 is fixed", v.IsFixed(1));
@@ -157,7 +157,7 @@ namespace tut {
     /// parameters are free.
     template<> template<>
     void testTCorrValues::test<9> () {
-        ND::TCorrValues v(3);
+        CP::TCorrValues v(3);
 
         v.SetFree(0);
         v.SetFixed(1);
@@ -185,7 +185,7 @@ namespace tut {
     /// Test the covariance value getters and setters.
     template<> template<>
     void testTCorrValues::test<10> () {
-        ND::TCorrValues v(3);
+        CP::TCorrValues v(3);
         
         v.SetCovarianceValue(0,0,1.0);
         v.SetCovarianceValue(1,1,2.0);
@@ -204,7 +204,7 @@ namespace tut {
     /// Test the one-dimensional constructor.
     template<> template<>
     void testTCorrValues::test<11> () {
-        ND::TCorrValues v(3.0,2.0);
+        CP::TCorrValues v(3.0,2.0);
         
         ensure_distance("TCorrValues value",
                         v.GetValue(), 3.0, 0.0000001);
@@ -217,17 +217,17 @@ namespace tut {
     /// Test the addition of one dimensional correlated values.
     template<> template<>
     void testTCorrValues::test<12> () {
-        ND::TCorrValues u(3.0,2.0);
-        ND::TCorrValues v(4.0,3.0);
+        CP::TCorrValues u(3.0,2.0);
+        CP::TCorrValues v(4.0,3.0);
         
-        ND::TCorrValues x(1);
+        CP::TCorrValues x(1);
         x = u + v;
         ensure_distance("TCorrValues value",
                         x.GetValue(), 7.0, 0.0000001);
         ensure_distance("TCorrValues uncertainty",
                         x.GetUncertainty(), std::sqrt(2*2+3*3), 0.0000001);
 
-        ND::TCorrValues y = u + v;
+        CP::TCorrValues y = u + v;
         ensure_distance("TCorrValues value",
                         y.GetValue(), 7.0, 0.0000001);
         ensure_distance("TCorrValues uncertainty",
@@ -267,8 +267,8 @@ namespace tut {
     /// Test the addition of one dimensional correlated values.
     template<> template<>
     void testTCorrValues::test<13> () {
-        ND::TCorrValues u(2);
-        ND::TCorrValues v(2);
+        CP::TCorrValues u(2);
+        CP::TCorrValues v(2);
 
         u.SetValue(0,3.0);
         u.SetCovarianceValue(0,0,4.0);
@@ -280,7 +280,7 @@ namespace tut {
         v.SetValue(1,4.0);
         v.SetCovarianceValue(1,1,9.0);
 
-        ND::TCorrValues y = u + v;
+        CP::TCorrValues y = u + v;
 
         for (int i=0; i<2; ++i) {
             ensure_distance("TCorrValues value",
@@ -333,17 +333,17 @@ namespace tut {
     /// Test the addition of one dimensional correlated values.
     template<> template<>
     void testTCorrValues::test<14> () {
-        ND::TCorrValues u(3.0,2.0);
-        ND::TCorrValues v(4.0,3.0);
+        CP::TCorrValues u(3.0,2.0);
+        CP::TCorrValues v(4.0,3.0);
         
-        ND::TCorrValues x(1);
+        CP::TCorrValues x(1);
         x = u + v;
         ensure_distance("TCorrValues value",
                         x.GetValue(), 7.0, 0.0000001);
         ensure_distance("TCorrValues uncertainty",
                         x.GetUncertainty(), std::sqrt(2*2+3*3), 0.0000001);
 
-        ND::TCorrValues y = u + v;
+        CP::TCorrValues y = u + v;
         ensure_distance("TCorrValues value",
                         y.GetValue(), 7.0, 0.0000001);
         ensure_distance("TCorrValues uncertainty",

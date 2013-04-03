@@ -7,23 +7,23 @@
 
 #include "TG4Trajectory.hxx"
 
-ClassImp(ND::TG4Trajectory);
-ClassImp(ND::TG4TrajectoryContainer);
+ClassImp(CP::TG4Trajectory);
+ClassImp(CP::TG4TrajectoryContainer);
 
-ND::TG4Trajectory::TG4Trajectory() 
+CP::TG4Trajectory::TG4Trajectory() 
     : fTrackId(0), fParentId(0), 
       fParticleName("none"), fPDGEncoding(0),
       fInitialMomentumX(0), fInitialMomentumY(0), 
       fInitialMomentumZ(0), fInitialMomentumT(0) {}
 
-ND::TG4Trajectory::~TG4Trajectory() { }
+CP::TG4Trajectory::~TG4Trajectory() { }
 
-const TParticlePDG* ND::TG4Trajectory::GetParticle() const {
+const TParticlePDG* CP::TG4Trajectory::GetParticle() const {
     return TDatabasePDG::Instance()->GetParticle(fPDGEncoding);
 }
 
-void ND::TG4Trajectory::ls(Option_t* opt) const {
-    ND::ls_header(this,opt);
+void CP::TG4Trajectory::ls(Option_t* opt) const {
+    CP::ls_header(this,opt);
     int prec = std::cout.precision();
     std::cout.precision(1);
     TLorentzVector mom = GetInitialMomentum();
@@ -51,7 +51,7 @@ void ND::TG4Trajectory::ls(Option_t* opt) const {
     std::cout.precision(prec);
 }
 
-int ND::TG4TrajectoryContainer::GetPrimaryId(int id) const {
+int CP::TG4TrajectoryContainer::GetPrimaryId(int id) const {
     TG4TrajectoryContainer::const_iterator particle = find(id);
 
     // The particle doesn't exist in the trajectory container.
@@ -67,19 +67,19 @@ int ND::TG4TrajectoryContainer::GetPrimaryId(int id) const {
     return -1;
 }
 
-ND::THandle<ND::TG4Trajectory>
-ND::TG4TrajectoryContainer::GetTrajectory(int id) const {
+CP::THandle<CP::TG4Trajectory>
+CP::TG4TrajectoryContainer::GetTrajectory(int id) const {
     TG4TrajectoryContainer::const_iterator particle = find(id);
     
     // The particle doesn't exist in the trajectory container.
-    if (particle == end()) return THandle<ND::TG4Trajectory>(NULL);
+    if (particle == end()) return THandle<CP::TG4Trajectory>(NULL);
     
-    ND::TG4Trajectory* val = const_cast<ND::TG4Trajectory*>(&(particle->second));
-    return THandle<ND::TG4Trajectory>(val,false);
+    CP::TG4Trajectory* val = const_cast<CP::TG4Trajectory*>(&(particle->second));
+    return THandle<CP::TG4Trajectory>(val,false);
 }
 
-void ND::TG4TrajectoryContainer::ls(Option_t* opt) const {
-    ND::TDatum::ls(opt);
+void CP::TG4TrajectoryContainer::ls(Option_t* opt) const {
+    CP::TDatum::ls(opt);
     TROOT::IncreaseDirLevel();
     for (const_iterator v = begin();
          v != end(); 

@@ -1,5 +1,5 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TTrackState+;
-#pragma link C++ class ND::THandle<ND::TTrackState>+;
-#pragma link C++ class ND::TReconNodeContainerImpl<ND::TTrackState>+;
+#pragma link C++ class CP::TTrackState+;
+#pragma link C++ class CP::THandle<CP::TTrackState>+;
+#pragma link C++ class CP::TReconNodeContainerImpl<CP::TTrackState>+;
 #endif

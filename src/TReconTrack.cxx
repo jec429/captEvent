@@ -1,27 +1,27 @@
 #include "TReconTrack.hxx"
 #include "TCorrValues.hxx"
 
-ClassImp(ND::TReconTrack);
+ClassImp(CP::TReconTrack);
 
-ND::TReconTrack::TReconTrack() {
+CP::TReconTrack::TReconTrack() {
     fState = new TTrackState;
-    fNodes = new TReconNodeContainerImpl<ND::TTrackState>;
+    fNodes = new TReconNodeContainerImpl<CP::TTrackState>;
 }
 
-ND::TReconTrack::TReconTrack(const ND::TReconTrack& track)
-    : ND::TReconBase(track) {
-    fNodes = new TReconNodeContainerImpl<ND::TTrackState>;
+CP::TReconTrack::TReconTrack(const CP::TReconTrack& track)
+    : CP::TReconBase(track) {
+    fNodes = new TReconNodeContainerImpl<CP::TTrackState>;
     
     // Copy the nodes 
     // Create new nodes with TTrackState's 
-    ND::TReconNodeContainer::const_iterator in;
+    CP::TReconNodeContainer::const_iterator in;
     for (in=track.GetNodes().begin(); in!=track.GetNodes().end(); ++in){
-        ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-        ND::THandle<ND::TReconBase> object = (*in)->GetObject();
+        CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+        CP::THandle<CP::TReconBase> object = (*in)->GetObject();
         node->SetObject(object);
-        ND::THandle<ND::TTrackState> tstate = (*in)->GetState();
+        CP::THandle<CP::TTrackState> tstate = (*in)->GetState();
         if (tstate) {
-            ND::THandle<ND::TReconState> pstate(new ND::TTrackState(*tstate));
+            CP::THandle<CP::TReconState> pstate(new CP::TTrackState(*tstate));
             node->SetState(pstate);
         }
         node->SetQuality((*in)->GetQuality());
@@ -30,7 +30,7 @@ ND::TReconTrack::TReconTrack(const ND::TReconTrack& track)
     }
 
     if (track.GetState()) {
-        ND::THandle<ND::TTrackState> state = track.GetState();  
+        CP::THandle<CP::TTrackState> state = track.GetState();  
         fState = new TTrackState(*state);
     }
     else {
@@ -38,47 +38,47 @@ ND::TReconTrack::TReconTrack(const ND::TReconTrack& track)
     }
 }
 
-ND::TReconTrack::~TReconTrack() {}
+CP::TReconTrack::~TReconTrack() {}
 
-double ND::TReconTrack::GetEDeposit() const {
-    THandle<ND::TTrackState> state = GetState();
+double CP::TReconTrack::GetEDeposit() const {
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetEDeposit();
 }
 
-TLorentzVector ND::TReconTrack::GetPosition() const {
+TLorentzVector CP::TReconTrack::GetPosition() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TTrackState> state = GetState();
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPosition();
 }
 
-TLorentzVector ND::TReconTrack::GetPositionVariance() const {
+TLorentzVector CP::TReconTrack::GetPositionVariance() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TTrackState> state = GetState();
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPositionVariance();
 }
 
-bool ND::TReconTrack::IsXTrack() const {
+bool CP::TReconTrack::IsXTrack() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.X())) return false;
+    if (CP::TCorrValues::IsFree(var.X())) return false;
     return true;
 }
 
-bool ND::TReconTrack::IsYTrack() const {
+bool CP::TReconTrack::IsYTrack() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Y())) return false;
+    if (CP::TCorrValues::IsFree(var.Y())) return false;
     return true;
 }
 
-bool ND::TReconTrack::IsZTrack() const {
+bool CP::TReconTrack::IsZTrack() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Z())) return false;
+    if (CP::TCorrValues::IsFree(var.Z())) return false;
     return true;
 }
 
-int ND::TReconTrack::GetDimensions() const{
+int CP::TReconTrack::GetDimensions() const{
     TLorentzVector var = GetPositionVariance();
     int dim = 0;
     if (IsXTrack()) ++dim;
@@ -87,22 +87,22 @@ int ND::TReconTrack::GetDimensions() const{
     return dim;
 }
 
-TVector3 ND::TReconTrack::GetDirection() const {
+TVector3 CP::TReconTrack::GetDirection() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TTrackState> state = GetState();
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetDirection();
 }
 
-double ND::TReconTrack::GetCurvature() const {
+double CP::TReconTrack::GetCurvature() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TTrackState> state = GetState();
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetCurvature();
 }
 
-TVector3 ND::TReconTrack::GetWidth() const {
-    THandle<ND::TTrackState> state = GetState();
+TVector3 CP::TReconTrack::GetWidth() const {
+    THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetWidth();
 }

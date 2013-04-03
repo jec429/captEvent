@@ -26,11 +26,11 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTTPCChannelId::test<1> () {
-        ND::TTPCChannelId g1(1);
-        ND::TChannelId g2;
-        ND::TTPCChannelId g3;
+        CP::TTPCChannelId g1(1);
+        CP::TChannelId g2;
+        CP::TTPCChannelId g3;
         g2 = g1;
-        g3 = ND::TTPCChannelId(g2);
+        g3 = CP::TTPCChannelId(g2);
         ensure_equals("TTPCChannelId value matchs", g1.AsUInt(), (unsigned) 1);
         ensure_equals("TChannelId value matchs", g2.AsUInt(), (unsigned) 1);
         ensure_equals("TTPCChannelId copied value matchs", g3.AsUInt(),
@@ -41,13 +41,13 @@ namespace tut {
     // Test the normal constructor.
     template<> template<>
     void testTTPCChannelId::test<2> () {
-        int subDet = ND::TChannelId::kTPC;
+        int subDet = CP::TChannelId::kTPC;
         unsigned int dcc = 15;
         unsigned int fem = 2;
         unsigned int fec = 1;
         unsigned int asic = 2;
         unsigned int channel = 39;
-        ND::TTPCChannelId g1(dcc,fem,fec,asic,channel);
+        CP::TTPCChannelId g1(dcc,fem,fec,asic,channel);
         ensure("TTPCChannelId is valid", g1.IsValid());
         ensure_equals("Sub-detector value matchs", g1.GetSubDetector(),subDet);
         ensure_equals("DCC value matchs", g1.GetDCC(),dcc);
@@ -84,35 +84,35 @@ namespace tut {
     
     template<> template<>
     void testTTPCChannelId::test<10> () {
-        CMP("Check DCC", ND::TTPCChannelId, 5, 18,
+        CMP("Check DCC", CP::TTPCChannelId, 5, 18,
             SetDCC, GetDCC, 
             GetSubDetector, GetFEM);
     }
 
     template<> template<>
     void testTTPCChannelId::test<11> () {
-        CMP("Check FEM", ND::TTPCChannelId, 4, 12,
+        CMP("Check FEM", CP::TTPCChannelId, 4, 12,
             SetFEM, GetFEM, 
             GetDCC, GetFEC);
     }
 
     template<> template<>
     void testTTPCChannelId::test<12> () {
-        CMP("Check FEC", ND::TTPCChannelId, 3, 6, 
+        CMP("Check FEC", CP::TTPCChannelId, 3, 6, 
             SetFEC, GetFEC, 
             GetFEM, GetAsic);
     }
 
     template<> template<>
     void testTTPCChannelId::test<13> () {
-        CMP("Check Asic", ND::TTPCChannelId, 2, 4,
+        CMP("Check Asic", CP::TTPCChannelId, 2, 4,
             SetAsic, GetAsic, 
             GetFEC, GetChannel);
     }
 
     template<> template<>
     void testTTPCChannelId::test<14> () {
-        CMP("Check channel", ND::TTPCChannelId, 7, 80,
+        CMP("Check channel", CP::TTPCChannelId, 7, 80,
             SetChannel, GetChannel, 
             GetAsic, GetAsic);
     }

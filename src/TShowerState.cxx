@@ -1,17 +1,17 @@
 #include "TShowerState.hxx"
 
 ///////////////////////////////////////////////////////
-ClassImp(ND::TShowerState);
+ClassImp(CP::TShowerState);
 
-ND::TShowerState::TShowerState(): TMReconState(this) {
+CP::TShowerState::TShowerState(): TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
     Init();
 }
 
-ND::TShowerState::~TShowerState() {}
+CP::TShowerState::~TShowerState() {}
 
-ND::TShowerState::TShowerState(const ND::TShowerState& init)
+CP::TShowerState::TShowerState(const CP::TShowerState& init)
   : TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -29,7 +29,7 @@ ND::TShowerState::TShowerState(const ND::TShowerState& init)
     
 }
 
-ND::TShowerState& ND::TShowerState::operator=(const ND::TShowerState& rhs) {
+CP::TShowerState& CP::TShowerState::operator=(const CP::TShowerState& rhs) {
     if (this == &rhs) return *this;
 
     for (int i=0; i<GetSize(); ++i) {
@@ -45,7 +45,7 @@ ND::TShowerState& ND::TShowerState::operator=(const ND::TShowerState& rhs) {
     return *this;
 }
 
-ND::TCorrValues ND::TShowerState::ProjectState(const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TShowerState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TShowerState::GetSize());
     values.SetType("EDeposit X Y Z T DX DY DZ C1 C2 ");
     const TMEDepositState* eDepositState 

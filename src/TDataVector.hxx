@@ -16,7 +16,7 @@
 
 class TBrowser;
 
-namespace ND {
+namespace CP {
     typedef std::vector<TDatum*> TDatumVector;
     class TDataVector;
     template <typename BaseIterator, typename Type> class TDataVectorIterator;
@@ -59,18 +59,18 @@ namespace ND {
 /// object, and assumes ownership of the objects (as per the memory management
 /// rules).  The second form of AddDatum takes a handle to a TDatum object,
 /// this has slightly unusual semantics since it takes ownership of the object
-/// away from the ND::THandle so that the data pointed two by the ND::THandle
-/// is now owned by the ND::TDataVector object.  Objects added to the
-/// ND::TDataVector::AddDatum method will be saved when the TDataVector is
+/// away from the CP::THandle so that the data pointed two by the CP::THandle
+/// is now owned by the CP::TDataVector object.  Objects added to the
+/// CP::TDataVector::AddDatum method will be saved when the TDataVector is
 /// written to an output file (this is the main way that data is saved to a
 /// file).
 ///
 /// In addition to AddDatum, any TDatum derived object can be added to the
-/// TDataVector object using ND::TDataVector::AddTemporary.  Objects added in
+/// TDataVector object using CP::TDataVector::AddTemporary.  Objects added in
 /// this way will not be saved to the output file.  You can check if an object
 /// is placed in the temporary store by using the
-/// ND::TDataVector::IsTemporary method.
-class ND::TDataVector : public TData {
+/// CP::TDataVector::IsTemporary method.
+class CP::TDataVector : public TData {
     template <typename BaseIterator, typename Type> 
     friend class TDataVectorIterator;
 
@@ -91,10 +91,10 @@ public:
     /// @{Bidirectional iterators as per STL.  Bidirectional iterators to
     /// sequence through the elements of the TDataVector from beginning to
     /// end.
-    typedef TDataVectorIterator<ND::TDatumVector::iterator,
-                                ND::TDatum*> iterator;
-    typedef TDataVectorIterator<ND::TDatumVector::const_iterator,
-                                ND::TDatum* const >  const_iterator;
+    typedef TDataVectorIterator<CP::TDatumVector::iterator,
+                                CP::TDatum*> iterator;
+    typedef TDataVectorIterator<CP::TDatumVector::const_iterator,
+                                CP::TDatum* const >  const_iterator;
     /// @}
 
     /// @{Bidirectional reverse iterators as per STL.  Iterators to sequence
@@ -141,12 +141,12 @@ public:
     /// Add a temporary TDatum that will not be saved to the output file.
     /// This takes over memory management of the handle and will throw the
     /// EBadInsertion exception if the insertion fails.
-    virtual void AddTemporary(ND::THandle<ND::TDatum> handle,
+    virtual void AddTemporary(CP::THandle<CP::TDatum> handle,
                               const char* name=NULL);
 
     /// @{Check if a TDatum object is temporary in this data vector.
     virtual bool IsTemporary(TDatum* val);
-    virtual bool IsTemporary(ND::THandle<TDatum> val);
+    virtual bool IsTemporary(CP::THandle<TDatum> val);
     /// @}
 
     /// @{As per the STL.  Return iterators to sequence through the vector
@@ -178,7 +178,7 @@ public:
     /// then removing.  This returns an iterator to the element that immediately
     /// followed the object at position (as per the STL vector erase).
     virtual iterator erase(TDatum* position);
-    virtual iterator erase(ND::THandle<ND::TDatum> position);
+    virtual iterator erase(CP::THandle<CP::TDatum> position);
     /// @}
 
     /// As per STL.  Remove a TDatum object from the TDataVector based on an
@@ -236,7 +236,7 @@ protected:
     /// Remove the element from the container.  The object can be deleted
     /// after this has been called, or it can be inserted someplace else.  If
     /// the element is found, then return value is equal to element.
-    /// Otherwise it's NULL.  See ND::TDatum::RemoveDatum() for details.
+    /// Otherwise it's NULL.  See CP::TDatum::RemoveDatum() for details.
     virtual TDatum* RemoveDatum(TDatum* element);
 
     /// Insert the element into the container and set the parent.  The element
@@ -257,28 +257,28 @@ private:
 };
 
 /// As per the STL.
-namespace ND {
+namespace CP {
     template <typename BaseIterator, typename Type>
     class TDataVectorIterator
         : public std::iterator<std::bidirectional_iterator_tag,
                                Type> {
         
-        TDataVectorIterator(const ND::TDataVector* obj,
+        TDataVectorIterator(const CP::TDataVector* obj,
                             const BaseIterator current) {
             // Cast to a non-const version since both the const and non-const
             // version of begin are required.
-            fObject = const_cast<ND::TDataVector*>(obj);
+            fObject = const_cast<CP::TDataVector*>(obj);
             fCurrent = current;
             if (fCurrent == fObject->fVector.end()) {
                 fCurrent = fObject->fTemporary.begin();
             }
         }
         
-        ND::TDataVector* fObject;
+        CP::TDataVector* fObject;
         BaseIterator fCurrent;
         
     public:
-        friend class ND::TDataVector;
+        friend class CP::TDataVector;
 
         /// @{As per the STL definitions for a bidirectional iterator.
         Type& operator*() const {return *fCurrent;}

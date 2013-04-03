@@ -4,12 +4,12 @@
 #include "TReconState.hxx"
 #include "TReconNode.hxx"
 
-namespace ND {
+namespace CP {
     class TShowerState;
 }
 
 /// A state holding the parameters associated with a TReconShower. 
-class ND::TShowerState: public TReconState, 
+class CP::TShowerState: public TReconState, 
                         virtual public TMReconState,
                         virtual public TMEDepositState,
                         virtual public TMPositionDirectionState,
@@ -29,7 +29,7 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<ND::TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
     ClassDef(TShowerState,1);
 };

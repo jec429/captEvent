@@ -15,7 +15,7 @@
 
 #include "method_deprecated.hxx"
 
-namespace ND {
+namespace CP {
     class THit;
 
     /// Base class for all exceptions associated with the THit classes.
@@ -39,7 +39,7 @@ namespace ND {
 /// many parts of the detector, a geometric element also corresponds to a
 /// particular electronics channel, however, the match to the detector
 /// geometry, and not the electroncis channel.
-class ND::THit : public TObject {
+class CP::THit : public TObject {
 public:
     THit();
     virtual ~THit();
@@ -122,7 +122,7 @@ public:
     /// Return a contributing hit.  If the index is out of range, this will
     /// throw an EHitOutOfRange exception.  By default this will throw an
     /// EHitOutOfRange, but it may be over-ridden in a derived class.
-    virtual ND::THandle<ND::THit> GetContributor(int i=0) const;
+    virtual CP::THandle<CP::THit> GetContributor(int i=0) const;
 
     /// Return the number of hits that contribute to this hit.
     virtual int GetContributorCount() const;
@@ -136,7 +136,7 @@ public:
     /// and then searching for the appropriate hit in the TDigitContainer.
     /// This search requires knowledge of how the digits are translated into
     /// hits.
-    virtual const ND::TDigitProxy& GetDigit(int i=0) const;
+    virtual const CP::TDigitProxy& GetDigit(int i=0) const;
 
     /// Return the number of digits that contribute to this hit.
     virtual int GetDigitCount() const;

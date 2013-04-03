@@ -8,28 +8,28 @@
 #include "TReconNode.hxx"
 #include "HEPUnits.hxx"
 
-ClassImp(ND::TReconCluster);
+ClassImp(CP::TReconCluster);
 
-ND::TReconCluster::TReconCluster() 
+CP::TReconCluster::TReconCluster() 
     : fMoments(3) {
     fState = new TClusterState;
-    fNodes = new TReconNodeContainerImpl<ND::TClusterState>;
+    fNodes = new TReconNodeContainerImpl<CP::TClusterState>;
 }
 
-ND::TReconCluster::TReconCluster(const ND::TReconCluster& cluster)
-    : ND::TReconBase(cluster), fMoments(3) {
-    fNodes = new TReconNodeContainerImpl<ND::TClusterState>;
+CP::TReconCluster::TReconCluster(const CP::TReconCluster& cluster)
+    : CP::TReconBase(cluster), fMoments(3) {
+    fNodes = new TReconNodeContainerImpl<CP::TClusterState>;
     
     // Copy the nodes 
     // Create new nodes with TClusterState's 
-    ND::TReconNodeContainer::const_iterator in;
+    CP::TReconNodeContainer::const_iterator in;
     for (in=cluster.GetNodes().begin(); in!=cluster.GetNodes().end();in++){
-        ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-        ND::THandle<ND::TReconBase> object = (*in)->GetObject();
+        CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+        CP::THandle<CP::TReconBase> object = (*in)->GetObject();
         node->SetObject(object);
-        ND::THandle<ND::TClusterState> tstate = (*in)->GetState();
+        CP::THandle<CP::TClusterState> tstate = (*in)->GetState();
         if (tstate){
-            ND::THandle<ND::TReconState> pstate(new ND::TClusterState(*tstate));
+            CP::THandle<CP::TReconState> pstate(new CP::TClusterState(*tstate));
             node->SetState(pstate);
         }
         node->SetQuality((*in)->GetQuality());
@@ -39,7 +39,7 @@ ND::TReconCluster::TReconCluster(const ND::TReconCluster& cluster)
     
     
     if (cluster.GetState()){
-        ND::THandle<ND::TClusterState> state = cluster.GetState();  
+        CP::THandle<CP::TClusterState> state = cluster.GetState();  
         fState = new TClusterState(*state);
     }
     else {
@@ -49,9 +49,9 @@ ND::TReconCluster::TReconCluster(const ND::TReconCluster& cluster)
 
 
 
-ND::TReconCluster::~TReconCluster() {}
+CP::TReconCluster::~TReconCluster() {}
 
-double ND::TReconCluster::GetEDeposit() const {
+double CP::TReconCluster::GetEDeposit() const {
     // I'm being a bit pedantic and casting to the base mix-in class.  This
     // could just as well cast to a TClusterState.
     const TMEDepositState* state 
@@ -60,39 +60,39 @@ double ND::TReconCluster::GetEDeposit() const {
     return state->GetEDeposit();
 }
     
-TLorentzVector ND::TReconCluster::GetPosition() const {
+TLorentzVector CP::TReconCluster::GetPosition() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TClusterState> state = GetState();
+    THandle<CP::TClusterState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPosition();
 }
 
-TLorentzVector ND::TReconCluster::GetPositionVariance() const {
+TLorentzVector CP::TReconCluster::GetPositionVariance() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TClusterState> state = GetState();
+    THandle<CP::TClusterState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPositionVariance();
 }
 
-bool ND::TReconCluster::IsXCluster() const {
+bool CP::TReconCluster::IsXCluster() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.X())) return false;
+    if (CP::TCorrValues::IsFree(var.X())) return false;
     return true;
 }
 
-bool ND::TReconCluster::IsYCluster() const {
+bool CP::TReconCluster::IsYCluster() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Y())) return false;
+    if (CP::TCorrValues::IsFree(var.Y())) return false;
     return true;
 }
 
-bool ND::TReconCluster::IsZCluster() const {
+bool CP::TReconCluster::IsZCluster() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Z())) return false;
+    if (CP::TCorrValues::IsFree(var.Z())) return false;
     return true;
 }
 
-int ND::TReconCluster::GetDimensions() const{
+int CP::TReconCluster::GetDimensions() const{
     TLorentzVector var = GetPositionVariance();
     int dim = 0;
     if (IsXCluster()) ++dim;
@@ -101,11 +101,11 @@ int ND::TReconCluster::GetDimensions() const{
     return dim;
 }
 
-const ND::TReconCluster::MomentMatrix& ND::TReconCluster::GetMoments() const {
+const CP::TReconCluster::MomentMatrix& CP::TReconCluster::GetMoments() const {
     return fMoments;
 }
 
-void ND::TReconCluster::SetMoments(double xx, double yy, double zz,
+void CP::TReconCluster::SetMoments(double xx, double yy, double zz,
                                    double xy, double xz, double yz) {
     fMoments(0,0) = xx;
     fMoments(1,1) = yy;
@@ -118,7 +118,7 @@ void ND::TReconCluster::SetMoments(double xx, double yy, double zz,
     fMoments(2,1) = yz;
 }
 
-void ND::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
+void CP::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
     if (moments.GetNrows() != fMoments.GetNrows()) throw EMomentsSize();
     if (moments.GetNcols() != fMoments.GetNcols()) throw EMomentsSize();
     for (int row=0; row<3; ++row) {
@@ -128,20 +128,20 @@ void ND::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
     }
 }
 
-void ND::TReconCluster::FillFromHits(const char* name, 
-                                     ND::THitSelection::const_iterator beg,
-                                     ND::THitSelection::const_iterator end) {
+void CP::TReconCluster::FillFromHits(const char* name, 
+                                     CP::THitSelection::const_iterator beg,
+                                     CP::THitSelection::const_iterator end) {
     // Add a copy of the hits to the cluster.
     if (end-beg < 1) return;
-    ND::THitSelection* hits = new THitSelection("clusterHits");
+    CP::THitSelection* hits = new THitSelection("clusterHits");
     std::copy(beg, end, std::back_inserter(*hits));
     AddHits(hits);
 
     fAlgorithm = std::string(name);
-    fStatus = ND::TReconBase::kSuccess;
+    fStatus = CP::TReconBase::kSuccess;
     fQuality = 1.0;
     fNDOF = std::max(1,int(end-beg-1));
-    ND::THandle<ND::TClusterState> state = GetState();
+    CP::THandle<CP::TClusterState> state = GetState();
     
     int dim = state->GetDimensions();
     TVectorT<double> vals(dim);
@@ -160,7 +160,7 @@ void ND::TReconCluster::FillFromHits(const char* name,
     // Find the energy deposit and the average position.
     TVectorT<double> stateValues(dim);
     TVectorT<double> stateNorms(dim);
-    for (ND::THitSelection::const_iterator h = beg;
+    for (CP::THitSelection::const_iterator h = beg;
          h != end;
          ++h) {
         vals(eDep) = (*h)->GetCharge();
@@ -198,7 +198,7 @@ void ND::TReconCluster::FillFromHits(const char* name,
     TMatrixTSym<double> weights(dim);
     // This counts the number of degrees of freedom contributing to each bin.
     TMatrixTSym<double> dof(dim);
-    for (ND::THitSelection::const_iterator h = beg;
+    for (CP::THitSelection::const_iterator h = beg;
          h != end;
          ++h) {
         vals(eDep) = (*h)->GetCharge() - stateValues(eDep);
@@ -254,7 +254,7 @@ void ND::TReconCluster::FillFromHits(const char* name,
     for (int row = 0; row<dim; ++row) {
         for (int col = row; col<dim; ++col) {
             if (dof(row,col)>0.9) stateCov(row,col) /= std::sqrt(dof(row,col));
-            else if (row==col) stateCov(row,col) = ND::TCorrValues::kFreeValue;
+            else if (row==col) stateCov(row,col) = CP::TCorrValues::kFreeValue;
             else stateCov(row,col) = 0.0;
             stateCov(col,row) = stateCov(row,col);
         }
@@ -262,7 +262,7 @@ void ND::TReconCluster::FillFromHits(const char* name,
 
     // Add the correction for finite size of the hits (i.e. the bars).
     TVectorT<double> barWeights(dim);
-    for (ND::THitSelection::const_iterator h = beg;
+    for (CP::THitSelection::const_iterator h = beg;
          h != end;
          ++h) {
         sigs(eDep) = std::sqrt((*h)->GetCharge());
@@ -308,7 +308,7 @@ void ND::TReconCluster::FillFromHits(const char* name,
                     state->GetValue(posZ));
 
     // Calculate the charge weighted "sum of squared differences".
-    for (ND::THitSelection::const_iterator h = beg;
+    for (CP::THitSelection::const_iterator h = beg;
          h != end;
          ++h) {
         TVector3 diff = (*h)->GetPosition() - center;
@@ -357,8 +357,8 @@ void ND::TReconCluster::FillFromHits(const char* name,
     SetMoments(moments);
 }
 
-void ND::TReconCluster::ls(Option_t *opt) const {
-    ND::TReconBase::ls_base(opt);
+void CP::TReconCluster::ls(Option_t *opt) const {
+    CP::TReconBase::ls_base(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
 

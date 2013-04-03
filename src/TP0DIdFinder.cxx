@@ -8,14 +8,14 @@
 #include "ND280GeomIdDef.hxx"
 #include "TP0DIdFinder.hxx"
 
-ND::TP0DIdFinder::TP0DIdFinder() 
+CP::TP0DIdFinder::TP0DIdFinder() 
     : fSP0Dule(-1), fP0Dule(-1), fLayer(-1), fBar(-1), fTarget(-1), 
       fECalRadiator(-1), fTargetRadiator(-1) {}
-ND::TP0DIdFinder::~TP0DIdFinder() {}
+CP::TP0DIdFinder::~TP0DIdFinder() {}
 
-bool ND::TP0DIdFinder::Search(const std::vector<std::string>& names, 
+bool CP::TP0DIdFinder::Search(const std::vector<std::string>& names, 
                               TGeometryId& id) {
-    using namespace ND::GeomId::Def;
+    using namespace CP::GeomId::Def;
 
     // Assign a geometry identifier to the full P0D.
     if (names.size()<5) return false;
@@ -29,29 +29,29 @@ bool ND::TP0DIdFinder::Search(const std::vector<std::string>& names,
 #endif
 
     if (names.back().find("P0D_")!=std::string::npos) {
-        id = ND::GeomId::P0D::Detector();
+        id = CP::GeomId::P0D::Detector();
         return true;
     }
 
     // Assign the super-P0Dule number.
     if (names.back().find("USECal_")!=std::string::npos) {
         fSP0Dule = 0;
-        id = ND::GeomId::P0D::SuperP0Dule(fSP0Dule);
+        id = CP::GeomId::P0D::SuperP0Dule(fSP0Dule);
         return true;
     }
     else if (names.back().find("USTarget_")!=std::string::npos) {
         fSP0Dule = 1;
-        id = ND::GeomId::P0D::SuperP0Dule(fSP0Dule);
+        id = CP::GeomId::P0D::SuperP0Dule(fSP0Dule);
         return true;
     }
     else if (names.back().find("CTarget_")!=std::string::npos) {
         fSP0Dule = 2;
-        id = ND::GeomId::P0D::SuperP0Dule(fSP0Dule);
+        id = CP::GeomId::P0D::SuperP0Dule(fSP0Dule);
         return true;
     }
     else if (names.back().find("CECal_")!=std::string::npos) {
         fSP0Dule = 3;
-        id = ND::GeomId::P0D::SuperP0Dule(fSP0Dule);
+        id = CP::GeomId::P0D::SuperP0Dule(fSP0Dule);
         return true;
     }
 
@@ -60,14 +60,14 @@ bool ND::TP0DIdFinder::Search(const std::vector<std::string>& names,
         ++fP0Dule;
         fLayer = -1;
         fBar = -1;
-        id = ND::GeomId::P0D::P0Dule(fP0Dule);
+        id = CP::GeomId::P0D::P0Dule(fP0Dule);
         return true;
     }
 
     // Assign the target.
     if (names.back().find("Target_") == 0) {
         ++fTarget;
-        id = ND::GeomId::P0D::Target(fTarget);
+        id = CP::GeomId::P0D::Target(fTarget);
         return true;
     }
 
@@ -75,11 +75,11 @@ bool ND::TP0DIdFinder::Search(const std::vector<std::string>& names,
     if (names.back().find("Radiator_") !=std::string::npos) {
         if (fSP0Dule == 0 || fSP0Dule==3) {
             ++fECalRadiator;
-            id = ND::GeomId::P0D::ECalRadiator(fECalRadiator);
+            id = CP::GeomId::P0D::ECalRadiator(fECalRadiator);
         }
         else {
             ++fTargetRadiator;
-            id = ND::GeomId::P0D::TargetRadiator(fTargetRadiator);
+            id = CP::GeomId::P0D::TargetRadiator(fTargetRadiator);
         }
         return true;
     }
@@ -97,7 +97,7 @@ bool ND::TP0DIdFinder::Search(const std::vector<std::string>& names,
     }
         
     if (names.back().find("Bar_")!=std::string::npos) {
-        id = ND::GeomId::P0D::Bar(fP0Dule, fLayer, ++fBar);
+        id = CP::GeomId::P0D::Bar(fP0Dule, fLayer, ++fBar);
         return true;
     }
 

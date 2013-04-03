@@ -5,12 +5,12 @@
 #include "TReconBase.hxx"
 #include "TVertexState.hxx"
 
-namespace ND {
+namespace CP {
     class TReconVertex;
 }
 
 /// Define a vertex location within the detector.
-class ND::TReconVertex: public ND::TReconBase {
+class CP::TReconVertex: public CP::TReconBase {
 public: 
     TReconVertex();
     virtual ~TReconVertex();

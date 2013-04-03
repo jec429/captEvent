@@ -9,22 +9,22 @@
 
 #include "TDataLink.hxx"
 
-ClassImp(ND::TDataLink);
+ClassImp(CP::TDataLink);
 
-ND::TDataLink::~TDataLink() {
+CP::TDataLink::~TDataLink() {
     // Null the fParent incase there are dangling pointers someplace.  
     fLink = NULL;
 }
 
 // This calls the function for the think that is being linked to.
-Bool_t ND::TDataLink::IsFolder(void) const {
+Bool_t CP::TDataLink::IsFolder(void) const {
     Bool_t result =  GetThis()->IsFolder();
     return result;
 }
 
 // Called by the browser.  This calls the browser of the class that is being
 // linked.  
-void ND::TDataLink::Browse(TBrowser* b) {
+void CP::TDataLink::Browse(TBrowser* b) {
     GetThis()->Browse(b);
 }
 

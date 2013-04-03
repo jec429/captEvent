@@ -5,7 +5,7 @@
 
 /// User code for the event loop.  This can be copied and used as a skeleton
 /// for generic user loop programs.
-class TUserLoop: public ND::TND280EventLoopFunction {
+class TUserLoop: public CP::TND280EventLoopFunction {
 public:
     /// Initialize any class specific variables, but most of the work can be
     /// done in Initialize.  Don't create histograms here!
@@ -32,7 +32,7 @@ public:
     /// current file should be skipped, this should through the
     /// ENextEventLoopFile exception.  If the daughter class defines this
     /// operator, it should not define the Process() method.
-    bool operator () (ND::TND280Event& event) {
+    bool operator () (CP::TND280Event& event) {
         return true;
     }
 
@@ -46,7 +46,7 @@ public:
     /// so you can add extra information.  Because of an ideosyncracy in the
     /// way root handles histograms, objects created in Initialize() will
     /// already be stored in the output file.
-    virtual void Finalize(ND::TND280Output* output) {
+    virtual void Finalize(CP::TND280Output* output) {
     }
 
 private:

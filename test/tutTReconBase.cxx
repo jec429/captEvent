@@ -29,7 +29,7 @@ namespace tut {
     // Test the basic constructor and destructor.
     template<> template <>
     void testTReconBase::test<1> () {
-        ND::TReconCluster base;
+        CP::TReconCluster base;
 
         ensure_equals("Default status is empty",base.GetStatus(),(unsigned)0);
         ensure_equals("Default quality is zero",base.GetQuality(),0);
@@ -40,85 +40,85 @@ namespace tut {
     // Test SetStatus(), ClearStatus(), and CheckStatus().
     template<> template <>
     void testTReconBase::test<2> () {
-        ND::TReconCluster base;
+        CP::TReconCluster base;
 
         ensure("No status bit is set", 
-               !base.CheckStatus(ND::TReconBase::kStatusMask));
+               !base.CheckStatus(CP::TReconBase::kStatusMask));
         ensure("Default kRan is false",
-               !base.CheckStatus(ND::TReconBase::kRan));
-        base.SetStatus(ND::TReconBase::kRan);
+               !base.CheckStatus(CP::TReconBase::kRan));
+        base.SetStatus(CP::TReconBase::kRan);
         ensure("The kRan bit is true",
-               base.CheckStatus(ND::TReconBase::kRan));
+               base.CheckStatus(CP::TReconBase::kRan));
         ensure("Bit in status mask is set",
-               base.CheckStatus(ND::TReconBase::kStatusMask));
+               base.CheckStatus(CP::TReconBase::kStatusMask));
         ensure("The kSuccess bit is false",
-               !base.CheckStatus(ND::TReconBase::kSuccess));
+               !base.CheckStatus(CP::TReconBase::kSuccess));
         ensure("The kChi2Fit bit is false",
-               !base.CheckStatus(ND::TReconBase::kChi2Fit));
+               !base.CheckStatus(CP::TReconBase::kChi2Fit));
         ensure("The kLikelihoodFit bit is false",
-               !base.CheckStatus(ND::TReconBase::kLikelihoodFit));
+               !base.CheckStatus(CP::TReconBase::kLikelihoodFit));
         ensure("The kKalman bit is false",
-               !base.CheckStatus(ND::TReconBase::kKalmanFit));
+               !base.CheckStatus(CP::TReconBase::kKalmanFit));
         ensure("Check several bits (including kRan) is true.",
-               base.CheckStatus(ND::TReconBase::kRan
-                                | ND::TReconBase::kSuccess));
+               base.CheckStatus(CP::TReconBase::kRan
+                                | CP::TReconBase::kSuccess));
         ensure("Check several bits (not including kRan) are false",
-               !base.CheckStatus(ND::TReconBase::kSuccess
-                                 | ND::TReconBase::kChi2Fit));
-        base.ClearStatus(ND::TReconBase::kRan);
+               !base.CheckStatus(CP::TReconBase::kSuccess
+                                 | CP::TReconBase::kChi2Fit));
+        base.ClearStatus(CP::TReconBase::kRan);
         ensure("The kRan Bit is cleared",
-               !base.CheckStatus(ND::TReconBase::kRan));
+               !base.CheckStatus(CP::TReconBase::kRan));
         ensure("No status bit set after clear", 
-               !base.CheckStatus(ND::TReconBase::kStatusMask));
+               !base.CheckStatus(CP::TReconBase::kStatusMask));
     }
 
     // Check the detector bits.
     template<> template <>
     void testTReconBase::test<3> () {
-        ND::TReconCluster base;
+        CP::TReconCluster base;
         
         ensure("No detector used by default",
-               !base.UsesDetector(ND::TReconBase::kDetectorMask));
+               !base.UsesDetector(CP::TReconBase::kDetectorMask));
 
 
         ensure("TPC is not used by default",
-               !base.UsesDetector(ND::TReconBase::kTPC));
+               !base.UsesDetector(CP::TReconBase::kTPC));
 
-        base.AddDetector(ND::TReconBase::kTPC1);
+        base.AddDetector(CP::TReconBase::kTPC1);
         ensure("TPC1 was added",
-               base.UsesDetector(ND::TReconBase::kTPC1));
+               base.UsesDetector(CP::TReconBase::kTPC1));
         ensure("TPC2 was not added",
-               !base.UsesDetector(ND::TReconBase::kTPC2));
+               !base.UsesDetector(CP::TReconBase::kTPC2));
         ensure("TPC3 was not added",
-               !base.UsesDetector(ND::TReconBase::kTPC3));
+               !base.UsesDetector(CP::TReconBase::kTPC3));
         ensure("A TPC module was added",
-               base.UsesDetector(ND::TReconBase::kTPC));
+               base.UsesDetector(CP::TReconBase::kTPC));
 
-        base.RemoveDetector(ND::TReconBase::kTPC1);
+        base.RemoveDetector(CP::TReconBase::kTPC1);
         ensure("TPC1 was removed",
-               !base.UsesDetector(ND::TReconBase::kTPC1));
+               !base.UsesDetector(CP::TReconBase::kTPC1));
         ensure("No TPC modules are used",
-               !base.UsesDetector(ND::TReconBase::kTPC));
+               !base.UsesDetector(CP::TReconBase::kTPC));
     }
 
     // Check the copy constructor.
     template<> template <>
     void testTReconBase::test<4> () {
-        ND::TReconCluster orig;
+        CP::TReconCluster orig;
         orig.SetName("name");
         orig.SetTitle("title");
         orig.SetMoments(1,2,3,4,5,6);
-        ND::TIntegerDatum* iDatum 
-            = new ND::TIntegerDatum("integerDatum","title");
+        CP::TIntegerDatum* iDatum 
+            = new CP::TIntegerDatum("integerDatum","title");
         orig.AddDatum(iDatum);
 
-        ND::THandle<ND::TIntegerDatum> origInt 
-            = orig.Get<ND::TIntegerDatum>("integerDatum");
+        CP::THandle<CP::TIntegerDatum> origInt 
+            = orig.Get<CP::TIntegerDatum>("integerDatum");
         (*origInt)[0] = 1;
         origInt->push_back(2);
         origInt->push_back(3);
 
-        ND::TReconCluster copy(orig);
+        CP::TReconCluster copy(orig);
 
         ensure_equals("Name of orig and copy are the same",
                       std::string(copy.GetName()),
@@ -128,8 +128,8 @@ namespace tut {
                       std::string(copy.GetTitle()),
                       std::string(orig.GetTitle()));
 
-        ND::THandle<ND::TIntegerDatum> copyInt 
-            = copy.Get<ND::TIntegerDatum>("integerDatum");
+        CP::THandle<CP::TIntegerDatum> copyInt 
+            = copy.Get<CP::TIntegerDatum>("integerDatum");
 
         ensure_equals("Integer datums have the same titles",
                       std::string(copyInt->GetTitle()),
@@ -149,21 +149,21 @@ namespace tut {
     // Check the copy constructor.
     template<> template <>
     void testTReconBase::test<5> () {
-        ND::TReconCluster orig;
+        CP::TReconCluster orig;
         orig.SetName("name");
         orig.SetTitle("title");
         orig.SetMoments(1,2,3,4,5,6);
-        ND::TRealDatum* iDatum 
-            = new ND::TRealDatum("realDatum","title");
+        CP::TRealDatum* iDatum 
+            = new CP::TRealDatum("realDatum","title");
         orig.AddDatum(iDatum);
 
-        ND::THandle<ND::TRealDatum> origReal 
-            = orig.Get<ND::TRealDatum>("realDatum");
+        CP::THandle<CP::TRealDatum> origReal 
+            = orig.Get<CP::TRealDatum>("realDatum");
         (*origReal)[0] = 1;
         origReal->push_back(2);
         origReal->push_back(3);
 
-        ND::TReconCluster copy(orig);
+        CP::TReconCluster copy(orig);
 
         ensure_equals("Name of orig and copy are the same",
                       std::string(copy.GetName()),
@@ -173,8 +173,8 @@ namespace tut {
                       std::string(copy.GetTitle()),
                       std::string(orig.GetTitle()));
 
-        ND::THandle<ND::TRealDatum> copyReal 
-            = copy.Get<ND::TRealDatum>("realDatum");
+        CP::THandle<CP::TRealDatum> copyReal 
+            = copy.Get<CP::TRealDatum>("realDatum");
 
         ensure_equals("Real datums have the same titles",
                       std::string(copyReal->GetTitle()),

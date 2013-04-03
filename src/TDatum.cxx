@@ -1,6 +1,6 @@
 // $Id: TDatum.cxx,v 1.19 2010/01/14 01:48:57 mcgrew Exp $
 //
-// Implement the ND::TDatum class.  This is a very simple class so almost
+// Implement the CP::TDatum class.  This is a very simple class so almost
 // all of the methods are implemented in line.  However the ClassImp
 // macro must be in a separate file and the virtual distructor is also
 // implemented here.
@@ -14,25 +14,25 @@
 
 #include "TDatum.hxx"
 
-ClassImp(ND::TDatum);
+ClassImp(CP::TDatum);
 
-ND::TDatum::TDatum() 
+CP::TDatum::TDatum() 
     : TNamed("unnamed",TDATUM_TITLE), fParent(NULL) { 
     SetBit(kCanDelete,true);
 }
 
-ND::TDatum::TDatum(const char* name, const char* title) 
+CP::TDatum::TDatum(const char* name, const char* title) 
     : TNamed(name,title), fParent(NULL) { 
     SetBit(kCanDelete,true);
 }
 
-ND::TDatum::~TDatum() {
+CP::TDatum::~TDatum() {
     // Null the fParent incase there are dangling pointers someplace.  
     fParent = NULL;
 }
 
-void ND::TDatum::ReassignParentDatum(ND::TDatum *parent) {
-    ND::TDatum *old = GetParentDatum();
+void CP::TDatum::ReassignParentDatum(CP::TDatum *parent) {
+    CP::TDatum *old = GetParentDatum();
     
     // Short circuit if the parent is not changed.
     if (old == parent) return;
@@ -42,9 +42,9 @@ void ND::TDatum::ReassignParentDatum(ND::TDatum *parent) {
     fParent = parent;
 }
 
-TString ND::TDatum::GetFullName(void) const {
+TString CP::TDatum::GetFullName(void) const {
     TString name;
-    for (const ND::TDatum *parent = this;
+    for (const CP::TDatum *parent = this;
          parent != NULL;
          parent = parent->GetParentDatum()) {
         std::string parentName(parent->GetName());
@@ -56,15 +56,15 @@ TString ND::TDatum::GetFullName(void) const {
     return name;
 }
 
-// Find a ND::TDatum object starting from a ND::TDatum using a slash separated
-// name.  ND::TDatum objects can't have any down links (remember, the
-// ND::TData class is derived so that ND::TDatum objects can contain other
-// ND::TDatum objects), so this can only search up.
-ND::TDatum* ND::TDatum::RecursiveFind(const char *theName) const {
+// Find a CP::TDatum object starting from a CP::TDatum using a slash separated
+// name.  CP::TDatum objects can't have any down links (remember, the
+// CP::TData class is derived so that CP::TDatum objects can contain other
+// CP::TDatum objects), so this can only search up.
+CP::TDatum* CP::TDatum::RecursiveFind(const char *theName) const {
     if (theName == 0) return NULL;
 
     // The result of the search.
-    ND::TDatum* result = const_cast<ND::TDatum*>(this);
+    CP::TDatum* result = const_cast<CP::TDatum*>(this);
 
     // Make a local copy of the name so that we can modify it.
     char cname[1024];
@@ -122,7 +122,7 @@ ND::TDatum* ND::TDatum::RecursiveFind(const char *theName) const {
             slash = strchr(name,'/');
             if (*slash) *slash = 0;
             // Look for the requested datum.
-            for (result = const_cast<ND::TDatum*>(this); 
+            for (result = const_cast<CP::TDatum*>(this); 
                  result && strcmp(name,result->GetName()) != 0;
                  result = result->GetParentDatum());
             if (result) result = result->GetThis();
@@ -174,17 +174,17 @@ ND::TDatum* ND::TDatum::RecursiveFind(const char *theName) const {
     if (!slash) {
         // The name syntax is xxxx.  No slash found, so just return
         // the datum in this.
-        ND::TDatum* datum = static_cast<ND::TDatum*>(result);
+        CP::TDatum* datum = static_cast<CP::TDatum*>(result);
         if (!datum) throw EBadConversion();
         result = datum->FindDatum(name);
         if (result) result = result->GetThis();
     }
     else {
         // The name syntax is xxxx/yyyy so zero terminate the name and
-        // find it in this.  The result has to be derived from ND::TData
+        // find it in this.  The result has to be derived from CP::TData
         // since it supports more
         *slash = 0;
-        ND::TDatum* datum = static_cast<ND::TDatum*>(result);
+        CP::TDatum* datum = static_cast<CP::TDatum*>(result);
         if (!datum) throw EBadConversion();
         result = datum->FindDatum(name);
         if (!result) return NULL;
@@ -198,13 +198,13 @@ ND::TDatum* ND::TDatum::RecursiveFind(const char *theName) const {
     return result;
 }
 
-void ND::TDatum::Browse(TBrowser *b) {
+void CP::TDatum::Browse(TBrowser *b) {
     if (b) {
         TClass::AutoBrowse(this,b);
     }
 }
 
-void ND::ls_header(const TObject* obj, Option_t* opt) {
+void CP::ls_header(const TObject* obj, Option_t* opt) {
     TROOT::IndentLevel();
     std::cout << obj->ClassName() << "(" << obj << "):: ";
     std::cout << obj->GetName();
@@ -215,7 +215,7 @@ void ND::ls_header(const TObject* obj, Option_t* opt) {
     }
 }
 
-void ND::TDatum::ls(Option_t* opt) const {
+void CP::TDatum::ls(Option_t* opt) const {
     ls_header(this, opt);
     if (strstr(opt,"title")) {
         std::cout << " Title:" << GetTitle();
@@ -231,12 +231,12 @@ void ND::TDatum::ls(Option_t* opt) const {
 
 // The default FindDatum never finds the object since there is never
 // an object to find.
-ND::TDatum* ND::TDatum::FindDatum(const char*) {
+CP::TDatum* CP::TDatum::FindDatum(const char*) {
     return NULL;
 }
 
 // Get the datum at the top of the TDatum tree.
-ND::TDatum* ND::TDatum::GetRootDatum(void) const {
+CP::TDatum* CP::TDatum::GetRootDatum(void) const {
     const TDatum* root;
     for (root=this;
          root->GetParentDatum() != NULL;
@@ -244,7 +244,7 @@ ND::TDatum* ND::TDatum::GetRootDatum(void) const {
     return const_cast<TDatum*>(root);
 }
 
-ND::TDatum* ND::TDatum::RemoveDatum(ND::TDatum* element) {
+CP::TDatum* CP::TDatum::RemoveDatum(CP::TDatum* element) {
     // Check that the element is actually held by the current object.  If this
     // object is the parent, then reset it's fParent field and return a
     // pointer to the element.  If this object is not the parent, then just
@@ -255,13 +255,13 @@ ND::TDatum* ND::TDatum::RemoveDatum(ND::TDatum* element) {
 }
 
 
-ND::TDatumCompareName::TDatumCompareName(const char* name) : fName(name) {
+CP::TDatumCompareName::TDatumCompareName(const char* name) : fName(name) {
     if (fName == ":") fName = "unnamed";
 }
 
-ND::TDatumCompareName::~TDatumCompareName() {}
+CP::TDatumCompareName::~TDatumCompareName() {}
 
-bool ND::TDatumCompareName::operator () (const TDatum* elem) {
+bool CP::TDatumCompareName::operator () (const TDatum* elem) {
     if (fName == "unnamed" && TString(elem->GetName()) == "") return true;
     return (fName == elem->GetName());
 }

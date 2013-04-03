@@ -3,12 +3,12 @@
 
 #include "TGeomIdFinder.hxx"
 
-namespace ND {
+namespace CP {
     class TP0DIdFinder;
 };
 
 /// Find TGeoManager node ids associated with the TGeometryId objects.
-class ND::TP0DIdFinder : public TGeomIdFinder {
+class CP::TP0DIdFinder : public TGeomIdFinder {
 public: 
     TP0DIdFinder();
     ~TP0DIdFinder();

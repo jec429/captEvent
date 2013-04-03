@@ -12,10 +12,10 @@
 #include "TMultiHit.hxx"
 #include "TOADatabase.hxx"
 
-ClassImp(ND::TMultiHit);
+ClassImp(CP::TMultiHit);
 
 
-ND::TMultiHit::TMultiHit() 
+CP::TMultiHit::TMultiHit() 
     : fInitialized(false),
       fGeomId(0), fCharge(0), fTime(0), 
       fPosition(0,0,0), 
@@ -26,8 +26,8 @@ ND::TMultiHit::TMultiHit()
     SetBit(kCanDelete,false);
 }
 
-ND::TMultiHit::TMultiHit(const ND::TMultiHit& h) 
-    : ND::THit(h), fHits(h.fHits),  fInitialized(false),
+CP::TMultiHit::TMultiHit(const CP::TMultiHit& h) 
+    : CP::THit(h), fHits(h.fHits),  fInitialized(false),
       fGeomId(h.fGeomId),
       fCharge(h.fCharge), fTime(h.fTime), 
       fPosition(h.fPosition),
@@ -38,7 +38,7 @@ ND::TMultiHit::TMultiHit(const ND::TMultiHit& h)
     SetBit(kCanDelete,false);
 }
 
-ND::TMultiHit::TMultiHit(iterator f, iterator l) 
+CP::TMultiHit::TMultiHit(iterator f, iterator l) 
     : fInitialized(false),
       fGeomId(0), fCharge(0), fTime(0), 
       fPosition(0,0,0), 
@@ -51,103 +51,103 @@ ND::TMultiHit::TMultiHit(iterator f, iterator l)
     Initialize();
 }
 
-ND::TMultiHit::~TMultiHit() {}
+CP::TMultiHit::~TMultiHit() {}
 
 //////////////////////////////////////////////////
-// Getter methods for ND::TMultiHit
+// Getter methods for CP::TMultiHit
 //////////////////////////////////////////////////
 
-ND::TGeometryId ND::TMultiHit::GetGeomId(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+CP::TGeometryId CP::TMultiHit::GetGeomId(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     return fGeomId;
 }
 
-const TVector3& ND::TMultiHit::GetPosition(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+const TVector3& CP::TMultiHit::GetPosition(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->GetPosition();
 }
 
-double ND::TMultiHit::GetCharge(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+double CP::TMultiHit::GetCharge(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     return fCharge;
 }
 
-double ND::TMultiHit::GetTime(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+double CP::TMultiHit::GetTime(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->GetTime();
 }
 
-const TVector3& ND::TMultiHit::GetSpread(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+const TVector3& CP::TMultiHit::GetSpread(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->GetSpread();
 }
 
-const TVector3& ND::TMultiHit::GetUncertainty(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+const TVector3& CP::TMultiHit::GetUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->GetUncertainty();
 }
 
-double ND::TMultiHit::GetTimeUncertainty(void) const {
+double CP::TMultiHit::GetTimeUncertainty(void) const {
     return 1.0*unit::ns;
 }
 
-ND::TChannelId ND::TMultiHit::GetChannelId(int i) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
-    if (i<0 || (int) size()<=i) throw ND::EHitOutOfRange();
+CP::TChannelId CP::TMultiHit::GetChannelId(int i) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
+    if (i<0 || (int) size()<=i) throw CP::EHitOutOfRange();
     return fHits[i]->GetChannelId();
 }
 
-int ND::TMultiHit::GetChannelIdCount() const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+int CP::TMultiHit::GetChannelIdCount() const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     return size();
 }
 
-bool ND::TMultiHit::IsXHit(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+bool CP::TMultiHit::IsXHit(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->IsXHit();
 }
 
-bool ND::TMultiHit::IsYHit(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+bool CP::TMultiHit::IsYHit(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->IsYHit();
 }
 
-bool ND::TMultiHit::IsZHit(void) const {
-    if (!fInitialized) const_cast<ND::TMultiHit*>(this)->Initialize();
+bool CP::TMultiHit::IsZHit(void) const {
+    if (!fInitialized) const_cast<CP::TMultiHit*>(this)->Initialize();
     if (size()<1) throw EMultiHitIllegal();
     return fHits.front()->IsZHit();
 }
 
-ND::TMultiHit::iterator ND::TMultiHit::begin() const {
+CP::TMultiHit::iterator CP::TMultiHit::begin() const {
     return fHits.begin();
 }
 
-ND::TMultiHit::iterator ND::TMultiHit::end() const {
+CP::TMultiHit::iterator CP::TMultiHit::end() const {
     return fHits.end();
 }
 
-const ND::THandle<ND::TSingleHit>& ND::TMultiHit::operator [](int index) const {
+const CP::THandle<CP::TSingleHit>& CP::TMultiHit::operator [](int index) const {
     return fHits[index];
 }
 
-unsigned int ND::TMultiHit::size() const {
+unsigned int CP::TMultiHit::size() const {
     return fHits.size();
 }
 
 namespace {
-    bool fHitsCompare(const ND::THandle<ND::TSingleHit>& a, 
-                      const ND::THandle<ND::TSingleHit>& b) {
+    bool fHitsCompare(const CP::THandle<CP::TSingleHit>& a, 
+                      const CP::THandle<CP::TSingleHit>& b) {
         return (a->GetTime() < b->GetTime());
     }
 }
 
-void ND::TMultiHit::Initialize() {
+void CP::TMultiHit::Initialize() {
     fInitialized = true;
     if (size()<1) throw EMultiHitIllegal();
     std::sort(fHits.begin(),fHits.end(), fHitsCompare);
@@ -159,8 +159,8 @@ void ND::TMultiHit::Initialize() {
     }
 }
 
-void ND::TMultiHit::ls(Option_t *opt) const {
-    ND::THit::ls(opt);
+void CP::TMultiHit::ls(Option_t *opt) const {
+    CP::THit::ls(opt);
     std::string option(opt);
     if (option.find("dump") != std::string::npos) {
         TROOT::IncreaseDirLevel();

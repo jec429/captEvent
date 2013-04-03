@@ -1,31 +1,31 @@
 #include "TReconPID.hxx"
 
-ClassImp(ND::TReconPID);
+ClassImp(CP::TReconPID);
 
-ND::TReconPID::TReconPID() {
+CP::TReconPID::TReconPID() {
     fParticleId= kNotSet;
     fParticleWeight = 0;
     fState = new TPIDState;
-    fNodes = new TReconNodeContainerImpl<ND::TPIDState>;
+    fNodes = new TReconNodeContainerImpl<CP::TPIDState>;
 }
 
 
-void ND::TReconPID::CopyTReconPID(const ND::TReconPID& pid){
-    fNodes = new TReconNodeContainerImpl<ND::TPIDState>;
+void CP::TReconPID::CopyTReconPID(const CP::TReconPID& pid){
+    fNodes = new TReconNodeContainerImpl<CP::TPIDState>;
     
     fParticleId = pid.GetParticleId();
     fParticleWeight = pid.GetPIDWeight();
     
     // Copy the nodes 
     // Create new nodes with TPIDState's 
-    ND::TReconNodeContainer::const_iterator in;
+    CP::TReconNodeContainer::const_iterator in;
     for (in=pid.GetNodes().begin(); in!=pid.GetNodes().end();in++){
-        ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-        ND::THandle<ND::TReconBase> object = (*in)->GetObject();
+        CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+        CP::THandle<CP::TReconBase> object = (*in)->GetObject();
         node->SetObject(object);
-        ND::THandle<ND::TPIDState> tstate = (*in)->GetState();
+        CP::THandle<CP::TPIDState> tstate = (*in)->GetState();
         if (tstate){
-            ND::THandle<ND::TReconState> pstate(new ND::TPIDState(*tstate));
+            CP::THandle<CP::TReconState> pstate(new CP::TPIDState(*tstate));
             node->SetState(pstate);
         }
         node->SetQuality((*in)->GetQuality());
@@ -35,7 +35,7 @@ void ND::TReconPID::CopyTReconPID(const ND::TReconPID& pid){
     
     
     if (pid.GetState()){
-        ND::THandle<ND::TPIDState> state = pid.GetState();  
+        CP::THandle<CP::TPIDState> state = pid.GetState();  
         fState = new TPIDState(*state);
     }
     else { 
@@ -43,37 +43,37 @@ void ND::TReconPID::CopyTReconPID(const ND::TReconPID& pid){
     }
 }
 
-ND::TReconPID::TReconPID(const ND::TReconPID& pid, int i)
-    : ND::TReconBase(pid) {
+CP::TReconPID::TReconPID(const CP::TReconPID& pid, int i)
+    : CP::TReconBase(pid) {
     // integer input parameter is dummy. Just to use a diferent constructor
     // which does not copy the alternates
     CopyTReconPID(pid);
 }
 
 
-ND::TReconPID::TReconPID(const ND::TReconPID& pid)
-    : ND::TReconBase(pid) {
+CP::TReconPID::TReconPID(const CP::TReconPID& pid)
+    : CP::TReconBase(pid) {
     CopyTReconPID(pid);
     // copy the alternates
-    ND::TReconObjectContainer::const_iterator it;
+    CP::TReconObjectContainer::const_iterator it;
     for (it = pid.GetAlternates().begin();
          it != pid.GetAlternates().end(); ++it) {
-        ND::THandle<ND::TReconPID> alter = *it;
+        CP::THandle<CP::TReconPID> alter = *it;
         AddAlternate(alter->GetParticleId(),alter->GetPIDWeight());
     }
 }
 
 
-ND::TReconPID::TReconPID(ND::THandle<ND::TReconTrack> track)
-    : ND::TReconBase(*track){
+CP::TReconPID::TReconPID(CP::THandle<CP::TReconTrack> track)
+    : CP::TReconBase(*track){
 
   fParticleId= kNotSet;
   fParticleWeight = 0;
-  fNodes = new TReconNodeContainerImpl<ND::TPIDState>;
+  fNodes = new TReconNodeContainerImpl<CP::TPIDState>;
 
 
   // copy the state by converting it from TTrackState to TPIDState
-  ND::THandle<ND::TTrackState> state = track->GetState();  
+  CP::THandle<CP::TTrackState> state = track->GetState();  
   if (state) {
       fState = new TPIDState(*state);
   }
@@ -86,17 +86,17 @@ ND::TReconPID::TReconPID(ND::THandle<ND::TReconTrack> track)
   TReconNodeContainer& nodes = GetNodes();
   GetNodes().clear();
 
-  for (ND::TReconNodeContainer::const_iterator in=track->GetNodes().begin(); 
+  for (CP::TReconNodeContainer::const_iterator in=track->GetNodes().begin(); 
        in!=track->GetNodes().end();
        ++in){
-      ND::THandle<ND::TTrackState> tstate = (*in)->GetState();
-      ND::THandle<ND::TReconBase> object = (*in)->GetObject();
+      CP::THandle<CP::TTrackState> tstate = (*in)->GetState();
+      CP::THandle<CP::TReconBase> object = (*in)->GetObject();
       if (!tstate) {
           ND280Error("Track node without track state");
           continue;
       }
-      ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-      ND::THandle<ND::TReconState> pstate(new ND::TPIDState(*tstate));
+      CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+      CP::THandle<CP::TReconState> pstate(new CP::TPIDState(*tstate));
       node->SetObject(object);
       node->SetState(pstate);
       node->SetQuality((*in)->GetQuality());
@@ -118,14 +118,14 @@ ND::TReconPID::TReconPID(ND::THandle<ND::TReconTrack> track)
 }
 
 
-ND::TReconPID::TReconPID(ND::THandle<ND::TReconShower> shower)
-  : ND::TReconBase(*shower) {
+CP::TReconPID::TReconPID(CP::THandle<CP::TReconShower> shower)
+  : CP::TReconBase(*shower) {
   fParticleId= kNotSet;
   fParticleWeight = 0;
-  fNodes = new TReconNodeContainerImpl<ND::TPIDState>;
+  fNodes = new TReconNodeContainerImpl<CP::TPIDState>;
 
   // copy the state by converting it from TShowerState to TPIDState
-  ND::THandle<ND::TShowerState> state = shower->GetState();  
+  CP::THandle<CP::TShowerState> state = shower->GetState();  
   if (state) {
     fState = new TPIDState(*state);
   }
@@ -138,18 +138,18 @@ ND::TReconPID::TReconPID(ND::THandle<ND::TReconShower> shower)
   TReconNodeContainer& nodes = GetNodes();
   GetNodes().clear();
   if (shower->GetNodes().size()>0) {
-      for (ND::TReconNodeContainer::const_iterator in
+      for (CP::TReconNodeContainer::const_iterator in
                = shower->GetNodes().begin();
            in!=shower->GetNodes().end();
            in++) {
-          ND::THandle<ND::TShowerState> tstate = (*in)->GetState();
-          ND::THandle<ND::TReconBase> object = (*in)->GetObject();
+          CP::THandle<CP::TShowerState> tstate = (*in)->GetState();
+          CP::THandle<CP::TReconBase> object = (*in)->GetObject();
           if (!tstate) {
               ND280Error("Shower node without shower state");
               continue;
           }
-          ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-          ND::THandle<ND::TReconState> pstate(new ND::TPIDState(*tstate));
+          CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+          CP::THandle<CP::TReconState> pstate(new CP::TPIDState(*tstate));
           node->SetObject(object);
           node->SetState(pstate);
           node->SetQuality((*in)->GetQuality());
@@ -157,15 +157,15 @@ ND::TReconPID::TReconPID(ND::THandle<ND::TReconShower> shower)
       }
   }
   else {
-      ND::THandle<ND::TShowerState> tstate = shower->GetState();
-      ND::THandle<ND::TReconBase> object = shower;
+      CP::THandle<CP::TShowerState> tstate = shower->GetState();
+      CP::THandle<CP::TReconBase> object = shower;
       if (!tstate) {
           ND280Error("Shower node without shower state");
           
       }
       else {
-          ND::THandle<ND::TReconNode> node(new ND::TReconNode);
-          ND::THandle<ND::TReconState> pstate(new ND::TPIDState(*tstate));
+          CP::THandle<CP::TReconNode> node(new CP::TReconNode);
+          CP::THandle<CP::TReconState> pstate(new CP::TPIDState(*tstate));
           node->SetObject(object);
           node->SetState(pstate);
           node->SetQuality(shower->GetQuality());
@@ -188,41 +188,41 @@ ND::TReconPID::TReconPID(ND::THandle<ND::TReconShower> shower)
 
 }
 
-ND::TReconPID::~TReconPID() {}
+CP::TReconPID::~TReconPID() {}
 
-TLorentzVector ND::TReconPID::GetPosition() const {
+TLorentzVector CP::TReconPID::GetPosition() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TPIDState> state = GetState();
+    THandle<CP::TPIDState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPosition();
 }
 
-TLorentzVector ND::TReconPID::GetPositionVariance() const {
+TLorentzVector CP::TReconPID::GetPositionVariance() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TPIDState> state = GetState();
+    THandle<CP::TPIDState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetPositionVariance();
 }
 
-bool ND::TReconPID::IsXPID() const {
+bool CP::TReconPID::IsXPID() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.X())) return false;
+    if (CP::TCorrValues::IsFree(var.X())) return false;
     return true;
 }
 
-bool ND::TReconPID::IsYPID() const {
+bool CP::TReconPID::IsYPID() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Y())) return false;
+    if (CP::TCorrValues::IsFree(var.Y())) return false;
     return true;
 }
 
-bool ND::TReconPID::IsZPID() const {
+bool CP::TReconPID::IsZPID() const {
     TLorentzVector var = GetPositionVariance();
-    if (ND::TCorrValues::IsFree(var.Z())) return false;
+    if (CP::TCorrValues::IsFree(var.Z())) return false;
     return true;
 }
 
-int ND::TReconPID::GetDimensions() const{
+int CP::TReconPID::GetDimensions() const{
     TLorentzVector var = GetPositionVariance();
     int dim = 0;
     if (IsXPID()) ++dim;
@@ -231,33 +231,33 @@ int ND::TReconPID::GetDimensions() const{
     return dim;
 }
 
-TVector3 ND::TReconPID::GetDirection() const {
+TVector3 CP::TReconPID::GetDirection() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TPIDState> state = GetState();
+    THandle<CP::TPIDState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetDirection();
 }
 
-double ND::TReconPID::GetMomentum() const {
+double CP::TReconPID::GetMomentum() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TPIDState> state = GetState();
+    THandle<CP::TPIDState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetMomentum();
 }
 
-double ND::TReconPID::GetCharge() const {
+double CP::TReconPID::GetCharge() const {
     // This is the preferred way to access a state field.  
-    THandle<ND::TPIDState> state = GetState();
+    THandle<CP::TPIDState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetCharge();
 }
 
 
-void ND::TReconPID::AddAlternate(ParticleId id, double weight) {
+void CP::TReconPID::AddAlternate(ParticleId id, double weight) {
   // erase a previous alternate if it has the same id
-  ND::TReconObjectContainer::iterator it;
+  CP::TReconObjectContainer::iterator it;
   for (it = fAlternatives.begin(); it != fAlternatives.end(); it++){
-    ND::THandle<ND::TReconPID> pid = *it;
+    CP::THandle<CP::TReconPID> pid = *it;
     if ( pid->GetParticleId() == id){ 
       fAlternatives.erase(it);
       break;
@@ -266,7 +266,7 @@ void ND::TReconPID::AddAlternate(ParticleId id, double weight) {
 
   // create a new TReconPID copying the main TReconPID. Don't copy the
   // alternates.  is there any other solution ?
-  ND::THandle<ND::TReconPID> alter(new ND::TReconPID(*this,1));
+  CP::THandle<CP::TReconPID> alter(new CP::TReconPID(*this,1));
 
   // set the new information
   alter->SetParticleId(id);
@@ -276,11 +276,11 @@ void ND::TReconPID::AddAlternate(ParticleId id, double weight) {
 
 }
 
-std::string ND::TReconPID::ConvertParticleId() const {
+std::string CP::TReconPID::ConvertParticleId() const {
     return ConvertParticleId(fParticleId);
 }
 
-std::string ND::TReconPID::ConvertParticleId(ND::TReconPID::ParticleId id){
+std::string CP::TReconPID::ConvertParticleId(CP::TReconPID::ParticleId id){
     std::string s("");
 
     if (id == kNotSet)     s= "Not Set";
@@ -301,8 +301,8 @@ std::string ND::TReconPID::ConvertParticleId(ND::TReconPID::ParticleId id){
     return s;
 }
 
-void ND::TReconPID::ls(Option_t *opt) const {
-    ND::TReconBase::ls_base(opt);
+void CP::TReconPID::ls(Option_t *opt) const {
+    CP::TReconBase::ls_base(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << "Particle Id: " << ConvertParticleId() 

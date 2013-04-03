@@ -2,9 +2,9 @@
 #include "TOADatabase.hxx"
 #include "TND280Log.hxx"
 
-ClassImp(ND::TAlgorithm);
+ClassImp(CP::TAlgorithm);
 
-ND::TAlgorithm::TAlgorithm(const char* name, const char* title) :
+CP::TAlgorithm::TAlgorithm(const char* name, const char* title) :
     TNamed(name, title) , fVerbose(Quiet), fQuiet(false) {
 
     SetBriefDescription(
@@ -22,32 +22,32 @@ ND::TAlgorithm::TAlgorithm(const char* name, const char* title) :
     SetVersion("none set");
 }
 
-ND::TAlgorithm::~TAlgorithm(){ }
+CP::TAlgorithm::~TAlgorithm(){ }
 
-std::string ND::TAlgorithm::GetDescription() const {
+std::string CP::TAlgorithm::GetDescription() const {
     switch (fVerbose){
-    case ND::TAlgorithm::Quiet: return std::string(GetName());
-    case ND::TAlgorithm::Brief: return fBriefDescription;
-    case ND::TAlgorithm::Summary: return fSummaryDescription;
-    case ND::TAlgorithm::Detailed: return fDetailedDescription;
+    case CP::TAlgorithm::Quiet: return std::string(GetName());
+    case CP::TAlgorithm::Brief: return fBriefDescription;
+    case CP::TAlgorithm::Summary: return fSummaryDescription;
+    case CP::TAlgorithm::Detailed: return fDetailedDescription;
     }
     return std::string("No Description");
 }
 
-void ND::TAlgorithm::Clear(Option_t*) {}
+void CP::TAlgorithm::Clear(Option_t*) {}
 
-void ND::TAlgorithm::SetVersion(const char* v) {
+void CP::TAlgorithm::SetVersion(const char* v) {
     fVersion = v;
 }
 
-ND::THandle<ND::TAlgorithmResult> ND::TAlgorithm::Execute() {
-    ND::TAlgorithmResult empty;
+CP::THandle<CP::TAlgorithmResult> CP::TAlgorithm::Execute() {
+    CP::TAlgorithmResult empty;
     return Process(empty);
 }
 
-ND::THandle<ND::TAlgorithmResult> 
-ND::TAlgorithm::MaybeProcess(const ND::TAlgorithmResult& input) {
-    ND::THandle<ND::TAlgorithmResult>
+CP::THandle<CP::TAlgorithmResult> 
+CP::TAlgorithm::MaybeProcess(const CP::TAlgorithmResult& input) {
+    CP::THandle<CP::TAlgorithmResult>
         result(GetPointer(GetEvent().GetFit(GetName())));
     if (!result) {
         result = Process(input);
@@ -56,18 +56,18 @@ ND::TAlgorithm::MaybeProcess(const ND::TAlgorithmResult& input) {
     return result;
 }
 
-ND::THandle<ND::TAlgorithmResult> 
-ND::TAlgorithm::Process(const ND::TAlgorithmResult&) {
+CP::THandle<CP::TAlgorithmResult> 
+CP::TAlgorithm::Process(const CP::TAlgorithmResult&) {
     // The very most trivial Process method that can be written.
-    return ND::THandle<ND::TAlgorithmResult>();
+    return CP::THandle<CP::TAlgorithmResult>();
 }
 
-ND::TAlgorithmTag ND::TAlgorithm::GetTag() const {
-    return ND::TAlgorithmTag(*this);
+CP::TAlgorithmTag CP::TAlgorithm::GetTag() const {
+    return CP::TAlgorithmTag(*this);
 }
 
-ND::TND280Event& ND::TAlgorithm::GetEvent() const {
-    TND280Event* event = ND::TEventFolder::GetCurrentEvent();
+CP::TND280Event& CP::TAlgorithm::GetEvent() const {
+    TND280Event* event = CP::TEventFolder::GetCurrentEvent();
     if (!event) {
         ND280Error("No current event");
         throw EAlgorithmWithoutEvent();
@@ -75,10 +75,10 @@ ND::TND280Event& ND::TAlgorithm::GetEvent() const {
     return *event;
 }
 
-TGeoManager* ND::TAlgorithm::GetGeom() const {
+TGeoManager* CP::TAlgorithm::GetGeom() const {
     TGeoManager* geom = NULL;
     try {
-        geom = ND::TOADatabase::Get().Geometry();
+        geom = CP::TOADatabase::Get().Geometry();
     }
     catch (...) {
         ND280Trace("Geometry not found");

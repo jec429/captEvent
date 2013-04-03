@@ -1,15 +1,15 @@
 #include "TTPCmcDigit.hxx"
 
-ClassImp(ND::TTPCmcDigit);
+ClassImp(CP::TTPCmcDigit);
 
-ND::TTPCmcDigit::TTPCmcDigit() {}
+CP::TTPCmcDigit::TTPCmcDigit() {}
 
-ND::TTPCmcDigit::TTPCmcDigit(ND::TChannelId chan, 
+CP::TTPCmcDigit::TTPCmcDigit(CP::TChannelId chan, 
                              short startTime, 
                              std::vector<short> adcs,
-                             const ND::TMCDigit::ContributorContainer& contrib)
+                             const CP::TMCDigit::ContributorContainer& contrib)
     : TTPCDigit(chan,startTime,adcs), 
       TMCDigit(contrib) {}
 
 
-ND::TTPCmcDigit::~TTPCmcDigit() {}
+CP::TTPCmcDigit::~TTPCmcDigit() {}

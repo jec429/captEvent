@@ -4,12 +4,12 @@
 #include <vector>
 #include <TDatum.hxx>
 
-namespace ND {
+namespace CP {
     class TIntegerDatum;
 }
 
 /// Save floating point values as a TDatum.  
-class ND::TIntegerDatum: public TDatum {
+class CP::TIntegerDatum: public TDatum {
 public:
     TIntegerDatum();
     explicit TIntegerDatum(const char* name, int value=0);

@@ -24,28 +24,28 @@ static UInt_t fgd_feb_asic_map[RAWFGD_CHAN_PER_FEB]= {0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 static UInt_t fgd_feb_asic_channel_map[RAWFGD_CHAN_PER_FEB]= {11, 13, 16, 18, 20, 22, 24, 26, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 54, 56, 58, 60, 62, 64, 67, 69, 71, 73, 75, 77, 11, 13, 16, 18, 20, 22, 24, 26, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 54, 56, 58, 60, 62, 64, 67, 69, 71, 73, 75, 77};
 
-ClassImp(ND::TFGDChannelId);
+ClassImp(CP::TFGDChannelId);
 
 //----------------------------------------------------------------------
-ND::TFGDChannelId::TFGDChannelId(UInt_t id): TChannelId(id) {}
+CP::TFGDChannelId::TFGDChannelId(UInt_t id): TChannelId(id) {}
 
 //----------------------------------------------------------------------
-ND::TFGDChannelId::TFGDChannelId(const ND::TChannelId& src)
+CP::TFGDChannelId::TFGDChannelId(const CP::TChannelId& src)
   : TChannelId(src) {}
 
 //----------------------------------------------------------------------
-ND::TFGDChannelId::~TFGDChannelId() {}
+CP::TFGDChannelId::~TFGDChannelId() {}
 
 //----------------------------------------------------------------------
-ND::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb, 
+CP::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb, 
                                  UInt_t afterChip, UInt_t afterChannel) {
 
-    if (subDet != ND::TChannelId::kFGD) {
+    if (subDet != CP::TChannelId::kFGD) {
         ND280Severe("Invalid sub-detector field: " << subDet);
     }
 
     SetGuardBit();
-    SetSubDetector(ND::TChannelId::kFGD);
+    SetSubDetector(CP::TChannelId::kFGD);
     SetMinicrate(minicrate);
     SetFEB(feb);
     SetAfterChip(afterChip);
@@ -53,7 +53,7 @@ ND::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb,
 }
 
 //----------------------------------------------------------------------
-ND::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb, 
+CP::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb, 
                                  UInt_t febCh) {
 
     UInt_t afterChip=0;
@@ -66,12 +66,12 @@ ND::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb,
         afterChannel = fgd_feb_asic_channel_map[febCh];
     }
 
-    if (subDet != ND::TChannelId::kFGD) {
+    if (subDet != CP::TChannelId::kFGD) {
         ND280Severe("Invalid sub-detector field: " << subDet);
     }
 
     SetGuardBit();
-    SetSubDetector(ND::TChannelId::kFGD);
+    SetSubDetector(CP::TChannelId::kFGD);
     SetMinicrate(minicrate);
     SetFEB(feb);
     SetAfterChip(afterChip);
@@ -79,7 +79,7 @@ ND::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb,
 }
 
 //----------------------------------------------------------------------
-std::string ND::TFGDChannelId::AsString() const {
+std::string CP::TFGDChannelId::AsString() const {
   const char* det = TChannelId::SubDetAsString().c_str();
   char buffer[50];
   if(GetFebChannel() < 0)
@@ -96,47 +96,47 @@ std::string ND::TFGDChannelId::AsString() const {
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TFGDChannelId::GetMinicrate() const {
+const UInt_t CP::TFGDChannelId::GetMinicrate() const {
     return GetField(kMinicrateMSB, kMinicrateLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TFGDChannelId::SetMinicrate(int val) {
+void CP::TFGDChannelId::SetMinicrate(int val) {
     SetField(val,kMinicrateMSB, kMinicrateLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TFGDChannelId::GetFEB() const {
+const UInt_t CP::TFGDChannelId::GetFEB() const {
     return GetField(kFEBMSB, kFEBLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TFGDChannelId::SetFEB(int val) {
+void CP::TFGDChannelId::SetFEB(int val) {
     SetField(val, kFEBMSB, kFEBLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TFGDChannelId::GetAfterChip() const {
+const UInt_t CP::TFGDChannelId::GetAfterChip() const {
     return GetField(kAfterMSB, kAfterLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TFGDChannelId::SetAfterChip(int val) {
+void CP::TFGDChannelId::SetAfterChip(int val) {
     SetField(val, kAfterMSB, kAfterLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TFGDChannelId::GetChannel() const {
+const UInt_t CP::TFGDChannelId::GetChannel() const {
     return GetField(kAfterChanMSB, kAfterChanLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TFGDChannelId::SetChannel(int val) {
+void CP::TFGDChannelId::SetChannel(int val) {
     SetField(val, kAfterChanMSB, kAfterChanLSB);
 }
 
 //----------------------------------------------------------------------
-const Int_t ND::TFGDChannelId::GetFebChannel() const {
+const Int_t CP::TFGDChannelId::GetFebChannel() const {
 
     UInt_t asic = GetAfterChip();
     UInt_t asicCh = GetChannel();
@@ -149,7 +149,7 @@ const Int_t ND::TFGDChannelId::GetFebChannel() const {
 }
 
 //----------------------------------------------------------------------
-const Int_t ND::TFGDChannelId::GetFebChAttenuation() const {
+const Int_t CP::TFGDChannelId::GetFebChAttenuation() const {
 
     UInt_t asic = GetAfterChip();
     UInt_t asicCh = GetChannel();

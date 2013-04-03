@@ -3,7 +3,7 @@
 
 #include "TGeometryId.hxx"
 
-namespace ND {
+namespace CP {
 
     /// Define the geometry identifiers for elements in the ND280 geometry.
     namespace GeomId {
@@ -224,14 +224,14 @@ namespace ND {
         /// Define the geometry identifiers for a generic (uk) ecal.
         namespace ECal {
             /// The geometry identifier for the tracker ecal modules.  The
-            /// ecal must be either ND::GeomId::Def::kDSECal,
-            /// ND::GeomId::Def::kPECal, or ND::GeomId::Def::kTECal.  The clam
+            /// ecal must be either CP::GeomId::Def::kDSECal,
+            /// CP::GeomId::Def::kPECal, or CP::GeomId::Def::kTECal.  The clam
             /// is 0 for south (-x) or 1 for north (+x).  The module is 0 for
             /// bottom, 1 for side, and 2 for top.
             TGeometryId Module(int ecal, int clam, int module);
             
             /// The geometry identifier for barrel ECal container modules
-            /// The ecal must be ND::GeomId::Def::kTECal
+            /// The ecal must be CP::GeomId::Def::kTECal
             /// Clams and modules are in in Module()
             TGeometryId Container(int ecal, int clam, int module);
 

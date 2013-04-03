@@ -1,16 +1,16 @@
 #include "TFGDmcDigit.hxx"
 
-ClassImp(ND::TFGDmcDigit);
+ClassImp(CP::TFGDmcDigit);
 
-ND::TFGDmcDigit::TFGDmcDigit() {}
+CP::TFGDmcDigit::TFGDmcDigit() {}
 
-ND::TFGDmcDigit::TFGDmcDigit(ND::TChannelId chan, 
+CP::TFGDmcDigit::TFGDmcDigit(CP::TChannelId chan, 
                              short startTime, short pulseTime, short pulseCharge, 
                              std::vector<unsigned short> adcs,
                              short dataType,
-                             const ND::TMCDigit::ContributorContainer& contrib)
+                             const CP::TMCDigit::ContributorContainer& contrib)
     : TFGDDigit(chan,startTime,pulseTime,pulseCharge,adcs,dataType), 
       TMCDigit(contrib) {}
 
 
-ND::TFGDmcDigit::~TFGDmcDigit() {}
+CP::TFGDmcDigit::~TFGDmcDigit() {}

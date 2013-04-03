@@ -66,7 +66,7 @@ void DisplayMessageDigest(unsigned *message_digest);
  */
 int main()
 {
-    ND::SHA1        sha;
+    CP::SHA1        sha;
     unsigned    message_digest[5];
 
     /*

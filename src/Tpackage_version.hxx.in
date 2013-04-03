@@ -6,13 +6,13 @@
 
 #include <TPackageVersion.hxx>
 
-namespace ND {
+namespace CP {
     class T%PACKAGE%_version;
 };
 
 /// This has fields for the library version and can add stuff to the TROOT
 /// environment.
-class ND::T%PACKAGE%_version: public ND::TPackageVersion {
+class CP::T%PACKAGE%_version: public CP::TPackageVersion {
 private:
     static T%PACKAGE%_version* fThis;
     

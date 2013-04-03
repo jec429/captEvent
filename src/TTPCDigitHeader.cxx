@@ -1,23 +1,23 @@
 #include "TTPCDigitHeader.hxx"
 
-ClassImp(ND::TTPCDigitHeader);
+ClassImp(CP::TTPCDigitHeader);
 
 //***********************************
-ND::TTPCDigitHeader::TTPCDigitHeader():
+CP::TTPCDigitHeader::TTPCDigitHeader():
   fCompressed(-1), fLosFlag(-1), fSyncFail(-1) {
 //************************************************************
 
 }
 
 //***********************************
-ND::TTPCDigitHeader::TTPCDigitHeader(bool c, bool l, bool s): 
+CP::TTPCDigitHeader::TTPCDigitHeader(bool c, bool l, bool s): 
   TDigitHeader("tpc"), fCompressed(c), fLosFlag(l), fSyncFail(s)  {
 //************************************************************
 
 }
 
 //***********************************
-ND::TTPCDigitHeader::~TTPCDigitHeader() {
+CP::TTPCDigitHeader::~TTPCDigitHeader() {
 //***********************************
 
 }

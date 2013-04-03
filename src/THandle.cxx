@@ -12,39 +12,39 @@
 namespace {
     int gHandleBaseCount = 0;
     int gLastHandleCount = 0;
-    std::set<ND::THandleBase*> *gHandleSet = NULL;
+    std::set<CP::THandleBase*> *gHandleSet = NULL;
 }
 
-ClassImp(ND::THandleBase);
-ND::THandleBase::THandleBase() : fCount(0) {
+ClassImp(CP::THandleBase);
+CP::THandleBase::THandleBase() : fCount(0) {
     ++gHandleBaseCount;
     if (gHandleSet) gHandleSet->insert(this);
 }
-ND::THandleBase::~THandleBase() {
+CP::THandleBase::~THandleBase() {
     --gHandleBaseCount;
     if (gHandleSet) gHandleSet->erase(this);
 }
 
-ClassImp(ND::THandleBaseDeletable);
-ND::THandleBaseDeletable::THandleBaseDeletable() 
+ClassImp(CP::THandleBaseDeletable);
+CP::THandleBaseDeletable::THandleBaseDeletable() 
     : fObject(NULL) { }
-ND::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
+CP::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
     : fObject(pointee) { }
-ND::THandleBaseDeletable::~THandleBaseDeletable() {
+CP::THandleBaseDeletable::~THandleBaseDeletable() {
     if (!fObject) return;
     // Actually delete the object.
     if (IsOwner()) delete fObject;
 }
 
-ClassImp(ND::THandleBaseUndeletable);
-ND::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
-ND::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
+ClassImp(CP::THandleBaseUndeletable);
+CP::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
+CP::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
     : fObject(pointee) { }
-ND::THandleBaseUndeletable::~THandleBaseUndeletable() {
+CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
     // Absolutely nothing to do.
 }
 
-bool ND::CleanHandleRegistry(bool) {
+bool CP::CleanHandleRegistry(bool) {
     bool result = (gHandleBaseCount==gLastHandleCount);
     if (!result) {
         ND280Log("CleanHandleRegistry::"
@@ -55,39 +55,39 @@ bool ND::CleanHandleRegistry(bool) {
     return result;
 }
 
-void ND::DumpHandleRegistry() {
+void CP::DumpHandleRegistry() {
     if (!gHandleSet) return;
     if (gHandleSet->empty()) return;
     ND280Log("Existing handles: " << gHandleSet->size());
-    ND::TND280Log::IncreaseIndentation();
-    for (std::set<ND::THandleBase*>::iterator h = gHandleSet->begin();
+    CP::TND280Log::IncreaseIndentation();
+    for (std::set<CP::THandleBase*>::iterator h = gHandleSet->begin();
          h != gHandleSet->end();
          ++h) {
-        ND::THandleBase* handleBase = *h;
+        CP::THandleBase* handleBase = *h;
         ND280Log(std::hex << "(0x" << handleBase << ")");
         if (handleBase) {
-            ND::TND280Log::IncreaseIndentation();
+            CP::TND280Log::IncreaseIndentation();
             TObject *object = handleBase->GetObject();
             ND280Log(std::hex << "-> (0x" << object << ")");
             if (object) {
-                ND::TND280Log::IncreaseIndentation();
+                CP::TND280Log::IncreaseIndentation();
                 ND280Log("Class: " << object->ClassName());
                 ND280Log("Name: " << object->GetName());
-                ND::TND280Log::DecreaseIndentation();
-                if (ND::TND280Log::GetDebugLevel()>ND::TND280Log::ErrorLevel) {
+                CP::TND280Log::DecreaseIndentation();
+                if (CP::TND280Log::GetDebugLevel()>CP::TND280Log::ErrorLevel) {
                     object->ls();
                 }
             }
-            ND::TND280Log::DecreaseIndentation();
+            CP::TND280Log::DecreaseIndentation();
         }
     }
-    ND::TND280Log::DecreaseIndentation();
+    CP::TND280Log::DecreaseIndentation();
 } 
 
-void ND::EnableHandleRegistry(bool enable) {
+void CP::EnableHandleRegistry(bool enable) {
     if (enable && !gHandleSet) {
         ND280Log("Enable the handle registry");
-        gHandleSet = new std::set<ND::THandleBase*>;
+        gHandleSet = new std::set<CP::THandleBase*>;
     }
     else { 
         ND280Log("Disable the handle registry");
@@ -96,32 +96,32 @@ void ND::EnableHandleRegistry(bool enable) {
     }
 }
 
-ClassImp(ND::TVHandle);
-ND::TVHandle::TVHandle() {Default(NULL);}
-ND::TVHandle::~TVHandle() {}
+ClassImp(CP::TVHandle);
+CP::TVHandle::TVHandle() {Default(NULL);}
+CP::TVHandle::~TVHandle() {}
 
-void ND::TVHandle::Default(ND::THandleBase* handle) {
+void CP::TVHandle::Default(CP::THandleBase* handle) {
     fHandle = handle;
     if (fHandle) fHandle->IncrementReferenceCount();
 }
 
-void ND::TVHandle::Link(const ND::TVHandle& rhs) {
+void CP::TVHandle::Link(const CP::TVHandle& rhs) {
     // Copy the handle.
     fHandle = rhs.fHandle;
     // Increment the reference count
     if (fHandle) fHandle->IncrementReferenceCount();
 }
 
-bool ND::TVHandle::Unlink() {
+bool CP::TVHandle::Unlink() {
     if (!fHandle) return false;
     fHandle->DecrementReferenceCount();
     if (fHandle->GetReferenceCount() < 1) return true;
     return false;
 }
 
-void ND::TVHandle::Destroy(void) {
+void CP::TVHandle::Destroy(void) {
     // Save the value of the handle
-    ND::THandleBase* target = fHandle;
+    CP::THandleBase* target = fHandle;
     
     // But, mark the current object as invalid.
     fHandle = NULL;
@@ -134,22 +134,22 @@ void ND::TVHandle::Destroy(void) {
     delete target;
 }
 
-TObject* ND::TVHandle::GetPointerValue() const {
+TObject* CP::TVHandle::GetPointerValue() const {
     if (!fHandle) return NULL;
     return fHandle->GetObject();
 }
 
-void ND::TVHandle::Release(void) {
+void CP::TVHandle::Release(void) {
     if (!fHandle) return;
     fHandle->Release();
 }
 
-bool ND::TVHandle::operator == (const ND::TVHandle& rhs) const {
+bool CP::TVHandle::operator == (const CP::TVHandle& rhs) const {
     if (fHandle == rhs.fHandle) return true;
     return fHandle && (fHandle->GetObject() == rhs.fHandle->GetObject());
 }
 
-void ND::TVHandle::ls(Option_t *opt) const {
+void CP::TVHandle::ls(Option_t *opt) const {
     TROOT::IndentLevel();
     std::cout << ClassName() << "(" << this << "):: ";
     if (strstr(opt,"size")) {

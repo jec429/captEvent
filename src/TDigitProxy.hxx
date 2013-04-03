@@ -7,7 +7,7 @@
 #include "TDigit.hxx"
 #include "TDigitContainer.hxx"
 
-namespace ND {
+namespace CP {
     /// An exception that should be thrown when the needed digit could not be
     /// found by the TDigitProxy.
     OA_EXCEPTION(EDigitNotFound,EDigit);
@@ -34,7 +34,7 @@ namespace ND {
 /// This differs from a THandle in that the proxy doesn't keep the object from
 /// being deleted.  If the object doesn't exist when accessed, this will throw
 /// an EDigitNotFound exception.
-class ND::TDigitProxy {
+class CP::TDigitProxy {
     friend class TDigitManager;
 
 public:
@@ -64,12 +64,12 @@ public:
     ///    TWritableData       
     /// }
     /// \endcode
-    TDigitProxy(const ND::TDigitContainer& container, 
+    TDigitProxy(const CP::TDigitContainer& container, 
                 unsigned int offset);
     
     /// Construct a proxy for a digit in a container.
-    TDigitProxy(const ND::TDigitContainer& container, 
-                const ND::TDigitContainer::iterator index);
+    TDigitProxy(const CP::TDigitContainer& container, 
+                const CP::TDigitContainer::iterator index);
     
     /// Construct a digit from an integer value.  This is used to allow
     /// TDigit's to be written as a single integer an output file and saves
@@ -82,11 +82,11 @@ public:
     bool IsValid() const;
 
     /// Return the pointer to the indexed digit.  If the digit is not
-    /// available the an ND::EDigitNotFound exception is thrown.
+    /// available the an CP::EDigitNotFound exception is thrown.
     TDigit* operator*() const;
     
     /// Return a reference the container that holds the digit.
-    ND::TDigitContainer& GetContainer() const;
+    CP::TDigitContainer& GetContainer() const;
 
     /// Return the digit as a particular type.  This gets the digit and then
     /// converts it into the requested type.  If the digit is not available an
@@ -100,7 +100,7 @@ public:
     }
 
     /// Check that the digit proxy salt matchs the container and digit.
-    bool CheckSalt(unsigned int signature, const ND::TDigit* digit) const;
+    bool CheckSalt(unsigned int signature, const CP::TDigit* digit) const;
 
     /// Convert a proxy name into a proxy enum type.
     static enum ProxyType ConvertName(std::string name);
@@ -123,11 +123,11 @@ private:
     unsigned int GetProxyOffset() const;
 
     /// Return the cached digit pointer.
-    ND::TDigit* GetProxyCache() const;
+    CP::TDigit* GetProxyCache() const;
 
     /// Set the cached digit pointer.
-    void SetProxyCache(ND::TDigit *const digit, 
-                       ND::TDigitContainer *const container) const;
+    void SetProxyCache(CP::TDigit *const digit, 
+                       CP::TDigitContainer *const container) const;
 
     /// Set the proxy type in the signature.
     void SetProxyType(int type);
@@ -152,13 +152,13 @@ private:
     
     /// A cache for the digit referenced by this proxy.  This is mutable so it
     /// can be set even if the TDigitProxy is constant.
-    mutable ND::TDigit* fDigit; //! Do not save.
+    mutable CP::TDigit* fDigit; //! Do not save.
 
     /// A cache to contain a pointer to the container that holds the digit.
     /// This is mutable so it can be set even if the TDigitProxy is constant.
-    mutable ND::TDigitContainer* fContainer; //! Do not save.
+    mutable CP::TDigitContainer* fContainer; //! Do not save.
 
-    virtual bool operator == (const ND::TDigitProxy& rhs) const;
+    virtual bool operator == (const CP::TDigitProxy& rhs) const;
 
     ClassDef(TDigitProxy,1);
 };

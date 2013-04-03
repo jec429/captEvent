@@ -18,7 +18,7 @@ class TFile;
 class TTree;
 class TGeoMatrix;
 
-namespace ND {
+namespace CP {
     class TTPCPadManager;
     class TND280Event;
     class TOADatabase;
@@ -45,7 +45,7 @@ namespace ND {
 
 /// Static access to the various geometry and calibration databases.  The main
 /// table provided by this class are the ROOT geometry using
-/// ND::TOADatabase::Get().Geometry().  It also provides several managers such
+/// CP::TOADatabase::Get().Geometry().  It also provides several managers such
 /// as Digits(), GeomId(), TPCPads, and the PDG particle table in Particles().
 ///
 /// This class is mostly used to access the root geometry using the Geometry()
@@ -55,19 +55,19 @@ namespace ND {
 /// apply the alignment constant to the current event.
 ///
 /// If user code needs to fill tables with geometry information (e.g. the
-/// internal RECPACK sensor geometry), a ND::TOADatabase::GeometryChange call
+/// internal RECPACK sensor geometry), a CP::TOADatabase::GeometryChange call
 /// back should be registered using RegisterGeometryCallback().  See the
-/// ND::TOADatabase::GeometryChange class documentation for more details.
+/// CP::TOADatabase::GeometryChange class documentation for more details.
 ///
-class ND::TOADatabase {
-    friend class ND::TND280Input;
-    friend class ND::TGeomIdManager;
+class CP::TOADatabase {
+    friend class CP::TND280Input;
+    friend class CP::TGeomIdManager;
 
 public:
 
     /// A base class to be registered by users providing a callback whenever
     /// the geometry has changed.  The callback is registered using the
-    /// ND::TOADatabase::RegisterGeometryCallback() method.
+    /// CP::TOADatabase::RegisterGeometryCallback() method.
     ///
     /// This class is most usefule whenever the a user has tables that need to
     /// be reinitialized after a geometry change.  For example, if a user
@@ -76,11 +76,11 @@ public:
     /// Callback method.
     ///
     /// \code
-    /// class MyChangeClass: public ND::TOADatabase::GeometryChange {
+    /// class MyChangeClass: public CP::TOADatabase::GeometryChange {
     /// public:
-    ///    void Callback(const ND::TND280Event* const event) {
+    ///    void Callback(const CP::TND280Event* const event) {
     ///        // Do something with the current geometry
-    ///        TGeoManager* newGeom = ND::TOADatabase::Get().Geometry();
+    ///        TGeoManager* newGeom = CP::TOADatabase::Get().Geometry();
     ///    }
     /// };
     /// \endcode
@@ -89,7 +89,7 @@ public:
     ///
     /// \code
     /// MyChangeClass* myChangeClass = new MyChangeClass;
-    /// ND::TOADatabase::Get().RegisterGeometryCallback(myChangeClass);
+    /// CP::TOADatabase::Get().RegisterGeometryCallback(myChangeClass);
     /// \endcode
     ///
     /// All of the callbacks registered with TOADatabase will then be called
@@ -105,7 +105,7 @@ public:
         // alignment has been applied.  This method should not modify the
         // event.  In addition, don't depend on the order in which the
         // registered callbacks will be executed.
-        virtual void Callback(const ND::TND280Event* const event) = 0;
+        virtual void Callback(const CP::TND280Event* const event) = 0;
     };
 
     /// A base class to be registered to find the geometry associated with an
@@ -126,11 +126,11 @@ public:
         /// Note: The hash value is the last method of finding a geometry file
         /// and can be overridden by providing a geometry directly in the data
         /// file, setting the geometry file explicitly using
-        /// ND::TOADatabase::SetGeometryFile(), or setting the hash value
-        /// explicitly using ND::TOADatabase::SetGeometryHash().
+        /// CP::TOADatabase::SetGeometryFile(), or setting the hash value
+        /// explicitly using CP::TOADatabase::SetGeometryHash().
         /// 
         /// This class is used in the FindEventGeometry method.
-        virtual TSHAHashValue GetHash(const ND::TND280Event* const event) {
+        virtual TSHAHashValue GetHash(const CP::TND280Event* const event) {
             return TSHAHashValue();
         }
     };
@@ -154,7 +154,7 @@ public:
         /// alignment should be reapplied this will return true.  If the
         /// geometry has been changed, then the alignment will be reapplied
         /// regardless of the CheckAlignment return value.
-        virtual bool CheckAlignment(const ND::TND280Event* const event) {
+        virtual bool CheckAlignment(const CP::TND280Event* const event) {
             return true; 
         }
         
@@ -163,9 +163,9 @@ public:
         /// about to start.  It will generally trigger initialization.  If an
         /// alignment should not be applied, then this should return an empty
         /// alignment.
-        virtual ND::TAlignmentId 
-        StartAlignment(const ND::TND280Event* const event) {
-            return ND::TAlignmentId();
+        virtual CP::TAlignmentId 
+        StartAlignment(const CP::TND280Event* const event) {
+            return CP::TAlignmentId();
         }
         
         /// Return the alignment for a particular geometry id.  This will be
@@ -179,7 +179,7 @@ public:
         /// The returned alignment is relative to the nominal position and
         /// rotation of the volume, and is specified in the master coordinate
         /// system.  
-        virtual TGeoMatrix* Align(const ND::TND280Event* const event,
+        virtual TGeoMatrix* Align(const CP::TND280Event* const event,
                                   TGeometryId& geomId) {return NULL;}
     };
 
@@ -205,12 +205,12 @@ public:
     /// TGeoManager::GetCurrentNodeId()).
     ///
     /// The geometry is searched for in the following order: If the geometry
-    /// file has been explicity set using ND::TOADatabase::SetGeometryFile(),
+    /// file has been explicity set using CP::TOADatabase::SetGeometryFile(),
     /// then use that geometry.  Otherwise, if an explicit geometry hash value
-    /// has been set using ND::TOADatabase::SetGeometryHash(), use that
+    /// has been set using CP::TOADatabase::SetGeometryHash(), use that
     /// geometry.  Otherwise, if the event file contains a geometry, try to
     /// use that geometry.  Otherwise, use the geometry associated with a hash
-    /// value returned by the registered ND::TOADatabase::GeometryLookup class
+    /// value returned by the registered CP::TOADatabase::GeometryLookup class
     /// which generally looks up the hash value using the calibration
     /// database.
     /// 
@@ -220,7 +220,7 @@ public:
     /// previously loaded geometry, this will throw a ENoGeometry exception.
     /// If you want to force a geometry to be loaded even though you don't
     /// currently have access to an event, you can use
-    /// ND::TOADatabase::Get().GeomId().ReadEvent(ND::TSHAHashValue()).  While
+    /// CP::TOADatabase::Get().GeomId().ReadEvent(CP::TSHAHashValue()).  While
     /// this isn't convenient, loading a geometry without an event is also
     /// rather unusual.
     /// 
@@ -231,18 +231,18 @@ public:
     ///
     /// After the geometry is loaded alignment parameters are applied.  The
     /// alignment is applied using the AlignGeometry() method which uses
-    /// ND::TOADatabase::AlignmentLookup class to lookup the coeficients.
+    /// CP::TOADatabase::AlignmentLookup class to lookup the coeficients.
     ///
-    /// Users should register the ND::TOADatabase::GeometryLookup and
-    /// ND::TOADatabase::AlignmentLookup classes using the
+    /// Users should register the CP::TOADatabase::GeometryLookup and
+    /// CP::TOADatabase::AlignmentLookup classes using the
     /// RegisterGeometryLookup and RegisterAlignmentLookup methods.
     ///
     /// If you need to use tables that get initialized for each new geometry
     /// (for instance, you might want to cache the locations of various
     /// detectors for use in RECPACK), then you need to define and register a
-    /// ND::TOADatabase::GeometryChange class using
-    /// ND::TOADatabase::RegisterGeometryCallback.  See the
-    /// ND::TOADatabase::GeometryChange for details and an example.
+    /// CP::TOADatabase::GeometryChange class using
+    /// CP::TOADatabase::RegisterGeometryCallback.  See the
+    /// CP::TOADatabase::GeometryChange for details and an example.
     TGeoManager* Geometry(TND280Event* event=NULL);
 
     /// Return a pointer to the correct TPC pad information for the event.  If
@@ -280,15 +280,15 @@ public:
     /// /t2k/export macro command.  This resets the required geometry if
     /// called without an argument.
     void SetGeometryOverride(const std::string& geoName ="");
-    void SetGeometryOverride(const ND::TSHAHashValue& hc);
+    void SetGeometryOverride(const CP::TSHAHashValue& hc);
     /// @}
 
     /// Register a user callback that will be called whenever the geometry
-    /// changes (see the ND::TOADatabase::GeometryChange class).
-    void RegisterGeometryCallback(ND::TOADatabase::GeometryChange* callback);
+    /// changes (see the CP::TOADatabase::GeometryChange class).
+    void RegisterGeometryCallback(CP::TOADatabase::GeometryChange* callback);
 
     /// Remove a user callback.
-    void RemoveGeometryCallback(ND::TOADatabase::GeometryChange* callback);
+    void RemoveGeometryCallback(CP::TOADatabase::GeometryChange* callback);
 
     /// Remove all user callbacks.
     void ClearGeometryCallbacks();
@@ -296,14 +296,14 @@ public:
     /// Register a class implementing the search for the correct geometry to
     /// be used for an event.  If called with "NULL", the default geometry
     /// lookup is installed.
-    ND::TOADatabase::GeometryLookup* RegisterGeometryLookup(
-        ND::TOADatabase::GeometryLookup* lookup);
+    CP::TOADatabase::GeometryLookup* RegisterGeometryLookup(
+        CP::TOADatabase::GeometryLookup* lookup);
 
     /// Register a class implementing the search for the correct geometry to
     /// be used for an event.  A pointer to the previous alignment lookup
     /// class is returned.
-    ND::TOADatabase::AlignmentLookup* RegisterAlignmentLookup(
-        ND::TOADatabase::AlignmentLookup* lookup);
+    CP::TOADatabase::AlignmentLookup* RegisterAlignmentLookup(
+        CP::TOADatabase::AlignmentLookup* lookup);
 
     /// Apply the alignment to the current geometry.  The alignment is usually
     /// done automatically when the geometry is loaded, but this can be called
@@ -318,7 +318,7 @@ public:
     /// If this applies an alignment, it will return the TAlignmentId
     /// associated with the new alignment.  Otherwise, it will return an
     /// invalid alignment.
-    virtual void AlignGeometry(const ND::TND280Event* const event);
+    virtual void AlignGeometry(const CP::TND280Event* const event);
 
 private:
     TOADatabase();
@@ -334,15 +334,15 @@ private:
 
     /// Call the registered geometry callbacks.  This is used by
     /// TGeomIdManager to notify the user routines when the geometry changes.
-    void ApplyGeometryCallbacks(const ND::TND280Event* event);
+    void ApplyGeometryCallbacks(const CP::TND280Event* event);
 
     /// Use the AlignmentLookup method to check if a new alignment should be
     /// applied.  If this returns true, the we need a new alignment.  This is
     /// used by TGeomIdManager to short circuit the alignment application.
-    bool CheckAlignment(const ND::TND280Event* const event);
+    bool CheckAlignment(const CP::TND280Event* const event);
 
     /// Use the AlignmentLookup class to get the actual alignment.
-    virtual ND::TAlignmentId ApplyAlignmentLookup(const ND::TND280Event* event);
+    virtual CP::TAlignmentId ApplyAlignmentLookup(const CP::TND280Event* event);
 
     /// Set the current input file for the data base.  This must be set for
     /// many of the methods to work correctly.  This is used by TND280Input to
@@ -384,7 +384,7 @@ private:
 
     /// A vector of call backs that will be called whenever the geometry
     /// changes.
-    std::set<ND::TOADatabase::GeometryChange*> fGeometryCallbacks;
+    std::set<CP::TOADatabase::GeometryChange*> fGeometryCallbacks;
 
     ClassDef(TOADatabase,0);
 };

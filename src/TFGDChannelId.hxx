@@ -3,7 +3,7 @@
 
 #include "TChannelId.hxx"
 
-namespace ND {
+namespace CP {
     class TFGDChannelId;
 };
 
@@ -11,17 +11,17 @@ namespace ND {
 ///electronics hierachy.  Can answer detailed questions about its
 ///elements.  This should be used for constructing TFGDChannelIds from
 ///the information available in MIDAS data block.
-class ND::TFGDChannelId : public ND::TChannelId {
+class CP::TFGDChannelId : public CP::TChannelId {
 public:
     ///Construct a FGD channel ID from a raw UInt_t
     explicit TFGDChannelId(UInt_t id =0);
 
     ///Constructor to specialise a Channel ID as a FGD channel ID 
-    explicit TFGDChannelId(const ND::TChannelId& src);
+    explicit TFGDChannelId(const CP::TChannelId& src);
 
     ///Construct a FGD channel ID from its electronics-space
     ///co-ordinates.  The sub-detector ID should be
-    ///ND::TChannelId::kFGD(=3), but is explicitly required for
+    ///CP::TChannelId::kFGD(=3), but is explicitly required for
     ///symmetery with TTfbChannelId. (And in case we have another
     ///detector with FGD electronics.)
     TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb, 
@@ -29,7 +29,7 @@ public:
 
     ///Construct a FGD channel ID from its minicrate, feb, feb channel
     ///co-ordinates.  The sub-detector ID should be
-    ///ND::TChannelId::kFGD(=3), but is explicitly required for
+    ///CP::TChannelId::kFGD(=3), but is explicitly required for
     ///symmetery with TTfbChannelId. (And in case we have another
     ///detector with FGD electronics.)
     /// We specify the FEB channel only; in the internal conversion

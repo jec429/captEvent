@@ -8,7 +8,7 @@
 
 class TTree;
 
-namespace ND {
+namespace CP {
     OA_EXCEPTION(END280Input,EoaCore);
     OA_EXCEPTION(ENoND280InputFile,END280Input);
     OA_EXCEPTION(ENoEvents,END280Input);
@@ -23,7 +23,7 @@ namespace ND {
 /// TND280Output class.  This will work with any file name, but the preferred
 /// file extension is [name].root (using this extension will help root
 /// identify this file as an ND280 event file).
-class ND::TND280Input : public TVInputFile {
+class CP::TND280Input : public TVInputFile {
 public:
     /// Open an input file. 
     TND280Input(const char* fName, Option_t* option="", int compress = 1);

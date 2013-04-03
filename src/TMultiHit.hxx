@@ -9,7 +9,7 @@
 #include "TSingleHit.hxx"
 #include "THandle.hxx"
 
-namespace ND {
+namespace CP {
     class TMultiHit;
 
     OA_EXCEPTION(EMultiHitIllegal,EoaCore);
@@ -41,7 +41,7 @@ namespace ND {
 /// &c information are provided.  However, this summary information is only
 /// based on a crude summary of the wave form (e.g. time of the first hit,
 /// total sum of the charge, &c).
-class ND::TMultiHit : public THit {
+class CP::TMultiHit : public THit {
 public:
     typedef std::vector< THandle< TSingleHit > > Hits;
     typedef Hits::const_iterator iterator;
@@ -132,7 +132,7 @@ public:
     virtual iterator end() const;
 
     /// Return a reference to the i'th THandle<THit> in the multi hit.
-    const THandle<ND::TSingleHit>& operator [](int index) const;
+    const THandle<CP::TSingleHit>& operator [](int index) const;
 
     /// Return the number of THandle<THit> in the multi hit
     unsigned int size() const;

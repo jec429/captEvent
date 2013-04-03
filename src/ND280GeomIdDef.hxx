@@ -1,7 +1,7 @@
 #ifndef ND280GeomIdDef_hxx_seen
 #define ND280GeomIdDef_hxx_seen
 
-namespace ND {
+namespace CP {
     namespace GeomId {
         /// Define the fields used to create a unique identifier for elements
         /// in the ND280 geometry.  This is a 32 bit field with the bits

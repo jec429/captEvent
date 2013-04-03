@@ -7,7 +7,7 @@
 
 #include <nd280EventLoop.hxx>
 
-class TTestGeomId: public ND::TND280EventLoopFunction {
+class TTestGeomId: public CP::TND280EventLoopFunction {
 public:
     TTestGeomId() {}
 
@@ -18,40 +18,40 @@ public:
                   << std::endl;
     }
 
-    void BeginFile(ND::TVInputFile *const) {
+    void BeginFile(CP::TVInputFile *const) {
         std::cout << "Get the geometry out of the file" << std::endl;
-        ND::TOADatabase::Get().Geometry();
+        CP::TOADatabase::Get().Geometry();
 
-        ND::TGeomIdManager& geomId = ND::TOADatabase::Get().GeomId();
+        CP::TGeomIdManager& geomId = CP::TOADatabase::Get().GeomId();
 
         std::cout << "Path to P0D" << std::endl;
-        geomId.CdId(ND::GeomId::P0D::Detector());
+        geomId.CdId(CP::GeomId::P0D::Detector());
         std::cout << gGeoManager->GetPath() << std::endl;
  
         std::cout << "Path to P0D y bar" << std::endl;
-        geomId.CdId(ND::GeomId::P0D::Bar(20,1,50));
+        geomId.CdId(CP::GeomId::P0D::Bar(20,1,50));
         std::cout << gGeoManager->GetPath() << std::endl;
 
         std::cout << "Path to TPC1" << std::endl;
-        geomId.CdId(ND::GeomId::TPC::TPC1());
+        geomId.CdId(CP::GeomId::TPC::TPC1());
         std::cout << gGeoManager->GetPath() << std::endl;
 
         std::cout << "Path to TPC mm" << std::endl;
-        geomId.CdId(ND::GeomId::TPC::MicroMega(1,0,5));
+        geomId.CdId(CP::GeomId::TPC::MicroMega(1,0,5));
         std::cout << gGeoManager->GetPath() << std::endl;
 
         std::cout << "Path to TPC pad (same as mm)" << std::endl;
-        if (geomId.CdId(ND::GeomId::TPC::Pad(1,0,5,123))) 
+        if (geomId.CdId(CP::GeomId::TPC::Pad(1,0,5,123))) 
             std::cout << gGeoManager->GetPath() << std::endl;
         else 
             std::cout << "not found" << std::endl;
 
         TVector3 position;
-        ND::TGeometryId id;
+        CP::TGeometryId id;
 
         std::cout << "Check the pad positions." << std::endl;
 
-        ND::TGeometryId check = ND::GeomId::TPC::Pad(1,0,5,123);
+        CP::TGeometryId check = CP::GeomId::TPC::Pad(1,0,5,123);
         std::cout << check.GetName() << std::endl;
         std::cout << "ID: " << check << std::endl;
         geomId.GetPosition(check,position);
@@ -77,7 +77,7 @@ public:
                       << check.AsInt() << std::endl;
         }
 
-        check = ND::GeomId::TPC::Pad(1,0,5,124);
+        check = CP::GeomId::TPC::Pad(1,0,5,124);
         std::cout << check.GetName() << std::endl;
         std::cout << "ID: " << check << std::endl;
         geomId.GetPosition(check,position);
@@ -103,7 +103,7 @@ public:
                       << check.AsInt() << std::endl;
         }
 
-        check = ND::GeomId::TPC::Pad(1,1,5,123);
+        check = CP::GeomId::TPC::Pad(1,1,5,123);
         std::cout << check.GetName() << std::endl;
         std::cout << "ID: " << check << std::endl;
         geomId.GetPosition(check,position);
@@ -129,7 +129,7 @@ public:
                       << check.AsInt() << std::endl;
         }
 
-        check = ND::GeomId::TPC::Pad(1,1,5,124);
+        check = CP::GeomId::TPC::Pad(1,1,5,124);
         std::cout << check.GetName() << std::endl;
         std::cout << "ID: " << check << std::endl;
         geomId.GetPosition(check,position);
@@ -155,7 +155,7 @@ public:
                       << check.AsInt() << std::endl;
         }
 
-        check = ND::GeomId::SMRD::Bar(0,1,1,3,2);
+        check = CP::GeomId::SMRD::Bar(0,1,1,3,2);
         std::cout << check.GetName() << std::endl;
         std::cout << "ID: " << check << std::endl;
         geomId.GetPosition(check,position);
@@ -182,7 +182,7 @@ public:
         }
     }
 
-    bool operator () (ND::TND280Event& event) {
+    bool operator () (CP::TND280Event& event) {
         return false;
     }
 };

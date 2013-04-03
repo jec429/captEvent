@@ -12,7 +12,7 @@
 #include "TEventFolder.hxx"
 #include "EoaCore.hxx"
 
-namespace ND {
+namespace CP {
     class TAlgorithm;
 
     /// An exception thrown if an algorithm expecting an event is run without
@@ -33,7 +33,7 @@ namespace ND {
 /// TAlgorithm::CreateResult() to construct an empty result that is returned
 /// by the Process method.  This convenience function will set the algorithm
 /// result name, and fill the book keeping information.
-class ND::TAlgorithm : public TNamed {
+class CP::TAlgorithm : public TNamed {
 public:
     TAlgorithm(const char* name, const char* title="T2K Algorithm");
     virtual ~TAlgorithm();
@@ -79,18 +79,18 @@ public:
 
     /// A convenience method that doesn't require input and which MUST NOT be
     /// implemented by the derived class.
-    THandle<ND::TAlgorithmResult> Execute(void);
+    THandle<CP::TAlgorithmResult> Execute(void);
 
     /// The routine that does the actual work.  This must be implemented by
     /// any derived class.
-    virtual THandle<ND::TAlgorithmResult> 
-    Process(const ND::TAlgorithmResult& input) = 0;
+    virtual THandle<CP::TAlgorithmResult> 
+    Process(const CP::TAlgorithmResult& input) = 0;
 
     /// A convenience routine that will try to find a result from a previously
     /// run version of this algorithm.  If the result is not found, then the
     /// standard process methods is run, and the result is saved into the
     /// event.
-    THandle<ND::TAlgorithmResult> MaybeProcess(const TAlgorithmResult& input);
+    THandle<CP::TAlgorithmResult> MaybeProcess(const TAlgorithmResult& input);
 
     /// Get the output state of the algorithm.
     bool GetQuiet(void) const {return fQuiet;}
@@ -120,7 +120,7 @@ protected:
     /// A convenient way to get the event being processed by the algorithm.
     /// The returned event is only valid during a single call to Process so
     /// the pointer can not be saved in a field.
-    ND::TND280Event& GetEvent() const;
+    CP::TND280Event& GetEvent() const;
     
     /// A convenient way to get the correct geometry for the current event.
     /// If there isn't a valid geometry available, this will return NULL.  As
@@ -129,7 +129,7 @@ protected:
   
     /// A convenient way to create an empty algorithm result to be returned by
     /// a derived class.
-    THandle<ND::TAlgorithmResult> CreateResult() {
+    THandle<CP::TAlgorithmResult> CreateResult() {
         return THandle<TAlgorithmResult>(new TAlgorithmResult(*this));
     }
 

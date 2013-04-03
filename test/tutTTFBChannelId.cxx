@@ -26,11 +26,11 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTTFBChannelId::test<1> () {
-        ND::TTFBChannelId g1(1);
-        ND::TChannelId g2;
-        ND::TTFBChannelId g3;
+        CP::TTFBChannelId g1(1);
+        CP::TChannelId g2;
+        CP::TTFBChannelId g3;
         g2 = g1;
-        g3 = ND::TTFBChannelId(g2);
+        g3 = CP::TTFBChannelId(g2);
         ensure_equals("TTFBChannelId value matchs", g1.AsUInt(), (unsigned)1);
         ensure_equals("TChannelId value matchs", g2.AsUInt(), (unsigned) 1);
         ensure_equals("TTFBChannelId copied value matchs", g3.AsUInt(), (unsigned) 1);
@@ -40,13 +40,13 @@ namespace tut {
     // Test the normal constructor.
     template<> template<>
     void testTTFBChannelId::test<2> () {
-        ND::TChannelId::SubDetId subDet = ND::TChannelId::kP0D;
+        CP::TChannelId::SubDetId subDet = CP::TChannelId::kP0D;
         unsigned int rmm = 2;
         unsigned int tfb = 39;
         unsigned int tripChip = 2;
         unsigned int channel = 15;
         unsigned int capacitor = 21;
-        ND::TTFBChannelId g1(subDet,rmm,tfb,tripChip,channel,capacitor);
+        CP::TTFBChannelId g1(subDet,rmm,tfb,tripChip,channel,capacitor);
         ensure("TTFBChannelId is valid", g1.IsValid());
         ensure_equals("Sub-detector value matchs", g1.GetSubDetector(),subDet);
         ensure_equals("RMM value matchs", g1.GetRMM(),rmm);
@@ -59,13 +59,13 @@ namespace tut {
     // Test the normal constructor.
     template<> template<>
     void testTTFBChannelId::test<3> () {
-        ND::TChannelId::SubDetId subDet = ND::TChannelId::kP0D;
+        CP::TChannelId::SubDetId subDet = CP::TChannelId::kP0D;
         unsigned int rmm = 2;
         unsigned int tfb = 39;
         unsigned int tripChip = 2;
         unsigned int channel = 15;
         unsigned int capacitor = 21;
-        ND::TTFBChannelId g1(subDet,rmm,tfb,tripChip,channel,capacitor);
+        CP::TTFBChannelId g1(subDet,rmm,tfb,tripChip,channel,capacitor);
         ensure("TTFBChannelId is valid", g1.IsValid());
         ensure_equals("Sub-detector value matchs", g1.GetSubDetector(),subDet);
         ensure_equals("RMM value matchs", g1.GetRMM(),rmm);
@@ -102,28 +102,28 @@ namespace tut {
     
     template<> template<>
     void testTTFBChannelId::test<10> () {
-        CMP("Check RMM", ND::TTFBChannelId, 5, 20,
+        CMP("Check RMM", CP::TTFBChannelId, 5, 20,
             SetRMM, GetRMM, 
             GetSubDetector, GetTFB);
     }
 
     template<> template<>
     void testTTFBChannelId::test<11> () {
-        CMP("Check TFB", ND::TTFBChannelId, 6, 48,
+        CMP("Check TFB", CP::TTFBChannelId, 6, 48,
              SetTFB, GetTFB, 
              GetRMM, GetCapacitor);
     }
 
     template<> template<>
     void testTTFBChannelId::test<12> () {
-        CMP("Check capacitor", ND::TTFBChannelId, 5, 25,
+        CMP("Check capacitor", CP::TTFBChannelId, 5, 25,
              SetCapacitor, GetCapacitor, 
              GetTFB, GetTripChip);
     }
 
     template<> template<>
     void testTTFBChannelId::test<13> () {
-        CMP("Check trip chip", ND::TTFBChannelId, 2, 4,
+        CMP("Check trip chip", CP::TTFBChannelId, 2, 4,
              SetTripChip, GetTripChip, 
              GetCapacitor, GetChannel);
     }
@@ -131,7 +131,7 @@ namespace tut {
     template<> template<>
     void testTTFBChannelId::test<14> () {
         // test GetTripChip twice since this is the bottom of the int.
-        CMP("Check channel", ND::TTFBChannelId, 5, 16,
+        CMP("Check channel", CP::TTFBChannelId, 5, 16,
              SetChannel, GetChannel, 
              GetTripChip, GetTripChip);
     }

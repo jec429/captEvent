@@ -14,26 +14,26 @@
 #include "TDigitManager.hxx"
 #include "TDigitContainer.hxx"
 
-ClassImp(ND::TND280Event);
+ClassImp(CP::TND280Event);
 
-ND::TND280Event::TND280Event() {
+CP::TND280Event::TND280Event() {
     /// All other fields are self initializing.
     Build();
 }
 
-ND::TND280Event::TND280Event(const ND::TND280Context& context)
+CP::TND280Event::TND280Event(const CP::TND280Context& context)
     : fContext(context){
     /// All other fields are self initializing.
     Build();
 }
 
-ND::TND280Event::~TND280Event() {
-    ND::TEventFolder::RemoveEvent(this);
+CP::TND280Event::~TND280Event() {
+    CP::TEventFolder::RemoveEvent(this);
 }
 
-void ND::TND280Event::Build(void) {
-    if (GetRunId() == ND::TND280Context::Invalid
-        || GetEventId() == ND::TND280Context::Invalid) {
+void CP::TND280Event::Build(void) {
+    if (GetRunId() == CP::TND280Context::Invalid
+        || GetEventId() == CP::TND280Context::Invalid) {
         SetName("event.uninitialized");
     }
     else {
@@ -44,19 +44,19 @@ void ND::TND280Event::Build(void) {
         SetName(name.str().c_str());
     }
     if (!FindDatum("digits")) {
-        AddDatum(new ND::TDataVector("digits","Uncalibrated digit data"));
+        AddDatum(new CP::TDataVector("digits","Uncalibrated digit data"));
     }
     if (!FindDatum("hits")) {
-        AddDatum(new ND::TDataVector("hits","Calibrated hit data"));
+        AddDatum(new CP::TDataVector("hits","Calibrated hit data"));
     }
     if (!FindDatum("fits")) {
-        AddDatum(new ND::TDataVector("fits","Fit results from reconstruction"));
+        AddDatum(new CP::TDataVector("fits","Fit results from reconstruction"));
     }
     Register();
 }
 
-void ND::TND280Event::ls(Option_t* opt) const {
-    ND::TDatum::ls(opt);
+void CP::TND280Event::ls(Option_t* opt) const {
+    CP::TDatum::ls(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << "Context: " << GetContext() << std::endl;
@@ -87,35 +87,35 @@ void ND::TND280Event::ls(Option_t* opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-void ND::TND280Event::Register(void) {
-    ND::TEventFolder::RegisterEvent(this);
+void CP::TND280Event::Register(void) {
+    CP::TEventFolder::RegisterEvent(this);
 }
 
-ND::THandle<ND::TDigitContainer> ND::TND280Event::GetDigits(const char* name) {
-    return ND::TOADatabase::Get().Digits().CacheDigits(*this,name);
+CP::THandle<CP::TDigitContainer> CP::TND280Event::GetDigits(const char* name) {
+    return CP::TOADatabase::Get().Digits().CacheDigits(*this,name);
 }
 
-ND::THandle<ND::THitSelection> ND::TND280Event::GetHitSelection(const char* name) 
+CP::THandle<CP::THitSelection> CP::TND280Event::GetHitSelection(const char* name) 
     const {
     std::string hitName("hits/");
     hitName += name;
-    ND::THandle<ND::TDatum> hitsData = Get<ND::TDatum>(hitName.c_str());
-    if (!hitsData) return ND::THandle<ND::THitSelection>();
-    return Get<ND::THitSelection>(hitName.c_str());
+    CP::THandle<CP::TDatum> hitsData = Get<CP::TDatum>(hitName.c_str());
+    if (!hitsData) return CP::THandle<CP::THitSelection>();
+    return Get<CP::THitSelection>(hitName.c_str());
 }
 
-ND::THandle<ND::TAlgorithmResult> ND::TND280Event::GetFit(const char* name) const {
+CP::THandle<CP::TAlgorithmResult> CP::TND280Event::GetFit(const char* name) const {
     std::string fitName = "~/fits/";
-    return Get<ND::TAlgorithmResult>(fitName + name);
+    return Get<CP::TAlgorithmResult>(fitName + name);
 }
 
-void ND::TND280Event::AddFit(ND::TAlgorithmResult* fit, const char* name) {
-    ND::THandle<ND::TDataVector> fits = Get<ND::TDataVector>("~/fits");
+void CP::TND280Event::AddFit(CP::TAlgorithmResult* fit, const char* name) {
+    CP::THandle<CP::TDataVector> fits = Get<CP::TDataVector>("~/fits");
     fits->AddDatum(fit,name);
 }
 
-void ND::TND280Event::AddFit(ND::THandle<ND::TAlgorithmResult> fit, const char* name) {
-    ND::THandle<ND::TDataVector> fits = Get<ND::TDataVector>("~/fits");
+void CP::TND280Event::AddFit(CP::THandle<CP::TAlgorithmResult> fit, const char* name) {
+    CP::THandle<CP::TDataVector> fits = Get<CP::TDataVector>("~/fits");
     fit.Release();
     fits->AddDatum(GetPointer(fit),name);
 }

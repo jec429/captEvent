@@ -1,4 +1,4 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TData+;
-#pragma link C++ class ND::THandle<ND::TData>+;
+#pragma link C++ class CP::TData+;
+#pragma link C++ class CP::THandle<CP::TData>+;
 #endif

@@ -7,7 +7,7 @@
 #include "EoaCore.hxx"
 #include "method_deprecated.hxx"
 
-namespace ND {
+namespace CP {
     /// Base class for all exceptions associated with the TGeometryId classe.
     OA_EXCEPTION(EChannelId,EoaCore);
 
@@ -17,7 +17,7 @@ namespace ND {
 ///Base class for channel identifiers.  This can answer simple interrogations
 ///about channel such as the sub-detector type, and can preform all of the
 ///basic conversions.
-class ND::TChannelId {
+class CP::TChannelId {
 public:
     /// Enumeration defining the sub-detector identifiers.  These tell you
     /// which sub-detector a channel is associated with.
@@ -41,7 +41,7 @@ public:
     explicit TChannelId(UInt_t id = 0);
 
     ///Copy constructor
-    TChannelId(const ND::TChannelId& src);
+    TChannelId(const CP::TChannelId& src);
 
     virtual ~TChannelId();
 

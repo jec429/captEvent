@@ -6,7 +6,7 @@
 
 #include "TSingleHit.hxx"
 
-namespace ND {
+namespace CP {
     class TG4VHit;
     class TMCHit;
     class TWritableMCHit;
@@ -15,7 +15,7 @@ namespace ND {
 /// A single calibrated hit detector element from the MC.  This corresponds to
 /// a real measurement inside the detector, but after it has been fully
 /// calibrated.
-class ND::TMCHit : public TSingleHit {
+class CP::TMCHit : public TSingleHit {
 public:
     typedef std::vector<TG4VHit*> ContributorContainer;
 
@@ -40,7 +40,7 @@ protected:
 };
 
 /// Provide a writable derived class used to create a TMCHit object.
-class ND::TWritableMCHit : public TMCHit {
+class CP::TWritableMCHit : public TMCHit {
 public:
     TWritableMCHit();
     TWritableMCHit(const TWritableMCHit& h);
@@ -52,7 +52,7 @@ public:
 
     void SetTime(double t);
 
-    void SetChannelId(ND::TChannelId id);
+    void SetChannelId(CP::TChannelId id);
 
     void SetChargeValidity(bool valid);
 

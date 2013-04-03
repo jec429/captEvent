@@ -10,7 +10,7 @@
 class TTree;
 class TGeoManager;
 
-namespace ND {
+namespace CP {
     class TND280Event;
     class TTPCPadManager;
     class TND280Output;
@@ -29,7 +29,7 @@ namespace ND {
 /// the geometry to the output file.  This will work with any file name, but
 /// the preferred file extension is [name].root (using this extension will
 /// help root identify this file as a ND280 event file).
-class ND::TND280Output : public TFile {
+class CP::TND280Output : public TFile {
 public:
     /// Open a new output file.
     TND280Output(const char* name,

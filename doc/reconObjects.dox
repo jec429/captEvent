@@ -26,25 +26,25 @@ For now, cheat and put the design and implementation stuff in one section.
 \subsection recObjStateDesign The TReconState Design
 
 The parameters describing the state of each reconstruction object is held
-in an associated class derived from ND::TReconState.  This has the
+in an associated class derived from CP::TReconState.  This has the
 advantage that the state parameters are separate from the object, and
 minimizes the conceptual confusion between the reconstruction object, and
 the state of the reconstruction object.  The primary user level state
-classes are ND::TClusterState, ND::TShowerState, ND::TTrackState,
-ND::TVertexState, and ND::TParticleState.
+classes are CP::TClusterState, CP::TShowerState, CP::TTrackState,
+CP::TVertexState, and CP::TParticleState.
 
-The ND::TReconState derived classes store the parameter variables within a
-ND::TCorrValues "hypervector".  The assignment of a particular state
-parameter to an index in the ND::TCorrValues object is done as the object is
+The CP::TReconState derived classes store the parameter variables within a
+CP::TCorrValues "hypervector".  The assignment of a particular state
+parameter to an index in the CP::TCorrValues object is done as the object is
 constructed and depends on the well defined C++ constructor order.  The
-ND::TCorrValues object should not be directly used in a program.
+CP::TCorrValues object should not be directly used in a program.
 
 User level state classes are constructed through multiple inheritance of
-mix-in classes (Example mix-in classes are ND::TMEDepositState, and
-ND::TMPositionState).  These class inherit from ND::TReconState using
+mix-in classes (Example mix-in classes are CP::TMEDepositState, and
+CP::TMPositionState).  These class inherit from CP::TReconState using
 virtual inheritance.  The mix-in classes provide the essential user
 interface for the user classes, and map parameters to specific indices in
-the ND::TCorrValues object.  The index assignment is done during object
+the CP::TCorrValues object.  The index assignment is done during object
 construction.  As much as is practical, the actual index value assigned to
 a parameter is hidden from the user.
 
@@ -90,10 +90,10 @@ in the code.
 
 \paragraph recObjIO Input and Output of Recon Objects
 
-The recon objects must be saved in a ND::TND280Event object.  For
+The recon objects must be saved in a CP::TND280Event object.  For
 efficiency, this implies that they are derived from either TObject,
-ND::TDatum, or ND::TDataVector.  The recon object should also be available
-within the ND::TND280Event name hierarchy, and support a namespace hierarchy so
+CP::TDatum, or CP::TDataVector.  The recon object should also be available
+within the CP::TND280Event name hierarchy, and support a namespace hierarchy so
 that algorithms can store arbitrary information.
 
 \subsubsection recObjBase Information shared by all Recon Objects
@@ -118,7 +118,7 @@ All recon objects must provide the following information
  - When reconstruction MC, it must be possible to determine the interactions
    and particle trajectories that contribute to the reconstructed object.
 
-This is implemented in the base class ND::TReconBase.
+This is implemented in the base class CP::TReconBase.
 
 \subsubsection recObjGeometric Geometric representation of energy deposition
 
@@ -135,7 +135,7 @@ included in the recon object.
 
 \paragraph reconCluster TReconCluster: Clustered Energy Deposition
 
-This is implemented by ND::TReconCluster.
+This is implemented by CP::TReconCluster.
 
 There needs to be a representation of a localized energy deposition
 centered at a position (i.e. a spheroidal blob of energy).  This type of
@@ -146,7 +146,7 @@ identify the specific detector hits associated with the energy cluster.
 
 \paragraph reconShower TReconShower: Directed Energy Deposition
 
-This is implemented by ND::TReconShower.
+This is implemented by CP::TReconShower.
 
 There needs to be a representation of an energy deposition starting at a
 position and falling within a cone.  This is described by the total amount
@@ -157,7 +157,7 @@ be possible to identify the detector hits associated with the shower.
 
 \paragraph reconTrack TReconTrack: A Curvilinear Energy Deposition
 
-This is implemented by ND::TReconTrack.
+This is implemented by CP::TReconTrack.
 
 There needs to be a representation of a curvilinear energy deposit starting
 a position, and following a path.  This is described by the amount of
@@ -179,14 +179,14 @@ below.)
 
 \paragraph reconVertex TReconVertex: An interaction
 
-This is implemented by ND::TReconVertex.
+This is implemented by CP::TReconVertex.
 
 There needs to be a representation of a reconstructed interaction vertex.
 This is described by the position, time, and particles leaving the vertex.  
 
 \paragraph reconParticle TReconParticle: A particle
 
-This is implemented by ND::TReconParticle.
+This is implemented by CP::TReconParticle.
 
 There needs to be a representation of a hypothesized particle leaving an
 interaction vertex.  This is described by the position, time, momentum
@@ -205,7 +205,7 @@ candidate TReconParticle objects interact with a TReconVertex object?  &c.
 
 \subsection recObjState Recon Object State Representation Requirements
 
-This is implemented by classes derived from ND::TReconState.
+This is implemented by classes derived from CP::TReconState.
 
 A recon object contains the state generated by the reconstruction
 algorithm.  The state object represents the value of parameters and
@@ -238,7 +238,7 @@ All state objects must support the following operations:
 
 \subsection recObjNode TReconNode: States Associated with Recon Objects
 
-This is implemented by ND::TReconNode.  
+This is implemented by CP::TReconNode.  
 
 There must be a way to associate to associate a recon object with its
 contribution to a second recon object.  The associate consists of

@@ -6,24 +6,24 @@
 #include "TShowerState.hxx"
 #include "TReconNode.hxx"
 
-namespace ND {
+namespace CP {
     class TPIDState;
 }
     
 /// A state holding parameters associated with a TReconPID.  
-class ND::TPIDState: public TReconState, 
+class CP::TPIDState: public TReconState, 
                      virtual public TMReconState,
                      virtual public TMPositionDirectionState, 
                      virtual public TMMomentumState,
                      virtual public TMChargeState {
 public:
     TPIDState();
-    TPIDState(const ND::TPIDState& init);
-    TPIDState(const ND::TTrackState& tstate);
-    TPIDState(const ND::TShowerState& tstate);
+    TPIDState(const CP::TPIDState& init);
+    TPIDState(const CP::TTrackState& tstate);
+    TPIDState(const CP::TShowerState& tstate);
 
     virtual ~TPIDState();
-    virtual TPIDState& operator=(const ND::TPIDState& rhs);
+    virtual TPIDState& operator=(const CP::TPIDState& rhs);
 
     /// Return the number of entries for the Direction in the TCorrValues
     /// vector.
@@ -34,7 +34,7 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static ND::TCorrValues ProjectState(const ND::THandle<ND::TReconState>& state);
+    static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
     ClassDef(TPIDState,1);
 };

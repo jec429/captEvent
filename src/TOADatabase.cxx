@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////
 // $Id: TOADatabase.cxx,v 1.53 2012/03/07 02:09:48 mcgrew Exp $
 //
-// Implement the class ND::TOADatabase which provides the user interface
+// Implement the class CP::TOADatabase which provides the user interface
 // to the calibrations and geometry databases.  This class is a
 // singleton.
 //
@@ -33,13 +33,13 @@
 #include "TGeomIdManager.hxx"
 #include "TSHA1.hxx"
 
-ClassImp(ND::TOADatabase);
+ClassImp(CP::TOADatabase);
 
 /// The static member pointer to the singleton.
-ND::TOADatabase* ND::TOADatabase::fOADatabase = NULL;
+CP::TOADatabase* CP::TOADatabase::fOADatabase = NULL;
 
 namespace {
-    typedef std::pair < std::time_t , ND::TSHAHashValue> HashValue;
+    typedef std::pair < std::time_t , CP::TSHAHashValue> HashValue;
     typedef std::vector< HashValue > Hash;
 
     bool hashCompare(const HashValue& lhs, const HashValue& rhs) {
@@ -48,7 +48,7 @@ namespace {
 
     /// Implement a default GeometryLookup class.  This is used unless another
     /// one is explicitly registered.
-    class DefaultGeometryLookup: public ND::TOADatabase::GeometryLookup {
+    class DefaultGeometryLookup: public CP::TOADatabase::GeometryLookup {
         Hash fHashs;
     public:
         virtual ~DefaultGeometryLookup() {}
@@ -116,7 +116,7 @@ namespace {
                                  true /* Apply shift */,-9*60*60 /*JST*/);
                 fHashs.push_back(
                     Hash::value_type(cTime.GetSec(),
-                                     ND::TSHAHashValue(hash0,
+                                     CP::TSHAHashValue(hash0,
                                                        hash1,
                                                        hash2,
                                                        hash3,
@@ -134,13 +134,13 @@ namespace {
         }
 
         // Return the geometry matching the event context.
-        virtual ND::TSHAHashValue GetHash(
-            const ND::TND280Event* const event) {
-            if (fHashs.empty()) return ND::TSHAHashValue();
+        virtual CP::TSHAHashValue GetHash(
+            const CP::TND280Event* const event) {
+            if (fHashs.empty()) return CP::TSHAHashValue();
             // If no event so no default geometry.
-            if (!event) return ND::TSHAHashValue();
+            if (!event) return CP::TSHAHashValue();
             // Check to see if there is a hash code for this event.
-            ND::TSHAHashValue hc = event->GetGeometryHash();
+            CP::TSHAHashValue hc = event->GetGeometryHash();
             if (hc.Valid()) return hc;
             // Find the first context after the event context
             Hash::iterator h;
@@ -160,7 +160,7 @@ namespace {
 }
 
 /// The private constructor for the database
-ND::TOADatabase::TOADatabase() {
+CP::TOADatabase::TOADatabase() {
     fCurrentInputFile = NULL;
     fPadManager = NULL;
     fParticleData = NULL;
@@ -170,55 +170,55 @@ ND::TOADatabase::TOADatabase() {
     fAlignmentLookup = NULL;
 }
 
-ND::TOADatabase& ND::TOADatabase::Get(void) {
+CP::TOADatabase& CP::TOADatabase::Get(void) {
     if (!fOADatabase) {
-        ND280Verbose("Create a new ND::TOADatabase object");
-        fOADatabase = new ND::TOADatabase;
+        ND280Verbose("Create a new CP::TOADatabase object");
+        fOADatabase = new CP::TOADatabase;
     }
     return *fOADatabase;
 }
 
-TGeoManager* ND::TOADatabase::Geometry(ND::TND280Event* event) {
+TGeoManager* CP::TOADatabase::Geometry(CP::TND280Event* event) {
     // If an event wasn't provided, then try getting the current event.
-    if (!event) event = ND::TEventFolder::GetCurrentEvent();
+    if (!event) event = CP::TEventFolder::GetCurrentEvent();
     TGeoManager* geom = GeomId().GetGeometry(event);
-    if (!geom) throw ND::ENoGeometry();
+    if (!geom) throw CP::ENoGeometry();
     return geom;
 }
 
-void ND::TOADatabase::SetCurrentInputFile(TFile* input) {
+void CP::TOADatabase::SetCurrentInputFile(TFile* input) {
     fCurrentInputFile = input;
 }
 
-void ND::TOADatabase::SetGeometryOverride(const std::string& geomFile) {
+void CP::TOADatabase::SetGeometryOverride(const std::string& geomFile) {
     GeomId().SetGeometryFileOverride("");
-    GeomId().SetGeometryHashOverride(ND::TSHAHashValue());
+    GeomId().SetGeometryHashOverride(CP::TSHAHashValue());
     if (geomFile != "") GeomId().SetGeometryFileOverride(geomFile);
 
     
 }
 
-void ND::TOADatabase::SetGeometryOverride(const ND::TSHAHashValue& hc) {
+void CP::TOADatabase::SetGeometryOverride(const CP::TSHAHashValue& hc) {
     GeomId().SetGeometryFileOverride("");
     GeomId().SetGeometryHashOverride(hc);
 }
 
-void ND::TOADatabase::RegisterGeometryCallback(
-    ND::TOADatabase::GeometryChange* callback) {
+void CP::TOADatabase::RegisterGeometryCallback(
+    CP::TOADatabase::GeometryChange* callback) {
     fGeometryCallbacks.insert(callback);
 }
 
-void ND::TOADatabase::RemoveGeometryCallback(
-    ND::TOADatabase::GeometryChange* callback) {
+void CP::TOADatabase::RemoveGeometryCallback(
+    CP::TOADatabase::GeometryChange* callback) {
     fGeometryCallbacks.erase(callback);
 }
 
-void ND::TOADatabase::ClearGeometryCallbacks() {
+void CP::TOADatabase::ClearGeometryCallbacks() {
     fGeometryCallbacks.clear();
 }
 
-void ND::TOADatabase::ApplyGeometryCallbacks(const ND::TND280Event* event) {
-    for (std::set<ND::TOADatabase::GeometryChange*>::iterator 
+void CP::TOADatabase::ApplyGeometryCallbacks(const CP::TND280Event* event) {
+    for (std::set<CP::TOADatabase::GeometryChange*>::iterator 
              c = fGeometryCallbacks.begin();
          c != fGeometryCallbacks.end();
          ++c) {
@@ -227,9 +227,9 @@ void ND::TOADatabase::ApplyGeometryCallbacks(const ND::TND280Event* event) {
     }
 }
 
-ND::TOADatabase::GeometryLookup* ND::TOADatabase::RegisterGeometryLookup(
-    ND::TOADatabase::GeometryLookup* lookup) {
-    ND::TOADatabase::GeometryLookup* old = fGeometryLookup;
+CP::TOADatabase::GeometryLookup* CP::TOADatabase::RegisterGeometryLookup(
+    CP::TOADatabase::GeometryLookup* lookup) {
+    CP::TOADatabase::GeometryLookup* old = fGeometryLookup;
     if (!lookup) {
         if (!gDefaultGeometryLookup) {
             gDefaultGeometryLookup = new DefaultGeometryLookup;
@@ -240,14 +240,14 @@ ND::TOADatabase::GeometryLookup* ND::TOADatabase::RegisterGeometryLookup(
     return old;
 }
 
-ND::TSHAHashValue ND::TOADatabase::FindEventGeometry(
-    const ND::TND280Event *const event) const {
+CP::TSHAHashValue CP::TOADatabase::FindEventGeometry(
+    const CP::TND280Event *const event) const {
     TSHAHashValue hashValue;
     if (!fGeometryLookup) {
         if (!gDefaultGeometryLookup) {
             gDefaultGeometryLookup = new DefaultGeometryLookup;
         }
-        const_cast<ND::TOADatabase*>(this)->fGeometryLookup 
+        const_cast<CP::TOADatabase*>(this)->fGeometryLookup 
             = gDefaultGeometryLookup;
     }
     try {
@@ -259,20 +259,20 @@ ND::TSHAHashValue ND::TOADatabase::FindEventGeometry(
     return hashValue;
 }
 
-ND::TOADatabase::AlignmentLookup* ND::TOADatabase::RegisterAlignmentLookup(
-    ND::TOADatabase::AlignmentLookup* lookup) {
-    ND::TOADatabase::AlignmentLookup* old = fAlignmentLookup;
+CP::TOADatabase::AlignmentLookup* CP::TOADatabase::RegisterAlignmentLookup(
+    CP::TOADatabase::AlignmentLookup* lookup) {
+    CP::TOADatabase::AlignmentLookup* old = fAlignmentLookup;
     fAlignmentLookup = lookup;
     return old;
 }
 
-void ND::TOADatabase::AlignGeometry(const ND::TND280Event* const event) {
+void CP::TOADatabase::AlignGeometry(const CP::TND280Event* const event) {
     GeomId().ApplyAlignment(event);
 }
 
-ND::TAlignmentId ND::TOADatabase::ApplyAlignmentLookup(
-    const ND::TND280Event* const event) {
-    ND::TAlignmentId id;
+CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
+    const CP::TND280Event* const event) {
+    CP::TAlignmentId id;
 
     GeomId().GetGeoManager();
     TObjArray* physicalNodes = gGeoManager->GetListOfPhysicalNodes();
@@ -350,18 +350,18 @@ ND::TAlignmentId ND::TOADatabase::ApplyAlignmentLookup(
     return id;
 }
 
-bool ND::TOADatabase::CheckAlignment(const ND::TND280Event* const event) {
+bool CP::TOADatabase::CheckAlignment(const CP::TND280Event* const event) {
     if (!fAlignmentLookup) return false;
     return fAlignmentLookup->CheckAlignment(event);
 }
 
-ND::TTPCPadManager& ND::TOADatabase::TPCPads(ND::TND280Event* event) {
+CP::TTPCPadManager& CP::TOADatabase::TPCPads(CP::TND280Event* event) {
     if (!fPadManager) {
         // create the tpc pad information into memory.  The default values
         // almost never change, so they are not saved in the data file.
         // Eventually, there should be a check to read the values from a
         // database.
-        fPadManager = new ND::TTPCPadManager();
+        fPadManager = new CP::TTPCPadManager();
         if (!fPadManager) {
             throw ENoTPCPads();
         }
@@ -369,27 +369,27 @@ ND::TTPCPadManager& ND::TOADatabase::TPCPads(ND::TND280Event* event) {
     return *fPadManager;
 }
 
-TDatabasePDG& ND::TOADatabase::ParticleData(void) {
+TDatabasePDG& CP::TOADatabase::ParticleData(void) {
     if (!fParticleData) {
         fParticleData = TDatabasePDG::Instance();
     }
     return *fParticleData;
 }
 
-ND::TPackageSet& ND::TOADatabase::PackageSet(void) {
+CP::TPackageSet& CP::TOADatabase::PackageSet(void) {
     return fPackageSet;
 }
 
-ND::TDigitManager& ND::TOADatabase::Digits(void) {
+CP::TDigitManager& CP::TOADatabase::Digits(void) {
     if (!fDigits) {
-        fDigits = new ND::TDigitManager();
+        fDigits = new CP::TDigitManager();
     }
     return *fDigits;
 }
 
-ND::TGeomIdManager& ND::TOADatabase::GeomId(void) {
+CP::TGeomIdManager& CP::TOADatabase::GeomId(void) {
     if (!fGeomId) {
-        fGeomId = new ND::TGeomIdManager();
+        fGeomId = new CP::TGeomIdManager();
     }
     return *fGeomId;
 }

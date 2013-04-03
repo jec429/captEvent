@@ -7,7 +7,7 @@
 #include <exception>
 #include <string>
 
-namespace ND {
+namespace CP {
     class EoaCore;
 }
 
@@ -40,9 +40,9 @@ namespace ND {
 ///
 /// This can add a backtrace at the point of the exception.  The number of
 /// backtrace frames to be shown is controlled with the
-/// ND::EoaCore::gBacktraceSymbols static variable.
+/// CP::EoaCore::gBacktraceSymbols static variable.
 /// 
-class ND::EoaCore :public std::exception {
+class CP::EoaCore :public std::exception {
     /// What exception generated this object.
     char fWhat[2048];
 

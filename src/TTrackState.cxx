@@ -1,17 +1,17 @@
 #include "TTrackState.hxx"
 
 ///////////////////////////////////////////////////////
-ClassImp(ND::TTrackState);
+ClassImp(CP::TTrackState);
 
-ND::TTrackState::TTrackState(): TMReconState(this) {
+CP::TTrackState::TTrackState(): TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
     Init();
 }
 
-ND::TTrackState::~TTrackState() {}
+CP::TTrackState::~TTrackState() {}
 
-ND::TTrackState::TTrackState(const ND::TTrackState& init)
+CP::TTrackState::TTrackState(const CP::TTrackState& init)
   : TMReconState(this) {
     std::copy(fLocalNames.begin(), fLocalNames.end(), 
               std::back_inserter(fFieldNames));
@@ -29,7 +29,7 @@ ND::TTrackState::TTrackState(const ND::TTrackState& init)
     
 }
 
-ND::TTrackState& ND::TTrackState::operator=(const ND::TTrackState& rhs) {
+CP::TTrackState& CP::TTrackState::operator=(const CP::TTrackState& rhs) {
     if (this == &rhs) return *this;
 
     for (int i=0; i<GetSize(); ++i) {
@@ -45,8 +45,8 @@ ND::TTrackState& ND::TTrackState::operator=(const ND::TTrackState& rhs) {
     return *this;
 }
 
-ND::TCorrValues ND::TTrackState::ProjectState(
-    const ND::THandle<ND::TReconState>& proj) {
+CP::TCorrValues CP::TTrackState::ProjectState(
+    const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TTrackState::GetSize());
     values.SetType("EDeposit X Y Z T DX DY DZ Curvature W1 W2 ");
     const TMEDepositState* eDepositState 

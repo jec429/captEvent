@@ -1,18 +1,18 @@
 #include "TDigitContainer.hxx"
 #include "TDigitHeader.hxx"
 
-ClassImp(ND::TDigitContainer);
+ClassImp(CP::TDigitContainer);
 
-ND::TDigitContainer::TDigitContainer(const char* name, const char* title) 
+CP::TDigitContainer::TDigitContainer(const char* name, const char* title) 
     : TDatum(name,title), fSignature(0) {}
 
-ND::TDigitContainer::~TDigitContainer() {
-    for (ND::TDigitContainer::iterator d = begin();
+CP::TDigitContainer::~TDigitContainer() {
+    for (CP::TDigitContainer::iterator d = begin();
          d != end();
          ++d) {
         delete (*d);
     }
-    for (std::vector<ND::TDigitHeader*>::iterator h = fHeaders.begin();
+    for (std::vector<CP::TDigitHeader*>::iterator h = fHeaders.begin();
          h != fHeaders.end();
          ++h) {
         delete (*h);
@@ -21,15 +21,15 @@ ND::TDigitContainer::~TDigitContainer() {
     clear();
 }
 
-ND::TDigitHeader *const ND::TDigitContainer::GetHeader(int i) const {
+CP::TDigitHeader *const CP::TDigitContainer::GetHeader(int i) const {
     return fHeaders.at(i);
 }
 
-void ND::TDigitContainer::AddHeader(ND::TDigitHeader* hdr) {
+void CP::TDigitContainer::AddHeader(CP::TDigitHeader* hdr) {
     fHeaders.push_back(hdr);
 }
 
-unsigned int ND::TDigitContainer::GetSignature() const {
+unsigned int CP::TDigitContainer::GetSignature() const {
     if (fSignature == 0) {
         // Calculate the signature using a modified Fowler, Noll, and Vo hash
         // type 1a (FNV-1a).  The signature is calculated so that it will be
@@ -73,14 +73,14 @@ unsigned int ND::TDigitContainer::GetSignature() const {
     return fSignature;
 }
 
-void ND::TDigitContainer::ls(Option_t* opt) const {
-    ND::TDatum::ls(opt);
+void CP::TDigitContainer::ls(Option_t* opt) const {
+    CP::TDatum::ls(opt);
     std::string option(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << "Signature: " << GetSignature() << std::endl;
     for (unsigned int i = 0; i< GetHeaderCount(); ++i) {
-        ND::TDigitHeader *const hdr = GetHeader(i);
+        CP::TDigitHeader *const hdr = GetHeader(i);
         hdr->ls(opt);
     }
     if (option.find("dump") != std::string::npos) {

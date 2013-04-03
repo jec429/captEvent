@@ -7,7 +7,7 @@
 #include "THit.hxx"
 #include "TGeometryId.hxx"
 
-namespace ND {
+namespace CP {
     class TReconHit;
     class TWritableReconHit;
 
@@ -25,7 +25,7 @@ namespace ND {
 ///
 /// The TReconHit class can't be directly instantiated.  It is created
 /// using the TWritableReconHit class and is accessed as a THit class.
-class ND::TReconHit : public THit {
+class CP::TReconHit : public THit {
 public:
     TReconHit();
     TReconHit(const TWritableReconHit& val);
@@ -65,7 +65,7 @@ public:
 
     /// Return a contributing hit.  If the index is out of range, this will
     /// throw an EHitOutOfRange exception.
-    ND::THandle<ND::THit> GetContributor(int i) const;
+    CP::THandle<CP::THit> GetContributor(int i) const;
 
     /// Return the number of hits that contribute to this hit.
     int GetContributorCount() const;
@@ -104,7 +104,7 @@ protected:
     TVector3 fReconUncertainty;
 
     /// The THits that make up this reconstructed hit.
-    std::vector< ND::THandle < ND::THit > > fConstituents;
+    std::vector< CP::THandle < CP::THit > > fConstituents;
 
     /// This is set to true if the fast access fields below have been
     /// initialized.
@@ -140,7 +140,7 @@ protected:
 /// hit.  The other hits are not used by this class, but are checked to make
 /// sure that they are in the same geometry volume.  If you need to combine
 /// hits from different geometry volumes, use a TReconCluster.
-class ND::TWritableReconHit : public TReconHit {
+class CP::TWritableReconHit : public TReconHit {
 public:
     TWritableReconHit(const TWritableReconHit& h);
 
@@ -148,19 +148,19 @@ public:
     /// constituent.  This sets the constituent fields, but the position,
     /// time, &c are not initialized.  These fields and their uncertainties
     /// must be set using SetCharge, SetTime, &c.
-    explicit TWritableReconHit(ND::THandle<ND::THit> hit);
+    explicit TWritableReconHit(CP::THandle<CP::THit> hit);
 
     /// A "convenience" constructor for the case where there are two
     /// constituents.  This sets the constituent fields, but the position,
     /// time, &c are not initialized.  These fields and their uncertainties
     /// must be set using SetCharge, SetTime, &c.
-    explicit TWritableReconHit(ND::THandle<ND::THit> hit1,
-                               ND::THandle<ND::THit> hit2);
+    explicit TWritableReconHit(CP::THandle<CP::THit> hit1,
+                               CP::THandle<CP::THit> hit2);
 
     virtual ~TWritableReconHit();
     
     /// Add one more hit to an existing TWritableReconHit.
-    void AddHit(ND::THandle<ND::THit> hit);
+    void AddHit(CP::THandle<CP::THit> hit);
 
     /// Set the charge for the hit.
     void SetCharge(double q);

@@ -8,9 +8,9 @@
 #include <execinfo.h>
 #endif
 
-unsigned int ND::EoaCore::gBacktraceSymbols = 5;
+unsigned int CP::EoaCore::gBacktraceSymbols = 5;
 
-ND::EoaCore::EoaCore() {
+CP::EoaCore::EoaCore() {
     fWhat[0] = 0;
 #ifdef _GNU_SOURCE
     if (gBacktraceSymbols>0) {
@@ -55,7 +55,7 @@ ND::EoaCore::EoaCore() {
     std::strcat(fWhat,"Exception:  EoaCore");
 }
 
-void ND::EoaCore::AppendWhat(const char* child) {
+void CP::EoaCore::AppendWhat(const char* child) {
     unsigned int wLen = std::strlen(fWhat);
     unsigned int cLen = std::strlen(child);
     if (wLen+cLen < sizeof(fWhat)-5) {

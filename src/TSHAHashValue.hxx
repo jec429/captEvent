@@ -7,14 +7,14 @@
 #include <TROOT.h>
 #include <TObject.h>
 
-namespace ND {
+namespace CP {
     class TSHAHashValue;
 };
 
 /// Save a SHA hash code value.  The hashcode value can be ordered using the
 /// "<" operator and compared for equality using the "==" operator.  The hash
 /// code is represented as 5 32 bit unsigned integers.
-class ND::TSHAHashValue {
+class CP::TSHAHashValue {
 public:
     TSHAHashValue();
     TSHAHashValue(const TSHAHashValue& hc);
@@ -64,17 +64,17 @@ private:
 };
 
 // Provide a "less than" comparison so the hash value can be stuck in a map.
-bool operator<(const ND::TSHAHashValue& lhs, const ND::TSHAHashValue& rhs);
+bool operator<(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs);
 
 // Add an equality comparison.
-bool operator==(const ND::TSHAHashValue& lhs, const ND::TSHAHashValue& rhs);
+bool operator==(const CP::TSHAHashValue& lhs, const CP::TSHAHashValue& rhs);
 
 // Add an inequality comparision.
-inline bool operator!=(const ND::TSHAHashValue& lhs, 
-                       const ND::TSHAHashValue& rhs) {
+inline bool operator!=(const CP::TSHAHashValue& lhs, 
+                       const CP::TSHAHashValue& rhs) {
     return !(lhs == rhs);
 }
 
 // Provide output to a stream.
-std::ostream& operator<<(std::ostream& s, const ND::TSHAHashValue& c);
+std::ostream& operator<<(std::ostream& s, const CP::TSHAHashValue& c);
 #endif

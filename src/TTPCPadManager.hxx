@@ -8,7 +8,7 @@
 
 class TGeoNode;
 
-namespace ND {
+namespace CP {
     class TTPCPadManager;
 }
 
@@ -48,7 +48,7 @@ namespace ND {
 /// - The pad numbering runs down the rows (0 -> 47 goes +Y_max -> -Y_max) and
 ///   then over the columns (+X_max to -X_max).
 ///
-class ND::TTPCPadManager: public TNamed {
+class CP::TTPCPadManager: public TNamed {
 public:
     TTPCPadManager();
     virtual ~TTPCPadManager();

@@ -3,7 +3,7 @@
 
 #include "TChannelId.hxx"
 
-namespace ND {
+namespace CP {
     class TTFBChannelId;
 };
 
@@ -11,13 +11,13 @@ namespace ND {
 ///electronics hierachy.  Can answer detailed questions about its
 ///elements.  This should be used for constructing TTFBChannelIds from
 ///the information available in MIDAS data block.
-class ND::TTFBChannelId : public ND::TChannelId {
+class CP::TTFBChannelId : public CP::TChannelId {
 public:
     ///Construct a TFB channel ID from a raw UInt_t
     explicit TTFBChannelId(UInt_t id = 0);
 
     ///Constructor to specialise a Channel ID as a TFB channel ID 
-    explicit TTFBChannelId(const ND::TChannelId& src);
+    explicit TTFBChannelId(const CP::TChannelId& src);
 
     ///Construct a TFB channel ID from its electronics-space co-ordinates
     TTFBChannelId(UInt_t subDet,  UInt_t rmm,  UInt_t tfb,

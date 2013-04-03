@@ -68,8 +68,8 @@ int main(int argc, char** argv) {
         return 1;
     }
     std::auto_ptr<TFile> inputFile(inputPtr);
-    if (!ND::TOADatabase::Get().GeomId().LoadGeometry(*inputFile,
-                                                      ND::TSHAHashValue())) {
+    if (!CP::TOADatabase::Get().GeomId().LoadGeometry(*inputFile,
+                                                      CP::TSHAHashValue())) {
         std::cerr << "Error: Geometry not found in input file." << std::endl;
         return 1;
     }
@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    ND::TSHAHashValue hc = ND::TOADatabase::Get().GeomId().GetHash();
+    CP::TSHAHashValue hc = CP::TOADatabase::Get().GeomId().GetHash();
     std::ostringstream geomName;
     geomName << "geom"; 
     geomName << std::hex << std::nouppercase << std::setfill('0');

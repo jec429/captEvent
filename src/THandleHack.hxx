@@ -1,7 +1,7 @@
 #ifndef THandleHack_hxx_Seen
 #define THandleHack_hxx_Seen
 
-namespace ND {
+namespace CP {
     /// A useful debugging/memory leak detecting routine to find places where
     /// THandle objects are somehow being misused.  I used it to find a
     /// THitSelection that was not correctly deleted, and which was causing a
@@ -17,11 +17,11 @@ namespace ND {
     /// with an argument of "true", this will create an internal handle
     /// registry and cause your program to run very slowly.  If called with an
     /// argument of "false", the internal registry will be deleted (if it
-    /// exists).  After ND::EnableHandleRegistry(true) is called, the
-    /// ND::DumpHandleRegistry() function will print a list of handles
+    /// exists).  After CP::EnableHandleRegistry(true) is called, the
+    /// CP::DumpHandleRegistry() function will print a list of handles
     /// remaining in memory.
     ///
-    /// The ND::EnableHandleRegistry() and ND::DumpHandleRegistry() are used
+    /// The CP::EnableHandleRegistry() and CP::DumpHandleRegistry() are used
     /// by the event loop when it is run using the "-H" command line option.
     void EnableHandleRegistry(bool create);
 }

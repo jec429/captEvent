@@ -12,7 +12,7 @@
 #include "THandle.hxx"
 #include "TG4TrajectoryPoint.hxx"
 
-namespace ND {
+namespace CP {
     class TG4Trajectory;
     class TG4TrajectoryContainer;
 }
@@ -22,7 +22,7 @@ namespace ND {
 /// through the G4 simulation. It saves the parent trajectory that generated
 /// this particle, the initial momentum of the particle, and the path followed
 /// by the particle in the detector.  
-class ND::TG4Trajectory: public TObject {
+class CP::TG4Trajectory: public TObject {
 public:
     typedef std::vector<TG4TrajectoryPoint> Points;
 
@@ -141,8 +141,8 @@ private:
 /// trajectory number.  Iterating through the trajectory returns pairs with
 /// the first element being the trajectory number, and the second element
 /// being the TG4Trajectory object.
-class ND::TG4TrajectoryContainer : public TDatum, 
-                                   public std::map<int, ND::TG4Trajectory> {
+class CP::TG4TrajectoryContainer : public TDatum, 
+                                   public std::map<int, CP::TG4Trajectory> {
 public:
     TG4TrajectoryContainer(): TDatum("G4Trajectories","G4 Trajectories") {}
     ~TG4TrajectoryContainer() {}
@@ -152,7 +152,7 @@ public:
     int GetPrimaryId(int trackId) const;
   
     /// Find the trajectory, or return NULL if it doesn't exist.
-    THandle<ND::TG4Trajectory> GetTrajectory(int trackId) const;
+    THandle<CP::TG4Trajectory> GetTrajectory(int trackId) const;
 
     /// Print the data vector information.
     virtual void ls(Option_t* opt = "") const;

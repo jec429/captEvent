@@ -2,7 +2,7 @@
 
 #include <nd280EventLoop.hxx>
 
-class TDumpEvent: public ND::TND280EventLoopFunction {
+class TDumpEvent: public CP::TND280EventLoopFunction {
 public:
     TDumpEvent() {
         fLSOption = "";
@@ -31,8 +31,8 @@ public:
         return true;
     }
 
-    bool operator () (ND::TND280Event& event) {
-        if (ND::TND280Log::GetLogLevel()>ND::TND280Log::QuietLevel && !fQuiet) {
+    bool operator () (CP::TND280Event& event) {
+        if (CP::TND280Log::GetLogLevel()>CP::TND280Log::QuietLevel && !fQuiet) {
             event.ls(fLSOption.c_str());
         }
         if (fPrintList) {
@@ -44,8 +44,8 @@ public:
     // Do nothing... This is here to test compiler warnings.  The warning
     // can be prevented by adding
     //
-    // using ND::TND280EventLoopFunction::Finalize;
-    void Finalize(ND::TND280Output*const output) {
+    // using CP::TND280EventLoopFunction::Finalize;
+    void Finalize(CP::TND280Output*const output) {
     }
 
 private:
@@ -56,6 +56,6 @@ private:
 
 int main(int argc, char **argv) {
     TDumpEvent userCode;
-    ND::nd280EventLoop(argc,argv,userCode,1);
+    CP::nd280EventLoop(argc,argv,userCode,1);
 }
 

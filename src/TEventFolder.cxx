@@ -14,27 +14,27 @@
 #include "TEventFolder.hxx"
 #include "TND280Log.hxx"
 
-ND::TEventFolder* ND::TEventFolder::fEventFolder = NULL;
-ND::TND280Event* ND::TEventFolder::fCurrentEvent = NULL;
+CP::TEventFolder* CP::TEventFolder::fEventFolder = NULL;
+CP::TND280Event* CP::TEventFolder::fCurrentEvent = NULL;
 
-ND::TEventFolder::TEventFolder() {
+CP::TEventFolder::TEventFolder() {
     fFolderOfEvents = NULL;
 }
 
-ND::TEventFolder::~TEventFolder() {
+CP::TEventFolder::~TEventFolder() {
     fFolderOfEvents = NULL;
     fEventFolder = NULL;
     fCurrentEvent = NULL;
 }
 
-TFolder* ND::TEventFolder::GetFolder(void) const {
+TFolder* CP::TEventFolder::GetFolder(void) const {
     if (!fFolderOfEvents) return NULL;
     return fFolderOfEvents;
 }
 
-ND::TEventFolder* ND::TEventFolder::GetEventFolder(void) {
+CP::TEventFolder* CP::TEventFolder::GetEventFolder(void) {
     if (!fEventFolder) {
-        fEventFolder = new ND::TEventFolder();
+        fEventFolder = new CP::TEventFolder();
     }
     if (!fEventFolder->fFolderOfEvents) {
         fEventFolder->fFolderOfEvents
@@ -45,24 +45,24 @@ ND::TEventFolder* ND::TEventFolder::GetEventFolder(void) {
     }
     #define CONNECT_SLOT
     #ifdef CONNECT_SLOT
-    TQObject::Connect("TEvent","Selected(ND::TDatum*)",
+    TQObject::Connect("TEvent","Selected(CP::TDatum*)",
                       "TEventFolder",fEventFolder,"EventSelected(TObject*)");
     #endif
 
     return fEventFolder;
 }
 
-ND::TND280Event* ND::TEventFolder::GetEvent(int indx) const {
+CP::TND280Event* CP::TEventFolder::GetEvent(int indx) const {
     if (!fFolderOfEvents) return NULL;
     TList* folder = dynamic_cast<TList*>(fFolderOfEvents->GetListOfFolders());
     if (!folder) return NULL;
-    ND::TND280Event* current = NULL;
+    CP::TND280Event* current = NULL;
     int count = 0;
 
     for ( TObjLink* objlink = folder->LastLink();
           objlink != NULL;
           objlink = objlink->Prev()) {
-        current = dynamic_cast<ND::TND280Event*>(objlink->GetObject());
+        current = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
         if (current) ++count;
         if (count > indx) break;
     }
@@ -70,17 +70,17 @@ ND::TND280Event* ND::TEventFolder::GetEvent(int indx) const {
     return current;
 }
 
-void ND::TEventFolder::SetCurrentEvent(ND::TND280Event* event) {
+void CP::TEventFolder::SetCurrentEvent(CP::TND280Event* event) {
     if (!event) return;
     if (!fFolderOfEvents) return;
     TList* folder = dynamic_cast<TList*>(fFolderOfEvents->GetListOfFolders());
     if (!folder) return;
 
-    ND::TND280Event* oldEvent = fCurrentEvent;
+    CP::TND280Event* oldEvent = fCurrentEvent;
     for (TObjLink* objlink = folder->LastLink();
           objlink != NULL;
           objlink = objlink->Prev()) {
-        ND::TND280Event* inList = dynamic_cast<ND::TND280Event*>(objlink->GetObject());
+        CP::TND280Event* inList = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
         if (inList == event) {
             fCurrentEvent = event;
         }
@@ -89,15 +89,15 @@ void ND::TEventFolder::SetCurrentEvent(ND::TND280Event* event) {
               << " to " << fCurrentEvent);
 }
 
-ND::TND280Event* ND::TEventFolder::FindEvent(int, int) const {
+CP::TND280Event* CP::TEventFolder::FindEvent(int, int) const {
     return NULL;
 }
 
-ND::TND280Event* ND::TEventFolder::GetCurrentEvent(void) {
+CP::TND280Event* CP::TEventFolder::GetCurrentEvent(void) {
     return fCurrentEvent;
 }
 
-void ND::TEventFolder::RegisterEvent(ND::TND280Event* event) {
+void CP::TEventFolder::RegisterEvent(CP::TND280Event* event) {
     fCurrentEvent = event;
     if (fCurrentEvent && fEventFolder && fEventFolder->fFolderOfEvents) {
         fEventFolder->fFolderOfEvents->Add(event);
@@ -105,7 +105,7 @@ void ND::TEventFolder::RegisterEvent(ND::TND280Event* event) {
     }
 }
 
-void ND::TEventFolder::RemoveEvent(ND::TND280Event* event) {
+void CP::TEventFolder::RemoveEvent(CP::TND280Event* event) {
     // Check if the event is the current event.
     if (fCurrentEvent == event) fCurrentEvent = NULL;
 
@@ -121,23 +121,23 @@ void ND::TEventFolder::RemoveEvent(ND::TND280Event* event) {
     for (TObjLink* objlink = folder->LastLink(); 
          objlink != NULL;       
          objlink = objlink->Prev()) {
-        fCurrentEvent = dynamic_cast<ND::TND280Event*>(objlink->GetObject());
+        fCurrentEvent = dynamic_cast<CP::TND280Event*>(objlink->GetObject());
         // Any event is OK as long as it's not the event being removed.
         if (fCurrentEvent != event) break;
     }
 }
 
-void ND::TEventFolder::EventSelected(TObject* theObject) {
+void CP::TEventFolder::EventSelected(TObject* theObject) {
     ND280Info("EventFolder had " << theObject->ClassName()  
               << " at " << theObject << " selected");
-    ND::TND280Event* event = dynamic_cast<ND::TND280Event*>(theObject);
+    CP::TND280Event* event = dynamic_cast<CP::TND280Event*>(theObject);
     SetCurrentEvent(event);
 }
 
 
-void ND::TEventFolder::ls(const Option_t* opt) const {
+void CP::TEventFolder::ls(const Option_t* opt) const {
     if (fFolderOfEvents) fFolderOfEvents->ls(opt);
     else std::cout << "No Event Folder" << std::endl;
 }
 
-ClassImp(ND::TEventFolder);
+ClassImp(CP::TEventFolder);

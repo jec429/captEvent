@@ -1,19 +1,19 @@
 #include "TND280MCHeader.hxx"
 #include "HEPUnits.hxx"
 
-ClassImp(ND::TND280MCHeader);
+ClassImp(CP::TND280MCHeader);
 
-ND::TND280MCHeader::TND280MCHeader()
-    : ND::TDataVector("mcHeader", "Monte Carlo Header"),
+CP::TND280MCHeader::TND280MCHeader()
+    : CP::TDataVector("mcHeader", "Monte Carlo Header"),
       fOffAxisField(0.0), fIntensity(0.0) {}
 
-ND::TND280MCHeader::TND280MCHeader(const char* name, const char* title)
-    : ND::TDataVector(name,title), fOffAxisField(0.0), fIntensity(0.0) {}
+CP::TND280MCHeader::TND280MCHeader(const char* name, const char* title)
+    : CP::TDataVector(name,title), fOffAxisField(0.0), fIntensity(0.0) {}
 
-ND::TND280MCHeader::~TND280MCHeader() {}
+CP::TND280MCHeader::~TND280MCHeader() {}
 
-void ND::TND280MCHeader::ls(Option_t* opt) const {
-    ND::TDatum::ls(opt);
+void CP::TND280MCHeader::ls(Option_t* opt) const {
+    CP::TDatum::ls(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << "Geometry Hash: " << GetGeometryHash() 

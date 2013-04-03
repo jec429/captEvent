@@ -14,9 +14,9 @@
 #include "HEPUnits.hxx"
 #include "ND280GeomId.hxx"
 
-ClassImp(ND::TSingleHit);
+ClassImp(CP::TSingleHit);
 
-ND::TSingleHit::TSingleHit() 
+CP::TSingleHit::TSingleHit() 
     : fGeomId(0), fCharge(0), fTime(0), fChannelId(0),
       fInitialized(false),
       fPosition(0,0,0), 
@@ -27,8 +27,8 @@ ND::TSingleHit::TSingleHit()
     SetBit(kCanDelete,false);
 }
 
-ND::TSingleHit::TSingleHit(const ND::TSingleHit& h) 
-    : ND::THit(h), fGeomId(h.fGeomId),
+CP::TSingleHit::TSingleHit(const CP::TSingleHit& h) 
+    : CP::THit(h), fGeomId(h.fGeomId),
       fCharge(h.fCharge), fTime(h.fTime), 
       fChannelId(h.fChannelId),
       fInitialized(h.fInitialized),
@@ -40,68 +40,68 @@ ND::TSingleHit::TSingleHit(const ND::TSingleHit& h)
     SetBit(kCanDelete,false);
 }
 
-ND::TSingleHit::~TSingleHit() { }
+CP::TSingleHit::~TSingleHit() { }
 
 //////////////////////////////////////////////////
-// Getter methods for ND::TSingleHit
+// Getter methods for CP::TSingleHit
 //////////////////////////////////////////////////
 
-ND::TGeometryId ND::TSingleHit::GetGeomId(void) const {
+CP::TGeometryId CP::TSingleHit::GetGeomId(void) const {
     return TGeometryId(fGeomId);
 }
 
-double ND::TSingleHit::GetCharge(void) const {return fCharge;}
+double CP::TSingleHit::GetCharge(void) const {return fCharge;}
 
-double ND::TSingleHit::GetTime(void) const {return fTime;}
+double CP::TSingleHit::GetTime(void) const {return fTime;}
 
 // Return the associated channel id.
-ND::TChannelId ND::TSingleHit::GetChannelId(int i) const {return fChannelId;}
+CP::TChannelId CP::TSingleHit::GetChannelId(int i) const {return fChannelId;}
 
 // Return the number of channel ids associated with this hit.
-int ND::TSingleHit::GetChannelIdCount() const {
+int CP::TSingleHit::GetChannelIdCount() const {
     if (!fChannelId.IsValid()) return 0;
     return 1;
 }
 
-const TVector3& ND::TSingleHit::GetPosition(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+const TVector3& CP::TSingleHit::GetPosition(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fPosition;
 }
 
-const TVector3& ND::TSingleHit::GetSpread(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize(); 
+const TVector3& CP::TSingleHit::GetSpread(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize(); 
     return fSpread;
 }
 
-const TVector3& ND::TSingleHit::GetUncertainty(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+const TVector3& CP::TSingleHit::GetUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fUncertainty;
 }
 
-double ND::TSingleHit::GetTimeUncertainty(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+double CP::TSingleHit::GetTimeUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fTimeUncertainty;
 }
 
-bool ND::TSingleHit::IsXHit(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+bool CP::TSingleHit::IsXHit(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fIsXHit;
 }
 
-bool ND::TSingleHit::IsYHit(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+bool CP::TSingleHit::IsYHit(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fIsYHit;
 }
 
-bool ND::TSingleHit::IsZHit(void) const {
-    if (!fInitialized) const_cast<ND::TSingleHit*>(this)->Initialize();
+bool CP::TSingleHit::IsZHit(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fIsZHit;
 }
 
-bool ND::TSingleHit::InitializeTPC() {
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+bool CP::TSingleHit::InitializeTPC() {
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
-    ND::TOADatabase::Get().GeomId().CdId(GetGeomId());
+    CP::TOADatabase::Get().GeomId().CdId(GetGeomId());
     TGeoNode* node = geom->GetCurrentNode();
 
     std::string nodeName(node->GetName());
@@ -110,12 +110,12 @@ bool ND::TSingleHit::InitializeTPC() {
         return false;
     }
 
-    if (!ND::TOADatabase::Get().GeomId().GetPosition(GetGeomId(),fPosition)) {
+    if (!CP::TOADatabase::Get().GeomId().GetPosition(GetGeomId(),fPosition)) {
         geom->PopPath();
         return false;
     }
 
-    ND::TTPCPadManager& pads = ND::TOADatabase::Get().TPCPads();
+    CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
     
     // Find the spread.
     fSpread.SetXYZ(1*unit::meter, 
@@ -141,10 +141,10 @@ bool ND::TSingleHit::InitializeTPC() {
     return true;
 }
 
-bool ND::TSingleHit::InitializeGeneric() {
-    TGeoManager* geom = ND::TOADatabase::Get().Geometry();
+bool CP::TSingleHit::InitializeGeneric() {
+    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
-    ND::TOADatabase::Get().GeomId().CdId(GetGeomId());
+    CP::TOADatabase::Get().GeomId().CdId(GetGeomId());
     TGeoNode* node = geom->GetCurrentNode();
 
     // Find the global position
@@ -191,14 +191,14 @@ bool ND::TSingleHit::InitializeGeneric() {
     // so that a single SMRD hit gives a Z position measurement.  Insteand of
     // having a generalized algorithm to figure this out, just force SMRD hits
     // to be Z hits.
-    if (ND::GeomId::SMRD::IsSMRD(GetGeomId())) fIsZHit = true;
+    if (CP::GeomId::SMRD::IsSMRD(GetGeomId())) fIsZHit = true;
 
     geom->PopPath();
     
     return true;
 }
 
-void ND::TSingleHit::Initialize(void) {
+void CP::TSingleHit::Initialize(void) {
 #ifdef TSINGLE_HIT_SAVE_POSITION
     TVector3 origPos = fPosition;
 #endif

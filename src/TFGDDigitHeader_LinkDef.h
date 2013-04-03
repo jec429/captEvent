@@ -1,5 +1,5 @@
 #ifdef __CINT__
-#pragma link C++ class ND::TCMBDigitHeader+;
-#pragma link C++ class ND::TFGDDigitHeader+;
+#pragma link C++ class CP::TCMBDigitHeader+;
+#pragma link C++ class CP::TFGDDigitHeader+;
 #endif
 

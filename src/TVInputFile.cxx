@@ -2,10 +2,10 @@
 #include "TND280Event.hxx"
 #include "TVInputFile.hxx"
 
-ND::TND280Event* ND::TVInputFile::FirstEvent() {throw ND::EoaCore();}
-ND::TND280Event* ND::TVInputFile::NextEvent(int skip) {throw ND::EoaCore();}
-int ND::TVInputFile::GetPosition() const {throw ND::EoaCore();}
-bool ND::TVInputFile::IsOpen() {throw ND::EoaCore();}
-bool ND::TVInputFile::EndOfFile() {throw ND::EoaCore();}
-void ND::TVInputFile::CloseFile() {throw ND::EoaCore();}
-const char* ND::TVInputFile::GetFilename() const {return "";}
+CP::TND280Event* CP::TVInputFile::FirstEvent() {throw CP::EoaCore();}
+CP::TND280Event* CP::TVInputFile::NextEvent(int skip) {throw CP::EoaCore();}
+int CP::TVInputFile::GetPosition() const {throw CP::EoaCore();}
+bool CP::TVInputFile::IsOpen() {throw CP::EoaCore();}
+bool CP::TVInputFile::EndOfFile() {throw CP::EoaCore();}
+void CP::TVInputFile::CloseFile() {throw CP::EoaCore();}
+const char* CP::TVInputFile::GetFilename() const {return "";}

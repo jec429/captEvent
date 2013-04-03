@@ -5,7 +5,7 @@
 #include <TSystem.h>
 #include <vector>
 
-namespace ND {
+namespace CP {
     class TMemoryUsage;
 };
 
@@ -14,7 +14,7 @@ namespace ND {
 /// Enable().  The expected usage is to call LogMemory() once per event, and
 /// Write() once all event have been processed.  This class is used inside the
 /// default nd280EventLoop, so it isn't generally used outside of oaEvent.
-class ND::TMemoryUsage {
+class CP::TMemoryUsage {
 public:
     /// Construct the memory usage class with logging disabled.
     TMemoryUsage();
@@ -38,7 +38,7 @@ public:
     /// the top-level directory of the output file.  The histograms are
     /// indexed by the number of calls to LogMemory().  If Enable() has not
     /// been called, this function does nothing.
-    void Write(ND::TND280Output* output);
+    void Write(CP::TND280Output* output);
     
 private:
     /// Whether to log memory usage. Set using Enable()

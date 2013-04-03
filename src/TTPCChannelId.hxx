@@ -4,7 +4,7 @@
 #include "method_deprecated.hxx"
 #include "TChannelId.hxx"
 
-namespace ND {
+namespace CP {
     class TTPCChannelId;
 };
 
@@ -12,16 +12,16 @@ namespace ND {
 ///electronics hierachy.  Can answer detailed questions about its
 ///elements.  This should be used for constructing TTPCChannelIds from
 ///the information available in MIDAS data block.
-class ND::TTPCChannelId : public ND::TChannelId {
+class CP::TTPCChannelId : public CP::TChannelId {
 public:
     ///Construct a TPC channel ID from a raw UInt_t
     explicit TTPCChannelId(UInt_t id = 0);
 
     ///Constructor to specialise a Channel ID as a TPC channel ID 
-    explicit TTPCChannelId(const ND::TChannelId& src);
+    explicit TTPCChannelId(const CP::TChannelId& src);
 
     ///Construct a TPC channel ID from its electronics-space
-    ///co-ordinates.  The sub-detector identifier is ND::TChannelId::kTPC(=2).
+    ///co-ordinates.  The sub-detector identifier is CP::TChannelId::kTPC(=2).
     TTPCChannelId(UInt_t dcc, UInt_t fem, UInt_t fec, 
                   UInt_t asic, UInt_t channel);
 

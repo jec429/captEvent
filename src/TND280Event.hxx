@@ -17,7 +17,7 @@
 #include "TAlignmentId.hxx"
 
 /// The standard namespace for nd280 offline software (see \ref namespaces).  
-namespace ND {
+namespace CP {
     class TND280Event;
 }
 
@@ -53,17 +53,17 @@ namespace ND {
 /// be saved automatically into a root folder by calling the
 /// TEventFolder::GetEventFolder() static method.
 ///
-class ND::TND280Event: public TDataVector {
+class CP::TND280Event: public TDataVector {
 public:
     TND280Event();
 
     /// Create a new TND280Event with the context, but not the header, filled.
-    TND280Event(const ND::TND280Context& context);
+    TND280Event(const CP::TND280Context& context);
 
     virtual ~TND280Event();
 
     /// Get the context for this event.
-    const ND::TND280Context& GetContext() const {return fContext;}
+    const CP::TND280Context& GetContext() const {return fContext;}
 
     /// Get the hash value of the geometry associated with this event.  If the
     /// event doesn't have a particular geometry associated with it, then
@@ -72,7 +72,7 @@ public:
     /// associate the proper geometry with the event when determining the
     /// positions of the hits (the hit positions are not saved with the
     /// event).
-    const ND::TSHAHashValue& GetGeometryHash() const {return fGeometryHash;}
+    const CP::TSHAHashValue& GetGeometryHash() const {return fGeometryHash;}
 
     /// Get the alignment id of the alignment constants associated with this
     /// event.  The alignment identifier is a SHA1 hash code of the alignment
@@ -82,10 +82,10 @@ public:
     /// calibration).  The hash code is used to associate the proper alignment
     /// constants with the event when determining the positions of the hits
     /// (the hit positions are not saved with the event).
-    const ND::TAlignmentId& GetAlignmentId() const {return fAlignmentId;}
+    const CP::TAlignmentId& GetAlignmentId() const {return fAlignmentId;}
 
     /// Set the context for this event.
-    void SetContext(ND::TND280Context context) {
+    void SetContext(CP::TND280Context context) {
         fContext = context;
         Build();
     }
@@ -126,17 +126,17 @@ public:
     /// persistent using TOADatabase::Get().Digits().PersistentDigits().  If
     /// the digits are made to be persistent, then they will continue to be
     /// available even if the TND280RawEvent datum is deleted.
-    THandle<ND::TDigitContainer> GetDigits(const char *name);
+    THandle<CP::TDigitContainer> GetDigits(const char *name);
 
     /// Get the hit selection by name.
-    THandle<ND::THitSelection> GetHitSelection(const char *name) const;
+    THandle<CP::THitSelection> GetHitSelection(const char *name) const;
 
     /// Get a TAlgorithmResult by name.
-    THandle<ND::TAlgorithmResult> GetFit(const char* name) const;
+    THandle<CP::TAlgorithmResult> GetFit(const char* name) const;
 
     /// Add a TAlgorithmResult object.
     void AddFit(TAlgorithmResult* fit, const char* name=NULL);
-    void AddFit(THandle<ND::TAlgorithmResult> fit, const char* name=NULL);
+    void AddFit(THandle<CP::TAlgorithmResult> fit, const char* name=NULL);
 
     /// Print the object information.
     virtual void ls(Option_t *opt = "") const;

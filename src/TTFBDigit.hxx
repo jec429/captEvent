@@ -7,19 +7,19 @@
 #include <TChannelId.hxx>
 #include <TDigit.hxx>
 
-namespace ND {
+namespace CP {
     class TTFBDigit;
 };
 
 /// Digit for TFB based detectors.  This holds the actual digitization data
 /// for a TFB channel.
-class ND::TTFBDigit : public TDigit {
+class CP::TTFBDigit : public TDigit {
 public:
     TTFBDigit ();
     virtual ~TTFBDigit();
 
     /// Construct a digit for a particular channel and cycle number.
-    TTFBDigit(ND::TChannelId chan, 
+    TTFBDigit(CP::TChannelId chan, 
               int highGainADC,
               int lowGainADC, 
               unsigned int timeCounter,

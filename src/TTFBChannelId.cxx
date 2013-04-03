@@ -1,17 +1,17 @@
 #include "TTFBChannelId.hxx"
 #include <cstdio>
 
-ClassImp(ND::TTFBChannelId);
+ClassImp(CP::TTFBChannelId);
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId::TTFBChannelId(UInt_t id): ND::TChannelId(id) {}
+CP::TTFBChannelId::TTFBChannelId(UInt_t id): CP::TChannelId(id) {}
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId::TTFBChannelId(const ND::TChannelId& src)
-  : ND::TChannelId(src) {}
+CP::TTFBChannelId::TTFBChannelId(const CP::TChannelId& src)
+  : CP::TChannelId(src) {}
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId::TTFBChannelId(UInt_t subDet,  UInt_t rmm,  UInt_t tfb,
+CP::TTFBChannelId::TTFBChannelId(UInt_t subDet,  UInt_t rmm,  UInt_t tfb,
                                  UInt_t tripChip, UInt_t tripChannel, 
                                  UInt_t capacitor) {
     SetGuardBit();
@@ -24,11 +24,11 @@ ND::TTFBChannelId::TTFBChannelId(UInt_t subDet,  UInt_t rmm,  UInt_t tfb,
 }
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId::~TTFBChannelId() {}
+CP::TTFBChannelId::~TTFBChannelId() {}
 
 //----------------------------------------------------------------------
-std::string ND::TTFBChannelId::AsString() const {
-  const char* det = ND::TChannelId::SubDetAsString().c_str();
+std::string CP::TTFBChannelId::AsString() const {
+  const char* det = CP::TChannelId::SubDetAsString().c_str();
   
   char trip = 'U';
   switch (GetTripChip()) {
@@ -55,90 +55,90 @@ std::string ND::TTFBChannelId::AsString() const {
 }
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId ND::TTFBChannelId::IgnoreCapacitor() const{
+CP::TTFBChannelId CP::TTFBChannelId::IgnoreCapacitor() const{
     TTFBChannelId id24(*this);
     id24.SetCapacitor(24);
     return id24;
 }
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId ND::TTFBChannelId::IgnoreChannel() const{
+CP::TTFBChannelId CP::TTFBChannelId::IgnoreChannel() const{
     TTFBChannelId id(this->IgnoreCapacitor());
     id.SetChannel(18);
     return id;
 }
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId ND::TTFBChannelId::IgnoreTripChip() const{
+CP::TTFBChannelId CP::TTFBChannelId::IgnoreTripChip() const{
     TTFBChannelId id(this->IgnoreChannel());
     id.SetTripChip(0);
     return id;
 }
 
 //----------------------------------------------------------------------
-ND::TTFBChannelId ND::TTFBChannelId::IgnoreTFB() const{
+CP::TTFBChannelId CP::TTFBChannelId::IgnoreTFB() const{
     TTFBChannelId id(this->IgnoreTripChip());
     id.SetTFB(0);
     return id;
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetRMM() const {
+const UInt_t CP::TTFBChannelId::GetRMM() const {
     return GetField(kRMMBoardMSB,kRMMBoardLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTFBChannelId::SetRMM(int val) {
+void CP::TTFBChannelId::SetRMM(int val) {
     SetField(val,kRMMBoardMSB,kRMMBoardLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetTFB() const {
+const UInt_t CP::TTFBChannelId::GetTFB() const {
     return GetField(kTFBPortMSB, kTFBPortLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTFBChannelId::SetTFB(int val) {
+void CP::TTFBChannelId::SetTFB(int val) {
     SetField(val, kTFBPortMSB, kTFBPortLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetCapacitor() const {
+const UInt_t CP::TTFBChannelId::GetCapacitor() const {
     return GetField(kCapacitorMSB, kCapacitorLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTFBChannelId::SetCapacitor(int val) {
+void CP::TTFBChannelId::SetCapacitor(int val) {
     SetField(val, kCapacitorMSB, kCapacitorLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetTripChip() const {
+const UInt_t CP::TTFBChannelId::GetTripChip() const {
     return GetField(kTripTMSB, kTripTLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTFBChannelId::SetTripChip(int val) {
+void CP::TTFBChannelId::SetTripChip(int val) {
     SetField(val, kTripTMSB, kTripTLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetChannel() const {
+const UInt_t CP::TTFBChannelId::GetChannel() const {
     return GetField(kTripTChannelMSB, kTripTChannelLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTFBChannelId::SetChannel(int val) {
+void CP::TTFBChannelId::SetChannel(int val) {
     SetField(val, kTripTChannelMSB, kTripTChannelLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetCableId() const {
+const UInt_t CP::TTFBChannelId::GetCableId() const {
     return IgnoreCapacitor().AsUInt();
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTFBChannelId::GetTripTId() const {
+const UInt_t CP::TTFBChannelId::GetTripTId() const {
     TTFBChannelId cableId(*this);
     cableId.SetChannel(0);
     cableId.SetCapacitor(0);

@@ -1,10 +1,10 @@
 #include "TMCDigit.hxx"
 
-ClassImp(ND::TMCDigit);
+ClassImp(CP::TMCDigit);
 
-ND::TMCDigit::TMCDigit() {}
+CP::TMCDigit::TMCDigit() {}
 
-ND::TMCDigit::TMCDigit(const ND::TMCDigit::ContributorContainer& contrib) 
+CP::TMCDigit::TMCDigit(const CP::TMCDigit::ContributorContainer& contrib) 
     : fContributors(contrib) {}
 
-ND::TMCDigit::~TMCDigit() {}
+CP::TMCDigit::~TMCDigit() {}

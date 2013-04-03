@@ -10,7 +10,7 @@
 
 #include "TDatum.hxx"
 
-namespace ND {
+namespace CP {
     class TG4TrajectoryPoint;
 }
 
@@ -18,7 +18,7 @@ namespace ND {
 /// linking to geant.  The trajectory point is saved in a TG4Trajectory as a
 /// way to record the path of a particle through the detector.  This is the
 /// truth information about the particles which were tracked.
-class ND::TG4TrajectoryPoint: public TObject {
+class CP::TG4TrajectoryPoint: public TObject {
 public:
     TG4TrajectoryPoint();
     virtual ~TG4TrajectoryPoint();

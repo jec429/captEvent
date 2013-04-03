@@ -1,7 +1,7 @@
 #ifdef __CINT__
-#pragma link C++ class ND::THandleBase+;
-#pragma link C++ class ND::THandleBaseDeletable+;
-#pragma link C++ class ND::THandleBaseUndeletable+;
-#pragma link C++ class ND::TVHandle+;
+#pragma link C++ class CP::THandleBase+;
+#pragma link C++ class CP::THandleBaseDeletable+;
+#pragma link C++ class CP::THandleBaseUndeletable+;
+#pragma link C++ class CP::TVHandle+;
 #endif
 

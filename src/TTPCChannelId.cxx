@@ -4,23 +4,23 @@
 #define METHOD_DEPRECATED
 #include "TTPCChannelId.hxx"
 
-ClassImp(ND::TTPCChannelId);
+ClassImp(CP::TTPCChannelId);
 
 //----------------------------------------------------------------------
-ND::TTPCChannelId::TTPCChannelId(UInt_t id): ND::TChannelId(id) {}
+CP::TTPCChannelId::TTPCChannelId(UInt_t id): CP::TChannelId(id) {}
 
 //----------------------------------------------------------------------
-ND::TTPCChannelId::TTPCChannelId(const ND::TChannelId& src)
-  : ND::TChannelId(src) {}
+CP::TTPCChannelId::TTPCChannelId(const CP::TChannelId& src)
+  : CP::TChannelId(src) {}
 
 //----------------------------------------------------------------------
-ND::TTPCChannelId::~TTPCChannelId() {}
+CP::TTPCChannelId::~TTPCChannelId() {}
 
 //----------------------------------------------------------------------
-ND::TTPCChannelId::TTPCChannelId(UInt_t dcc, UInt_t fem, UInt_t fec, 
+CP::TTPCChannelId::TTPCChannelId(UInt_t dcc, UInt_t fem, UInt_t fec, 
 			     UInt_t asic, UInt_t channel) {
     SetGuardBit();
-    SetSubDetector(ND::TChannelId::kTPC);
+    SetSubDetector(CP::TChannelId::kTPC);
     SetDCC(dcc);
     SetFEM(fem);
     SetFEC(fec);
@@ -30,9 +30,9 @@ ND::TTPCChannelId::TTPCChannelId(UInt_t dcc, UInt_t fem, UInt_t fec,
 
 #ifdef USE_DEPRECATED_TTPCChannelId_Constructor
 //----------------------------------------------------------------------
-ND::TTPCChannelId::TTPCChannelId(UInt_t tpc, UInt_t mm, UInt_t channel) {
+CP::TTPCChannelId::TTPCChannelId(UInt_t tpc, UInt_t mm, UInt_t channel) {
     SetGuardBit();
-    SetSubDetector(ND::TChannelId::kTPC);
+    SetSubDetector(CP::TChannelId::kTPC);
     SetTPC(tpc);
     SetMM(mm);
     SetMMChannel(channel);
@@ -40,7 +40,7 @@ ND::TTPCChannelId::TTPCChannelId(UInt_t tpc, UInt_t mm, UInt_t channel) {
 #endif
 
 //----------------------------------------------------------------------
-std::string ND::TTPCChannelId::AsString() const {
+std::string CP::TTPCChannelId::AsString() const {
     const char* det = TChannelId::SubDetAsString().c_str();
     char buffer[30];
 
@@ -54,83 +54,83 @@ std::string ND::TTPCChannelId::AsString() const {
 
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetDCC() const {
+const UInt_t CP::TTPCChannelId::GetDCC() const {
     return GetField(kDCCMSB, kDCCLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetDCC(int val) {
+void CP::TTPCChannelId::SetDCC(int val) {
     SetField(val, kDCCMSB, kDCCLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetFEM() const {
+const UInt_t CP::TTPCChannelId::GetFEM() const {
     return GetField(kFEMMSB, kFEMLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetFEM(int val) {
+void CP::TTPCChannelId::SetFEM(int val) {
     SetField(val, kFEMMSB, kFEMLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetFEC() const {
+const UInt_t CP::TTPCChannelId::GetFEC() const {
     return GetField(kFECMSB, kFECLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetFEC(int val) {
+void CP::TTPCChannelId::SetFEC(int val) {
     SetField(val, kFECMSB, kFECLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetAsic() const {
+const UInt_t CP::TTPCChannelId::GetAsic() const {
     return GetField(kAsicMSB,kAsicLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetAsic(int val) {
+void CP::TTPCChannelId::SetAsic(int val) {
     SetField(val, kAsicMSB,kAsicLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetChannel() const {
+const UInt_t CP::TTPCChannelId::GetChannel() const {
     return GetField(kChanMSB, kChanLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetChannel(int val) {
+void CP::TTPCChannelId::SetChannel(int val) {
     SetField(val, kChanMSB, kChanLSB);
 }
 
 #ifdef USE_DEPRECATED_TPCCode
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetTPC() const {
+const UInt_t CP::TTPCChannelId::GetTPC() const {
     return GetField(kTPCMSB,kTPCLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetTPC(int val) {
+void CP::TTPCChannelId::SetTPC(int val) {
     SetField(val,kTPCMSB,kTPCLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetMM() const {
+const UInt_t CP::TTPCChannelId::GetMM() const {
     return GetField(kMMegaMSB, kMMegaLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetMM(int val) {
+void CP::TTPCChannelId::SetMM(int val) {
     SetField(val,kMMegaMSB, kMMegaLSB);
 }
 
 //----------------------------------------------------------------------
-const UInt_t ND::TTPCChannelId::GetMMChannel() const {
+const UInt_t CP::TTPCChannelId::GetMMChannel() const {
     return GetField(kMMChanMSB, kMMChanLSB);
 }
 
 //----------------------------------------------------------------------
-void ND::TTPCChannelId::SetMMChannel(int val) {
+void CP::TTPCChannelId::SetMMChannel(int val) {
     SetField(val, kMMChanMSB, kMMChanLSB);
 }
 #endif

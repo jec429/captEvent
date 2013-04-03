@@ -7,26 +7,26 @@
 #include "TReconShower.hxx"
 #include "TPIDState.hxx"
 
-namespace ND {
+namespace CP {
     class TReconPID;
 }
 
-/// Represent a ND::TReconCluster, ND::TReconShower, or ND::TReconTrack after
+/// Represent a CP::TReconCluster, CP::TReconShower, or CP::TReconTrack after
 /// it has had a particle identification attached.
-class ND::TReconPID: public ND::TReconBase {
+class CP::TReconPID: public CP::TReconBase {
 public: 
     TReconPID();
 
     /// copy constructor 
-    TReconPID(const ND::TReconPID& pid); 
+    TReconPID(const CP::TReconPID& pid); 
 
 
     virtual ~TReconPID();
 
     /// Constructors for promotion.  This converts tracks or showers into a
     /// PID with particle type "kNotSet".
-    TReconPID(ND::THandle<ND::TReconTrack> track);
-    TReconPID(ND::THandle<ND::TReconShower> shower);
+    TReconPID(CP::THandle<CP::TReconTrack> track);
+    TReconPID(CP::THandle<CP::TReconShower> shower);
 
     /// Define the particle types.  
     typedef enum {
@@ -140,12 +140,12 @@ public:
     /// Get the alternate hypotheses for this PID.  The primary PID (i.e. top
     /// level) contains the most likely hypothesis, and other possible
     /// interpretations are here.
-    const ND::TReconObjectContainer& GetAlternates() const {
+    const CP::TReconObjectContainer& GetAlternates() const {
         return fAlternatives;
     }
 
     /// Add an alternative hypothesis.
-    void AddAlternate(ND::THandle<TReconPID> alter) {
+    void AddAlternate(CP::THandle<TReconPID> alter) {
         fAlternatives.push_back(alter);
     }
 
@@ -155,7 +155,7 @@ public:
 
     /// Turn the ParticleId into a string.
     std::string ConvertParticleId() const;
-    static std::string ConvertParticleId(ND::TReconPID::ParticleId id);
+    static std::string ConvertParticleId(CP::TReconPID::ParticleId id);
 
     /// List the results of particle id.
     virtual void ls(Option_t* opt = "") const; 
@@ -163,12 +163,12 @@ public:
 private:
 
     ///  Copy constructor that does not copy alternates (used only internally)
-    TReconPID(const ND::TReconPID& pid,int);
+    TReconPID(const CP::TReconPID& pid,int);
 
     /// it copies all information in a TReconPID except the alternates to
     /// avoid infinite recursion in alternates. It is used by the copy
     /// constructors
-    void CopyTReconPID(const ND::TReconPID& pid);
+    void CopyTReconPID(const CP::TReconPID& pid);
 
 
     /// The particle id.
@@ -178,7 +178,7 @@ private:
     double fParticleWeight;
 
     /// The alternative hypotheses for this PID.
-    ND::TReconObjectContainer fAlternatives;
+    CP::TReconObjectContainer fAlternatives;
 
     ClassDef(TReconPID,1);
 };
