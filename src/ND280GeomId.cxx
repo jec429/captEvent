@@ -293,7 +293,7 @@ bool CP::GeomId::TPC::IsTPC(TGeometryId i) {
 CP::TGeometryId CP::GeomId::TPC::Module(int tpc) {
     TSettableGeometryId id;
     if (tpc<0 || tpc>2) {
-        ND280Warn("TPC module out of range [0,2]: " << tpc);
+        CaptWarn("TPC module out of range [0,2]: " << tpc);
         return id;
     }
     id.SetField(CP::GeomId::Def::kTPC,
@@ -345,15 +345,15 @@ bool CP::GeomId::TPC::IsTPC3(TGeometryId i) {
 CP::TGeometryId CP::GeomId::TPC::MicroMega(int tpc, int half, int mm) {
     TSettableGeometryId id;
     if (tpc<0 || tpc>2) {
-        ND280Warn("TPC module out of range [0,2]: " << tpc);
+        CaptWarn("TPC module out of range [0,2]: " << tpc);
         return id;
     }
     if (half<0 || half>1) {
-        ND280Warn("TPC half out of range [0,1]: " << half);
+        CaptWarn("TPC half out of range [0,1]: " << half);
         return id;
     }
     if (mm<0 || mm>11) {
-        ND280Warn("TPC micromega out of range [0,11]: " << mm);
+        CaptWarn("TPC micromega out of range [0,11]: " << mm);
         return id;
     }
     id.SetField(CP::GeomId::Def::kTPC,
@@ -398,19 +398,19 @@ bool CP::GeomId::TPC::IsMicroMega(CP::TGeometryId i) {
 CP::TGeometryId CP::GeomId::TPC::Pad(int tpc, int half, int mm, int pad) {
     TSettableGeometryId id;
     if (tpc<0 || tpc>2) {
-        ND280Warn("TPC module out of range [0,2]: " << tpc);
+        CaptWarn("TPC module out of range [0,2]: " << tpc);
         return id;
     }
     if (half<0 || half>1) {
-        ND280Warn("TPC half out of range [0,1]: " << half);
+        CaptWarn("TPC half out of range [0,1]: " << half);
         return id;
     }
     if (mm<0 || mm>11) {
-        ND280Warn("TPC micromega out of range [0,11]: " << mm);
+        CaptWarn("TPC micromega out of range [0,11]: " << mm);
         return id;
     }
     if (pad<0 || pad>1727) {
-        ND280Warn("TPC pad out of range [0,1727]: " << pad);
+        CaptWarn("TPC pad out of range [0,1727]: " << pad);
         return id;
     }
     id.SetField(CP::GeomId::Def::kTPC,
@@ -527,7 +527,7 @@ bool CP::GeomId::FGD::IsFGD(TGeometryId i) {
 CP::TGeometryId CP::GeomId::FGD::FGD(int fgd) {
     TSettableGeometryId id;
     if (fgd<0 || fgd>1) {
-        ND280Warn("FGD out of range [0,1]: " << fgd);
+        CaptWarn("FGD out of range [0,1]: " << fgd);
         return id;
     }
     id.SetField(CP::GeomId::Def::kFGD,
@@ -577,7 +577,7 @@ CP::TGeometryId CP::GeomId::FGD::Bar(int fgd,
                                      int bar) {
     TSettableGeometryId id;
     if (fgd<0 || fgd>1) {
-        ND280Warn("FGD out of range [0,1]: " << fgd);
+        CaptWarn("FGD out of range [0,1]: " << fgd);
         return id;
     }
     id.SetField(CP::GeomId::Def::kFGD,
@@ -686,7 +686,7 @@ CP::TGeometryId CP::GeomId::FGD::Layer(int fgd,
                                        int layer) {
     TSettableGeometryId id;
     if (fgd<0 || fgd>1) {
-        ND280Warn("FGD out of range [0,1]: " << fgd);
+        CaptWarn("FGD out of range [0,1]: " << fgd);
         return id;
     }
     id.SetField(CP::GeomId::Def::kFGD,
@@ -763,31 +763,31 @@ CP::TGeometryId CP::GeomId::ECal::Module(int ecal, int clam, int module) {
     TSettableGeometryId id;
     if (ecal == CP::GeomId::Def::kDSECal) {
         if (clam != 0) {
-            ND280Error("Downstream ECal with invalid clam: " << clam);
+            CaptError("Downstream ECal with invalid clam: " << clam);
             return id;
         }
         if (module != 0) {
-            ND280Error("Downstream ECal with invalid module: " << module);
+            CaptError("Downstream ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kTECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("Tracker ECal with invalid clam: " << clam);
+            CaptError("Tracker ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("Tracker ECal with invalid module: " << module);
+            CaptError("Tracker ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kPECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("P0D ECal with invalid clam: " << clam);
+            CaptError("P0D ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("P0D ECal with invalid module: " << module);
+            CaptError("P0D ECal with invalid module: " << module);
             return id;
         }
     }
@@ -815,26 +815,26 @@ CP::TGeometryId CP::GeomId::ECal::Container(int ecal, int clam, int module) {
     TSettableGeometryId id;
     if (ecal ==  CP::GeomId::Def::kTECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("Tracker ECal container with invalid clam: " << clam);
+            CaptError("Tracker ECal container with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("Tracker ECal container with invalid module: " << module);
+            CaptError("Tracker ECal container with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kPECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("P0D ECal container with invalid clam: " << clam);
+            CaptError("P0D ECal container with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("P0D ECal container with invalid module: " << module);
+            CaptError("P0D ECal container with invalid module: " << module);
             return id;
         }
     }
     else {
-        ND280Error("Container for non-contained ECal: " << ecal);
+        CaptError("Container for non-contained ECal: " << ecal);
         return id;
     }
     
@@ -901,31 +901,31 @@ CP::TGeometryId CP::GeomId::ECal::Layer(int ecal, int clam,
     TSettableGeometryId id;
     if (ecal == CP::GeomId::Def::kDSECal) {
         if (clam != 0) {
-            ND280Error("Downstream ECal with invalid clam: " << clam);
+            CaptError("Downstream ECal with invalid clam: " << clam);
             return id;
         }
         if (module != 0) {
-            ND280Error("Downstream ECal with invalid module: " << module);
+            CaptError("Downstream ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kTECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("Tracker ECal with invalid clam: " << clam);
+            CaptError("Tracker ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("Tracker ECal with invalid module: " << module);
+            CaptError("Tracker ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kPECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("P0D ECal with invalid clam: " << clam);
+            CaptError("P0D ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("P0D ECal with invalid module: " << module);
+            CaptError("P0D ECal with invalid module: " << module);
             return id;
         }
     }
@@ -1003,31 +1003,31 @@ CP::TGeometryId CP::GeomId::ECal::Radiator(int ecal, int clam,
     TSettableGeometryId id;
     if (ecal == CP::GeomId::Def::kDSECal) {
         if (clam != 0) {
-            ND280Error("Downstream ECal with invalid clam: " << clam);
+            CaptError("Downstream ECal with invalid clam: " << clam);
             return id;
         }
         if (module != 0) {
-            ND280Error("Downstream ECal with invalid module: " << module);
+            CaptError("Downstream ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kTECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("Tracker ECal with invalid clam: " << clam);
+            CaptError("Tracker ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("Tracker ECal with invalid module: " << module);
+            CaptError("Tracker ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kPECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("P0D ECal with invalid clam: " << clam);
+            CaptError("P0D ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("P0D ECal with invalid module: " << module);
+            CaptError("P0D ECal with invalid module: " << module);
             return id;
         }
     }
@@ -1105,31 +1105,31 @@ CP::TGeometryId CP::GeomId::ECal::Bar(int ecal, int clam,
     TSettableGeometryId id;
     if (ecal == CP::GeomId::Def::kDSECal) {
         if (clam != 0) {
-            ND280Error("Downstream ECal with invalid clam: " << clam);
+            CaptError("Downstream ECal with invalid clam: " << clam);
             return id;
         }
         if (module != 0) {
-            ND280Error("Downstream ECal with invalid module: " << module);
+            CaptError("Downstream ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kTECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("Tracker ECal with invalid clam: " << clam);
+            CaptError("Tracker ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("Tracker ECal with invalid module: " << module);
+            CaptError("Tracker ECal with invalid module: " << module);
             return id;
         }
     }
     else if (ecal == CP::GeomId::Def::kPECal) {
         if (clam != 0 && clam != 1) {
-            ND280Error("P0D ECal with invalid clam: " << clam);
+            CaptError("P0D ECal with invalid clam: " << clam);
             return id;
         }
         if (module<0 || 2<module) {
-            ND280Error("P0D ECal with invalid module: " << module);
+            CaptError("P0D ECal with invalid module: " << module);
             return id;
         }
     }

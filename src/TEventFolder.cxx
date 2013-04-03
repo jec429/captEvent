@@ -85,7 +85,7 @@ void CP::TEventFolder::SetCurrentEvent(CP::TEvent* event) {
             fCurrentEvent = event;
         }
     }
-    ND280Info("Current event changed from " << oldEvent
+    CaptInfo("Current event changed from " << oldEvent
               << " to " << fCurrentEvent);
 }
 
@@ -128,7 +128,7 @@ void CP::TEventFolder::RemoveEvent(CP::TEvent* event) {
 }
 
 void CP::TEventFolder::EventSelected(TObject* theObject) {
-    ND280Info("EventFolder had " << theObject->ClassName()  
+    CaptInfo("EventFolder had " << theObject->ClassName()  
               << " at " << theObject << " selected");
     CP::TEvent* event = dynamic_cast<CP::TEvent*>(theObject);
     SetCurrentEvent(event);

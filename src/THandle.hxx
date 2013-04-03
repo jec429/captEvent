@@ -248,13 +248,13 @@ namespace CP {
         T& operator*() const {
             TObject* object = GetPointerValue();
             if (!object) {
-                ND280Error("Dereferencing a NULL handle " << typeid(T).name());
+                CaptError("Dereferencing a NULL handle " << typeid(T).name());
                 
                 throw EHandleBadReference();
             }
             T* pointer = dynamic_cast<T*>(object);
             if (!pointer) {
-                ND280Error("Dereferencing with an invalid cast "
+                CaptError("Dereferencing with an invalid cast "
                            << typeid(T).name());
                 throw EHandleBadReference();
             }
@@ -265,12 +265,12 @@ namespace CP {
         T* operator->() const {
             TObject* object = GetPointerValue();
             if (!object) {
-                ND280Error("Referencing a NULL handle " << typeid(T).name());
+                CaptError("Referencing a NULL handle " << typeid(T).name());
                 throw EHandleBadReference();
             }
             T* pointer = dynamic_cast<T*>(object);
             if (!pointer) {
-                ND280Error("Referencing with an invalid cast"
+                CaptError("Referencing with an invalid cast"
                            << typeid(T).name());
                 throw EHandleBadReference();
             }

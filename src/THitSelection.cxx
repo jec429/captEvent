@@ -15,7 +15,7 @@ CP::THitSelection::~THitSelection() { }
 
 void CP::THitSelection::push_back(const CP::THandle<CP::THit>& hit) {
     if (!hit) {
-        ND280Severe("Attempting to add a NULL hit");
+        CaptSevere("Attempting to add a NULL hit");
         throw CP::EInvalidHit();
     }
     std::vector< CP::THandle<CP::THit> >::push_back(hit);

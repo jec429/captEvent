@@ -46,7 +46,7 @@ namespace CP {
 ///     -g                Force the geometry to be saved
 ///     -m                MIDAS input file
 ///     -n <cnt>          Only read <cnt> events [Default: 1]
-///     -r                ND280 ROOT file
+///     -r                Open a ROOT file
 ///     -s <cnt>          Skip <cnt> events
 ///     -t [bpTPEFecC]    Only accept these triggers:
 ///                          b  Beam triggers

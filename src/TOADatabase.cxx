@@ -78,37 +78,37 @@ namespace {
                 char c;
                 parser >> yr >> c >> mn >> c >> da;
                 if (parser.fail()) {
-                    ND280Error("Could not parse date: "<< line);
+                    CaptError("Could not parse date: "<< line);
                     continue;
                 }
                 parser >> hr >> c >> m;
                 if (parser.fail()) {
-                    ND280Error("Could not parse time: "<< line);
+                    CaptError("Could not parse time: "<< line);
                     continue;
                 }
                 parser >> std::hex >> hash0;
                 if (parser.fail()) {
-                    ND280Error("Could not parse hash: "<< line);
+                    CaptError("Could not parse hash: "<< line);
                     continue;
                 }
                 parser >> c >> std::hex >> hash1;
                 if (c != '-' || parser.fail()) {
-                    ND280Error("Could not parse hash: "<< line);
+                    CaptError("Could not parse hash: "<< line);
                     continue;
                 }
                 parser >> c >> std::hex >> hash2;
                 if (c != '-' || parser.fail()) {
-                    ND280Error("Could not parse hash: "<< line);
+                    CaptError("Could not parse hash: "<< line);
                     continue;
                 }
                 parser >> c >> std::hex >> hash3;
                 if (c != '-' || parser.fail()) {
-                    ND280Error("Could not parse hash: "<< line);
+                    CaptError("Could not parse hash: "<< line);
                     continue;
                 }
                 parser >> c >> std::hex >> hash4;
                 if (c != '-' || parser.fail()) {
-                    ND280Error("Could not parse hash: "<< line);
+                    CaptError("Could not parse hash: "<< line);
                     continue;
                 }
                 yr -= 1900;
@@ -123,9 +123,9 @@ namespace {
                                                        hash4)));
             }
             std::sort(fHashs.begin(),fHashs.end(),hashCompare);
-            ND280Verbose("Available Geometries:");
+            CaptVerbose("Available Geometries:");
             for (Hash::iterator h = fHashs.begin(); h != fHashs.end(); ++h) {
-                ND280Verbose("  First valid date: " 
+                CaptVerbose("  First valid date: " 
                              << TTimeStamp(h->first).AsString("c")
                              << " UTC -- Hash code: " 
                              << std::hex << std::setw(8) << std::showbase
@@ -172,7 +172,7 @@ CP::TOADatabase::TOADatabase() {
 
 CP::TOADatabase& CP::TOADatabase::Get(void) {
     if (!fOADatabase) {
-        ND280Verbose("Create a new CP::TOADatabase object");
+        CaptVerbose("Create a new CP::TOADatabase object");
         fOADatabase = new CP::TOADatabase;
     }
     return *fOADatabase;
@@ -277,20 +277,20 @@ CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
     GeomId().GetGeoManager();
     TObjArray* physicalNodes = gGeoManager->GetListOfPhysicalNodes();
     if (physicalNodes) {
-        ND280NamedInfo("Geometry","Clear existing physical nodes: " 
+        CaptNamedInfo("Geometry","Clear existing physical nodes: " 
                   << physicalNodes->GetEntries());
         gGeoManager->ClearPhysicalNodes(true);
     }
 
     if (fAlignmentLookup) {
         // Save the current geometry state.
-        ND280Info("Apply alignment to event");
+        CaptInfo("Apply alignment to event");
         gGeoManager->PushPath();
         
         // Let alignment code know that the alignment is starting.
         id = fAlignmentLookup->StartAlignment(event);
 
-        if (!id.Valid()) ND280NamedInfo("Geometry",
+        if (!id.Valid()) CaptNamedInfo("Geometry",
                                         "No alignment should be apply");
 
         gGeoManager->UnlockGeometry();
@@ -315,19 +315,19 @@ CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
         }
 
         if (alignmentCount > 0) {
-            ND280Info("Applied " << alignmentCount << " alignment matrices.");
+            CaptInfo("Applied " << alignmentCount << " alignment matrices.");
         }
 
         gGeoManager->PopPath();
         gGeoManager->RefreshPhysicalNodes(true);
         
         if (id.Valid() && !alignmentCount) {
-            ND280Error("Invalid alignment applied to geometry");
+            CaptError("Invalid alignment applied to geometry");
             throw EBadAlignment();
         }
         
         if (!id.Valid() && alignmentCount) {
-            ND280Error("Invalid alignment applied to geometry");
+            CaptError("Invalid alignment applied to geometry");
             throw EBadAlignment();
         }
 
@@ -336,14 +336,14 @@ CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
     // There isn't an alignment id, so create one.  This is the hash of an
     // empty string.
     if (!id.Valid()) {
-        ND280NamedDebug("Geometry","No alignment id, so create an empty one");
+        CaptNamedDebug("Geometry","No alignment id, so create an empty one");
         TSHA1 sha;
         unsigned int message[5];
         if (sha.Result(message)) {
             id = TAlignmentId(message);
         }
         else {
-            ND280Error("SHA1 Calculation failed");
+            CaptError("SHA1 Calculation failed");
         }
     }
 

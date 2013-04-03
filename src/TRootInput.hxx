@@ -9,9 +9,9 @@
 class TTree;
 
 namespace CP {
-    EXCEPTION(END280Input,ECore);
-    EXCEPTION(ENoND280InputFile,END280Input);
-    EXCEPTION(ENoEvents,END280Input);
+    EXCEPTION(EInputFile,ECore);
+    EXCEPTION(EInputFileMissing,EInputFile);
+    EXCEPTION(ENoEvents,EInputFile);
 
     class TEvent;
     class TRootInput;
@@ -21,14 +21,13 @@ namespace CP {
 /// to see if the geometry is saved in the input file and reads it if
 /// it can.  This will only read files that were written using the
 /// TRootOutput class.  This will work with any file name, but the preferred
-/// file extension is [name].root (using this extension will help root
-/// identify this file as an ND280 event file).
+/// file extension is [name].root.
 class CP::TRootInput : public TVInputFile {
 public:
     /// Open an input file. 
     TRootInput(const char* fName, Option_t* option="", int compress = 1);
 
-    /// Use a TFile that was opened someplace else.  The ND280Input object
+    /// Use a TFile that was opened someplace else.  The TRootInput object
     /// takes ownership of the file.  This is particularly useful if the file
     /// has been openned using the static TFile::Open method.  This method
     /// returns a pointer to a TFile derived class that is appropriate to the

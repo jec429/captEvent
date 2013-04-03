@@ -12,7 +12,7 @@ CP::TData::~TData() { }
 
 void CP::TData::AddDatum(CP::TDatum* val, const char* name) {
     if (!val) {
-        ND280Severe("Datum pointer has null value");
+        CaptSevere("Datum pointer has null value");
         throw EBadInsertion();
     }
     if (name) val->SetName(name);
@@ -26,7 +26,7 @@ void CP::TData::AddDatum(CP::THandle<CP::TDatum> handle, const char* name) {
     // Make sure that handle isn't holding an object that already belongs
     // in the event.
     if (handle->GetParentDatum()) {
-        ND280Severe("Datum appears to have already been inserted");
+        CaptSevere("Datum appears to have already been inserted");
         throw EBadInsertion();
     }
     handle.Release();

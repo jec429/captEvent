@@ -26,7 +26,7 @@ CP::TGeometryId CP::THit::GetGeomId(void) const {throw;}
 
 #ifdef USE_DEPRECATED_GetGeoNodeId
 int CP::THit::GetGeoNodeId(void) const {
-    ND280Error("Deprecated method being used");
+    CaptError("Deprecated method being used");
     CP::TOADatabase::Get().Geometry();
     gGeoManager->PushPath();
     TOADatabase::Get().GeomId().CdId(GetGeomId());

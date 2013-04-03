@@ -149,7 +149,7 @@ namespace {
         event.AddFit(result);
 
         /// Create an CP::TAlgorithmResult with reconstruction objects.
-        ND280Debug("Create Recon Object");
+        CaptDebug("Create Recon Object");
         result = new CP::TAlgorithmResult("reconResult",
                                           "Test Recon Object Result");
         CP::TReconObjectContainer* recObjs
@@ -199,7 +199,7 @@ namespace tut {
                         CP::TEvent* event = new CP::TEvent();
                         event->SetRunId(1);
                         event->SetEventId(i);
-                        ND280Trace("Write event");
+                        CaptTrace("Write event");
                         outputEvents.push_back(event);
                         FillEvent(*event);
                         output->WriteEvent(*event);
@@ -209,8 +209,8 @@ namespace tut {
                 }
             }
             catch (std::exception& e) {
-                ND280Error("Error writing output file");
-                ND280Error("exception: " << e.what());
+                CaptError("Error writing output file");
+                CaptError("exception: " << e.what());
                 return;
             }
             // Read the same events from the file and save them in another
@@ -222,7 +222,7 @@ namespace tut {
                     for (CP::TEvent* event = input->FirstEvent();
                          !input->EndOfFile();
                          event = input->NextEvent()) {
-                        ND280Trace("Read event");
+                        CaptTrace("Read event");
                         inputEvents.push_back(event);
                     }
                     input->Close();
@@ -230,8 +230,8 @@ namespace tut {
                 }
             }
             catch (std::exception& e) {
-                ND280Error("Error reading input file");
-                ND280Error("exception: " << e.what());
+                CaptError("Error reading input file");
+                CaptError("exception: " << e.what());
                 return;
             }
         }

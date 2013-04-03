@@ -36,7 +36,7 @@ public:
             event.ls(fLSOption.c_str());
         }
         if (fPrintList) {
-            ND280Log("Event " << event.GetContext());
+            CaptLog("Event " << event.GetContext());
         }
         return true;
     }

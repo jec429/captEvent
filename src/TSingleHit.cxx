@@ -214,19 +214,19 @@ void CP::TSingleHit::Initialize(void) {
         fInitialized = true;
     }
     catch (std::exception& e) {
-        ND280Severe("TSingleHit Exception: " << e.what());
+        CaptSevere("TSingleHit Exception: " << e.what());
         return;
     }
     catch (...) {
         // Just don't crash!
-        ND280Severe("TSingleHit Exception: unknown");
+        CaptSevere("TSingleHit Exception: unknown");
         return;
     }
   
 #ifdef TSINGLE_HIT_SAVE_POSITION
     if (origPos.Mag()>1*unit::mm
         && (fPosition-origPos).Mag()>1*unit::mm) {
-        ND280Error("Position and node position mismatch"
+        CaptError("Position and node position mismatch"
                    << std::endl
                    << "  Geometry Id " << GetGeomId().AsInt() << std::endl
                    << "  Saved Position is " 

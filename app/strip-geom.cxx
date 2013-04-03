@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
                 overlap->PrintInfo();
             }
             if (count > 0) {
-                ND280Error("Geometry has overlaps");
+                CaptError("Geometry has overlaps");
                 std::exit(1);
             }
         }
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
                 overlap->PrintInfo();
             }
             if (count > 0) {
-                ND280Error("Geometry has overlaps");
+                CaptError("Geometry has overlaps");
                 std::exit(1);
             }
         }

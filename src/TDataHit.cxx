@@ -54,14 +54,14 @@ void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
                 }
                 else if (fChannelId != digit->GetChannelId()
                          && digit->GetChannelId().AsUInt() != 0) {
-                    ND280Error("Hit channel id disagrees with digit proxy");
+                    CaptError("Hit channel id disagrees with digit proxy");
                 }
             }
         }
         catch (...) {}
     }
     else if (fChannelId.AsUInt() == 0) {
-        ND280Error("Invalid digit used to create hit."
+        CaptError("Invalid digit used to create hit."
                    "  Use SetChannelId to set channel before SetDigit.");
     }
 }

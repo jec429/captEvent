@@ -6,7 +6,7 @@ CP::TEventLoopFunction::TEventLoopFunction() {}
 CP::TEventLoopFunction::~TEventLoopFunction() {}
 
 bool CP::TEventLoopFunction::operator () (TEvent& event) {
-    ND280Warn("Event loop without processing operator " 
+    CaptWarn("Event loop without processing operator " 
               << event.GetName());
     return true;
 }
@@ -28,6 +28,6 @@ void CP::TEventLoopFunction::Usage(void) {}
 
 bool CP::TEventLoopFunction::SetOption(std::string option,
                                             std::string value) {
-    ND280Warn("Empty set option called with " << option << "=" << value);
+    CaptWarn("Empty set option called with " << option << "=" << value);
     return false;
 }

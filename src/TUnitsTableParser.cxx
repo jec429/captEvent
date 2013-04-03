@@ -138,14 +138,14 @@ std::string CP::TUnitsTableParser::ConvertWithUnit(std::string input) {
     std::istringstream line(input);
     if (!(line >> value >> unit)) {
         PrintListOfUnits();
-        ND280Error("Badly formatted input string.");
+        CaptError("Badly formatted input string.");
         std::exit(1);
     }
   
     // Check if requested unit is in map.
     if (units.find(unit) == units.end()) {
         PrintListOfUnits();
-        ND280Error("CP::TUnitsTableParser: requested unit '"
+        CaptError("CP::TUnitsTableParser: requested unit '"
                    << unit << "' not found.");
         std::exit(1);
     }

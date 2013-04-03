@@ -41,7 +41,7 @@ CP::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb,
                                  UInt_t afterChip, UInt_t afterChannel) {
 
     if (subDet != CP::TChannelId::kFGD) {
-        ND280Severe("Invalid sub-detector field: " << subDet);
+        CaptSevere("Invalid sub-detector field: " << subDet);
     }
 
     SetGuardBit();
@@ -67,7 +67,7 @@ CP::TFGDChannelId::TFGDChannelId(UInt_t subDet, UInt_t minicrate, UInt_t feb,
     }
 
     if (subDet != CP::TChannelId::kFGD) {
-        ND280Severe("Invalid sub-detector field: " << subDet);
+        CaptSevere("Invalid sub-detector field: " << subDet);
     }
 
     SetGuardBit();

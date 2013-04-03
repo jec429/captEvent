@@ -43,7 +43,7 @@ std::string CP::TG4TrajectoryPoint::GetVolumeName(void) const {
         gGeoManager->PopPath();
     }
     catch (...) {
-        ND280Trace("Geometry not found");
+        CaptTrace("Geometry not found");
     }
     return path;
 }

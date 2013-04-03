@@ -87,13 +87,13 @@ public:
     virtual void push_back(const CP::THandle<CP::TReconNode>& node) {
         //CP::THandle<CP::TReconBase> obj = node->GetObject();
         //if (!obj) {
-        //    ND280Severe("Node added to a TReconNodeContainer"
+        //    CaptSevere("Node added to a TReconNodeContainer"
         //                " without an associated recon object");
         //    throw EObjectEmpty();
         //}
         //std::vector< CP::THandle<CP::TReconNode> >::push_back(node);
 
-        ND280Error("Never directly call TReconNodeContainer::push_back()");
+        CaptError("Never directly call TReconNodeContainer::push_back()");
         throw std::exception();
     }
 
@@ -124,7 +124,7 @@ namespace CP {
                 CP::THandle<T> n(node->GetState());
                 // Check that the state handle is valid (correct state type)
                 if (!n) {
-                    ND280Severe("Wrong type of state being added to a "
+                    CaptSevere("Wrong type of state being added to a "
                                 "TReconNodeContainer");
                     throw EWrongStateType();
                 }
@@ -132,7 +132,7 @@ namespace CP {
 
             CP::THandle<CP::TReconBase> obj = node->GetObject();
             if (!obj) {
-                ND280Severe("Node added to a TReconNodeContainer"
+                CaptSevere("Node added to a TReconNodeContainer"
                             " without an associated recon object");
                 throw EObjectEmpty();
             }

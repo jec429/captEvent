@@ -19,7 +19,7 @@ CP::TG4PrimaryParticle::~TG4PrimaryParticle() {}
 const TParticlePDG* CP::TG4PrimaryParticle::GetParticle(void) const {
     TParticlePDG* particle = TDatabasePDG::Instance()->GetParticle(fPDGCode);
     if (!particle) {
-        ND280Log("TG4PrimaryParticle:: Warning -- Undefined PDG code: "
+        CaptLog("TG4PrimaryParticle:: Warning -- Undefined PDG code: "
                  << fPDGCode << " [RETURNING NULL]");
     }
     return particle;

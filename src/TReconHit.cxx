@@ -128,7 +128,7 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2) {
     // Check that the hits are on the same bar
     if (hit1->GetGeomId() != hit2->GetGeomId()){
-        ND280Error("TReconHits can only be created from hits"
+        CaptError("TReconHits can only be created from hits"
                    " with the same geometrical ID");
         throw EReconHitIllegal();
     }  
@@ -143,7 +143,7 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
 void CP::TWritableReconHit::AddHit(CP::THandle<CP::THit> hit) {
     // Check that the hits are on the same bar
     if (fGeomId != hit->GetGeomId()){
-        ND280Error("TReconHits can only be created from hits"
+        CaptError("TReconHits can only be created from hits"
                    " with the same geometrical ID");
         throw EReconHitIllegal();
     }  

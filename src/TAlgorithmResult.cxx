@@ -62,7 +62,7 @@ void CP::TAlgorithmResult::AddResultsContainer(
 void CP::TAlgorithmResult::SetDefaultResultsContainer(const char* name) {
     std::string trackName(name);
     if (trackName == "results") {
-        ND280Severe("Illegal TReconObjectContainer name: " << name );
+        CaptSevere("Illegal TReconObjectContainer name: " << name );
         throw EIllegalRecObjContainerName();
     }
 
@@ -92,7 +92,7 @@ void CP::TAlgorithmResult::AddHitSelection(CP::THitSelection* hits) {
 void CP::TAlgorithmResult::SetDefaultHitSelection(const char* name) {
     std::string hitName(name);
     if (hitName == "hits") {
-        ND280Severe("Illegal hit name " << name);
+        CaptSevere("Illegal hit name " << name);
         throw EIllegalHitSelectionName();
     }
 

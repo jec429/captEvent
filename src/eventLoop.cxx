@@ -79,7 +79,7 @@ namespace {
         std::cout << "    -q                Decrease the verbosity"
                   << std::endl;
 
-        std::cout << "    -r                ND280 ROOT file"
+        std::cout << "    -r                Open a ROOT file"
                   << std::endl;
 
         std::cout << "    -R <override>     Name of an run-time parameter "
@@ -331,15 +331,15 @@ int CP::eventLoop(int argc, char** argv,
     }
     else if (logLevel == 1) {
         TCaptLog::SetLogLevel(TCaptLog::LogLevel);
-        ND280Log("Set log level to LogLevel");
+        CaptLog("Set log level to LogLevel");
     }
     else if (logLevel == 2) {
         TCaptLog::SetLogLevel(TCaptLog::InfoLevel);
-        ND280Info("Set log level to InfoLevel");
+        CaptInfo("Set log level to InfoLevel");
     }
     else if (logLevel >= 3) {
         TCaptLog::SetLogLevel(TCaptLog::VerboseLevel);
-        ND280Verbose("Set log level to VerboseLevel");
+        CaptVerbose("Set log level to VerboseLevel");
     }
     
     for (std::map<std::string,CP::TCaptLog::LogPriority>::iterator i 
@@ -351,15 +351,15 @@ int CP::eventLoop(int argc, char** argv,
          
     if (debugLevel == 1) {
         TCaptLog::SetDebugLevel(TCaptLog::WarnLevel);
-        ND280Warn("Set debug level to WarnLevel");
+        CaptWarn("Set debug level to WarnLevel");
     }
     else if (debugLevel == 2) {
         TCaptLog::SetDebugLevel(TCaptLog::DebugLevel);
-        ND280Debug("Set debug level to DebugLevel");
+        CaptDebug("Set debug level to DebugLevel");
     }
     else if (debugLevel >= 2) {
         TCaptLog::SetDebugLevel(TCaptLog::TraceLevel);
-        ND280Trace("Set debug level to TraceLevel");
+        CaptTrace("Set debug level to TraceLevel");
     }
 
     for (std::map<std::string,CP::TCaptLog::ErrorPriority>::iterator i 
@@ -473,10 +473,10 @@ int CP::eventLoop(int argc, char** argv,
                                 ->WriteGeometry(TOADatabase::Get().Geometry());
                         }
                         catch (ENoGeometry) {
-                            ND280Severe("Geometry not saved in output");
+                            CaptSevere("Geometry not saved in output");
                         }
                         catch (EOADatabase) {
-                            ND280Severe("Geometry not saved in output");
+                            CaptSevere("Geometry not saved in output");
                         }
                     }
                 }
@@ -489,7 +489,7 @@ int CP::eventLoop(int argc, char** argv,
                 event.reset(NULL);
                 if (!CleanHandleRegistry()) {
                     DumpHandleRegistry();
-                    std::cout << "WARNING: (ND280) Memory Leak in "
+                    std::cout << "WARNING: Memory Leak in "
                               << std::endl;
                     std::cout << "    File(event,run): " << fileName 
                               << ":(" 
@@ -502,7 +502,7 @@ int CP::eventLoop(int argc, char** argv,
                     if (nextOutput - totalRead > 1000) {
                         nextOutput = totalRead + 1000;
                     }
-                    ND280Log("Events Processed: " << totalRead);
+                    CaptLog("Events Processed: " << totalRead);
                 }
 
                 // Check to see if we have read enough events.
@@ -511,7 +511,7 @@ int CP::eventLoop(int argc, char** argv,
             
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: (ND280) Memory Leak after finishing "
+                std::cout << "WARNING: Memory Leak after finishing "
                           << std::endl;
                 std::cout << "       " << fileName << std::endl;
             }
@@ -521,12 +521,12 @@ int CP::eventLoop(int argc, char** argv,
             input->CloseFile();
         }
         catch (std::exception& except) {
-            std::cout << "ERROR: (ND280) Uncaught exception in " 
+            std::cout << "ERROR: Uncaught exception in " 
                       << fileName << std::endl;
             std::cout << "      " << except.what() << std::endl;
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: (ND280) Memory Leak after finishing "
+                std::cout << "WARNING: Memory Leak after finishing "
                           << std::endl;
                 std::cout << "       " << fileName << std::endl;
             }
@@ -535,11 +535,11 @@ int CP::eventLoop(int argc, char** argv,
         }
         catch (...) {
             // Don't crash on an error, but try to go to the next file.
-            std::cout << "ERROR: (ND280) Uncaught exception in " 
+            std::cout << "ERROR: Uncaught exception in " 
                       << fileName << std::endl;
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: (ND280) Memory Leak after finishing "
+                std::cout << "WARNING: Memory Leak after finishing "
                           << std::endl;
                 std::cout << "       " << fileName << std::endl;
             }
@@ -573,7 +573,7 @@ int CP::eventLoop(int argc, char** argv,
     }
 
     if (exitStatus > 0) {
-        ND280Error("Terminating with non-zero exit status.");
+        CaptError("Terminating with non-zero exit status.");
         std::exit(exitStatus);
     }
 

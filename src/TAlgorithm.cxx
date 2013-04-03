@@ -69,7 +69,7 @@ CP::TAlgorithmTag CP::TAlgorithm::GetTag() const {
 CP::TEvent& CP::TAlgorithm::GetEvent() const {
     TEvent* event = CP::TEventFolder::GetCurrentEvent();
     if (!event) {
-        ND280Error("No current event");
+        CaptError("No current event");
         throw EAlgorithmWithoutEvent();
     }
     return *event;
@@ -81,7 +81,7 @@ TGeoManager* CP::TAlgorithm::GetGeom() const {
         geom = CP::TOADatabase::Get().Geometry();
     }
     catch (...) {
-        ND280Trace("Geometry not found");
+        CaptTrace("Geometry not found");
         geom = NULL;
     }
     return geom;

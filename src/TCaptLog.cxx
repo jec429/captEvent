@@ -54,7 +54,7 @@ void CP::TCaptLog::SetDebugStream(std::ostream* err) {
     std::ofstream* ofile = dynamic_cast<std::ofstream*>(err);
     if (ofile && !(ofile->is_open())) {
         fDebugStream = NULL;
-        ND280Severe("Debug stream is not open.");
+        CaptSevere("Debug stream is not open.");
     }
     *fDebugStream << std::endl
                   << "##################################################" 
@@ -88,7 +88,7 @@ void CP::TCaptLog::SetLogStream(std::ostream* log) {
     std::ofstream* ofile = dynamic_cast<std::ofstream*>(log);
     if (ofile && !(ofile->is_open())) {
         fLogStream = NULL;
-        ND280Severe("Log stream is not open.");
+        CaptSevere("Log stream is not open.");
     }
     *fLogStream << std::endl
                 << "##################################################" 
@@ -390,6 +390,6 @@ void CP::TCaptLog::Configure(const char* conf) {
     ReadConfigurationFile("./captainlog.config");
     if (conf) {
         bool success = ReadConfigurationFile(conf);
-        if (!success) ND280Log("ND280Log configuration file was not read.");
+        if (!success) CaptLog("CaptLog configuration file was not read.");
     }
 }

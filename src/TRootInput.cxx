@@ -18,13 +18,13 @@ CP::TRootInput::TRootInput(const char* name, Option_t* option, Int_t compress)
       fEventsRead(0), fAttached(false) {
     fFile = new TFile(name, option, "ROOT Input File", compress);
     if (!fFile || !fFile->IsOpen()) {
-        throw CP::ENoND280InputFile();
+        throw CP::EInputFileMissing();
     }
-    ND280Error("ROOT may produce warning messages about missing ShowMembers" 
+    CaptError("ROOT may produce warning messages about missing ShowMembers" 
                << " methods which may be ignored");
     IsAttached();
     CP::TOADatabase::Get().SetCurrentInputFile(fFile);
-    ND280Verbose("Input file " << fFile->GetName() << " is open");
+    CaptVerbose("Input file " << fFile->GetName() << " is open");
 }
 
 CP::TRootInput::TRootInput(TFile* file) 
@@ -33,11 +33,11 @@ CP::TRootInput::TRootInput(TFile* file)
     if (!fFile || !fFile->IsOpen()) {
         throw CP::ENoInputFile();
     }
-    ND280Error("ROOT may produce warning messages about missing ShowMembers" 
+    CaptError("ROOT may produce warning messages about missing ShowMembers" 
                << " methods which may be ignored");
     IsAttached();
     CP::TOADatabase::Get().SetCurrentInputFile(fFile);
-    ND280Verbose("Input file " << fFile->GetName() << " is open");
+    CaptVerbose("Input file " << fFile->GetName() << " is open");
 }
 
 CP::TRootInput::~TRootInput(void) {
@@ -64,7 +64,7 @@ bool CP::TRootInput::IsAttached(void) {
     // Make sure the **** global file pointer is pointing to this file.
     if (gFile != fFile) {
         if (gFile) {
-            ND280Debug("Changing current file from " << gFile->GetName()
+            CaptDebug("Changing current file from " << gFile->GetName()
                        << " to " << fFile->GetName() << " to read.");
         }
         fFile->cd();

@@ -21,20 +21,20 @@ CP::TGeometryId::~TGeometryId() {}
 void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     // Make sure the bit range is valid.
     if (msb<lsb || msb>31 || lsb <0) {
-        ND280Error("Invalid bit field range -- MSB: " << msb
+        CaptError("Invalid bit field range -- MSB: " << msb
                    << " LSB: " << lsb);
         throw EGeomIdMSBLSB();
     }
     // Make sure val is in range.
     int maxValue = (1 << (msb-lsb+1));
     if (val >= maxValue) {
-        ND280Error("Value out of range " << val 
+        CaptError("Value out of range " << val 
                    << " Bits in field " << msb-lsb+1 
                    << " Maximum value " << maxValue);
         throw EGeomIdOutOfRange();
     }
     if (val < 0) {
-        ND280Error("Value out of range " << val 
+        CaptError("Value out of range " << val 
                    << " -- Negative values are not allowed");
         throw EGeomIdOutOfRange();
     }
@@ -45,7 +45,7 @@ void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     // Shift the value and set the field.
     fGeometryId |= ((val << lsb)&mask);
     if (!IsValid()) {
-        ND280Error("Invalid id: " << fGeometryId);
+        CaptError("Invalid id: " << fGeometryId);
         throw EGeomIdInvalid();
     }
 }
@@ -114,7 +114,7 @@ std::string CP::TGeometryId::GetSubsystemName() const {
 TVector3 CP::TGeometryId::GetPosition() const {
     TVector3 position(0,0,0);
     if (!TOADatabase::Get().GeomId().GetPosition(*this,position)) {
-        ND280Warn("Position for invalid geometry id was requested");
+        CaptWarn("Position for invalid geometry id was requested");
         throw CP::EGeomIdInvalid();
     }
     return position;

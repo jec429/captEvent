@@ -15,7 +15,7 @@ CP::TRuntimeParameters::fTRuntimeParameters = NULL;
 
 CP::TRuntimeParameters::TRuntimeParameters() {
 
-    ND280Log("Initializing CP::TRuntimeParameters");
+    CaptLog("Initializing CP::TRuntimeParameters");
 
     // Build the set of units for Geant4.
     fUnitsTableParser = new CP::TUnitsTableParser();
@@ -43,7 +43,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
         fullFileName = dirName + "/" + fileName;
     }
   
-    ND280Info("Opening parameter file: " << fullFileName);
+    CaptInfo("Opening parameter file: " << fullFileName);
   
     std::ifstream inputFile(fullFileName.c_str());
   
@@ -51,14 +51,14 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
     if (!inputFile) {
         // Just return if 'tryFile' is specified.
         if (tryFile) {
-            ND280Info("CP::TRuntimeParameters::ReadInputFile "
+            CaptInfo("CP::TRuntimeParameters::ReadInputFile "
                       << "Cannot open input file '" 
                       << fullFileName << "'.");
             return;
         }
         else {
             // Otherwise, throw exception.
-            ND280Error("CP::TRuntimeParameters::ReadInputFile "
+            CaptError("CP::TRuntimeParameters::ReadInputFile "
                        << "Cannot open input file '" 
                        << fullFileName << "'.");
             throw CP::EBadParameterFile();
@@ -85,7 +85,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
                 inputState = 3;
             else {
         
-                ND280Error("CP::TRuntimeParameters::ReadInputFile "
+                CaptError("CP::TRuntimeParameters::ReadInputFile "
                            "Input file '" << fileName << "'. Last parameter '"
                            << parameterName << "'.\n" 
                            << "Cannot find symbol '='.\n"
@@ -111,7 +111,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
                 inputState = 0;
             }
             else if (inputString == "<") {
-                ND280Error("CP::TRuntimeParameters::ReadInputFile "
+                CaptError("CP::TRuntimeParameters::ReadInputFile "
                            << "Input file '" << fileName 
                            << "'. Last parameter '"
                            << parameterName << "'." << std::endl
@@ -135,7 +135,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
     }
   
     if (inputState != 0) {    
-        ND280Error("CP::TRuntimeParameters::ReadInputFile "
+        CaptError("CP::TRuntimeParameters::ReadInputFile "
                    << "Input file '" << fileName << "'. Last parameter '"
                    << parameterName << "'.\n"
                    << "Cannot find symbol '>' at the end of file.\n"
@@ -148,19 +148,19 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
 
 void CP::TRuntimeParameters::PrintListOfParameters() {
 
-    ND280Info("CP::TRuntimeParameters::PrintListOfParameters ");
-    ND280Info("List of parameters:");
+    CaptInfo("CP::TRuntimeParameters::PrintListOfParameters ");
+    CaptInfo("List of parameters:");
   
     for (Parameters::iterator i = fRuntimeParameters.begin();
          i != fRuntimeParameters.end(); ++i)
-        ND280Info("  " << (*i).first << " = " << (*i).second);
-    ND280Info("");
+        CaptInfo("  " << (*i).first << " = " << (*i).second);
+    CaptInfo("");
 
 }
 
 bool 
 CP::TRuntimeParameters::TryLoadingParametersFile(std::string parameterName) {
-    ND280Info("Trying to load parameters file for parameter: " 
+    CaptInfo("Trying to load parameters file for parameter: " 
               << parameterName);
 
     // Figure out the name of the package
@@ -190,7 +190,7 @@ CP::TRuntimeParameters::TryLoadingParametersFile(std::string parameterName) {
 
 
 void CP::TRuntimeParameters::ReadParamOverrideFile(std::string filename) {
-    ND280Log("Using TRuntimeParameters override file = " << filename);
+    CaptLog("Using TRuntimeParameters override file = " << filename);
 
     // Setting final input variable to true forces the parameters
     // that are loaded to be 'fixed'; ie immutable.
@@ -220,7 +220,7 @@ int CP::TRuntimeParameters::GetParameterI(std::string parameterName) {
         return atoi(fRuntimeParameters[parameterName].c_str());
     } 
     else {
-        ND280Error("CP::TRuntimeParameters::GetParameterAsInteger "
+        CaptError("CP::TRuntimeParameters::GetParameterAsInteger "
                    << "Cannot find parameter '" << parameterName << "'.");
         throw CP::ENonexistantParameter();
     }
@@ -235,7 +235,7 @@ double CP::TRuntimeParameters::GetParameterD(std::string parameterName) {
         return atof(fRuntimeParameters[parameterName].c_str());
     }
     else { 
-        ND280Error("CP::TRuntimeParameters::GetParameterAsDouble "
+        CaptError("CP::TRuntimeParameters::GetParameterAsDouble "
                    << "Cannot find parameter '" << parameterName << "'.");
         throw CP::ENonexistantParameter();
     }
@@ -250,7 +250,7 @@ std::string CP::TRuntimeParameters::GetParameterS(std::string parameterName) {
         return fRuntimeParameters[parameterName];
     }
     else {
-        ND280Error("CP::TRuntimeParameters::GetParameterAsString "
+        CaptError("CP::TRuntimeParameters::GetParameterAsString "
                    << "Cannot find parameter '" << parameterName << "'.");
         throw CP::ENonexistantParameter();
     }

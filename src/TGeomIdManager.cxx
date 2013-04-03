@@ -135,13 +135,13 @@ void CP::TGeomIdManager::ResetGeometry() {
     fGeomEventContext = TEventContext();
     SetGeoManager(gGeoManager);
     if (!gGeoManager) {
-        ND280NamedDebug("Geometry","ResetGeometry with invalid gGeoManager");
+        CaptNamedDebug("Geometry","ResetGeometry with invalid gGeoManager");
         return;
     }
 
     BuildHashCode();
     if (!GetHash().Valid()) {
-        ND280Error("Geometry reset, but no valid hash is available");
+        CaptError("Geometry reset, but no valid hash is available");
         return;
     }
 
@@ -158,7 +158,7 @@ bool CP::TGeomIdManager::LoadGeometry(TFile& file,
                                       const CP::TSHAHashValue& hc,
                                       const CP::TAlignmentId& align) {
     if (!file.IsOpen()) {
-        ND280Error("Geometry file not available");
+        CaptError("Geometry file not available");
         return false;
     }
     file.cd();
@@ -238,7 +238,7 @@ bool CP::TGeomIdManager::LoadGeometry(TFile& file,
     }
 
     std::string fileName(gSystem->BaseName(file.GetName()));
-    ND280Log("Geometry read from " << fileName);
+    CaptLog("Geometry read from " << fileName);
 
     // Check to see if the hash code should be taken from the file name.
     TSHAHashValue newCode;
@@ -265,7 +265,7 @@ CP::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
     std::string geometryName = oaEventRoot + "/" + oaEventConfig;
     void* dirp = gSystem->OpenDirectory(geometryName.c_str());
     if (!dirp) {
-        ND280Severe("Geometry directory not available:"
+        CaptSevere("Geometry directory not available:"
                     "  Run captain-get-geometry.");
         return result;
     }
@@ -306,12 +306,12 @@ CP::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
 bool CP::TGeomIdManager::ReadGeometry(const CP::TSHAHashValue& hc) {
     std::string inputName = FindGeometryFile(hc);
     if (inputName.empty()) {
-        ND280Severe("No geometry matchs hash: " << hc);
+        CaptSevere("No geometry matchs hash: " << hc);
         return false;
     }
     TFile* inputPtr(TFile::Open(inputName.c_str(),"OLD"));
     if (!inputPtr) {
-        ND280Error("Cannot open geometry file: " << inputName);
+        CaptError("Cannot open geometry file: " << inputName);
         return false;
     }
     std::auto_ptr<TFile> inFile(inputPtr);
@@ -321,7 +321,7 @@ bool CP::TGeomIdManager::ReadGeometry(const CP::TSHAHashValue& hc) {
 void CP::TGeomIdManager::SaveHashCode(const TSHAHashValue& hc) {
     std::ostringstream hash;
     if (!hc.Valid()) {
-        ND280Severe("Trying to save invalid hash code");
+        CaptSevere("Trying to save invalid hash code");
         return;
     }
 
@@ -353,11 +353,11 @@ bool CP::TGeomIdManager::GetHashCode(CP::TSHAHashValue& hc) const {
         return false;
     }
     if (name.size() < 58) {
-        ND280NamedDebug("Geometry","Name length wrong: " << name.size());
+        CaptNamedDebug("Geometry","Name length wrong: " << name.size());
         return false;
     }
     if (!ParseHashCode(name.substr(14,256),hc)) {
-        ND280NamedDebug("Geometry","Name not parsed: " << name.substr(14,256));
+        CaptNamedDebug("Geometry","Name not parsed: " << name.substr(14,256));
         return false;
     }
     return true;
@@ -369,12 +369,12 @@ void CP::TGeomIdManager::SaveAlignmentCode(const CP::TAlignmentId& aid) {
 
     // Make sure we are starting from a standarized name.
     if (name.find("ND280Geometry-")!=0) {
-        ND280Severe("Cannot save alignment id.  Invalid geometry name");
+        CaptSevere("Cannot save alignment id.  Invalid geometry name");
         return;
     }
 
     if (name.length()<58) {
-        ND280Severe("Cannot save alignment id.  No hash code saved");
+        CaptSevere("Cannot save alignment id.  No hash code saved");
         return;
     }
 
@@ -417,11 +417,11 @@ bool CP::TGeomIdManager::GetAlignmentCode(CP::TAlignmentId& aid) const {
         return false;
     }
     if (name.size() < 102) {
-        ND280NamedDebug("Geometry","Name length wrong: " << name.size());
+        CaptNamedDebug("Geometry","Name length wrong: " << name.size());
         return false;
     }
     if (!ParseHashCode(name.substr(59,256),aid)) {
-        ND280NamedDebug("Geometry","Name not parsed: " << name.substr(59,256));
+        CaptNamedDebug("Geometry","Name not parsed: " << name.substr(59,256));
         return false;
     }
     return true;
@@ -435,8 +435,8 @@ bool CP::TGeomIdManager::ParseHashCode(std::string name,
 
     int dash = parseName.find('-');
     if (dash != 8) {
-        ND280NamedDebug("Geometry",name);
-        ND280NamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
+        CaptNamedDebug("Geometry",name);
+        CaptNamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
         return false;
     }
     std::istringstream hash0(parseName.substr(0,8));
@@ -445,8 +445,8 @@ bool CP::TGeomIdManager::ParseHashCode(std::string name,
     parseName = parseName.substr(dash+1,100);
     dash = parseName.find('-');
     if (dash != 8) {
-        ND280NamedDebug("Geometry",name);
-        ND280NamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
+        CaptNamedDebug("Geometry",name);
+        CaptNamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
         return false;
     }
     std::istringstream hash1(parseName.substr(0,8));
@@ -455,8 +455,8 @@ bool CP::TGeomIdManager::ParseHashCode(std::string name,
     parseName = parseName.substr(dash+1,100);
     dash = parseName.find('-');
     if (dash != 8) {
-        ND280NamedDebug("Geometry",name);
-        ND280NamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
+        CaptNamedDebug("Geometry",name);
+        CaptNamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
         return false;
     }
     std::istringstream hash2(parseName.substr(0,8));
@@ -465,8 +465,8 @@ bool CP::TGeomIdManager::ParseHashCode(std::string name,
     parseName = parseName.substr(dash+1,100);
     dash = parseName.find('-');
     if (dash != 8) {
-        ND280NamedDebug("Geometry",name);
-        ND280NamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
+        CaptNamedDebug("Geometry",name);
+        CaptNamedDebug("Geometry","Bad code -- '-' in wrong place: " << dash);
         return false;
     }
     std::istringstream hash3(parseName.substr(0,8));
@@ -474,8 +474,8 @@ bool CP::TGeomIdManager::ParseHashCode(std::string name,
 
     parseName = parseName.substr(dash+1,100);
     if (parseName.size() < 8) {
-        ND280NamedDebug("Geometry",name);
-        ND280NamedDebug("Geometry","Bad code -- last value short: " 
+        CaptNamedDebug("Geometry",name);
+        CaptNamedDebug("Geometry","Bad code -- last value short: " 
                         << parseName.size());
         return false;
     }
@@ -531,13 +531,13 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
     TGeoVolume* top = gGeoManager->GetTopVolume();
     std::string topName(top->GetName());
     if (topName != "t2k") {
-        ND280Warn("Geometry top volume has changed to " << topName);
+        CaptWarn("Geometry top volume has changed to " << topName);
         top = gGeoManager->GetVolume("t2k");
         if (!top) {
-            ND280Error("No t2k volume in geometry");
+            CaptError("No t2k volume in geometry");
             return;
         }
-        ND280Warn("Resetting top volume to " << top->GetName());
+        CaptWarn("Resetting top volume to " << top->GetName());
         gGeoManager->SetTopVolume(top);
     }
         
@@ -551,7 +551,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
 
     // Create the geometry identifier finders.
     if (!fFinders.empty()) {
-        ND280Severe("fFinders vector should be empty");
+        CaptSevere("fFinders vector should be empty");
         fFinders.clear();
     }
     fFinders.push_back(new TP0DIdFinder());
@@ -576,7 +576,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
     // Restore the state.
     gGeoManager->PopPath();
 
-    ND280Log("Geometry identifier map with " 
+    CaptLog("Geometry identifier map with " 
              << fGeomIdMap.size() << " entries.");
 
 }
@@ -601,17 +601,17 @@ int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
             TGeometryId id;
             if ((*f)->Search(names, id)) {
                 if (!id.IsValid()) {
-                    ND280Error("Invalid TGeometryId from " 
+                    CaptError("Invalid TGeometryId from " 
                                << typeid((*f)).name());
                     continue;
                 }
                 if (id.GetSubsystemName() == "node") {
-                    ND280Error("Plain node TGeometryId from " 
+                    CaptError("Plain node TGeometryId from " 
                                << typeid((*f)).name());
                     continue;
                 }
                 if (id.GetSubsystemName() == "unknown") {
-                    ND280Error("Unknown TGeometryId from " 
+                    CaptError("Unknown TGeometryId from " 
                                << typeid((*f)).name());
                     continue;
                 }
@@ -619,7 +619,7 @@ int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
                 RootGeoKey rgk = MakeRootGeoKey();
                 GeomIdMap::iterator g = fGeomIdMap.find(gik);
                 if (g != fGeomIdMap.end()) {
-                    ND280Error("Duplicate id: " << gik);
+                    CaptError("Duplicate id: " << gik);
                     continue;
                 }
                 fGeomIdMap[gik] = rgk;
@@ -630,7 +630,7 @@ int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
             keepGoing &= ~mask;
         }
         catch (...) {
-            ND280Error("Unknown exception from finder");
+            CaptError("Unknown exception from finder");
         }
     }
 
@@ -663,19 +663,19 @@ void CP::TGeomIdManager::BuildHashCode() {
     // then don't recalculate.
     if (GetHashCode(fGeomIdHashCode)) return;
 
-    ND280NamedDebug("Geometry", "Rebuild hash code");
+    CaptNamedDebug("Geometry", "Rebuild hash code");
 
     // Set the top volume.
     TGeoVolume* top = gGeoManager->GetTopVolume();
     std::string topName(top->GetName());
     if (topName != "t2k") {
-        ND280Warn("Geometry top volume has changed to " << topName);
+        CaptWarn("Geometry top volume has changed to " << topName);
         top = gGeoManager->GetVolume("t2k");
         if (!top) {
-            ND280Error("No t2k volume in geometry");
+            CaptError("No t2k volume in geometry");
             return;
         }
-        ND280Warn("Resetting top volume to " << top->GetName());
+        CaptWarn("Resetting top volume to " << top->GetName());
         gGeoManager->SetTopVolume(top);
     }
         
@@ -694,11 +694,11 @@ void CP::TGeomIdManager::BuildHashCode() {
     unsigned int messageDigest[5];
     if (fSHA1.Result(messageDigest)) {
         fGeomIdHashCode = TSHAHashValue(messageDigest);
-        ND280NamedDebug("Geometry","Built hash code: " << fGeomIdHashCode);
+        CaptNamedDebug("Geometry","Built hash code: " << fGeomIdHashCode);
         SaveHashCode(fGeomIdHashCode);
     }
     else {
-        ND280Severe("TGeomIdManager:: Could not build hash code");
+        CaptSevere("TGeomIdManager:: Could not build hash code");
         fGeomIdHashCode = TSHAHashValue();
         SaveHashCode(fGeomIdHashCode);
     }
@@ -767,25 +767,25 @@ TGeoManager* CP::TGeomIdManager::GetGeoManager() {
 bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     // Check to see if the geometry has already been overloaded
     if (GetGeometryHashOverride().Equivalent(GetHash())) {
-        ND280NamedDebug("Geometry","Correct geometry override already loaded");
+        CaptNamedDebug("Geometry","Correct geometry override already loaded");
         return false;
     }
 
     // Check to see if we have a file to override the default geometry.
     if (!GetGeometryFileOverride().empty()
         || GetGeometryHashOverride().Valid()) {
-        ND280NamedDebug("Geometry","Override standard geometry");
+        CaptNamedDebug("Geometry","Override standard geometry");
         if (!GetGeometryFileOverride().empty()) {
             TFile *filePtr 
                 = TFile::Open(GetGeometryFileOverride().c_str(),"OLD");
             if (!filePtr) {
-                ND280NamedWarn("Geometry",
+                CaptNamedWarn("Geometry",
                                " Geometry override file does not exist.");
             }
             else {
                 std::auto_ptr<TFile> file(filePtr);        
                 if (LoadGeometry(*file,CP::TSHAHashValue())) {
-                    ND280NamedInfo("Geometry","Override geometry from "
+                    CaptNamedInfo("Geometry","Override geometry from "
                                    << file->GetName());
                     SetGeometryHashOverride(GetHash());
                     return true;
@@ -795,7 +795,7 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
 
         if (GetGeometryHashOverride().Valid()) {
             if (ReadGeometry(GetGeometryHashOverride())) {
-                ND280NamedInfo("Geometry","Override geometry hash " 
+                CaptNamedInfo("Geometry","Override geometry hash " 
                           << GetGeometryHashOverride());
                 SetGeometryHashOverride(GetHash());
                 return true;
@@ -813,16 +813,16 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     }
     TFile* currentInputFile = TOADatabase::Get().CurrentInputFile();
     if (!currentInputFile) {
-        ND280NamedWarn("Geometry",
+        CaptNamedWarn("Geometry",
                        " Input file not available to provide geometry");
     }
     else if (LoadGeometry(*currentInputFile,hc,aid)) {
-        ND280NamedInfo("Geometry",
+        CaptNamedInfo("Geometry",
                        "Geometry loaded from " << currentInputFile->GetName());
         return true;
     }
     else if (hc.Valid()) {
-        ND280NamedWarn("Geometry",
+        CaptNamedWarn("Geometry",
                        "Event needs geom w/ " << hc << ", but not in file");
     }
     
@@ -831,14 +831,14 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     // path. 
     hc = CP::TOADatabase::Get().FindEventGeometry(event);
     if (hc.Valid() && !GetHash().Equivalent(hc)) {
-        ND280NamedInfo("Geometry","Look for geometry with " << hc);
+        CaptNamedInfo("Geometry","Look for geometry with " << hc);
         if (ReadGeometry(hc)) {
-            ND280NamedInfo("Geometry","Geometry loaded with from database");
+            CaptNamedInfo("Geometry","Geometry loaded with from database");
             return true;
         }
     }
 
-    ND280NamedDebug("Geometry","Geometry not loaded (no valid method found)");
+    CaptNamedDebug("Geometry","Geometry not loaded (no valid method found)");
     return false;
 }
 
@@ -865,7 +865,7 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     if (geomLock.IsLocked()) {
         // The geometry is currently being accessed, so don't do any geometry
         // checks.
-        ND280NamedWarn("Geometry","Recursive Geometry Access: Lock count is "
+        CaptNamedWarn("Geometry","Recursive Geometry Access: Lock count is "
                        << geomLock.LockCount());
         return gGeoManager;
     }
@@ -884,10 +884,10 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     // changed, then reload the geometry.
     bool geometryChanging = false;
     if (CheckGeometry(event)) {
-        ND280NamedDebug("Geometry","Check for the correct geometry");
+        CaptNamedDebug("Geometry","Check for the correct geometry");
         if (FindAndLoadGeometry(event)) {
             geometryChanging = true;
-            ND280NamedDebug("Geometry", "Loaded geometry w/ hash: "
+            CaptNamedDebug("Geometry", "Loaded geometry w/ hash: "
                             << GetHash());
         }
     }
@@ -895,10 +895,10 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     if (event) {
         if (event->GetGeometryHash().Valid()
             && !event->GetGeometryHash().Equivalent(GetHash())) {
-            ND280NamedWarn("Geometry","Event geometry has been changed");
-            ND280NamedDebug("Geometry","    Old hash: " 
+            CaptNamedWarn("Geometry","Event geometry has been changed");
+            CaptNamedDebug("Geometry","    Old hash: " 
                             << event->GetGeometryHash());
-            ND280NamedDebug("Geometry","    New hash: " 
+            CaptNamedDebug("Geometry","    New hash: " 
                             << GetHash());
         }
         event->SetGeometryHash(GetHash());
@@ -913,10 +913,10 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     if (event) {
         if (event->GetAlignmentId().Valid()
             && !event->GetAlignmentId().Equivalent(GetAlignmentId())) {
-            ND280NamedWarn("Geometry","Event alignment has changed");
-            ND280NamedDebug("Geometry","    Old hash: " 
+            CaptNamedWarn("Geometry","Event alignment has changed");
+            CaptNamedDebug("Geometry","    Old hash: " 
                             << event->GetAlignmentId());
-            ND280NamedDebug("Geometry","    New hash: " 
+            CaptNamedDebug("Geometry","    New hash: " 
                             << GetAlignmentId());
         }
         event->SetAlignmentId(GetAlignmentId());
@@ -928,7 +928,7 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     // Make sure we have a valid geometry and return an exception if we do
     // not.
     if (!GetGeoManager()) {
-        ND280Error("No Geometry is available.");
+        CaptError("No Geometry is available.");
         throw ENoGeometry();
     }
 
@@ -937,7 +937,7 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     if (geometryChanging || !fGeomIdChangedHash.Equivalent(GetHash())) {
         fGeomIdChangedHash = GetHash();
         CP::TOADatabase::Get().ApplyGeometryCallbacks(event);
-        ND280Log("Loaded " << GetGeoManager()->GetName());
+        CaptLog("Loaded " << GetGeoManager()->GetName());
     }
 
     // Stash the current time stamp.
@@ -958,24 +958,24 @@ bool CP::TGeomIdManager::CheckGeometry(const CP::TEvent* const event) {
     // now, just print an error message, but this is actually a pretty serious
     // problem.  In the future, this will return false.
     if (!event) {
-        ND280Error("Invalid event: Using suspicious geometry.");
+        CaptError("Invalid event: Using suspicious geometry.");
 #define LOAD_DEFAULT_GEOMETRY
 #ifndef LOAD_DEFAULT_GEOMETRY
         return false;
 #else
-        ND280NamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TOADatabase::GeometryLookup class so that it is notified when the geometry changed.");
+        CaptNamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TOADatabase::GeometryLookup class so that it is notified when the geometry changed.");
 #endif
     }
     
     // If we don't have any geometry manager, then we have to look for one.
     if (!GetGeoManager()) {
-        ND280NamedInfo("Geometry","Reload Geometry -- Not currently loaded");
+        CaptNamedInfo("Geometry","Reload Geometry -- Not currently loaded");
         return true;
     }
 
     // The current geometry hash code isn't valid.
     if (!GetHash().Valid()) {
-        ND280NamedInfo("Geometry","Reload Geometry -- Current Hash Invalid");
+        CaptNamedInfo("Geometry","Reload Geometry -- Current Hash Invalid");
         return true;
     }
 
@@ -1022,16 +1022,16 @@ bool CP::TGeomIdManager::CheckAlignment(const CP::TEvent* const event) {
 
 void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
     if (!gGeoManager) {
-        ND280Severe("ApplyAlignment called with invalid geometry");
+        CaptSevere("ApplyAlignment called with invalid geometry");
         return;
     }
 
     if (!GetHash().Valid()) {
-        ND280Error("ApplyAlignment called with invalid geometry tables");
+        CaptError("ApplyAlignment called with invalid geometry tables");
         return;
     }
 
-    ND280NamedDebug("Geometry","Apply alignment to event");
+    CaptNamedDebug("Geometry","Apply alignment to event");
 
     fGeomIdAlignmentId = CP::TOADatabase::Get().ApplyAlignmentLookup(event);
 

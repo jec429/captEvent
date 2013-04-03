@@ -257,7 +257,7 @@ public:
     /// \endcode
     CP::THandle<CP::TReconState> GetState() const {
         if (!fState) {
-            ND280Error("TReconBase with NULL State: "
+            CaptError("TReconBase with NULL State: "
                        << "State must be created in the derived class.");
             throw EReconObject();
         }
@@ -274,7 +274,7 @@ public:
     ///   reconstruction objects that have been added to the fit.
     const CP::TReconNodeContainer& GetNodes() const {
         if (!fNodes) {
-            ND280Error("TReconBase without a TReconNodeContainer:"
+            CaptError("TReconBase without a TReconNodeContainer:"
                        << "Must be created in derived class constructor");
             throw EReconObject();
         }
@@ -285,7 +285,7 @@ public:
     /// be added.
     CP::TReconNodeContainer& GetNodes() {
         if (!fNodes) {
-            ND280Error("TReconBase without a TReconNodeContainer:"
+            CaptError("TReconBase without a TReconNodeContainer:"
                        << "Must be created in derived class constructor");
             throw EReconObject();
         }

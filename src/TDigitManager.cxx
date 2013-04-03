@@ -47,7 +47,7 @@ CP::TDigitManager::CacheDigits(CP::TEvent& event,
     if (!factory) return CP::THandle<CP::TDigitContainer>();
     digits = CP::THandle<CP::TDigitContainer>(factory->MakeDigits());
     if (!digits) {
-        ND280Warn("The " << factory->GetName() << " digit factory failed");
+        CaptWarn("The " << factory->GetName() << " digit factory failed");
         return CP::THandle<CP::TDigitContainer>();
     }
     digits->SetName(type.c_str());

@@ -6,139 +6,139 @@
 int main (int argc, char **argv) {
     CP::TCaptLog::Configure();
 
-    ND280Error("An Error Message " << "with a streamed integer " << 42);
-    ND280Log("A Log Message " << "with a streamed integer " << 42);
+    CaptError("An Error Message " << "with a streamed integer " << 42);
+    CaptLog("A Log Message " << "with a streamed integer " << 42);
     
     ////////////////////////////////////////////////////////
     // Test the debugging levels.
     ////////////////////////////////////////////////////////
 
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::SilentLevel);
-    ND280Error("An error message that should be printed");
+    CaptError("An error message that should be printed");
 
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::ErrorLevel);
-    ND280Error("An error message that should be printed");
-    ND280Severe("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptError("An error message that should be printed");
+    CaptSevere("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::SevereLevel);
-    ND280Severe("A severe message that should be printed");
-    ND280Warn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptSevere("A severe message that should be printed");
+    CaptWarn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::WarnLevel);
-    ND280Warn("A warn message that should be printed");
-    ND280Debug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptWarn("A warn message that should be printed");
+    CaptDebug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::DebugLevel);
-    ND280Debug("A debug message that should be printed");
-    ND280Trace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptDebug("A debug message that should be printed");
+    CaptTrace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
     
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::TraceLevel);
-    ND280Trace("A trace message that should be printed");
+    CaptTrace("A trace message that should be printed");
 
     ////////////////////////////////////////////////////////
     // Test the named debugging levels.
     ////////////////////////////////////////////////////////
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::SilentLevel);
-    ND280NamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::ErrorLevel);
-    ND280NamedError("test","An error message that should be printed");
-    ND280NamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedError("test","An error message that should be printed");
+    CaptNamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::SevereLevel);
-    ND280NamedSevere("test","A severe message that should be printed");
-    ND280NamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedSevere("test","A severe message that should be printed");
+    CaptNamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::WarnLevel);
-    ND280NamedWarn("test","A warn message that should be printed");
-    ND280NamedDebug("test","A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedWarn("test","A warn message that should be printed");
+    CaptNamedDebug("test","A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::DebugLevel);
-    ND280NamedDebug("test","A debug message that should be printed");
-    ND280NamedTrace("test","A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedDebug("test","A debug message that should be printed");
+    CaptNamedTrace("test","A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
     
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::TraceLevel);
-    ND280NamedTrace("test","A trace message that should be printed");
+    CaptNamedTrace("test","A trace message that should be printed");
 
     /////////////////////////////////////////////////////////
     // Test the logging levels
     /////////////////////////////////////////////////////////
 
     CP::TCaptLog::SetLogLevel(CP::TCaptLog::QuietLevel);
-    ND280Log("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptLog("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel(CP::TCaptLog::LogLevel);
-    ND280Log("A log message that should be printed");
-    ND280Info("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptLog("A log message that should be printed");
+    CaptInfo("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel(CP::TCaptLog::InfoLevel);
-    ND280Info("An info message that should be printed");
-    ND280Verbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptInfo("An info message that should be printed");
+    CaptVerbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel(CP::TCaptLog::VerboseLevel);
-    ND280Verbose("A verbose message that should be printed");
+    CaptVerbose("A verbose message that should be printed");
 
     /////////////////////////////////////////////////////////
     // Test the named logging levels
     /////////////////////////////////////////////////////////
 
     CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::QuietLevel);
-    ND280NamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::LogLevel);
-    ND280NamedLog("test","A log message that should be printed");
-    ND280NamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedLog("test","A log message that should be printed");
+    CaptNamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::InfoLevel);
-    ND280NamedInfo("test","An info message that should be printed");
-    ND280NamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedInfo("test","An info message that should be printed");
+    CaptNamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::VerboseLevel);
-    ND280NamedVerbose("test","A verbose message that should be printed");
+    CaptNamedVerbose("test","A verbose message that should be printed");
     
-    ND280NamedLog("test","A kilogram is " << unit::kg 
+    CaptNamedLog("test","A kilogram is " << unit::kg 
                    << " MeV s^2 m^-2 e_si^-1");
 
     //////////////////////////////////////////////////////////
     // Check the conditional compilation
 
-#ifdef ND280_ERROR_OUTPUT 
-#undef ND280_ERROR_OUTPUT 
+#ifdef CAPT_ERROR_OUTPUT 
+#undef CAPT_ERROR_OUTPUT 
 #endif
-#define ND280_ERROR_OUTPUT false
+#define CAPT_ERROR_OUTPUT false
     CP::TCaptLog::SetDebugLevel(CP::TCaptLog::TraceLevel);
-    ND280Error("AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Severe("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Warn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Debug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Trace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptError("AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptSevere("A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptWarn("A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptDebug("A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptTrace("A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetDebugLevel("test",CP::TCaptLog::TraceLevel);
-    ND280NamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedDebug("test","A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedTrace("test","A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedError("test","AN ERROR MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedSevere("test","A SEVERE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedWarn("test","A WARN MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedDebug("test","A DEBUG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedTrace("test","A TRACE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     /////////////////////////////////////////////////////////
     // Test the logging levels
     /////////////////////////////////////////////////////////
 
-#ifdef ND280_LOG_OUTPUT 
-#undef ND280_LOG_OUTPUT 
+#ifdef CAPT_LOG_OUTPUT 
+#undef CAPT_LOG_OUTPUT 
 #endif
-#define ND280_LOG_OUTPUT false
+#define CAPT_LOG_OUTPUT false
 
     CP::TCaptLog::SetLogLevel(CP::TCaptLog::VerboseLevel);
-    ND280Log("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Info("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280Verbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptLog("A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptInfo("AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptVerbose("A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     CP::TCaptLog::SetLogLevel("test",CP::TCaptLog::VerboseLevel);
-    ND280NamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
-    ND280NamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedLog("test","A LOG MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedInfo("test","AN INFO MESSAGE THAT SHOULD NOT BE PRINTED");
+    CaptNamedVerbose("test","A VERBOSE MESSAGE THAT SHOULD NOT BE PRINTED");
 
     return 0;
 }

@@ -148,7 +148,7 @@ public:
         if (!t) {
             TObject* tmp = d->GetThis();
             if (!tmp) tmp = d;
-            ND280Warn(ClassName() << "::Get<" << T::Class_Name() 
+            CaptWarn(ClassName() << "::Get<" << T::Class_Name() 
                       << ">(" << name << "): Cannot convert from"
                       << " \"" << tmp->ClassName() << "\""
                       << " to \"" << T::Class_Name() << "\""
@@ -271,7 +271,7 @@ protected:
         if (!p) {
             // This might not work if T is not derived from a TObject,
             // but I think all will be well.
-            ND280Warn("TDatum::GetParent:Cannot convert a TDatum to " 
+            CaptWarn("TDatum::GetParent:Cannot convert a TDatum to " 
                       << T::Class_Name());
             throw EBadConversion();
         }

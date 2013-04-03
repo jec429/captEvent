@@ -92,7 +92,7 @@ CP::TReconPID::TReconPID(CP::THandle<CP::TReconTrack> track)
       CP::THandle<CP::TTrackState> tstate = (*in)->GetState();
       CP::THandle<CP::TReconBase> object = (*in)->GetObject();
       if (!tstate) {
-          ND280Error("Track node without track state");
+          CaptError("Track node without track state");
           continue;
       }
       CP::THandle<CP::TReconNode> node(new CP::TReconNode);
@@ -145,7 +145,7 @@ CP::TReconPID::TReconPID(CP::THandle<CP::TReconShower> shower)
           CP::THandle<CP::TShowerState> tstate = (*in)->GetState();
           CP::THandle<CP::TReconBase> object = (*in)->GetObject();
           if (!tstate) {
-              ND280Error("Shower node without shower state");
+              CaptError("Shower node without shower state");
               continue;
           }
           CP::THandle<CP::TReconNode> node(new CP::TReconNode);
@@ -160,7 +160,7 @@ CP::TReconPID::TReconPID(CP::THandle<CP::TReconShower> shower)
       CP::THandle<CP::TShowerState> tstate = shower->GetState();
       CP::THandle<CP::TReconBase> object = shower;
       if (!tstate) {
-          ND280Error("Shower node without shower state");
+          CaptError("Shower node without shower state");
           
       }
       else {

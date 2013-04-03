@@ -201,7 +201,7 @@ public:
         TDatum *d = operator[](num);
         T* t = dynamic_cast<T*>(d->GetThis());
         if (!t) {
-            ND280Warn("TDatum::Get<" << ClassName() 
+            CaptWarn("TDatum::Get<" << ClassName() 
                       << ">:Cannot convert class "
                       << ClassName()
                       << " to class " << T::Class_Name());

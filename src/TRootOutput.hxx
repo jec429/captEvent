@@ -16,19 +16,15 @@ namespace CP {
     class TRootOutput;
 
     /// Base class for output errors.
-    EXCEPTION(END280Output, ECore);
+    EXCEPTION(ERootOutput, ECore);
 
     /// An error occurred during WriteEvent.
-    EXCEPTION(END280OutputWriteFailed, END280Output);
+    EXCEPTION(ERootOutputWriteFailed, ERootOutput);
 }
-
-/// The preferred file name extension for ND280 event files.
-#define ROOT_OUTPUT_PREFERRED_EXTENSION ".event"
 
 /// Attach to a file so that the events can be written.  This can also write
 /// the geometry to the output file.  This will work with any file name, but
-/// the preferred file extension is [name].root (using this extension will
-/// help root identify this file as a ND280 event file).
+/// the preferred file extension is [name].root.
 class CP::TRootOutput : public TFile {
 public:
     /// Open a new output file.

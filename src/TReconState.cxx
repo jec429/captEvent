@@ -126,7 +126,7 @@ CP::TMReconState::TMReconState(TReconState* state): fThis(state) {}
 
 CP::TReconState& CP::TMReconState::GetThis() const {
     if (!fThis) {
-        ND280Error("Base pointer (fThis) is NULL");
+        CaptError("Base pointer (fThis) is NULL");
     }
     return *fThis;
 }

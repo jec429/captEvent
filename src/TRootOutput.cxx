@@ -24,7 +24,7 @@ CP::TRootOutput::TRootOutput(const char *fileName,
     : TFile(fileName, opt, "ROOT Output File", compress),
       fEventTree(NULL), fEventPointer(NULL), fAttached(false), 
       fEventsWritten(0), fGeometry(NULL) {
-    ND280Verbose("Open output file " << fileName);
+    CaptVerbose("Open output file " << fileName);
     IsAttached();
 }
 
@@ -36,28 +36,28 @@ bool CP::TRootOutput::IsAttached(void) {
     if (!IsOpen()) return false;
     if (gFile != this) {
         if (gFile) {
-            ND280Debug("Changing current file from " << gFile->GetName()
+            CaptDebug("Changing current file from " << gFile->GetName()
                        << " to " << this->GetName() << " to write.");
         }
         cd();
     }
     if (fAttached) return true;
-    ND280Info("Attaching to " << this->GetName());
+    CaptInfo("Attaching to " << this->GetName());
     
     //////////////
     // Hmm... Not attached, so make sure it is attached.
     // Make sure the object is attached
     fEventPointer = NULL;
     if (!fEventTree) {
-        ND280Trace("Create a new tree");
+        CaptTrace("Create a new tree");
         fEventTree = new TTree("ND280Events", "ND280 Event Tree");
     }
-    ND280Trace("Add the branch pointer");
+    CaptTrace("Add the branch pointer");
     fEventTree->Branch("ND280Event","CP::TEvent",&fEventPointer,128000,0);
     fEventPointer = NULL;       // Make sure it's empty.
     fAttached = true;
 
-    ND280Trace("Attached");
+    CaptTrace("Attached");
     return fAttached;
 }
 
@@ -69,8 +69,8 @@ void CP::TRootOutput::WriteEvent(CP::TEvent& event) {
     fEventPointer = &event;
     // Put the event into the tree;
     if (fEventTree->Fill()<0) {
-        ND280Error("Error while writing an event");
-        throw CP::END280OutputWriteFailed();
+        CaptError("Error while writing an event");
+        throw CP::ERootOutputWriteFailed();
     }
     // Empty out the fEventPointer so that it can't be written twice.
     fEventPointer = NULL;
@@ -84,11 +84,11 @@ void CP::TRootOutput::WriteGeometry(TGeoManager* geom) {
     if (key) return;
     fGeometry = geom;
     if (geom->Write()<1) {
-        ND280Error("Error while writing geometry");
-        throw CP::END280OutputWriteFailed();
+        CaptError("Error while writing geometry");
+        throw CP::ERootOutputWriteFailed();
     }
     Flush();
-    ND280Log("** Geometry " << geom->GetName() << " written to output file ");
+    CaptLog("** Geometry " << geom->GetName() << " written to output file ");
 }
 
 bool CP::TRootOutput::GeometryWritten(void) {

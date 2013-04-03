@@ -47,7 +47,7 @@ CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
 bool CP::CleanHandleRegistry(bool) {
     bool result = (gHandleBaseCount==gLastHandleCount);
     if (!result) {
-        ND280Log("CleanHandleRegistry::"
+        CaptLog("CleanHandleRegistry::"
                  << " Handle Count: " << gHandleBaseCount 
                  << " Change: " << gHandleBaseCount - gLastHandleCount);
         gLastHandleCount = gHandleBaseCount;
@@ -58,21 +58,21 @@ bool CP::CleanHandleRegistry(bool) {
 void CP::DumpHandleRegistry() {
     if (!gHandleSet) return;
     if (gHandleSet->empty()) return;
-    ND280Log("Existing handles: " << gHandleSet->size());
+    CaptLog("Existing handles: " << gHandleSet->size());
     CP::TCaptLog::IncreaseIndentation();
     for (std::set<CP::THandleBase*>::iterator h = gHandleSet->begin();
          h != gHandleSet->end();
          ++h) {
         CP::THandleBase* handleBase = *h;
-        ND280Log(std::hex << "(0x" << handleBase << ")");
+        CaptLog(std::hex << "(0x" << handleBase << ")");
         if (handleBase) {
             CP::TCaptLog::IncreaseIndentation();
             TObject *object = handleBase->GetObject();
-            ND280Log(std::hex << "-> (0x" << object << ")");
+            CaptLog(std::hex << "-> (0x" << object << ")");
             if (object) {
                 CP::TCaptLog::IncreaseIndentation();
-                ND280Log("Class: " << object->ClassName());
-                ND280Log("Name: " << object->GetName());
+                CaptLog("Class: " << object->ClassName());
+                CaptLog("Name: " << object->GetName());
                 CP::TCaptLog::DecreaseIndentation();
                 if (CP::TCaptLog::GetDebugLevel()>CP::TCaptLog::ErrorLevel) {
                     object->ls();
@@ -86,11 +86,11 @@ void CP::DumpHandleRegistry() {
 
 void CP::EnableHandleRegistry(bool enable) {
     if (enable && !gHandleSet) {
-        ND280Log("Enable the handle registry");
+        CaptLog("Enable the handle registry");
         gHandleSet = new std::set<CP::THandleBase*>;
     }
     else { 
-        ND280Log("Disable the handle registry");
+        CaptLog("Disable the handle registry");
         delete gHandleSet;
         gHandleSet = NULL;
     }

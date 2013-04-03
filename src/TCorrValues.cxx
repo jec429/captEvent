@@ -50,7 +50,7 @@ CP::TCorrValues::TCorrValues(const TVectorT<float>& v,
     : fVector(v), fMatrix(v.GetNoElements()),
       fNDOF(0), fTypeHash(0), fHessian(NULL) {
     if (err.GetNoElements() != v.GetNoElements()) {
-        ND280Error("Mismatched number of elements");
+        CaptError("Mismatched number of elements");
         throw ECorrValuesConstructor();
     }
     for (int i = 0; i < GetDimensions(); ++i) {
@@ -63,11 +63,11 @@ CP::TCorrValues::TCorrValues(const TVectorT<float>& v,
     : fVector(v), fMatrix(cov),
       fNDOF(0), fTypeHash(0), fHessian(NULL) {
     if (cov.GetNcols() != fVector.GetNoElements()) {
-        ND280Error("Mismatch between element count and covariance columns.");
+        CaptError("Mismatch between element count and covariance columns.");
         throw ECorrValuesConstructor();
     }
     if (cov.GetNrows() != fVector.GetNoElements()) {
-        ND280Error("Mismatch between element count and covariance rows.");
+        CaptError("Mismatch between element count and covariance rows.");
         throw ECorrValuesConstructor();
     }
 }
@@ -85,11 +85,11 @@ void CP::TCorrValues::SetCovariance(const TMatrixTSym<float>& m) {
 
 void CP::TCorrValues::SetValue(int i, double v) {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -98,11 +98,11 @@ void CP::TCorrValues::SetValue(int i, double v) {
 
 double CP::TCorrValues::GetValue(int i) const {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -111,11 +111,11 @@ double CP::TCorrValues::GetValue(int i) const {
 
 void CP::TCorrValues::SetCovarianceValue(int i, int j, double v) {
     if (i<0 || j<0) {
-        ND280Error("Negative covariance index: (" << i << "," << j << ")");
+        CaptError("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i || GetDimensions()<=j) {
-        ND280Error("Negative covariance index: (" << i << "," << j << ")");
+        CaptError("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
     }
     fMatrix(i,j) = v;
@@ -127,11 +127,11 @@ void CP::TCorrValues::SetCovarianceValue(int i, int j, double v) {
 
 double CP::TCorrValues::GetCovarianceValue(int i, int j) const {
     if (i<0 || j<0) {
-        ND280Error("Negative covariance index: (" << i << "," << j << ")");
+        CaptError("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i || GetDimensions()<=j) {
-        ND280Error("Negative covariance index: (" << i << "," << j << ")");
+        CaptError("Negative covariance index: (" << i << "," << j << ")");
         throw ECorrValuesRange();
     }
     return fMatrix(i,j);
@@ -145,7 +145,7 @@ double CP::TCorrValues::GetUncertainty(int i) const {
 
 void CP::TCorrValues::SetValue(double v) {
     if (GetDimensions() != 1) {
-        ND280Error("Not 1 dimensional");
+        CaptError("Not 1 dimensional");
         throw ECorrValuesRange();
     }
     SetValue(0,v);
@@ -153,7 +153,7 @@ void CP::TCorrValues::SetValue(double v) {
 
 double CP::TCorrValues::GetValue() const {
     if (GetDimensions() != 1) {
-        ND280Error("Not 1 dimensional");
+        CaptError("Not 1 dimensional");
         throw ECorrValuesRange();
     }
     return GetValue(0);
@@ -161,7 +161,7 @@ double CP::TCorrValues::GetValue() const {
 
 void CP::TCorrValues::SetUncertainty(double v) {
     if (GetDimensions() != 1) {
-        ND280Error("Not 1 dimensional");
+        CaptError("Not 1 dimensional");
         throw ECorrValuesRange();
     }
     SetCovarianceValue(0,0,v*v);
@@ -169,7 +169,7 @@ void CP::TCorrValues::SetUncertainty(double v) {
 
 double CP::TCorrValues::GetUncertainty() const {
     if (GetDimensions() != 1) {
-        ND280Error("Not 1 dimensional");
+        CaptError("Not 1 dimensional");
         throw ECorrValuesRange();
     }
     return GetUncertainty(0);
@@ -226,11 +226,11 @@ void CP::TCorrValues::SetType(const char* type) {
 
 void CP::TCorrValues::SetFixed(int i) {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -242,11 +242,11 @@ void CP::TCorrValues::SetFixed(int i) {
 
 bool CP::TCorrValues::IsFixed(int i) const {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -256,11 +256,11 @@ bool CP::TCorrValues::IsFixed(int i) const {
 
 void CP::TCorrValues::SetFree(int i) {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -272,11 +272,11 @@ void CP::TCorrValues::SetFree(int i) {
 
 bool CP::TCorrValues::IsFree(int i) const {
     if (i<0) {
-        ND280Error("Negative element index: " << i);
+        CaptError("Negative element index: " << i);
         throw ECorrValuesRange();
     }
     if (GetDimensions()<=i) {
-        ND280Error("Out of bounds element index: " << i 
+        CaptError("Out of bounds element index: " << i 
                    << " (dim is " << GetDimensions() << ")");
         throw ECorrValuesRange();
     }
@@ -400,7 +400,7 @@ const CP::TCorrValues& CP::TCorrValues::operator =(const CP::TCorrValues&
 CP::TCorrValues operator +(const CP::TCorrValues& a, 
                            const CP::TCorrValues& b) {
     if (a.GetDimensions() != b.GetDimensions()) {
-        ND280Error("Dimensions mismatch: " 
+        CaptError("Dimensions mismatch: " 
                    << a.GetDimensions() << " != " << b.GetDimensions());
         throw CP::ECorrValuesRange();
     }
@@ -430,7 +430,7 @@ CP::TCorrValues operator +(const CP::TCorrValues& a, double b) {return b + a;}
 CP::TCorrValues operator -(const CP::TCorrValues& a, 
                            const CP::TCorrValues& b) {
     if (a.GetDimensions() != b.GetDimensions()) {
-        ND280Error("Dimensions mismatch: " 
+        CaptError("Dimensions mismatch: " 
                    << a.GetDimensions() << " != " << b.GetDimensions());
         throw CP::ECorrValuesRange();
     }
@@ -500,7 +500,7 @@ CP::TCorrValues operator /(double a, const CP::TCorrValues& x) {
 CP::TCorrValues operator *(const CP::TCorrValues& x, 
                            const CP::TCorrValues& y) {
     if (x.GetDimensions() != y.GetDimensions()) {
-        ND280Error("Dimensions mismatch: " 
+        CaptError("Dimensions mismatch: " 
                    << x.GetDimensions() << " != " << y.GetDimensions());
         throw CP::ECorrValuesRange();
     }

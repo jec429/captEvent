@@ -127,7 +127,7 @@ void CP::TDigitProxy::SetProxySalt(int salt) {
 
 void CP::TDigitProxy::SetProxyOffset(int off) {
     if (off & 0xFFFE0000u) off = 0x1FFFFu;
-    if (off == 0x1FFFFu) ND280Severe("Invalid proxy has been created.");
+    if (off == 0x1FFFFu) CaptSevere("Invalid proxy has been created.");
     fDigitSignature = (fDigitSignature & 0xFFFE0000u) | (off & 0x1FFFFu);
 }
 

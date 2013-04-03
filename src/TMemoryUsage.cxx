@@ -25,8 +25,8 @@ CP::TMemoryUsage::TMemoryUsage(): fEnabled(false) {}
 CP::TMemoryUsage::~TMemoryUsage() {}
 
 void CP::TMemoryUsage::Enable(bool enable) {
-    if (enable) ND280NamedInfo("MEM","Enabling logging of memory usage");
-    else ND280NamedInfo("MEM","Disabling logging of memory usage");
+    if (enable) CaptNamedInfo("MEM","Enabling logging of memory usage");
+    else CaptNamedInfo("MEM","Disabling logging of memory usage");
     fEnabled = enable;
 }
 
@@ -42,7 +42,7 @@ void CP::TMemoryUsage::Write(CP::TRootOutput* output) {
 
     if (output && output->IsOpen()) {
 
-        ND280NamedInfo("MEM","Writing memory usage histograms to file");
+        CaptNamedInfo("MEM","Writing memory usage histograms to file");
         output->cd();
         
         // Create the histograms we need.
@@ -83,8 +83,8 @@ void CP::TMemoryUsage::Write(CP::TRootOutput* output) {
                           fEventMemory.end(), 
                           CmpMemVirtual()))->fMemVirtual;
     
-    ND280NamedLog("MEM","Maximum resident memory usage: " 
+    CaptNamedLog("MEM","Maximum resident memory usage: " 
                   << (maxMemResident / (1024. * 1024.)) << " GB");
-    ND280NamedLog("MEM", "Maximum virtual memory usage:  " 
+    CaptNamedLog("MEM", "Maximum virtual memory usage:  " 
                   << (maxMemVirtual / (1024. * 1024.))  << " GB");
 }

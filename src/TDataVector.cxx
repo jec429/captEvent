@@ -135,7 +135,7 @@ void CP::TDataVector::InsertTemporary(CP::TDatum* val) {
 // be saved in fTemporary.
 void CP::TDataVector::AddTemporary(CP::TDatum* val, const char* name) {
     if (!val) {
-        ND280Severe("Datum pointer has null value");
+        CaptSevere("Datum pointer has null value");
         throw EBadInsertion();
     }
     if (name) val->SetName(name);
@@ -152,7 +152,7 @@ void CP::TDataVector::AddTemporary(CP::THandle<CP::TDatum> handle,
     // Make sure that handle isn't holding an object that already belongs
     // in the event.
     if (handle->GetParentDatum()) {
-        ND280Severe("Datum appears to have already been inserted");
+        CaptSevere("Datum appears to have already been inserted");
         throw EBadInsertion();
     }
     handle.Release();
