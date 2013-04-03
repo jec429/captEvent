@@ -53,7 +53,7 @@ bool CP::TRootOutput::IsAttached(void) {
         fEventTree = new TTree("EventTree", "ND280 Event Tree");
     }
     CaptTrace("Add the branch pointer");
-    fEventTree->Branch("ND280Event","CP::TEvent",&fEventPointer,128000,0);
+    fEventTree->Branch("Event","CP::TEvent",&fEventPointer,128000,0);
     fEventPointer = NULL;       // Make sure it's empty.
     fAttached = true;
 

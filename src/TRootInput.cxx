@@ -130,7 +130,7 @@ CP::TEvent* CP::TRootInput::ReadEvent(Int_t n) {
 
     // Set up for a new event structure to be allocated.
     fEventPointer = new CP::TEvent;
-    fEventTree->SetBranchAddress("ND280Event",&fEventPointer);
+    fEventTree->SetBranchAddress("Event",&fEventPointer);
 
     // Read the new event.
     int nBytes = fEventTree->GetEntry(fSequence);
