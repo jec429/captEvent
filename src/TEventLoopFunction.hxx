@@ -4,7 +4,6 @@
 #include "EoaCore.hxx"
 
 #include "TND280Event.hxx"
-#include "method_deprecated.hxx"
 
 namespace CP {
     class TEventLoopFunction;
@@ -142,16 +141,6 @@ public:
     /// body.  Therefore, the way to read this declaration is that "const"
     /// documents that the method *must* not change the value of the pointer.
     virtual void EndFile(TVInputFile *const);
-
-    /// Method has been deprecated and will be removed after v8r9.
-    /// User code should prefer the Finalize(CP::TND280Output*const) method.
-    /// This is called before a valid output file is being closed, but only if
-    /// the Finalize(CP::TND280Output*const) method is undefined in the user
-    /// code, and an output file is open.  If those conditions are met, then
-    /// it will be called once per open file.  If you want to have a finalized
-    /// method that is called even if there isn't an output file use the
-    /// Finalize(CP::TND280Output * const file) version.
-    virtual void Finalize(TND280Output& file) METHOD_DEPRECATED;
 
     /// Called after the last event has been processed, but before any open
     /// output files are closed.  This is called at least once, and will be

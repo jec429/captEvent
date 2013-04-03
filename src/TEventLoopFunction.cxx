@@ -22,14 +22,7 @@ void CP::TEventLoopFunction::BeginFile(TVInputFile *const) {}
 
 void CP::TEventLoopFunction::EndFile(TVInputFile *const) {}
 
-void CP::TEventLoopFunction::Finalize(TND280Output& value) {}
-
-void CP::TEventLoopFunction::Finalize(TND280Output * const value) {
-    // The user program didn't define a Finalize method.  Check to see if
-    // there is a valid output file, and if there is, try the old (bogus) form
-    // of Finalize in case the program hasn't been updated. 
-    if (value) Finalize(*value);
-}
+void CP::TEventLoopFunction::Finalize(TND280Output * const value) {}
 
 void CP::TEventLoopFunction::Usage(void) {}
 

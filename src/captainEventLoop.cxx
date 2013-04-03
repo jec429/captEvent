@@ -126,7 +126,6 @@ int CP::captainEventLoop(int argc, char** argv,
     TMemoryUsage memoryUsage;
 
     // If this is not zero, then only accept triggers matched in this mask.
-    unsigned int validTriggersMask = 0;
     signal(SIGSEGV, SIG_DFL);
 
     enum {
