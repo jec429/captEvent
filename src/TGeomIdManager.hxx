@@ -10,7 +10,7 @@
 
 class TGeoManager;
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TGeometryId.hxx"
 #include "TSHA1.hxx"
 #include "TSHAHashValue.hxx"

@@ -10,14 +10,14 @@
 #include "TAlgorithmTag.hxx"
 #include "TAlgorithmResult.hxx"
 #include "TEventFolder.hxx"
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 namespace CP {
     class TAlgorithm;
 
     /// An exception thrown if an algorithm expecting an event is run without
     /// a current event available.
-    OA_EXCEPTION(EAlgorithmWithoutEvent,EoaCore);
+    EXCEPTION(EAlgorithmWithoutEvent,ECore);
 }
 
 /// Base class for reconstruction algorithms.  It contains the basic

@@ -11,7 +11,7 @@ namespace CP {
     class TReconHit;
     class TWritableReconHit;
 
-    OA_EXCEPTION(EReconHitIllegal,EoaCore);
+    EXCEPTION(EReconHitIllegal,ECore);
 }
 
 /// A calibrated hit detector element where the hit information has

@@ -5,21 +5,21 @@
 #include <TVector3.h>
 #include <string>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "method_deprecated.hxx"
 
 namespace CP {
     /// Base class for all exceptions associated with the TGeometryId classe.
-    OA_EXCEPTION(EGeomId,EoaCore);
+    EXCEPTION(EGeomId,ECore);
 
     /// Invalid MSB or LSB.
-    OA_EXCEPTION(EGeomIdMSBLSB,EGeomId);
+    EXCEPTION(EGeomIdMSBLSB,EGeomId);
 
     /// Invalid geometry id.
-    OA_EXCEPTION(EGeomIdInvalid,EGeomId);
+    EXCEPTION(EGeomIdInvalid,EGeomId);
 
     /// Value out of range.
-    OA_EXCEPTION(EGeomIdOutOfRange,EGeomIdInvalid);
+    EXCEPTION(EGeomIdOutOfRange,EGeomIdInvalid);
 
     class TGeometryId;
     class TGeomIdManager;

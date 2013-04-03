@@ -3,7 +3,7 @@
 
 #include "TObject.h"
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "THandle.hxx"
 #include "TReconBase.hxx"
 #include "TReconState.hxx"
@@ -14,16 +14,16 @@ namespace CP {
     class TReconNodeContainer;
 
     /// An exception base class for TReconNode.
-    OA_EXCEPTION(EReconNode, EReconObject);
+    EXCEPTION(EReconNode, EReconObject);
 
     /// An exception thrown when a TReconNode object being added to a
     /// TReconNodeContainer has a state with the wrong type.  The type of the
     /// state must match the state type of the containing TReconBase object.
-    OA_EXCEPTION(EWrongStateType, EReconNode);
+    EXCEPTION(EWrongStateType, EReconNode);
 
     /// An exception thrown when a TReconNode object being added to a
     /// TReconNodeContainer without an associated reconstruction object.
-    OA_EXCEPTION(EObjectEmpty, EReconNode);
+    EXCEPTION(EObjectEmpty, EReconNode);
 }
 
 /// Class to contain the association between a TReconState and the object

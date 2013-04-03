@@ -7,7 +7,7 @@
 
 #include <TObject.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TPackageSet.hxx"
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
@@ -28,19 +28,19 @@ namespace CP {
     class TGeometryId;
 
     /// An exception from the data base.
-    OA_EXCEPTION(EOADatabase,EoaCore);
+    EXCEPTION(EOADatabase,ECore);
 
     /// Flag that no file was found.
-    OA_EXCEPTION(ENoInputFile,EOADatabase);
+    EXCEPTION(ENoInputFile,EOADatabase);
 
     /// Flag that geometry data base was not found.
-    OA_EXCEPTION(ENoGeometry,EOADatabase);
+    EXCEPTION(ENoGeometry,EOADatabase);
 
     /// Flag that something went wrong with the alignment.
-    OA_EXCEPTION(EBadAlignment, ENoGeometry);
+    EXCEPTION(EBadAlignment, ENoGeometry);
 
     /// Flag that tpc pad information data base was not found.
-    OA_EXCEPTION(ENoTPCPads,EOADatabase);
+    EXCEPTION(ENoTPCPads,EOADatabase);
 }
 
 /// Static access to the various geometry and calibration databases.  The main

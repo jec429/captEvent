@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "THit.hxx"
 #include "TSingleHit.hxx"
 #include "THandle.hxx"
@@ -12,7 +12,7 @@
 namespace CP {
     class TMultiHit;
 
-    OA_EXCEPTION(EMultiHitIllegal,EoaCore);
+    EXCEPTION(EMultiHitIllegal,ECore);
 }
 
 /// Contain a calibrated wave form (collection of time ordered hits) for a

@@ -1,16 +1,16 @@
 #include <cstring>
 #include <cstdlib>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "Demangle.hxx"
 
 #ifdef _GNU_SOURCE
 #include <execinfo.h>
 #endif
 
-unsigned int CP::EoaCore::gBacktraceSymbols = 5;
+unsigned int CP::ECore::gBacktraceSymbols = 5;
 
-CP::EoaCore::EoaCore() {
+CP::ECore::ECore() {
     fWhat[0] = 0;
 #ifdef _GNU_SOURCE
     if (gBacktraceSymbols>0) {
@@ -52,10 +52,10 @@ CP::EoaCore::EoaCore() {
         }
     }
 #endif
-    std::strcat(fWhat,"Exception:  EoaCore");
+    std::strcat(fWhat,"Exception:  ECore");
 }
 
-void CP::EoaCore::AppendWhat(const char* child) {
+void CP::ECore::AppendWhat(const char* child) {
     unsigned int wLen = std::strlen(fWhat);
     unsigned int cLen = std::strlen(child);
     if (wLen+cLen < sizeof(fWhat)-5) {

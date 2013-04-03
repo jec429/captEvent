@@ -3,7 +3,7 @@
 
 #include <TObject.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TCaptLog.hxx"
 #include "THandle.hxx"
 #include "TDatum.hxx"
@@ -17,11 +17,11 @@ namespace CP {
     class TReconNodeContainer;
 
     /// An exception associated with a reconstruction object.
-    OA_EXCEPTION(EReconObject, EoaCore);
+    EXCEPTION(EReconObject, ECore);
 
     /// An exception thrown when a requested field is not supported by the
     /// current object state.
-    OA_EXCEPTION(EMissingField, EReconObject);
+    EXCEPTION(EMissingField, EReconObject);
 }
 
 /// Define a base class for all of the reconstruction objects.  This contains

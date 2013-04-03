@@ -10,11 +10,11 @@
 
 namespace CP {
     /// Base class for all exceptions associated with the TDigit classes.
-    OA_EXCEPTION(EDigit,EoaCore);
+    EXCEPTION(EDigit,ECore);
 
     /// An exception that should be thrown when the user requests information
     /// from the digit that is not available.
-    OA_EXCEPTION(EInvalidDigitRequest,EDigit);
+    EXCEPTION(EInvalidDigitRequest,EDigit);
 
     // The abstract base class for electronics data.
     class TDigit;

@@ -9,7 +9,7 @@
 #include "TDatum.hxx"
 
 namespace CP {
-    OA_EXCEPTION(EBadLink,EDatum);
+    EXCEPTION(EBadLink,EDatum);
     class TDataLink;
 }
 

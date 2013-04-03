@@ -5,7 +5,7 @@
 #include <TROOT.h>
 #include <TFile.h>
 
-#include <EoaCore.hxx>
+#include <ECore.hxx>
 
 class TTree;
 class TGeoManager;
@@ -16,10 +16,10 @@ namespace CP {
     class TRootOutput;
 
     /// Base class for output errors.
-    OA_EXCEPTION(END280Output, EoaCore);
+    EXCEPTION(END280Output, ECore);
 
     /// An error occurred during WriteEvent.
-    OA_EXCEPTION(END280OutputWriteFailed, END280Output);
+    EXCEPTION(END280OutputWriteFailed, END280Output);
 }
 
 /// The preferred file name extension for ND280 event files.

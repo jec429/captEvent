@@ -14,11 +14,11 @@ namespace CP {
     
     /// An exception flagging that hit information was accessed while the hit
     /// was open for modification.
-    OA_EXCEPTION(EComboHitOpen,EoaCore);
+    EXCEPTION(EComboHitOpen,ECore);
 
     /// An exception flagging that an attempt to modify the hit information
     /// was made after the hit was closed.
-    OA_EXCEPTION(EComboHitClosed,EoaCore);
+    EXCEPTION(EComboHitClosed,ECore);
 }
 
 /// A single calibrated hit detector element.  This corresponds to a real

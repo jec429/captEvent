@@ -4,12 +4,12 @@
 #include <Rtypes.h>
 #include <string>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "method_deprecated.hxx"
 
 namespace CP {
     /// Base class for all exceptions associated with the TGeometryId classe.
-    OA_EXCEPTION(EChannelId,EoaCore);
+    EXCEPTION(EChannelId,ECore);
 
     class TChannelId;
 };

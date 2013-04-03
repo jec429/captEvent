@@ -5,7 +5,7 @@
 #include "THandle.hxx"
 #include "TReconBase.hxx"
 #include "TAlgorithmTag.hxx"
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 namespace CP {
     class TAlgorithmResult;
@@ -13,19 +13,19 @@ namespace CP {
 
     /// A base exception for any exception associated with an algorithm
     /// result.
-    OA_EXCEPTION(EAlgorithmResult,EoaCore);
+    EXCEPTION(EAlgorithmResult,ECore);
 
     /// An exception thrown when the user tries to add a track container with an
     /// illegal name.
-    OA_EXCEPTION(EIllegalTrackContainerName,EAlgorithmResult);
+    EXCEPTION(EIllegalTrackContainerName,EAlgorithmResult);
 
     /// An exception thrown when the user tries to add a reconstruction object
     /// container with an illegal name.
-    OA_EXCEPTION(EIllegalRecObjContainerName,EAlgorithmResult);
+    EXCEPTION(EIllegalRecObjContainerName,EAlgorithmResult);
 
     /// An exception thrown when a user tries to add a hit selection with an
     /// illegal name.
-    OA_EXCEPTION(EIllegalHitSelectionName,EAlgorithmResult);
+    EXCEPTION(EIllegalHitSelectionName,EAlgorithmResult);
 }
 
 /// A class to save results from a TAlgorithm object (this is the base class

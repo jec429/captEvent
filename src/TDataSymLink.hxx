@@ -12,7 +12,7 @@ class TBrowser;
 #include "TDatum.hxx"
 
 namespace CP {
-    OA_EXCEPTION(EBadSymLink,EDatum);
+    EXCEPTION(EBadSymLink,EDatum);
     class TDataSymLink;
 }
 

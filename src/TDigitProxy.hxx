@@ -10,18 +10,18 @@
 namespace CP {
     /// An exception that should be thrown when the needed digit could not be
     /// found by the TDigitProxy.
-    OA_EXCEPTION(EDigitNotFound,EDigit);
+    EXCEPTION(EDigitNotFound,EDigit);
 
     /// An exception that should be thrown when the needed digit container
     /// could not be found by the TDigitProxy.
-    OA_EXCEPTION(EDigitNotAvailable,EDigitNotFound);
+    EXCEPTION(EDigitNotAvailable,EDigitNotFound);
 
     /// An exception that should be thrown when the salt for the digit doesn't
     /// match.
-    OA_EXCEPTION(EDigitMismatch,EDigitNotFound);
+    EXCEPTION(EDigitMismatch,EDigitNotFound);
 
     /// Thrown if the digit type is not valid.
-    OA_EXCEPTION(EDigitTypeInvalid,EDigitNotFound);
+    EXCEPTION(EDigitTypeInvalid,EDigitNotFound);
 
     // A handle to reference a TDigit object that may or may not be available.
     class TDigitProxy;

@@ -19,17 +19,17 @@ namespace CP {
     class THit;
 
     /// Base class for all exceptions associated with the THit classes.
-    OA_EXCEPTION(EHit,EoaCore);
+    EXCEPTION(EHit,ECore);
 
     /// The index of the requested contributor, digit, or channel was out of
     /// range.
-    OA_EXCEPTION(EHitOutOfRange,EoaCore);
+    EXCEPTION(EHitOutOfRange,ECore);
 
 #ifdef USE_EDigitOutOfRange
     /// The index of the requested digit was out of range.  This isn't used
     /// since all the OutOfRange exceptions use EHitOutOfRange to make traps
     /// less complex.
-    OA_EXCEPTION(EDigitOutOfRange,EoaCore);
+    EXCEPTION(EDigitOutOfRange,ECore);
 #endif
 }
 

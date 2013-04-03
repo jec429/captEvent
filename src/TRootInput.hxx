@@ -3,15 +3,15 @@
 
 #include <TFile.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TVInputFile.hxx"
 
 class TTree;
 
 namespace CP {
-    OA_EXCEPTION(END280Input,EoaCore);
-    OA_EXCEPTION(ENoND280InputFile,END280Input);
-    OA_EXCEPTION(ENoEvents,END280Input);
+    EXCEPTION(END280Input,ECore);
+    EXCEPTION(ENoND280InputFile,END280Input);
+    EXCEPTION(ENoEvents,END280Input);
 
     class TEvent;
     class TRootInput;

@@ -1,7 +1,7 @@
 #ifndef TEventLoopFunction_hxx_seen
 #define TEventLoopFunction_hxx_seen
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 #include "TEvent.hxx"
 
@@ -13,7 +13,7 @@ namespace CP {
     /// Terminate an event loop that is processing a particular file.  This
     /// should be thrown by the event loop user function when it wants to stop
     /// processing the current file and move to the next.
-    OA_EXCEPTION(ENextEventLoopFile,EoaCore);
+    EXCEPTION(ENextEventLoopFile,ECore);
 };
 
 /// A base class for use with the CP::eventLoop() which defines the

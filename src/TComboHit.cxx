@@ -7,7 +7,7 @@
 #include <TGeoMatrix.h>
 #include <TGeoNode.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "HEPUnits.hxx"
 #include "THitSelection.hxx"
 #include "TComboHit.hxx"

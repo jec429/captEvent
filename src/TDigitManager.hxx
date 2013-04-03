@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TDigit.hxx"
 #include "TEvent.hxx"
 #include "TDigitContainer.hxx"
@@ -13,13 +13,13 @@
 
 namespace CP {
     /// An exception from the digit manager.
-    OA_EXCEPTION(EDigitManager, EDigit);
+    EXCEPTION(EDigitManager, EDigit);
 
     /// A factory was registered more than once.
-    OA_EXCEPTION(EMultipleDigitFact, EDigitManager);
+    EXCEPTION(EMultipleDigitFact, EDigitManager);
 
     /// Attempting to cache digits without an event available
-    OA_EXCEPTION(EDigitEventMissing, EDigitManager);
+    EXCEPTION(EDigitEventMissing, EDigitManager);
 
     class TDigitManager;
     class TDigitFactory;

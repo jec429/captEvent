@@ -7,13 +7,13 @@
 #include "THandle.hxx"
 #include "TReconBase.hxx"
 #include "TClusterState.hxx"
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 namespace CP {
     class TReconCluster;
 
-    OA_EXCEPTION(EReconCluster,EoaCore);
-    OA_EXCEPTION(EMomentsSize,EReconCluster);
+    EXCEPTION(EReconCluster,ECore);
+    EXCEPTION(EMomentsSize,EReconCluster);
 }
 
 /// Represent an extended energy deposition centered at a position (i.e. a

@@ -4,13 +4,13 @@
 #include <string>
 #include <vector>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TGeomIdManager.hxx"
 
 namespace CP {
     /// An exception thrown by a TGeomIdFinder when it doesn't want to follow
     /// a particular branch of the geometry.
-    OA_EXCEPTION(EGeomIdStop,EoaCore);
+    EXCEPTION(EGeomIdStop,ECore);
 
     class TGeomIdFinder;
 };

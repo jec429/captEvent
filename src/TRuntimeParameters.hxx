@@ -1,7 +1,7 @@
 #ifndef TRuntimeParameters_hxx_seen
 #define TRuntimeParameters_hxx_seen
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 #include <iostream>
 #include <string>
@@ -14,11 +14,11 @@ namespace CP {
     class TUnitsTableParser;
 
     // General run time parameters exceptions
-    OA_EXCEPTION(EOARuntimeParameters,CP::EoaCore);
+    EXCEPTION(EOARuntimeParameters,CP::ECore);
     // Exception for missing parameters
-    OA_EXCEPTION(ENonexistantParameter,EOARuntimeParameters);
+    EXCEPTION(ENonexistantParameter,EOARuntimeParameters);
     // Exception for reading parameter file
-    OA_EXCEPTION(EBadParameterFile,EOARuntimeParameters);
+    EXCEPTION(EBadParameterFile,EOARuntimeParameters);
 };
 
 /// This class is meant to provide access to a set of parameters that are

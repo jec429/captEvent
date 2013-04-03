@@ -1,6 +1,6 @@
 #include "eventLoop.hxx"
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 #include "TEvent.hxx"
 #include "TRootInput.hxx"

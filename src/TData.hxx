@@ -5,13 +5,13 @@
 #ifndef T_DATA_HXX
 #define T_DATA_HXX
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TDatum.hxx"
 #include "THandle.hxx"
 
 namespace CP {
-    OA_EXCEPTION(EData,EDatum);
-    OA_EXCEPTION(EBadInsertion,EData);
+    EXCEPTION(EData,EDatum);
+    EXCEPTION(EBadInsertion,EData);
     class TData;
 }
 

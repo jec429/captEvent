@@ -14,14 +14,14 @@
 #include <TQObject.h>
 
 #include "THandle.hxx"
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TCaptLog.hxx"
 
 namespace CP {
-    OA_EXCEPTION(EDatum,EoaCore);
-    OA_EXCEPTION(EBadConversion,EDatum);
-    OA_EXCEPTION(EBadName,EDatum);
-    OA_EXCEPTION(ENoSuchElement,EDatum);
+    EXCEPTION(EDatum,ECore);
+    EXCEPTION(EBadConversion,EDatum);
+    EXCEPTION(EBadName,EDatum);
+    EXCEPTION(ENoSuchElement,EDatum);
     class TDatum;
     class TDatumCompareName;
     class TData;

@@ -12,14 +12,14 @@
 #include <TVectorD.h>
 #include <TMatrixD.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 
 namespace CP {
     class TCorrValues;
 
-    OA_EXCEPTION(ECorrValues, EoaCore);
-    OA_EXCEPTION(ECorrValuesConstructor,ECorrValues);
-    OA_EXCEPTION(ECorrValuesRange,ECorrValues);
+    EXCEPTION(ECorrValues, ECore);
+    EXCEPTION(ECorrValuesConstructor,ECorrValues);
+    EXCEPTION(ECorrValuesRange,ECorrValues);
 }
 
 /// A class representing a vector of values and the correlations between them.

@@ -7,17 +7,17 @@
 #include <TObject.h>
 #include <TVector3.h>
 
-#include "EoaCore.hxx"
+#include "ECore.hxx"
 #include "TDatum.hxx"
 #include "THit.hxx"
 
 namespace CP {
     class THitSelection;
-    OA_EXCEPTION(EHitSelection,EoaCore);
+    EXCEPTION(EHitSelection,ECore);
 
     /// An invalid hit was added to the hit selection.  This exception can be
     /// caught and continue, with the THitSelection object intact.
-    OA_EXCEPTION(EInvalidHit, EHitSelection);
+    EXCEPTION(EInvalidHit, EHitSelection);
 }
 
 /// A container of THitHandle objects for the hit detector information.  This
