@@ -21,7 +21,6 @@
 #include "ND280GeomIdDef.hxx"
 #include "TGeomIdManager.hxx"
 #include "TOADatabase.hxx"
-#include "TTPCPadManager.hxx"
 #include "TEvent.hxx"
 #include "TGeomIdFinder.hxx"
 #include "TP0DIdFinder.hxx"
@@ -82,20 +81,8 @@ bool CP::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
 
 bool CP::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
     CP::TOADatabase::Get().Geometry();
-    bool success = false;
-    if (CP::GeomId::TPC::IsPad(id)) {
-        GeomIdKey gid = MakeGeomIdKey(id) 
-            & ~(CP::GeomId::Def::TPC::Pad::kPadFlagMask
-                | CP::GeomId::Def::TPC::Pad::kPadMask);
-        GeomIdMap::const_iterator pair = fGeomIdMap.find(gid);
-        if (pair == fGeomIdMap.end()) return false;
-        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
-        int pad = MakeGeomIdKey(id) & CP::GeomId::Def::TPC::Pad::kPadMask;
-        success = pads.ChannelToGlobalXYZ(pair->second, pad, position);
-        return success;
-    }
     gGeoManager->PushPath();
-    success = CdId(id);
+    bool success = CdId(id);
     double local[3] = {0,0,0};
     double master[3];
     gGeoManager->LocalToMaster(local,master);
@@ -110,18 +97,6 @@ bool CP::TGeomIdManager::GetGeometryId(double x, double y, double z,
     gGeoManager->PushPath();
     gGeoManager->FindNode(x,y,z);
     bool success = FindGeometryId(id);
-    // Check to see if the id might be a TPC pad.
-    if (success && CP::GeomId::TPC::IsMicroMega(id)) {
-        int node, key;
-        CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
-        success = pads.GlobalXYZToChannel(TVector3(x,y,z), node, key);
-        if (success) {
-            GeomIdKey gid = MakeGeomIdKey(id);
-            gid |= CP::GeomId::Def::TPC::Pad::kPadFlagMask;
-            gid |= (CP::GeomId::Def::TPC::Pad::kPadMask & key);
-            id = TGeometryId(gid);
-        }
-    }        
     gGeoManager->PopPath();
     return success;
 }

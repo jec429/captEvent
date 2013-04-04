@@ -19,7 +19,6 @@ class TTree;
 class TGeoMatrix;
 
 namespace CP {
-    class TTPCPadManager;
     class TEvent;
     class TOADatabase;
     class TDigitManager;
@@ -245,16 +244,6 @@ public:
     /// CP::TOADatabase::GeometryChange for details and an example.
     TGeoManager* Geometry(TEvent* event=NULL);
 
-    /// Return a pointer to the correct TPC pad information for the event.  If
-    /// the argument is NULL, the pad information from the current event (as
-    /// determined by TEventFolder::GetCurrentEvent()) is used, or failing
-    /// that, the most recent pad information is used.  If none of the
-    /// attempts to find the pad information work this throws an ENoTPCPads
-    /// exception; however, since not having pad information is a very serious
-    /// error you will probably want your program to crash so you don't need
-    /// to catch the ENoTPCPads exception.
-    TTPCPadManager& TPCPads(TEvent* event=NULL);
-
     /// Return a reference to the ROOT TDatabasePDG.
     TDatabasePDG& ParticleData(void);
 
@@ -365,9 +354,6 @@ private:
     /// A pointer to a class which will find the alignment associated with the
     /// current geometry used for this event.
     AlignmentLookup* fAlignmentLookup;
-
-    /// The current TPC pad manager.  This is fixed for all events.
-    TTPCPadManager* fPadManager;
 
     /// A connection to the ROOT particle data book data base.
     TDatabasePDG* fParticleData;

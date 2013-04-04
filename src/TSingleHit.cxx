@@ -10,7 +10,6 @@
 #include "TGeomIdManager.hxx"
 #include "TSingleHit.hxx"
 #include "TOADatabase.hxx"
-#include "TTPCPadManager.hxx"
 #include "HEPUnits.hxx"
 #include "ND280GeomId.hxx"
 
@@ -98,49 +97,6 @@ bool CP::TSingleHit::IsZHit(void) const {
     return fIsZHit;
 }
 
-bool CP::TSingleHit::InitializeTPC() {
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
-    geom->PushPath();
-    CP::TOADatabase::Get().GeomId().CdId(GetGeomId());
-    TGeoNode* node = geom->GetCurrentNode();
-
-    std::string nodeName(node->GetName());
-    if (nodeName.find("MM_") == std::string::npos) {
-        geom->PopPath();
-        return false;
-    }
-
-    if (!CP::TOADatabase::Get().GeomId().GetPosition(GetGeomId(),fPosition)) {
-        geom->PopPath();
-        return false;
-    }
-
-    CP::TTPCPadManager& pads = CP::TOADatabase::Get().TPCPads();
-    
-    // Find the spread.
-    fSpread.SetXYZ(1*unit::meter, 
-                   pads.GetPadYPitch()/2, 
-                   pads.GetPadXPitch()/2);
-    fUncertainty.SetXYZ(1*unit::mm, 
-                        2*fSpread.Y()/std::sqrt(12.0),
-                        2*fSpread.Z()/std::sqrt(12.0));
-    if (HasValidTime()) {
-        fTimeUncertainty = 10*unit::ns/std::sqrt(12.0);
-    }
-    else {
-        fTimeUncertainty = 10*unit::microsecond/std::sqrt(12.0);
-    }
-
-
-    // Determine if the hit is an X, Y, or Z hit.
-    fIsXHit = false;
-    fIsYHit = true;
-    fIsZHit = true;
-
-    geom->PopPath();
-    return true;
-}
-
 bool CP::TSingleHit::InitializeGeneric() {
     TGeoManager* geom = CP::TOADatabase::Get().Geometry();
     geom->PushPath();
@@ -208,7 +164,6 @@ void CP::TSingleHit::Initialize(void) {
             // Try initializations looking for the first one to work.  The
             // initializations should be ordered from the most specific to the
             // most general.
-            if (InitializeTPC()) break;
             InitializeGeneric();
         } while (false);
         fInitialized = true;

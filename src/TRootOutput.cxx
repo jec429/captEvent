@@ -13,7 +13,6 @@
 #include "TRootOutput.hxx"
 #include "TEvent.hxx"
 #include "TOADatabase.hxx"
-#include "TTPCPadManager.hxx"
 #include "TCaptLog.hxx"
 
 ClassImp(CP::TRootOutput);

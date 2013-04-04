@@ -27,7 +27,6 @@
 
 #include "TEvent.hxx"
 #include "TOADatabase.hxx"
-#include "TTPCPadManager.hxx"
 #include "TEventFolder.hxx"
 #include "TDigitManager.hxx"
 #include "TGeomIdManager.hxx"
@@ -353,20 +352,6 @@ CP::TAlignmentId CP::TOADatabase::ApplyAlignmentLookup(
 bool CP::TOADatabase::CheckAlignment(const CP::TEvent* const event) {
     if (!fAlignmentLookup) return false;
     return fAlignmentLookup->CheckAlignment(event);
-}
-
-CP::TTPCPadManager& CP::TOADatabase::TPCPads(CP::TEvent* event) {
-    if (!fPadManager) {
-        // create the tpc pad information into memory.  The default values
-        // almost never change, so they are not saved in the data file.
-        // Eventually, there should be a check to read the values from a
-        // database.
-        fPadManager = new CP::TTPCPadManager();
-        if (!fPadManager) {
-            throw ENoTPCPads();
-        }
-    }
-    return *fPadManager;
 }
 
 TDatabasePDG& CP::TOADatabase::ParticleData(void) {

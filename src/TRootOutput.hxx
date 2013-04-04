@@ -12,7 +12,6 @@ class TGeoManager;
 
 namespace CP {
     class TEvent;
-    class TTPCPadManager;
     class TRootOutput;
 
     /// Base class for output errors.
