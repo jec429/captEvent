@@ -11,7 +11,7 @@
 #include "HEPUnits.hxx"
 #include "THitSelection.hxx"
 #include "TComboHit.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 
 ClassImp(CP::TComboHit);
@@ -290,11 +290,11 @@ void CP::TComboHit::CloseHits() const {
     fUncertainty.SetXYZ(sqrt(uncXX),sqrt(uncYY),sqrt(uncZZ));
     fTimeUncertainty = sqrt(fTimeUncertainty);
 
-    CP::TOADatabase::Get().GeomId().GetGeometryId(
+    CP::TManager::Get().GeomId().GetGeometryId(
         fPosition.X(), fPosition.Y(), fPosition.Z(), fGeomId);
 
     // Get the parent stack for this cluster.
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TManager::Get().Geometry();
     fParentNodes.clear();
     if (fHits.size()>0) {
         geom->PushPoint();

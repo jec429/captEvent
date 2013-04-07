@@ -2,7 +2,7 @@
 
 #include "TEvent.hxx"
 #include "TEventFolder.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TDigitManager.hxx"
 #include "TCaptLog.hxx"
 

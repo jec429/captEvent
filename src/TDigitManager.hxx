@@ -23,7 +23,7 @@ namespace CP {
 
     class TDigitManager;
     class TDigitFactory;
-    class TOADatabase;
+    class TManager;
 };
 
 /// A base class to provide a way to build digits from the MIDAS data accessed
@@ -53,14 +53,14 @@ private:
 };
 
 /// Manage the current set of TDigit objects and containers.  This manager
-/// class is a singleton accessed through the TOADatabase class
-/// (TOADataBase::Digits() will return a reference).  This is mostly an
+/// class is a singleton accessed through the TManager class
+/// (TManager::Digits() will return a reference).  This is mostly an
 /// internal implementation class used to provide management to the
 /// TDigitProxy class and to provide a connection to the raw data access in
 /// oaRawEvent (using oaUnpack).  This class will not be directly used by most
-/// people.  The TDigitManager is owned by TOADatabase.
+/// people.  The TDigitManager is owned by TManager.
 class CP::TDigitManager {
-    friend class CP::TOADatabase;
+    friend class CP::TManager;
     friend class CP::TDigitProxy;
 
 public: 
@@ -90,7 +90,7 @@ public:
     /// unpacked using the available digit factories, and then if necessary,
     /// will use the factories to find the digits.  By default, the cached
     /// digits are saved as temporary banks, but can be made persistent using
-    /// TOADatabase::Get().Digits().PersistentDigits().
+    /// TManager::Get().Digits().PersistentDigits().
     CP::THandle<CP::TDigitContainer> CacheDigits(std::string type);
     CP::THandle<CP::TDigitContainer> CacheDigits(CP::TEvent& event,
                                                  std::string type);
@@ -103,7 +103,7 @@ private:
     typedef std::map<std::string, CP::TDigitFactory*> FactoryMap;
 
     /// Construct a new TDigitManager.  This is private since it should only
-    /// be constructed by the friend class TOADatabase.
+    /// be constructed by the friend class TManager.
     TDigitManager();
 
     /// Make the copy constructor private.

@@ -1,7 +1,7 @@
 #include "TGeoManager.h"
 #include "TVector3.h"
 
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 #include "ND280GeomId.hxx"
 
@@ -20,9 +20,9 @@ public:
 
     void BeginFile(CP::TVInputFile *const) {
         std::cout << "Get the geometry out of the file" << std::endl;
-        CP::TOADatabase::Get().Geometry();
+        CP::TManager::Get().Geometry();
 
-        CP::TGeomIdManager& geomId = CP::TOADatabase::Get().GeomId();
+        CP::TGeomIdManager& geomId = CP::TManager::Get().GeomId();
 
         std::cout << "Path to P0D" << std::endl;
         geomId.CdId(CP::GeomId::P0D::Detector());

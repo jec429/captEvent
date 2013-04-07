@@ -10,7 +10,7 @@
 #include "TRootInput.hxx"
 
 #include "TEvent.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TCaptLog.hxx"
 
 CP::TRootInput::TRootInput(const char* name, Option_t* option, Int_t compress) 
@@ -23,7 +23,7 @@ CP::TRootInput::TRootInput(const char* name, Option_t* option, Int_t compress)
     CaptError("ROOT may produce warning messages about missing ShowMembers" 
                << " methods which may be ignored");
     IsAttached();
-    CP::TOADatabase::Get().SetCurrentInputFile(fFile);
+    CP::TManager::Get().SetCurrentInputFile(fFile);
     CaptVerbose("Input file " << fFile->GetName() << " is open");
 }
 
@@ -36,7 +36,7 @@ CP::TRootInput::TRootInput(TFile* file)
     CaptError("ROOT may produce warning messages about missing ShowMembers" 
                << " methods which may be ignored");
     IsAttached();
-    CP::TOADatabase::Get().SetCurrentInputFile(fFile);
+    CP::TManager::Get().SetCurrentInputFile(fFile);
     CaptVerbose("Input file " << fFile->GetName() << " is open");
 }
 
@@ -72,7 +72,7 @@ bool CP::TRootInput::IsAttached(void) {
 
     // Make sure that we have the event tree.
     if (!fEventTree) {
-        fEventTree = dynamic_cast<TTree*>(fFile->Get("EventTree"));
+        fEventTree = dynamic_cast<TTree*>(fFile->Get("captainEventTree"));
         if (!fEventTree) throw ENoEvents();
     }
 
@@ -143,13 +143,13 @@ CP::TEvent* CP::TRootInput::ReadEvent(Int_t n) {
         fEventPointer = NULL;
     }
 
-    CP::TOADatabase::Get().SetCurrentInputFile(fFile);
+    CP::TManager::Get().SetCurrentInputFile(fFile);
     return fEventPointer;
 }
 
 void CP::TRootInput::Close(Option_t* opt) {
-    TFile* current = CP::TOADatabase::Get().CurrentInputFile();
-    if (fFile == current) CP::TOADatabase::Get().SetCurrentInputFile(NULL);
+    TFile* current = CP::TManager::Get().CurrentInputFile();
+    if (fFile == current) CP::TManager::Get().SetCurrentInputFile(NULL);
     fFile->Close(opt);
 }
 

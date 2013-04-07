@@ -12,7 +12,7 @@
 #undef protected
 
 #include "TEvent.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TDataHit.hxx"
 #include "TGeometryId.hxx"
 #include "ND280GeomId.hxx"
@@ -34,7 +34,7 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testTDigit::test<1> () {
-        CP::TOADatabase::Get().Digits();
+        CP::TManager::Get().Digits();
     }
 
     // Test the TDigitProxy type setters and getters work
@@ -112,24 +112,24 @@ namespace tut {
     template <> template <>
     void testTDigit::test<5> () {
         ensure("Test TDigitFactory is not available",
-               !CP::TOADatabase::Get().Digits().FactoryAvailable("test"));
+               !CP::TManager::Get().Digits().FactoryAvailable("test"));
 
-        CP::TOADatabase::Get().Digits().RegisterFactory(new FactoryForTest());
+        CP::TManager::Get().Digits().RegisterFactory(new FactoryForTest());
 
         ensure("Test TDigitFactory is available",
-               CP::TOADatabase::Get().Digits().FactoryAvailable("test"));
+               CP::TManager::Get().Digits().FactoryAvailable("test"));
     }
 
     // Test that the "test" TDigitFactory digits are created in the right place.
     template <> template <>
     void testTDigit::test<6> () {
          ensure("Test TDigitFactory is available",
-               CP::TOADatabase::Get().Digits().FactoryAvailable("test"));
+               CP::TManager::Get().Digits().FactoryAvailable("test"));
 
          CP::TEvent event;
 
          CP::THandle<CP::TDigitContainer> digits = 
-             CP::TOADatabase::Get().Digits().CacheDigits("test");
+             CP::TManager::Get().Digits().CacheDigits("test");
 
          ensure("Digit container was created",digits);
 

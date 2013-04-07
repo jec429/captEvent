@@ -14,7 +14,7 @@
 #include <TGeoManager.h>
 #include <TGeoOverlap.h>
 
-#include <TOADatabase.hxx>
+#include <TManager.hxx>
 #include <TGeomIdManager.hxx>
 #include <TSHAHashValue.hxx>
 
@@ -52,9 +52,9 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    CP::TOADatabase::Get().SetGeometryOverride(argv[optind++]);
+    CP::TManager::Get().SetGeometryOverride(argv[optind++]);
 
-    CP::TOADatabase::Get().Geometry()->CheckOverlaps();
+    CP::TManager::Get().Geometry()->CheckOverlaps();
     TIter next(gGeoManager->GetListOfOverlaps());
     int count = 0;
     TGeoOverlap* overlap;
@@ -74,8 +74,8 @@ int main(int argc, char** argv) {
     std::vector< std::pair<CP::TGeometryId, TVector3> > allId;
     std::map<int, CP::TGeometryId> rootMap;
     for (CP::TGeomIdManager::GeomIdMap::const_iterator g
-             = CP::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
-         g != CP::TOADatabase::Get().GeomId().GetGeomIdMap().end();
+             = CP::TManager::Get().GeomId().GetGeomIdMap().begin();
+         g != CP::TManager::Get().GeomId().GetGeomIdMap().end();
          ++g) {
         CP::TGeometryId geomId(g->first);
         if (!geomId.IsValid()) {
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
             return 1;
         }
         TVector3 pos;
-        if (!CP::TOADatabase::Get().GeomId().GetPosition(geomId, pos)) {
+        if (!CP::TManager::Get().GeomId().GetPosition(geomId, pos)) {
             std::cout << "missing geometry id " 
                       << geomId.AsInt()
                       << " " << geomId.GetSubsystemName()
@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
             if (target.GetName().find("/Bar_") == std::string::npos) continue;
 
             CP::TGeometryId geomId;
-            if (!CP::TOADatabase::Get().GeomId().GetGeometryId(
+            if (!CP::TManager::Get().GeomId().GetGeometryId(
                     pos.X(), pos.Y(), pos.Z(), geomId)) {
                 std::cout << "couldn't find geometry id " 
                           << target.AsInt() << " " << target

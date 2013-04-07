@@ -64,7 +64,7 @@ public:
     ///
     /// \code
     /// THandle<THit> myHit = ... Must have a value ...
-    /// TOADatabase::Get().GeomId().CdId(myHit->GetGeomId());
+    /// TManager::Get().GeomId().CdId(myHit->GetGeomId());
     /// int node = gGeoManager->GetCurrentNodeId();
     /// \endcode
     ///

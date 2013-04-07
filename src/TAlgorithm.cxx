@@ -1,5 +1,5 @@
 #include "TAlgorithm.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TCaptLog.hxx"
 
 ClassImp(CP::TAlgorithm);
@@ -78,7 +78,7 @@ CP::TEvent& CP::TAlgorithm::GetEvent() const {
 TGeoManager* CP::TAlgorithm::GetGeom() const {
     TGeoManager* geom = NULL;
     try {
-        geom = CP::TOADatabase::Get().Geometry();
+        geom = CP::TManager::Get().Geometry();
     }
     catch (...) {
         CaptTrace("Geometry not found");

@@ -1,6 +1,6 @@
 # -*- makefile -*-
 #
-# A fragment used by CMT to register the library with TOADatabase.
+# A fragment used by CMT to register the library with TManager.
 #
 
 # A dummy place holder.  All of the real work is done in register_header. 

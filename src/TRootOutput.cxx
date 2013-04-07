@@ -12,7 +12,7 @@
 
 #include "TRootOutput.hxx"
 #include "TEvent.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TCaptLog.hxx"
 
 ClassImp(CP::TRootOutput);
@@ -49,7 +49,7 @@ bool CP::TRootOutput::IsAttached(void) {
     fEventPointer = NULL;
     if (!fEventTree) {
         CaptTrace("Create a new tree");
-        fEventTree = new TTree("EventTree", "Tree of Events");
+        fEventTree = new TTree("captainEventTree", "Tree of CAPTAIN Events");
     }
     CaptTrace("Add the branch pointer");
     fEventTree->Branch("Event","CP::TEvent",&fEventPointer,128000,0);

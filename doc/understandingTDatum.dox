@@ -29,7 +29,7 @@ the normal ROOT methods.  A typical CAPTAIN event file will contain (at
 least) two objects, EventTree, and CAPTAINGeometry.  The first object is a
 TTree with a single branch containing all of the events in the file.  There
 is a small amount of bookkeeping required to correctly read events from a
-file, mostly involving keeping the TOADatabase synchronized with the
+file, mostly involving keeping the TManager synchronized with the
 event.  This can be handled by reading the EventTree TTree object using
 the TRootInput class.  
 

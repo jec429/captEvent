@@ -105,24 +105,24 @@ The description of the detector geometry is done using the ROOT TGeoManager
 class.  This class provides a complete description of the locations as well
 as the mass, densities, and composition of all components of the detector.
 Access to the TGeoManager class is done through the
-CP::TOADatabase::Geometry() method which makes sure the correct geometry
+CP::TManager::Geometry() method which makes sure the correct geometry
 for a given event is loaded into memory.  Care should be taken using the
-CP::TOADatabase::Geometry() method since it can (and often will) change the
+CP::TManager::Geometry() method since it can (and often will) change the
 geometry that is currently loaded.  It does this by checking which version
 of the geometry should be used for the current event, loads the correct
 geometry, and then applies the correct alignment constants to the
 geometry.
 
-\note CP::TOADatabase is a singleton class so this method is accessed using
-CP::TOADatabase::Get().Geometry().
+\note CP::TManager is a singleton class so this method is accessed using
+CP::TManager::Get().Geometry().
 
 Since the current geometry description can change many times as different
 events are accessed and lodaed, if your code needs to build tables of
 detector locations, or other geometry details, it should register an object
-derived from the CP::TOADatabase::GeometryChange class using
-CP::TOADatabase::RegisterGeometryCalback().  This class will then be used
+derived from the CP::TManager::GeometryChange class using
+CP::TManager::RegisterGeometryCalback().  This class will then be used
 to update the tables whenever the geometry has been changed.  See the
-CP::TOADatabase::GeometryChange class for more details and an example.
+CP::TManager::GeometryChange class for more details and an example.
 
 \subsection systemOfUnits The System of Units.
 

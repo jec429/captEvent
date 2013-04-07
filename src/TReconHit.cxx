@@ -1,7 +1,7 @@
 #include <TGeoManager.h>
 
 #include "TReconHit.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 
 ClassImp(CP::TReconHit);
@@ -34,9 +34,9 @@ void CP::TReconHit::Initialize(){
     fSpread = fConstituents.at(0)->GetSpread();
 
     // To do positions we need the geometry.
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
-    TOADatabase::Get().GeomId().CdId(fGeomId);
+    TManager::Get().GeomId().CdId(fGeomId);
     double local[3] = {fReconPosition.X(),
                        fReconPosition.Y(),
                        fReconPosition.Z()};
@@ -168,9 +168,9 @@ void CP::TWritableReconHit::SetPosition(TVector3& pos){
     // Need to store in local position.
     
     // To do positions we need the geometry.
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
-    CP::TOADatabase::Get().GeomId().CdId(fGeomId);
+    CP::TManager::Get().GeomId().CdId(fGeomId);
     double local[3] = {0,0,0};
     double master[3] = {pos.X(),pos.Y(),pos.Z()};
     geom->MasterToLocal(master,local);
@@ -182,9 +182,9 @@ void CP::TWritableReconHit::SetUncertainty(TVector3& unc){
     // Save the 1 sigma offset in local.
   
     // To do positions we need the geometry.
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
-    CP::TOADatabase::Get().GeomId().CdId(fGeomId);
+    CP::TManager::Get().GeomId().CdId(fGeomId);
 
     /// \bug Shouldn't the conversion of the global coordinates uncertainty to
     /// the the local coordinates uncertainty be done using

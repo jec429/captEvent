@@ -10,7 +10,7 @@
 #include "TEventFolder.hxx"
 #include "THitSelection.hxx"
 #include "TAlgorithmResult.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TDigitManager.hxx"
 #include "TDigitContainer.hxx"
 
@@ -92,7 +92,7 @@ void CP::TEvent::Register(void) {
 }
 
 CP::THandle<CP::TDigitContainer> CP::TEvent::GetDigits(const char* name) {
-    return CP::TOADatabase::Get().Digits().CacheDigits(*this,name);
+    return CP::TManager::Get().Digits().CacheDigits(*this,name);
 }
 
 CP::THandle<CP::THitSelection> CP::TEvent::GetHitSelection(const char* name) 

@@ -10,7 +10,7 @@
 
 #include "HEPUnits.hxx"
 #include "TMultiHit.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 
 ClassImp(CP::TMultiHit);
 

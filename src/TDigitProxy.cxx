@@ -3,7 +3,7 @@
 
 #include "TDigitProxy.hxx"
 #include "TDigitManager.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 
 ClassImp(CP::TDigitProxy);
 
@@ -47,11 +47,11 @@ CP::TDigitProxy::TDigitProxy(int proxy)
     : fDigitSignature(proxy), fDigit(NULL), fContainer(NULL) {}
 
 CP::TDigit* CP::TDigitProxy::operator*() const {
-    return CP::TOADatabase::Get().Digits().GetDigit(*this);
+    return CP::TManager::Get().Digits().GetDigit(*this);
 }
 
 CP::TDigitContainer& CP::TDigitProxy::GetContainer() const {
-    CP::TOADatabase::Get().Digits().GetDigit(*this);
+    CP::TManager::Get().Digits().GetDigit(*this);
     return *fContainer;
 }
 

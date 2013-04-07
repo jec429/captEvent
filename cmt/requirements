@@ -66,6 +66,6 @@ apply_pattern dependency target=validate-geometry depends=captEvent
 application captEventTUT -check ../test/captEventTUT.cxx ../test/tut*.cxx
 apply_pattern dependency target=captEventTUT depends=captEvent
 
-# Register fragments needed to register libraries with TOADatabase.
+# Register fragments needed to register libraries with TManager.
 make_fragment register -header=register_header -trailer=register_trailer
 make_fragment linkdef -header=linkdef_header -trailer=linkdef_trailer 

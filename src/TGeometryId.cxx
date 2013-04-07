@@ -4,7 +4,7 @@
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "ND280GeomIdDef.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 
 ClassImp(CP::TGeometryId);
@@ -89,7 +89,7 @@ const bool CP::TGeometryId::IsValid() const {
 }
 
 std::string CP::TGeometryId::GetName() const {
-    return TOADatabase::Get().GeomId().GetPath(*this);
+    return TManager::Get().GeomId().GetPath(*this);
 }
 
 std::string CP::TGeometryId::GetSubsystemName() const {
@@ -113,7 +113,7 @@ std::string CP::TGeometryId::GetSubsystemName() const {
 
 TVector3 CP::TGeometryId::GetPosition() const {
     TVector3 position(0,0,0);
-    if (!TOADatabase::Get().GeomId().GetPosition(*this,position)) {
+    if (!TManager::Get().GeomId().GetPosition(*this,position)) {
         CaptWarn("Position for invalid geometry id was requested");
         throw CP::EGeomIdInvalid();
     }
@@ -130,7 +130,7 @@ bool CP::operator!=(const CP::TGeometryId& a, const CP::TGeometryId& b) {
 
 std::ostream& CP::operator<<(std::ostream& s, const CP::TGeometryId& id) {
     try {
-        CP::TOADatabase::Get().Geometry();
+        CP::TManager::Get().Geometry();
         std::string name = id.GetName();
         int len = name.size();
         int maxlen = 50;

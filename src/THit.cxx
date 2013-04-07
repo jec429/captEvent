@@ -9,7 +9,7 @@
 #include "HEPUnits.hxx"
 #include "THit.hxx"
 #include "TDigitProxy.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 #include "TCaptLog.hxx"
 
@@ -27,9 +27,9 @@ CP::TGeometryId CP::THit::GetGeomId(void) const {throw;}
 #ifdef USE_DEPRECATED_GetGeoNodeId
 int CP::THit::GetGeoNodeId(void) const {
     CaptError("Deprecated method being used");
-    CP::TOADatabase::Get().Geometry();
+    CP::TManager::Get().Geometry();
     gGeoManager->PushPath();
-    TOADatabase::Get().GeomId().CdId(GetGeomId());
+    TManager::Get().GeomId().CdId(GetGeomId());
     int node = gGeoManager->GetCurrentNodeId();
     gGeoManager->PopPath();
     return node;

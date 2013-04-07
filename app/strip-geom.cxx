@@ -14,7 +14,7 @@
 #include <TGeoOverlap.h>
 
 #include <HEPUnits.hxx>
-#include <TOADatabase.hxx>
+#include <TManager.hxx>
 #include <TGeomIdManager.hxx>
 #include <TSHAHashValue.hxx>
 #include <TCaptLog.hxx>
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     std::auto_ptr<TFile> inputFile(inputPtr);
-    if (!CP::TOADatabase::Get().GeomId().LoadGeometry(*inputFile,
+    if (!CP::TManager::Get().GeomId().LoadGeometry(*inputFile,
                                                       CP::TSHAHashValue())) {
         std::cerr << "Error: Geometry not found in input file." << std::endl;
         return 1;
@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    CP::TSHAHashValue hc = CP::TOADatabase::Get().GeomId().GetHash();
+    CP::TSHAHashValue hc = CP::TManager::Get().GeomId().GetHash();
     std::ostringstream geomName;
     geomName << "geom"; 
     geomName << std::hex << std::nouppercase << std::setfill('0');

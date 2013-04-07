@@ -6,7 +6,7 @@
 #include <TClass.h>
 #include <TStreamerInfo.h>
 
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 
 #include "TG4TrajectoryPoint.hxx"
 
@@ -36,7 +36,7 @@ void CP::TG4TrajectoryPoint::ls(Option_t *opt) const {
 std::string CP::TG4TrajectoryPoint::GetVolumeName(void) const {
     std::string path("none");
     try {
-        TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+        TGeoManager* geom = CP::TManager::Get().Geometry();
         geom->PushPath();
         geom->CdNode(fVolumeNode);
         path = gGeoManager->GetPath();

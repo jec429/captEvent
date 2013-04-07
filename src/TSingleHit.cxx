@@ -9,7 +9,7 @@
 
 #include "TGeomIdManager.hxx"
 #include "TSingleHit.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "HEPUnits.hxx"
 #include "ND280GeomId.hxx"
 
@@ -98,9 +98,9 @@ bool CP::TSingleHit::IsZHit(void) const {
 }
 
 bool CP::TSingleHit::InitializeGeneric() {
-    TGeoManager* geom = CP::TOADatabase::Get().Geometry();
+    TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
-    CP::TOADatabase::Get().GeomId().CdId(GetGeomId());
+    CP::TManager::Get().GeomId().CdId(GetGeomId());
     TGeoNode* node = geom->GetCurrentNode();
 
     // Find the global position

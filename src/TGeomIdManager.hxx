@@ -20,12 +20,12 @@ class TGeoManager;
 namespace CP {
     class TGeomIdFinder;
     class TGeomIdManager;
-    class TOADatabase;
+    class TManager;
     class TEvent;
 };
 
 /// Translate TGeometryId objects into TGeoNode pointers used with
-/// TGeoManager.  This is a singleton object managed and owned by TOADatabase.
+/// TGeoManager.  This is a singleton object managed and owned by TManager.
 /// The geometry identifier provides a non-dynamic (and stable) way for the
 /// software to uniquely identify a particular volume (e.g. a scintillator
 /// bar, a TPC pad, &c).  However, for efficiency ROOT needs to use TGeoNode
@@ -40,7 +40,7 @@ namespace CP {
 /// TGeomIdManager::GetGeometryId()).  The name of the volume associated with
 /// a TGeometryId object is available through TGeometryId::GetName().
 class CP::TGeomIdManager {
-    friend class CP::TOADatabase;
+    friend class CP::TManager;
     friend class TGeometryId;
 
 public:
@@ -140,8 +140,8 @@ public:
     ///
     /// \code
     /// for (TGeomIdManager::GeomIdMap::iterator g 
-    ///         = CP::TOADatabase::Get().GeomId().GetGeomIdMap().begin();
-    ///      g != CP::TOADatabase::Get().GeomId().GetGeomIdMap().end();
+    ///         = CP::TManager::Get().GeomId().GetGeomIdMap().begin();
+    ///      g != CP::TManager::Get().GeomId().GetGeomIdMap().end();
     ///      ++g) {
     ///     TGeometryId gid(g->first);
     /// }
@@ -149,7 +149,7 @@ public:
     const GeomIdMap& GetGeomIdMap() {return fGeomIdMap;}
     
     /// Provide a file to override the standard geometry.  Setting the
-    /// geometry file to any value other than "" will cause TOADatabase to
+    /// geometry file to any value other than "" will cause TManager to
     /// override the standard geometry.
     void SetGeometryFileOverride(std::string f) {fGeometryFileOverride = f;}
 
@@ -172,7 +172,7 @@ public:
 
 private:
     /// Construct a new TGeomIdManager.  This is private since it should only
-    /// be constructed by the friend class TOADatabase.
+    /// be constructed by the friend class TManager.
     TGeomIdManager();
     
     /// Make the copy constructor private.
@@ -272,8 +272,8 @@ private:
     /// This applies the alignment.
     void ApplyAlignment(const CP::TEvent* const event);
 
-    /// Load the correct geometry.  This is provided to TOADatabase to
-    /// implement CP::TOADatabase::Geometry().
+    /// Load the correct geometry.  This is provided to TManager to
+    /// implement CP::TManager::Geometry().
     TGeoManager* GetGeometry(CP::TEvent* event);
 
     /// Set the pointer to the current geometry manager.  This sets both the

@@ -1,5 +1,5 @@
-#ifndef TOADATABASE_HXX_SEEN
-#define TOADATABASE_HXX_SEEN
+#ifndef TManager_hxx_seen
+#define TManager_hxx_seen
 
 #include <iostream>
 #include <map>
@@ -20,31 +20,31 @@ class TGeoMatrix;
 
 namespace CP {
     class TEvent;
-    class TOADatabase;
+    class TManager;
     class TDigitManager;
     class TGeomIdManager;
     class TRootInput;
     class TGeometryId;
 
     /// An exception from the data base.
-    EXCEPTION(EOADatabase,ECore);
+    EXCEPTION(EManager,ECore);
 
     /// Flag that no file was found.
-    EXCEPTION(ENoInputFile,EOADatabase);
+    EXCEPTION(ENoInputFile,EManager);
 
     /// Flag that geometry data base was not found.
-    EXCEPTION(ENoGeometry,EOADatabase);
+    EXCEPTION(ENoGeometry,EManager);
 
     /// Flag that something went wrong with the alignment.
     EXCEPTION(EBadAlignment, ENoGeometry);
 
     /// Flag that tpc pad information data base was not found.
-    EXCEPTION(ENoTPCPads,EOADatabase);
+    EXCEPTION(ENoTPCPads,EManager);
 }
 
 /// Static access to the various geometry and calibration databases.  The main
 /// table provided by this class are the ROOT geometry using
-/// CP::TOADatabase::Get().Geometry().  It also provides several managers such
+/// CP::TManager::Get().Geometry().  It also provides several managers such
 /// as Digits(), GeomId(), TPCPads, and the PDG particle table in Particles().
 ///
 /// This class is mostly used to access the root geometry using the Geometry()
@@ -54,11 +54,11 @@ namespace CP {
 /// apply the alignment constant to the current event.
 ///
 /// If user code needs to fill tables with geometry information (e.g. the
-/// internal RECPACK sensor geometry), a CP::TOADatabase::GeometryChange call
+/// internal RECPACK sensor geometry), a CP::TManager::GeometryChange call
 /// back should be registered using RegisterGeometryCallback().  See the
-/// CP::TOADatabase::GeometryChange class documentation for more details.
+/// CP::TManager::GeometryChange class documentation for more details.
 ///
-class CP::TOADatabase {
+class CP::TManager {
     friend class CP::TRootInput;
     friend class CP::TGeomIdManager;
 
@@ -66,7 +66,7 @@ public:
 
     /// A base class to be registered by users providing a callback whenever
     /// the geometry has changed.  The callback is registered using the
-    /// CP::TOADatabase::RegisterGeometryCallback() method.
+    /// CP::TManager::RegisterGeometryCallback() method.
     ///
     /// This class is most usefule whenever the a user has tables that need to
     /// be reinitialized after a geometry change.  For example, if a user
@@ -75,23 +75,23 @@ public:
     /// Callback method.
     ///
     /// \code
-    /// class MyChangeClass: public CP::TOADatabase::GeometryChange {
+    /// class MyChangeClass: public CP::TManager::GeometryChange {
     /// public:
     ///    void Callback(const CP::TEvent* const event) {
     ///        // Do something with the current geometry
-    ///        TGeoManager* newGeom = CP::TOADatabase::Get().Geometry();
+    ///        TGeoManager* newGeom = CP::TManager::Get().Geometry();
     ///    }
     /// };
     /// \endcode
     ///
-    /// This callback must then be registered with TOADatabase.
+    /// This callback must then be registered with TManager.
     ///
     /// \code
     /// MyChangeClass* myChangeClass = new MyChangeClass;
-    /// CP::TOADatabase::Get().RegisterGeometryCallback(myChangeClass);
+    /// CP::TManager::Get().RegisterGeometryCallback(myChangeClass);
     /// \endcode
     ///
-    /// All of the callbacks registered with TOADatabase will then be called
+    /// All of the callbacks registered with TManager will then be called
     /// when the geometry changes.  The order of callbacks is unspecified
     /// (meaning don't count on a particular call order).
     class GeometryChange {
@@ -125,8 +125,8 @@ public:
         /// Note: The hash value is the last method of finding a geometry file
         /// and can be overridden by providing a geometry directly in the data
         /// file, setting the geometry file explicitly using
-        /// CP::TOADatabase::SetGeometryFile(), or setting the hash value
-        /// explicitly using CP::TOADatabase::SetGeometryHash().
+        /// CP::TManager::SetGeometryFile(), or setting the hash value
+        /// explicitly using CP::TManager::SetGeometryHash().
         /// 
         /// This class is used in the FindEventGeometry method.
         virtual TSHAHashValue GetHash(const CP::TEvent* const event) {
@@ -182,10 +182,10 @@ public:
                                   TGeometryId& geomId) {return NULL;}
     };
 
-    virtual ~TOADatabase() {;};
+    virtual ~TManager() {;};
 
     /// Get a pointer to the singleton instance of the database.
-    static TOADatabase& Get(void);
+    static TManager& Get(void);
 
     /// Return a pointer to the correct detector geometry for the event.  If
     /// the argument is NULL, then this will try to get the geometry for the
@@ -204,12 +204,12 @@ public:
     /// TGeoManager::GetCurrentNodeId()).
     ///
     /// The geometry is searched for in the following order: If the geometry
-    /// file has been explicity set using CP::TOADatabase::SetGeometryFile(),
+    /// file has been explicity set using CP::TManager::SetGeometryFile(),
     /// then use that geometry.  Otherwise, if an explicit geometry hash value
-    /// has been set using CP::TOADatabase::SetGeometryHash(), use that
+    /// has been set using CP::TManager::SetGeometryHash(), use that
     /// geometry.  Otherwise, if the event file contains a geometry, try to
     /// use that geometry.  Otherwise, use the geometry associated with a hash
-    /// value returned by the registered CP::TOADatabase::GeometryLookup class
+    /// value returned by the registered CP::TManager::GeometryLookup class
     /// which generally looks up the hash value using the calibration
     /// database.
     /// 
@@ -219,7 +219,7 @@ public:
     /// previously loaded geometry, this will throw a ENoGeometry exception.
     /// If you want to force a geometry to be loaded even though you don't
     /// currently have access to an event, you can use
-    /// CP::TOADatabase::Get().GeomId().ReadEvent(CP::TSHAHashValue()).  While
+    /// CP::TManager::Get().GeomId().ReadEvent(CP::TSHAHashValue()).  While
     /// this isn't convenient, loading a geometry without an event is also
     /// rather unusual.
     /// 
@@ -230,18 +230,18 @@ public:
     ///
     /// After the geometry is loaded alignment parameters are applied.  The
     /// alignment is applied using the AlignGeometry() method which uses
-    /// CP::TOADatabase::AlignmentLookup class to lookup the coeficients.
+    /// CP::TManager::AlignmentLookup class to lookup the coeficients.
     ///
-    /// Users should register the CP::TOADatabase::GeometryLookup and
-    /// CP::TOADatabase::AlignmentLookup classes using the
+    /// Users should register the CP::TManager::GeometryLookup and
+    /// CP::TManager::AlignmentLookup classes using the
     /// RegisterGeometryLookup and RegisterAlignmentLookup methods.
     ///
     /// If you need to use tables that get initialized for each new geometry
     /// (for instance, you might want to cache the locations of various
     /// detectors for use in RECPACK), then you need to define and register a
-    /// CP::TOADatabase::GeometryChange class using
-    /// CP::TOADatabase::RegisterGeometryCallback.  See the
-    /// CP::TOADatabase::GeometryChange for details and an example.
+    /// CP::TManager::GeometryChange class using
+    /// CP::TManager::RegisterGeometryCallback.  See the
+    /// CP::TManager::GeometryChange for details and an example.
     TGeoManager* Geometry(TEvent* event=NULL);
 
     /// Return a reference to the ROOT TDatabasePDG.
@@ -257,27 +257,26 @@ public:
     /// Return a reference to the TGeomIdManager.  The TGeomIdManager class
     /// manages the geometries and alignments that are loaded to use with an
     /// event.  It provides the implementation required to implement
-    /// TOADatabase::Geometry().  All book keeping information about the
+    /// TManager::Geometry().  All book keeping information about the
     /// current geometry (such as it's hashcode or the alignment id) should be
     /// accessed through TGeomIdManager.
     TGeomIdManager& GeomId(void);
 
     /// @{ Provide a file to override the standard geometry.  Setting the
-    /// geometry file to any value other than "" will cause TOADatabase to
+    /// geometry file to any value other than "" will cause TManager to
     /// override the standard (default) geometry with the one found in the
-    /// geometry file.  You can generate a geometry file using the ND280MC.exe
-    /// /t2k/export macro command.  This resets the required geometry if
-    /// called without an argument.
+    /// geometry file.  This resets the required geometry if called without an
+    /// argument.
     void SetGeometryOverride(const std::string& geoName ="");
     void SetGeometryOverride(const CP::TSHAHashValue& hc);
     /// @}
 
     /// Register a user callback that will be called whenever the geometry
-    /// changes (see the CP::TOADatabase::GeometryChange class).
-    void RegisterGeometryCallback(CP::TOADatabase::GeometryChange* callback);
+    /// changes (see the CP::TManager::GeometryChange class).
+    void RegisterGeometryCallback(CP::TManager::GeometryChange* callback);
 
     /// Remove a user callback.
-    void RemoveGeometryCallback(CP::TOADatabase::GeometryChange* callback);
+    void RemoveGeometryCallback(CP::TManager::GeometryChange* callback);
 
     /// Remove all user callbacks.
     void ClearGeometryCallbacks();
@@ -285,14 +284,14 @@ public:
     /// Register a class implementing the search for the correct geometry to
     /// be used for an event.  If called with "NULL", the default geometry
     /// lookup is installed.
-    CP::TOADatabase::GeometryLookup* RegisterGeometryLookup(
-        CP::TOADatabase::GeometryLookup* lookup);
+    CP::TManager::GeometryLookup* RegisterGeometryLookup(
+        CP::TManager::GeometryLookup* lookup);
 
     /// Register a class implementing the search for the correct geometry to
     /// be used for an event.  A pointer to the previous alignment lookup
     /// class is returned.
-    CP::TOADatabase::AlignmentLookup* RegisterAlignmentLookup(
-        CP::TOADatabase::AlignmentLookup* lookup);
+    CP::TManager::AlignmentLookup* RegisterAlignmentLookup(
+        CP::TManager::AlignmentLookup* lookup);
 
     /// Apply the alignment to the current geometry.  The alignment is usually
     /// done automatically when the geometry is loaded, but this can be called
@@ -310,9 +309,9 @@ public:
     virtual void AlignGeometry(const CP::TEvent* const event);
 
 private:
-    TOADatabase();
-    TOADatabase(const TOADatabase&);
-    TOADatabase& operator=(const TOADatabase&);
+    TManager();
+    TManager(const TManager&);
+    TManager& operator=(const TManager&);
 
     /// Find the hash code for a particular event.  This uses the
     /// GeometryLookup class to lookup the correct hash code for the event.
@@ -335,14 +334,14 @@ private:
 
     /// Set the current input file for the data base.  This must be set for
     /// many of the methods to work correctly.  This is used by TRootInput to
-    /// notify TOADatabase when the input file changes.
+    /// notify TManager when the input file changes.
     void SetCurrentInputFile(TFile* input);
     
     /// Get the current input event file.  This is used by TGeomIdManager to
     /// find the file with the geometry.
     TFile* CurrentInputFile(void) {return fCurrentInputFile;}
 
-    static TOADatabase *fOADatabase;
+    static TManager *fManager;
     
     /// The current event file.  This is only valid for a ROOT input file.
     TFile* fCurrentInputFile;
@@ -370,8 +369,8 @@ private:
 
     /// A vector of call backs that will be called whenever the geometry
     /// changes.
-    std::set<CP::TOADatabase::GeometryChange*> fGeometryCallbacks;
+    std::set<CP::TManager::GeometryChange*> fGeometryCallbacks;
 
-    ClassDef(TOADatabase,0);
+    ClassDef(TManager,0);
 };
 #endif

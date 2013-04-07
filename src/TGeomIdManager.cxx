@@ -20,7 +20,7 @@
 #include "ND280GeomId.hxx"
 #include "ND280GeomIdDef.hxx"
 #include "TGeomIdManager.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TEvent.hxx"
 #include "TGeomIdFinder.hxx"
 #include "TP0DIdFinder.hxx"
@@ -51,7 +51,7 @@ bool CP::TGeomIdManager::CdId(TGeometryId id) const {
 
 bool CP::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
     // Save the current node.
-    CP::TOADatabase::Get().Geometry();
+    CP::TManager::Get().Geometry();
     gGeoManager->PushPath();
 
     bool success = true;
@@ -80,7 +80,7 @@ bool CP::TGeomIdManager::FindGeometryId(TGeometryId& id) const {
 }
 
 bool CP::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
-    CP::TOADatabase::Get().Geometry();
+    CP::TManager::Get().Geometry();
     gGeoManager->PushPath();
     bool success = CdId(id);
     double local[3] = {0,0,0};
@@ -93,7 +93,7 @@ bool CP::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
 
 bool CP::TGeomIdManager::GetGeometryId(double x, double y, double z, 
                                        TGeometryId& id) const {
-    CP::TOADatabase::Get().Geometry();
+    CP::TManager::Get().Geometry();
     gGeoManager->PushPath();
     gGeoManager->FindNode(x,y,z);
     bool success = FindGeometryId(id);
@@ -494,7 +494,7 @@ CP::TGeometryId CP::TGeomIdManager::MakeGeometryId(GeomIdKey key) const {
 }
 
 void CP::TGeomIdManager::BuildGeomIdMap() {
-    // DO NOT CALL TOADatabase::Get().Geometry() HERE
+    // DO NOT CALL TManager::Get().Geometry() HERE
 
     // Make sure that the node id array has been initialized in the
     // TGeoNodeCache.
@@ -505,6 +505,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
     // Set the top volume.
     TGeoVolume* top = gGeoManager->GetTopVolume();
     std::string topName(top->GetName());
+#ifdef RESET_TOP_VOLUME
     if (topName != "t2k") {
         CaptWarn("Geometry top volume has changed to " << topName);
         top = gGeoManager->GetVolume("t2k");
@@ -515,6 +516,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
         CaptWarn("Resetting top volume to " << top->GetName());
         gGeoManager->SetTopVolume(top);
     }
+#endif
         
     // Clear the current geom id map.
     fGeomIdMap.clear();
@@ -558,7 +560,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
 
 int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
                                           int keepGoing) {
-    // DO NOT CALL TOADatabase::Get().Geometry() HERE
+    // DO NOT CALL TManager::Get().Geometry() HERE
 
     TGeoNode* node = gGeoManager->GetCurrentNode();
     names.push_back(node->GetName());
@@ -626,7 +628,7 @@ int CP::TGeomIdManager::RecurseGeomId(std::vector<std::string>& names,
 }
 
 void CP::TGeomIdManager::BuildHashCode() {
-    // DO NOT CALL TOADatabase::Get().Geometry() HERE
+    // DO NOT CALL TManager::Get().Geometry() HERE
 
     // Make sure that the node id array has been initialized in the
     // TGeoNodeCache.
@@ -640,9 +642,12 @@ void CP::TGeomIdManager::BuildHashCode() {
 
     CaptNamedDebug("Geometry", "Rebuild hash code");
 
-    // Set the top volume.
     TGeoVolume* top = gGeoManager->GetTopVolume();
     std::string topName(top->GetName());
+    CaptLog("Find Hash for " << topName);
+
+#ifdef RESET_TOP_VOLUME
+    // reset the top volume.
     if (topName != "t2k") {
         CaptWarn("Geometry top volume has changed to " << topName);
         top = gGeoManager->GetVolume("t2k");
@@ -653,7 +658,8 @@ void CP::TGeomIdManager::BuildHashCode() {
         CaptWarn("Resetting top volume to " << top->GetName());
         gGeoManager->SetTopVolume(top);
     }
-        
+#endif
+
     // Save the current geometry state.
     gGeoManager->PushPath();
     gGeoManager->CdTop();
@@ -683,7 +689,7 @@ void CP::TGeomIdManager::BuildHashCode() {
 }
 
 void CP::TGeomIdManager::RecurseHashCode(std::vector<std::string>& names) {
-    // DO NOT CALL TOADatabase::Get().Geometry() HERE
+    // DO NOT CALL TManager::Get().Geometry() HERE
 
     TGeoNode* node = gGeoManager->GetCurrentNode();
     names.push_back(node->GetName());
@@ -786,7 +792,7 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
         hc = event->GetGeometryHash();
         aid = event->GetAlignmentId();
     }
-    TFile* currentInputFile = TOADatabase::Get().CurrentInputFile();
+    TFile* currentInputFile = TManager::Get().CurrentInputFile();
     if (!currentInputFile) {
         CaptNamedWarn("Geometry",
                        " Input file not available to provide geometry");
@@ -804,7 +810,7 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     // As a last resort, try to use the geometry that was specified as the
     // default.  While this is the last resort, this is the "normal" code
     // path. 
-    hc = CP::TOADatabase::Get().FindEventGeometry(event);
+    hc = CP::TManager::Get().FindEventGeometry(event);
     if (hc.Valid() && !GetHash().Equivalent(hc)) {
         CaptNamedInfo("Geometry","Look for geometry with " << hc);
         if (ReadGeometry(hc)) {
@@ -911,7 +917,7 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
     // "changed hash".
     if (geometryChanging || !fGeomIdChangedHash.Equivalent(GetHash())) {
         fGeomIdChangedHash = GetHash();
-        CP::TOADatabase::Get().ApplyGeometryCallbacks(event);
+        CP::TManager::Get().ApplyGeometryCallbacks(event);
         CaptLog("Loaded " << GetGeoManager()->GetName());
     }
 
@@ -938,7 +944,7 @@ bool CP::TGeomIdManager::CheckGeometry(const CP::TEvent* const event) {
 #ifndef LOAD_DEFAULT_GEOMETRY
         return false;
 #else
-        CaptNamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TOADatabase::GeometryLookup class so that it is notified when the geometry changed.");
+        CaptNamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TManager::GeometryLookup class so that it is notified when the geometry changed.");
 #endif
     }
     
@@ -992,7 +998,7 @@ bool CP::TGeomIdManager::CheckAlignment(const CP::TEvent* const event) {
     // alignment.  Use the database code to see if the alignment needs to be
     // checked.  If this returns false we will keep the current alignment.  If
     // it returns true the geometry will be realigned.
-    return CP::TOADatabase::Get().CheckAlignment(event);
+    return CP::TManager::Get().CheckAlignment(event);
 }
 
 void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
@@ -1008,7 +1014,7 @@ void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
 
     CaptNamedDebug("Geometry","Apply alignment to event");
 
-    fGeomIdAlignmentId = CP::TOADatabase::Get().ApplyAlignmentLookup(event);
+    fGeomIdAlignmentId = CP::TManager::Get().ApplyAlignmentLookup(event);
 
     SaveAlignmentCode(fGeomIdAlignmentId);
 }

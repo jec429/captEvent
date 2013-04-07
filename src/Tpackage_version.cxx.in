@@ -1,4 +1,4 @@
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 
 // Source for T%PACKAGE%_version.cxx auto-generated using the
 // Tpackage_version.cxx.in template file.
@@ -22,7 +22,7 @@ CP::T%PACKAGE%_version::~T%PACKAGE%_version() {}
 
 void CP::T%PACKAGE%_version::Initialize(void) {
     // register this package.
-    CP::TOADatabase::Get().PackageSet().insert(fThis);
+    CP::TManager::Get().PackageSet().insert(fThis);
 }
 
 CP::T%PACKAGE%_version* CP::T%PACKAGE%_version::Get(void) {

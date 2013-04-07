@@ -3,7 +3,7 @@
 
 #include "TPackageSet.hxx"
 #include "TPackageVersion.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 
 namespace tut {
     struct basePackageVersion {
@@ -22,6 +22,6 @@ namespace tut {
     // Test the default constructor and destructor.
     template<> template<>
     void testPackageVersion::test<1> () {
-        CP::TOADatabase::Get().PackageSet();
+        CP::TManager::Get().PackageSet();
     }
 };

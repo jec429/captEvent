@@ -1,6 +1,6 @@
 # -*- makefile -*-
 # 
-# A fragment used by CMT to register the library with TOADatabase.
+# A fragment used by CMT to register the library with TManager.
 #
 
 clean :: registerclean

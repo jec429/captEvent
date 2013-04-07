@@ -5,7 +5,7 @@
 
 #include "TAlgorithm.hxx"
 #include "TAlgorithmTag.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "TPackageSet.hxx"
 
 ClassImp(CP::TAlgorithmTag);
@@ -16,13 +16,13 @@ CP::TAlgorithmTag::TAlgorithmTag()
     : TNamed("unnamed","Algorithm Tag") { }
 
 CP::TAlgorithmTag::TAlgorithmTag(const CP::TAlgorithm& algo) 
-    : TNamed(algo.GetName(), "T2K Algorithm Tag") {
+    : TNamed(algo.GetName(), "Algorithm Tag") {
 
     std::string tag = 
         std::string(algo.GetName()) + ", " + std::string(algo.GetVersion());
     Add(tag);
 
-    const CP::TPackageSet& packages = CP::TOADatabase::Get().PackageSet();
+    const CP::TPackageSet& packages = CP::TManager::Get().PackageSet();
     for (CP::TPackageSet::const_iterator p = packages.begin();
          p != packages.end();
          ++p) {

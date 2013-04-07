@@ -14,11 +14,11 @@ CP::TAlgorithmResult::TAlgorithmResult(const char* name, const char* title)
     : CP::TDataVector(name, title), fStatusSummary("") { }
 
 CP::TAlgorithmResult::TAlgorithmResult(const CP::TAlgorithm& algo) 
-    : CP::TDataVector(algo.GetName(), "T2K Algorithm Result"),
+    : CP::TDataVector(algo.GetName(), "An Algorithm Result"),
       fTag(algo.GetTag()), fStatusSummary("") { }
 
 CP::TAlgorithmResult::TAlgorithmResult(const CP::THitSelection& hits)
-    : CP::TDataVector(hits.GetName(), "T2K Algorithm Result"),
+    : CP::TDataVector(hits.GetName(), "An Algorithm Result"),
       fStatusSummary("") {
     SetName(hits.GetName());
     CP::THitSelection* internalHits = new CP::THitSelection(hits.GetName());

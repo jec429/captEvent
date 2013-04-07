@@ -72,14 +72,14 @@ namespace CP {
 ///
 /// The ROOT geometry node can be found:
 /// \code
-/// TOADatabase::Get().GeomId().CdId(geomId);
+/// TManager::Get().GeomId().CdId(geomId);
 /// int nodeId = gGeoManager->GetCurrentNodeId();
 /// \endcode
 /// 
 /// The geometry identifier for a particular position.
 /// \code
 /// // Return false if x,y,z is an invalid position.
-/// TOADatabase::Get().GeomId().GetGeometryId(x,y,z,geomId);
+/// TManager::Get().GeomId().GetGeometryId(x,y,z,geomId);
 /// \endcode
 ///
 class CP::TGeometryId {

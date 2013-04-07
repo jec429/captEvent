@@ -35,7 +35,7 @@ namespace CP {
 /// result name, and fill the book keeping information.
 class CP::TAlgorithm : public TNamed {
 public:
-    TAlgorithm(const char* name, const char* title="T2K Algorithm");
+    TAlgorithm(const char* name, const char* title="An Algorithm");
     virtual ~TAlgorithm();
     
     /// This method returns information about the compiled version 

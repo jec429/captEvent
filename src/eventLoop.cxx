@@ -5,7 +5,7 @@
 #include "TEvent.hxx"
 #include "TRootInput.hxx"
 #include "TRootOutput.hxx"
-#include "TOADatabase.hxx"
+#include "TManager.hxx"
 #include "THandleHack.hxx"
 #include "TCaptLog.hxx"
 #include "TMemoryUsage.hxx"
@@ -395,7 +395,7 @@ int CP::eventLoop(int argc, char** argv,
     if (readCount<1) readCount = std::numeric_limits<int>::max();
     
     if (geometryFile != "") {
-        TOADatabase::Get().SetGeometryOverride(geometryFile);
+        TManager::Get().SetGeometryOverride(geometryFile);
     }
 
     int totalRead = 0;
@@ -470,12 +470,12 @@ int CP::eventLoop(int argc, char** argv,
                         && saveEvent < (int) outputFiles.size()) {
                         try {
                             outputFiles[geomFile]
-                                ->WriteGeometry(TOADatabase::Get().Geometry());
+                                ->WriteGeometry(TManager::Get().Geometry());
                         }
                         catch (ENoGeometry) {
                             CaptSevere("Geometry not saved in output");
                         }
-                        catch (EOADatabase) {
+                        catch (EManager) {
                             CaptSevere("Geometry not saved in output");
                         }
                     }
