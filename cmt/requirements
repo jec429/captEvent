@@ -28,16 +28,18 @@ document version version *.cxx *.hxx *_LinkDef.h
 
 # Build the registration prototype.
 document register register 
+macro_append register_dependencies " version "
 
 # Build all of the ROOT dictionaries.
 document linkdef linkdef *.hxx *_LinkDef.h
+macro_append linkdef_dependencies " register "
 
 # Build the documentation.
 document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
 
 # The library to build
 library captEvent bogusVariable=helloBogus *.cxx *.hxx $(bin)dict/*.cxx
-apply_pattern dependency target=captEvent depends=linkdef
+macro_append captEvent_dependencies " linkdef "
 
 # Build information used by packages that use this one.
 macro captEvent_cppflags " -DCAPTEVENT_USED "
