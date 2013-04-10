@@ -235,9 +235,9 @@ std::string
 CP::TGeomIdManager::FindGeometryFile(const TSHAHashValue& hc) const {
     std::string result = "";
 
-    std::string oaEventRoot(gSystem->Getenv("OAEVENTROOT"));
-    std::string oaEventConfig(gSystem->Getenv("OAEVENTCONFIG"));
-    std::string geometryName = oaEventRoot + "/" + oaEventConfig;
+    std::string packageRoot(gSystem->Getenv("CAPTEVENTROOT"));
+    std::string packageConfig(gSystem->Getenv("CAPTEVENTCONFIG"));
+    std::string geometryName = packageRoot + "/" + packageConfig;
     void* dirp = gSystem->OpenDirectory(geometryName.c_str());
     if (!dirp) {
         CaptSevere("Geometry directory not available:"
@@ -935,17 +935,13 @@ bool CP::TGeomIdManager::CheckGeometry(const CP::TEvent* const event) {
     else if (GetGeometryHashOverride().Valid()) return true;
     else if (!GetGeometryFileOverride().empty()) return true;
         
-    // We don't have an event so we can't determine the correct geometry.  For
-    // now, just print an error message, but this is actually a pretty serious
-    // problem.  In the future, this will return false.
+    // We don't have an event so we can't determine the correct geometry.
     if (!event) {
-        CaptError("Invalid event: Using suspicious geometry.");
-#define LOAD_DEFAULT_GEOMETRY
-#ifndef LOAD_DEFAULT_GEOMETRY
+        CaptError("Requesting geometry when there isn't a valid event.\n"
+                  "The correct geometry cannot be determined and won't\n"
+                  "and the current geometry (if one is loaded) won't be\n"
+                  "changed.");
         return false;
-#else
-        CaptNamedError("Geometry","Using suspicious geometry: This probably means that the geometry has been accessed in BeginFile() and is probably wrong.  This worked in previous code, but depends on an oaEvent bug will be fixed in a future release.  Code should be modified to use the CP::TManager::GeometryLookup class so that it is notified when the geometry changed.");
-#endif
     }
     
     // If we don't have any geometry manager, then we have to look for one.
