@@ -14,6 +14,7 @@
 #include <TKey.h>
 #include <TString.h>
 #include <TPRegexp.h>
+#include <TGeoPhysicalNode.h>
 
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
@@ -810,7 +811,7 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
     // As a last resort, try to use the geometry that was specified as the
     // default.  While this is the last resort, this is the "normal" code
     // path. 
-    hc = CP::TManager::Get().FindEventGeometry(event);
+    hc = CP::TManager::Get().LookupGeometry(event);
     if (hc.Valid() && !GetHash().Equivalent(hc)) {
         CaptNamedInfo("Geometry","Look for geometry with " << hc);
         if (ReadGeometry(hc)) {
@@ -998,6 +999,7 @@ bool CP::TGeomIdManager::CheckAlignment(const CP::TEvent* const event) {
 }
 
 void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
+    GetGeoManager();
     if (!gGeoManager) {
         CaptSevere("ApplyAlignment called with invalid geometry");
         return;
@@ -1010,7 +1012,84 @@ void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
 
     CaptNamedDebug("Geometry","Apply alignment to event");
 
-    fGeomIdAlignmentId = CP::TManager::Get().ApplyAlignmentLookup(event);
+    CP::TAlignmentId id;
+
+    TObjArray* physicalNodes = gGeoManager->GetListOfPhysicalNodes();
+    if (physicalNodes) {
+        CaptNamedInfo("Geometry","Clear existing physical nodes: " 
+                  << physicalNodes->GetEntries());
+        gGeoManager->ClearPhysicalNodes(true);
+    }
+
+    if (CP::TManager::Get().HaveAlignment()) {
+        // Save the current geometry state.
+        CaptInfo("Apply alignment to event");
+        gGeoManager->PushPath();
+        
+        // Let alignment code know that the alignment is starting.
+        id = CP::TManager::Get().StartAlignment(event);
+
+        if (!id.Valid()) CaptNamedInfo("Geometry",
+                                        "No alignment should be apply");
+
+        gGeoManager->UnlockGeometry();
+        int alignmentCount = 0;
+        // Apply alignment to each geometry element.
+        std::pair<TGeometryId, TGeoMatrix*> 
+            alignPair = CP::TManager::Get().Alignment(event);
+        while (alignPair.second) {
+            TGeometryId geomId = alignPair.first;
+            std::auto_ptr<TGeoMatrix> align(alignPair.second);
+            std::string path = geomId.GetName();
+            TGeoPhysicalNode* pNode 
+                = gGeoManager->MakePhysicalNode(path.c_str());
+            TGeoMatrix* orig = pNode->GetNode()->GetMatrix();
+            TGeoHMatrix h = (*orig) * (*align);
+            if (pNode->IsAligned()) {
+                pNode->Align(new TGeoHMatrix(h));
+                delete orig;
+            }
+            else {
+                pNode->Align(new TGeoHMatrix(h));
+            }
+            ++ alignmentCount;
+            alignPair = CP::TManager::Get().Alignment(event);
+        }
+        
+        if (alignmentCount > 0) {
+            CaptInfo("Applied " << alignmentCount << " alignment matrices.");
+        }
+
+        gGeoManager->PopPath();
+        gGeoManager->RefreshPhysicalNodes(true);
+        
+        if (id.Valid() && !alignmentCount) {
+            CaptError("Invalid alignment applied to geometry");
+            throw EBadAlignment();
+        }
+        
+        if (!id.Valid() && alignmentCount) {
+            CaptError("Invalid alignment applied to geometry");
+            throw EBadAlignment();
+        }
+
+    }
+
+    // There isn't an alignment id, so create one.  This is the hash of an
+    // empty string.
+    if (!id.Valid()) {
+        CaptNamedDebug("Geometry","No alignment id, so create an empty one");
+        TSHA1 sha;
+        unsigned int message[5];
+        if (sha.Result(message)) {
+            id = TAlignmentId(message);
+        }
+        else {
+            CaptError("SHA1 Calculation failed");
+        }
+    }
+
+    fGeomIdAlignmentId = id;
 
     SaveAlignmentCode(fGeomIdAlignmentId);
 }

@@ -298,25 +298,32 @@ private:
     TManager(const TManager&);
     TManager& operator=(const TManager&);
 
-    /// Find the hash code for a particular event.  This uses the
-    /// GeometryLookup class to lookup the correct hash code for the event.
-    /// If the event hash code is not found, then this returns an invalid hash
-    /// code.  This is used by TGeomIdManager to access the GeometryLookup
-    /// class.
-    TSHAHashValue FindEventGeometry(const TEvent *const event) const;
+    /// Find the hash code for a particular event using a registered
+    /// GeometryLookup object.  This returns the hash code of the geometry to
+    /// use for the event.  If the event hash code is not found, then this
+    /// returns an invalid hash code.  This is used by TGeomIdManager to
+    /// access the GeometryLookup class.
+    TSHAHashValue LookupGeometry(const TEvent *const event) const;
 
     /// Call the registered geometry callbacks.  This is used by
     /// TGeomIdManager to notify the user routines when the geometry changes.
     void ApplyGeometryCallbacks(const CP::TEvent* event);
+
+    /// Check if there is a valid alignment.
+    bool HaveAlignment() {return (fAlignmentLookup != NULL);}
 
     /// Use the AlignmentLookup method to check if a new alignment should be
     /// applied.  If this returns true, the we need a new alignment.  This is
     /// used by TGeomIdManager to short circuit the alignment application.
     bool CheckAlignment(const CP::TEvent* const event);
 
-    /// Use the AlignmentLookup class to get the actual alignment.
-    virtual CP::TAlignmentId ApplyAlignmentLookup(const CP::TEvent* event);
+    /// Use the AlignmentLookup class to start applying the alignment.  This
+    /// is used by the TGeomIdManager to start applying alignment.
+    CP::TAlignmentId StartAlignment(const CP::TEvent* const event);
 
+    /// Use the AlignmentLookup class to return an alignment matrix.
+    std::pair<CP::TGeometryId,TGeoMatrix*> Alignment(const CP::TEvent* event);
+    
     /// Set the current input file for the data base.  This must be set for
     /// many of the methods to work correctly.  This is used by TRootInput to
     /// notify TManager when the input file changes.
