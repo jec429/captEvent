@@ -4,6 +4,7 @@
 
 CP::TEvent* CP::TVInputFile::FirstEvent() {throw CP::ECore();}
 CP::TEvent* CP::TVInputFile::NextEvent(int skip) {throw CP::ECore();}
+CP::TEvent* CP::TVInputFile::PreviousEvent(int skip) {return NULL;}
 int CP::TVInputFile::GetPosition() const {throw CP::ECore();}
 bool CP::TVInputFile::IsOpen() {throw CP::ECore();}
 bool CP::TVInputFile::EndOfFile() {throw CP::ECore();}

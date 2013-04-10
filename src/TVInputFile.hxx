@@ -24,6 +24,14 @@ public:
     /// then skip this many events before returning.
     virtual CP::TEvent* NextEvent(int skip=0) = 0;
     
+    /// Read the previous event in the file.  If the skip is greater than
+    /// zero, then skip backward this many events before returning.  If the
+    /// event cannot be returned, this will return NULL.  In a ROOT file, this
+    /// means that the read would be before the beginning of the file (and the
+    /// new position is the beginning).  In other types of files, it may not
+    /// be possible to read backwards and this will always return NULL.
+    virtual TEvent* PreviousEvent(int skip = 0);
+
     /// Return the position of the event just read in the file.  A position of
     /// zero means that the first event was read.  A position of -1 means that
     /// no events have been read and we are not at the end of file.  The

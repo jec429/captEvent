@@ -72,6 +72,9 @@ public:
     }
 
     /// Read the n'th event in the file.  The events are counted from zero.
+    /// If the index is out-of-range, or no event can be read, this will
+    /// return NULL.  For example, if event -1 is requested, this returns
+    /// NULL.
     virtual TEvent* ReadEvent(Int_t n);
 
     /// Make sure that the file is closed.  This method is specific to
