@@ -170,6 +170,17 @@ public:
         return fGeometryHashOverride;
     }
 
+    /// Apply the alignment to the current geometry.  The alignment is usually
+    /// done automatically when the geometry is loaded, but this can be called
+    /// multiple times by the user as well.  Each time it is called, the
+    /// current set of physical nodes is cleared and the alignment is
+    /// reapplied to the baseline geometry.  
+    ///
+    /// Be careful, the ROOT physical geometry alignment code is a relatively
+    /// slow.  In practical terms, the alignment should only be applied when
+    /// the geometry is loaded.  
+    void ApplyAlignment(const CP::TEvent* const event);
+
 private:
     /// Construct a new TGeomIdManager.  This is private since it should only
     /// be constructed by the friend class TManager.
@@ -268,9 +279,6 @@ private:
 
     /// Check if the alignment might have changed.
     bool CheckAlignment(const CP::TEvent* const event);
-
-    /// This applies the alignment.
-    void ApplyAlignment(const CP::TEvent* const event);
 
     /// Load the correct geometry.  This is provided to TManager to
     /// implement CP::TManager::Geometry().

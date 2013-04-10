@@ -264,10 +264,6 @@ CP::TManager::AlignmentLookup* CP::TManager::RegisterAlignmentLookup(
     return old;
 }
 
-void CP::TManager::AlignGeometry(const CP::TEvent* const event) {
-    GeomId().ApplyAlignment(event);
-}
-
 CP::TAlignmentId CP::TManager::ApplyAlignmentLookup(
     const CP::TEvent* const event) {
     CP::TAlignmentId id;

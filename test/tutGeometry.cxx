@@ -111,7 +111,7 @@ namespace tut {
                                               2*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
-        CP::TManager::Get().AlignGeometry(NULL);
+        CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
         CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::Detector());
@@ -144,7 +144,7 @@ namespace tut {
                                               2*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
-        CP::TManager::Get().AlignGeometry(NULL);
+        CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
         CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
@@ -177,7 +177,7 @@ namespace tut {
                                               3*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
-        CP::TManager::Get().AlignGeometry(NULL);
+        CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
         CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
@@ -214,7 +214,7 @@ namespace tut {
                                               4*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
-        CP::TManager::Get().AlignGeometry(NULL);
+        CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
         CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
@@ -231,7 +231,7 @@ namespace tut {
         // CP::TManager::Get().Geometry();
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
-        CP::TManager::Get().AlignGeometry(NULL);
+        CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         CP::TSHAHashValue hc = CP::TManager::Get().GeomId().GetHash();
         CP::TAlignmentId aid = CP::TManager::Get().GeomId().GetAlignmentId();
