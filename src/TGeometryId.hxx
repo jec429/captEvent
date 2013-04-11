@@ -23,12 +23,7 @@ namespace CP {
 
     class TGeometryId;
     class TGeomIdManager;
-    class TP0DIdFinder;
-    class TFGDIdFinder;
-    class TPECalIdFinder;
-    class TTECalIdFinder;
-    class TTPCIdFinder;
-    class TSMRDIdFinder;
+    class TCaptIdFinder;
 
     bool operator ==(const CP::TGeometryId& a, const CP::TGeometryId& b);
     bool operator !=(const CP::TGeometryId& a, const CP::TGeometryId& b);
@@ -44,30 +39,9 @@ namespace CP {
 ///
 /// Examples:
 ///
-/// To set the id to a P0D P0D scintillator bar:
+/// To set the id to a cyrostat wire:
 /// \code
-/// TGeometryId id = CP::GeomId::P0D::Bar(p0duleNumber, xyLayer, bar);
-/// \endcode
-///
-/// To set the id to a TPC pad:
-/// \code
-/// TGeometryId id = CP::GeomId::TPC::Pad(tpc, half, mm, pad);
-/// \endcode
-///
-/// Find the detector element:
-/// \code
-/// std::string name = geomId.GetName();
-/// if (name.find("P0Dule") != std::string::npos) {/* In P0Dule */}
-/// \endcode
-///
-/// Find a element number (e.g. a MicroMega):
-/// \code
-/// std::string name = geomId.GetName();
-/// std::size_type mm = name.find("/MM_");
-/// if (mm != std::string::npos) {
-///     std::istringstream in(name.substr(mm+4);
-///     in >> microMegaNumber;
-/// }
+/// TGeometryId id = CP::GeomId::Cryo::Wire(xuvLayer, wire);
 /// \endcode
 ///
 /// The ROOT geometry node can be found:
@@ -101,24 +75,16 @@ public:
     /// determine which detector element is represented by the identifier.
     std::string GetName() const;
 
-    /// Get the subsystem name.  The current values are "P0D", "TPC", "FGD",
-    /// "DSECal", "TECal", "PECal", "SMRD", "INGRID" and "node".  If the value
-    /// is empty ("node"), then the identifier is a plain ROOT node
-    /// identifier, and you must use the geometry manager to query for the
-    /// specific location.
+    /// Get the subsystem name.  The current values are "Cryo", and "node".
+    /// If the value is empty ("node"), then the identifier is a plain ROOT
+    /// node identifier, and you must use the geometry manager to query for
+    /// the specific location.
     std::string GetSubsystemName() const;
 
-    /// Get the subsystem index.  The values are defined in ND280GeomIdDef.hxx
-    /// and are
+    /// Get the subsystem index.  The values are defined in CaptGeomIdDef.hxx
+    /// and are.  The only value for CAPTAIN is
     ///
-    ///    * CP::GeomId::Def::kP0D           -- The P0D
-    ///    * CP::GeomId::Def::kTPC           -- The TPC
-    ///    * CP::GeomId::Def::kFGD           -- The FGD
-    ///    * CP::GeomId::Def::kDSECal        -- The DSECal
-    ///    * CP::GeomId::Def::kTECal         -- The TECal
-    ///    * CP::GeomId::Def::kPECal         -- The PECal
-    ///    * CP::GeomId::Def::kSMRD          -- The SMRD
-    ///    * CP::GeomId::Def::kINGRID        -- The INGRID
+    ///    * CP::GeomId::Def::kCryostat      -- The Cryostat
     ///    * CP::GeomId::Def::kROOTGeoNodeId -- A general ROOT node
     ///
     /// Any other value is invalid.
@@ -136,13 +102,13 @@ public:
     }
 
     /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the ND280GeomId CP::GeomId
+    /// release.  Use the functions provided in the CaptGeomId CP::GeomId
     /// namespace to set the TGeometryId fields.
     void SetField(int val, int msb, int lsb) METHOD_DEPRECATED
         {SetFieldSafe(val,msb,lsb);}
 
     /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the ND280GeomId CP::GeomId
+    /// release.  Use the functions provided in the CaptGeomId CP::GeomId
     /// namespace to get the TGeometryId fields.
     int GetField(int msb, int lsb) const METHOD_DEPRECATED
         {return GetFieldSafe(msb,lsb);}

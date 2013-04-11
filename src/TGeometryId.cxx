@@ -3,7 +3,7 @@
 #include <sstream>
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
-#include "ND280GeomIdDef.hxx"
+#include "CaptGeomIdDef.hxx"
 #include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 
@@ -71,14 +71,7 @@ const bool CP::TGeometryId::IsValid() const {
     int sys = (field & mask);
 
     switch (sys) {
-    case CP::GeomId::Def::kP0D:
-    case CP::GeomId::Def::kTPC:
-    case CP::GeomId::Def::kFGD:
-    case CP::GeomId::Def::kDSECal:
-    case CP::GeomId::Def::kTECal:
-    case CP::GeomId::Def::kPECal:
-    case CP::GeomId::Def::kSMRD:
-    case CP::GeomId::Def::kINGRID:
+    case CP::GeomId::Def::kCryostat:
     case CP::GeomId::Def::kROOTGeoNodeId:
         return true;
     default:
@@ -97,14 +90,7 @@ std::string CP::TGeometryId::GetSubsystemName() const {
                        CP::GeomId::Def::kDetectorIdLSB);
 
     switch (sys) {
-    case CP::GeomId::Def::kP0D: return "P0D";
-    case CP::GeomId::Def::kTPC: return "TPC";
-    case CP::GeomId::Def::kFGD: return "FGD";
-    case CP::GeomId::Def::kDSECal: return "DSECal";
-    case CP::GeomId::Def::kTECal: return "TECal";
-    case CP::GeomId::Def::kPECal: return "PECal";
-    case CP::GeomId::Def::kSMRD: return "SMRD";
-    case CP::GeomId::Def::kINGRID: return "INGRID";
+    case CP::GeomId::Def::kCryostat: return "Cryostat";
     case CP::GeomId::Def::kROOTGeoNodeId: return "node";
     }
 

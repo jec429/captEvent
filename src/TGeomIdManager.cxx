@@ -18,13 +18,13 @@
 
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
-#include "ND280GeomId.hxx"
-#include "ND280GeomIdDef.hxx"
+#include "CaptGeomId.hxx"
+#include "CaptGeomIdDef.hxx"
 #include "TGeomIdManager.hxx"
 #include "TManager.hxx"
 #include "TEvent.hxx"
 #include "TGeomIdFinder.hxx"
-#include "TP0DIdFinder.hxx"
+#include "TCaptIdFinder.hxx"
 
 CP::TGeomIdManager::TGeomIdManager() {
     ResetGeometry();
@@ -36,17 +36,6 @@ bool CP::TGeomIdManager::CdId(TGeometryId id) const {
     GeomIdKey gid = MakeGeomIdKey(id);
     GeomIdMap::const_iterator pair = fGeomIdMap.find(gid);
     if (pair != fGeomIdMap.end()) return CdKey(pair->second);
-    // The geometry id was not found.  Check to see if this is one of the
-    // special cases.
-    if (CP::GeomId::TPC::IsPad(id)) {
-        /// This is a pad, so handle the special case by masking out the pad
-        /// bits to find the ROOT key.
-        gid = MakeGeomIdKey(id) 
-            & ~(CP::GeomId::Def::TPC::Pad::kPadFlagMask
-                | CP::GeomId::Def::TPC::Pad::kPadMask);
-        pair = fGeomIdMap.find(gid);
-        if (pair != fGeomIdMap.end()) return CdKey(pair->second);
-    }
     return false;
 }
 
@@ -532,7 +521,7 @@ void CP::TGeomIdManager::BuildGeomIdMap() {
         CaptSevere("fFinders vector should be empty");
         fFinders.clear();
     }
-    fFinders.push_back(new TP0DIdFinder());
+    fFinders.push_back(new TCaptIdFinder());
 
     // Initialize to begin recursion.
     std::vector<std::string> names; names.reserve(20);
@@ -726,12 +715,6 @@ std::string CP::TGeomIdManager::GetPath(TGeometryId id) const {
         return "invalid";
     }
     std::string result = gGeoManager->GetPath();
-    if (CP::GeomId::TPC::IsPad(id)) {
-        int pad = MakeGeomIdKey(id) & CP::GeomId::Def::TPC::Pad::kPadMask;
-        std::stringstream padStr;
-        padStr << "/Pad_" << pad;
-        result = result + padStr.str();
-    }
     gGeoManager->PopPath();
     return result;
 }
