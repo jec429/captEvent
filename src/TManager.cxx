@@ -53,9 +53,9 @@ namespace {
         // Open the context file and read the list of geometries.
         DefaultGeometryLookup() {
             // Generate the name of the file.
-            std::string geometryName(gSystem->Getenv("OAEVENTROOT"));
+            std::string geometryName(gSystem->Getenv("CAPTEVENTROOT"));
             geometryName += "/";
-            geometryName += gSystem->Getenv("OAEVENTCONFIG");
+            geometryName += gSystem->Getenv("CAPTEVENTCONFIG");
             geometryName += "/GEOMETRY.LIST" ;
             // Attache the file to a stream.
             std::ifstream geoContext(geometryName.c_str());

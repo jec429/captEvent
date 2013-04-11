@@ -100,9 +100,9 @@ public:
     /// file name is searched for that hash.
     /// 
     /// The geometry is found by looking in a standarized location
-    /// (${OAEVENTROOT}/${OAEVENTCONFIG}/geometry) for a file which advertises
-    /// a geometry matching the requested hash value.  This uses LoadGeometry
-    /// to read the geometry file.
+    /// (${CAPTEVENTROOT}/${CAPTEVENTCONFIG}/geometry) for a file which
+    /// advertises a geometry matching the requested hash value.  This uses
+    /// LoadGeometry to read the geometry file.
     bool ReadGeometry(const TSHAHashValue& hc);
 
     /// Provide a standard method to load the geometry out of a TFile.  The
