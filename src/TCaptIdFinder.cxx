@@ -14,7 +14,6 @@ CP::TCaptIdFinder::~TCaptIdFinder() {}
 bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names, 
                               TGeometryId& id) {
 
-#define DEBUG_CaptFinder
 #ifdef DEBUG_CaptFinder
     for (std::vector<std::string>::const_iterator s = names.begin();
          s != names.end();
