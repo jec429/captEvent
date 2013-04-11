@@ -11,7 +11,6 @@
 #include "TSingleHit.hxx"
 #include "TManager.hxx"
 #include "HEPUnits.hxx"
-#include "ND280GeomId.hxx"
 
 ClassImp(CP::TSingleHit);
 
@@ -142,12 +141,6 @@ bool CP::TSingleHit::InitializeGeneric() {
     fIsXHit = (fSpread.X() < 10*unit::cm);
     fIsYHit = (fSpread.Y() < 10*unit::cm);
     fIsZHit = (fSpread.Z() < 10*unit::cm);
-
-    // The SMRD scintillator is long in the Z direction, but still segmented
-    // so that a single SMRD hit gives a Z position measurement.  Insteand of
-    // having a generalized algorithm to figure this out, just force SMRD hits
-    // to be Z hits.
-    if (CP::GeomId::SMRD::IsSMRD(GetGeomId())) fIsZHit = true;
 
     geom->PopPath();
     
