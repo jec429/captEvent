@@ -103,6 +103,11 @@ public:
     /// \note You cannot access the geometry in this method since it will not
     /// be correctly initialized.  Accessing the geometry *WILL* result in
     /// getting an incorrect geometry loaded.
+    ///
+    /// \note When you need to do initialization when the geometry is loaded,
+    /// declare a CP::TManager::GeometryChange derived class with a
+    /// Callback(const TEvent* event) method.  This is called everytime the
+    /// geometry is changed.
     virtual void Initialize(void);
 
     /// Called before the first event of a file is read, but you should prefer
@@ -113,8 +118,8 @@ public:
     /// pointer to the input file which must then be dynamic cast to the
     /// correct type.
     ///
-    /// \note You should access the geometry in this method since it will not
-    /// be correctly initialized.  Accessing the geometry *WILL* result in
+    /// \note You should not access the geometry in this method since it will
+    /// not be correctly initialized.  Accessing the geometry *WILL* result in
     /// getting an incorrect geometry loaded.  Loading the correct geometry
     /// requires looking at the event header information to determine the
     /// detector configuration.
