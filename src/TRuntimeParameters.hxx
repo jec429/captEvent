@@ -24,7 +24,25 @@ namespace CP {
 /// This class is meant to provide access to a set of parameters that are
 /// defined in a set of text files; in particular, the text files are used to
 /// store 'software runtime parameters' in calibration and reconstruction
-/// algorithms.
+/// algorithms.  This reads parameter values saved in parameters files that
+/// are found in each package.  The files are named
+/// ${<PACKAGE>ROOT}/parameters/<package>.parameters.dat.  The files are found
+/// by taking the first part of the parameter name and using it as a package
+/// name.  For instance, parameters for the captEvent package would be saved
+/// in a file name ${CAPTEVENTROOT}/parameters/captEvent.parameters.dat.  The
+/// file  should look something like:
+///
+/// \code
+/// This is a parameters file.  It is free form text, with parameters embedded
+/// like this
+///
+/// < captEvent.someParameter = value > 
+///
+/// All text outside of the greaterthan and less than signs will be treated as
+/// comments.
+/// \endcode
+///
+/// This is described in detail in the \ref runtimeParameters documentation. 
 class CP::TRuntimeParameters {
 public:
     ~TRuntimeParameters();
