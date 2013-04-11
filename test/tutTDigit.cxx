@@ -15,7 +15,7 @@
 #include "TManager.hxx"
 #include "TDataHit.hxx"
 #include "TGeometryId.hxx"
-#include "ND280GeomId.hxx"
+#include "CaptGeomId.hxx"
 
 namespace tut {
     struct baseTDigit {
@@ -212,14 +212,14 @@ namespace tut {
          CP::THandle<CP::THitSelection> hits(new CP::THitSelection("test"));
 
          // Run a fake calibration to make a hits selection
-         int barCount = 0;
+         int wireCount = 0;
          for (CP::TDigitContainer::iterator it = digits->begin();
               it != digits->end();
               ++it) {
              // Create the hit and save a proxy for this digit.
              std::auto_ptr<CP::TWritableDataHit> hit(new CP::TWritableDataHit);
              hit->SetDigit(CP::TDigitProxy(*digits,it));
-             hit->SetGeomId(CP::GeomId::P0D::Bar(0,0,barCount++));
+             hit->SetGeomId(CP::GeomId::Captain::Wire(0,wireCount++));
 
              // Save the new hit in the hit selection.
              hits->push_back(CP::THandle<CP::THit>(new CP::TDataHit(*hit)));

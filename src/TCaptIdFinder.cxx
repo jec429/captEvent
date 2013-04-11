@@ -24,41 +24,41 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
 
     // Assign the main detector volume.
     if (names.back().find("Cryostat_")!=std::string::npos) {
-        id = CP::GeomId::Cryo::Detector();
+        id = CP::GeomId::Captain::Detector();
         return true;
     }
 
     // Assign the drift volume.
     if (names.back().find("Drift_")!=std::string::npos) {
-        id = CP::GeomId::Cryo::Drift();
+        id = CP::GeomId::Captain::Drift();
         return true;
     }
 
     // Assign the layer 
     if (names.back().find("XPlane_")!=std::string::npos) {
         fPlane = 0;
-        id = CP::GeomId::Cryo::Plane(fPlane);
+        id = CP::GeomId::Captain::Plane(fPlane);
         fWire = -1;
         return true;
     }
         
     if (names.back().find("UPlane_")!=std::string::npos) {
         fPlane = 1;
-        id = CP::GeomId::Cryo::Plane(fPlane);
+        id = CP::GeomId::Captain::Plane(fPlane);
         fWire = -1;
         return true;
     }
         
     if (names.back().find("VPlane_")!=std::string::npos) {
         fPlane = 2;
-        id = CP::GeomId::Cryo::Plane(fPlane);
+        id = CP::GeomId::Captain::Plane(fPlane);
         fWire = -1;
         return true;
     }
         
     // Assign the wire.
     if (names.back().find("Wire_")!=std::string::npos) {
-        id = CP::GeomId::Cryo::Wire(fPlane, ++fWire);
+        id = CP::GeomId::Captain::Wire(fPlane, ++fWire);
         return true;
     }
 

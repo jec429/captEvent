@@ -15,7 +15,7 @@ namespace CP {
         int GetSubSystem(TGeometryId id);
         
         /// Define the P0D specific geometry identifiers.
-        namespace Cryo {
+        namespace Captain {
             /// Define a geometry identifier to the entire Cryostat.
             TGeometryId Detector();
         

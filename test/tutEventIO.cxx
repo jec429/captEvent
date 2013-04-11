@@ -21,7 +21,7 @@
 #include "TReconCluster.hxx"
 #include "TReconShower.hxx"
 #include "TReconTrack.hxx"
-#include "ND280GeomId.hxx"
+#include "CaptGeomId.hxx"
 
 namespace {
     class TTestG4VHit : public CP::TG4HitSegment {
@@ -86,45 +86,12 @@ namespace {
             CP::TWritableMCHit mcHit;
             CP::TG4HitSegment* hitSeg
                 = dynamic_cast<CP::TG4HitSegment*>(*g4Hit);
-            mcHit.SetGeomId(CP::GeomId::P0D::Bar(20,0,50));
+            mcHit.SetGeomId(CP::GeomId::Captain::Wire(0,50));
             mcHit.SetCharge(hitSeg->GetPrimaryId());
             mcHit.SetTime(hitSeg->GetPrimaryId());
             mcHit.GetContributors().push_back(hitSeg);
             mcHit.GetContributors().push_back(NULL);
             hits->push_back(CP::THandle<CP::TMCHit>(new CP::TMCHit(mcHit)));
-        }
-    }
-
-    void CreateWaveform(CP::TEvent& event, std::string name) {
-        std::string g4Name = "truth/g4Hits/" + name;
-        CP::THandle<CP::TG4HitContainer> g4Hits 
-            = event.Get<CP::TG4HitContainer>(g4Name);
-        if (!g4Hits) return;
-
-        std::string containerTitle("Hits for the "
-                                   + name 
-                                   + " detector");
-
-        CP::THitSelection *hits = new CP::THitSelection(name.c_str(),
-                                                        containerTitle.c_str());
-        event.Get<CP::TDataVector>("hits")->push_back(hits);
-
-        
-        // Create maxWaveforms worth of TMultiHits.
-        int maxWaveforms = 20;
-        std::vector< CP::THandle<CP::TSingleHit> > wave(600);
-        for (int i = 0; i< maxWaveforms; ++i) {
-            // Create a waveform.
-            wave.clear();
-            for (int j = 0; j<512; ++j) {
-                CP::TWritableMCHit tmpHit;
-                tmpHit.SetGeomId(CP::GeomId::FGD::Bar(1,3,0,40));
-                tmpHit.SetCharge(1.0);
-                tmpHit.SetTime(j);
-                wave.push_back(CP::THandle<CP::TSingleHit>(new CP::TMCHit(tmpHit)));
-            }
-            hits->push_back(
-                CP::THandle<CP::THit>(new CP::TMultiHit(wave.begin(),wave.end())));
         }
     }
 
@@ -176,13 +143,13 @@ namespace {
 
     void FillEvent(CP::TEvent& event) {
         CreateTruth(event);
-        CreateHits(event,"p0d");
-        CreateWaveform(event,"fgd");
+        CreateHits(event,"captain");
         CreateResults(event);
         CreateTemporary(event);
     }
 }
 
+#ifdef TEST_EVENT_IO
 namespace tut {
     struct baseEventIO {
         static std::vector<CP::TEvent*> outputEvents;
@@ -321,19 +288,19 @@ namespace tut {
 
         for (;out != baseEventIO::outputEvents.end();
              ++out, ++in) {
-            CP::THandle<CP::TG4HitContainer> outP0D
-                = (*out)->Get<CP::TG4HitContainer>("~/truth/g4Hits/p0d");
-            CP::THandle<CP::TG4HitContainer> inP0D
-                = (*in)->Get<CP::TG4HitContainer>("~/truth/g4Hits/p0d");
-            ensure("P0D G4 hit container exists in output event",outP0D);
-            ensure("P0D G4 hit container exists in input event",inP0D);
+            CP::THandle<CP::TG4HitContainer> outCAPTAIN
+                = (*out)->Get<CP::TG4HitContainer>("~/truth/g4Hits/captain");
+            CP::THandle<CP::TG4HitContainer> inCAPTAIN
+                = (*in)->Get<CP::TG4HitContainer>("~/truth/g4Hits/captain");
+            ensure("CAPTAIN G4 hit container exists in output event",outCAPTAIN);
+            ensure("CAPTAIN G4 hit container exists in input event",inCAPTAIN);
 
-            ensure_equals("P0D G4 hit containers are same length",
-                          outP0D->size() , inP0D->size());
+            ensure_equals("CAPTAIN G4 hit containers are same length",
+                          outCAPTAIN->size() , inCAPTAIN->size());
 
-            CP::TG4HitContainer::iterator out = outP0D->begin();
-            CP::TG4HitContainer::iterator in = inP0D->begin();
-            for (;out != outP0D->end(); ++out, ++in) {
+            CP::TG4HitContainer::iterator out = outCAPTAIN->begin();
+            CP::TG4HitContainer::iterator in = inCAPTAIN->begin();
+            for (;out != outCAPTAIN->end(); ++out, ++in) {
                 ensure("Output CP::TG4VHit pointer exists", (*out));
                 ensure("Input CP::TG4VHit pointer exists", (*in));
                 const CP::TG4HitSegment *inSeg
@@ -342,7 +309,7 @@ namespace tut {
                     = dynamic_cast<const CP::TG4HitSegment*>(*out);
                 ensure("Output is a TG4HitSegment", outSeg);
                 ensure("Input is a TG4HitSegment", inSeg);
-                ensure_equals("P0D data fields match",
+                ensure_equals("CAPTAIN data fields match",
                               inSeg->GetPrimaryId(),
                               outSeg->GetPrimaryId());
             }
@@ -359,44 +326,44 @@ namespace tut {
 
         for (;out != baseEventIO::outputEvents.end();
              ++out, ++in) {
-            CP::THandle<CP::THitSelection> outP0D
-                = (*out)->Get<CP::THitSelection>("~/hits/p0d");
-            CP::THandle<CP::THitSelection> inP0D
-                = (*in)->Get<CP::THitSelection>("~/hits/p0d");
-            ensure("P0D hit selection exists in output event",outP0D);
-            ensure("P0D hit selection exists in input event",inP0D);
+            CP::THandle<CP::THitSelection> outCAPTAIN
+                = (*out)->Get<CP::THitSelection>("~/hits/captain");
+            CP::THandle<CP::THitSelection> inCAPTAIN
+                = (*in)->Get<CP::THitSelection>("~/hits/captain");
+            ensure("CAPTAIN hit selection exists in output event",outCAPTAIN);
+            ensure("CAPTAIN hit selection exists in input event",inCAPTAIN);
             
-            CP::THitSelection::iterator out = outP0D->begin();
-            CP::THitSelection::iterator in = inP0D->begin();
-            for (;out != outP0D->end(); ++out, ++in) {
+            CP::THitSelection::iterator out = outCAPTAIN->begin();
+            CP::THitSelection::iterator in = inCAPTAIN->begin();
+            for (;out != outCAPTAIN->end(); ++out, ++in) {
                 CP::THandle<CP::THit> outHit = (*out);
                 CP::THandle<CP::TMCHit> outMCHit = outHit;
                 CP::THandle<CP::THit> inHit = (*in);
                 CP::THandle<CP::TMCHit> inMCHit = inHit;
 
-                ensure_greaterthan("P0D hit GeomId filled",
+                ensure_greaterthan("CAPTAIN hit GeomId filled",
                                    inHit->GetGeomId().AsInt(), 0);
 
-                ensure_equals("P0D hit GeomIds match",
+                ensure_equals("CAPTAIN hit GeomIds match",
                               inHit->GetGeomId(), outHit->GetGeomId());
-                ensure_equals("P0D hit charges match",
+                ensure_equals("CAPTAIN hit charges match",
                               inHit->GetCharge(), outHit->GetCharge());
-                ensure_equals("P0D hit times match",
+                ensure_equals("CAPTAIN hit times match",
                               inHit->GetTime(), outHit->GetTime());
 
-                ensure_equals("P0D MC and regular hit GeomIds match",
+                ensure_equals("CAPTAIN MC and regular hit GeomIds match",
                               inHit->GetGeomId(), outMCHit->GetGeomId());
-                ensure_equals("P0D MC and regular hit charges match",
+                ensure_equals("CAPTAIN MC and regular hit charges match",
                               inHit->GetCharge(), outMCHit->GetCharge());
-                ensure_equals("P0D MC and regular hit times match",
+                ensure_equals("CAPTAIN MC and regular hit times match",
                               inHit->GetTime(), outMCHit->GetTime());
 
-                ensure_equals("P0D MC hit GeomIds match",
+                ensure_equals("CAPTAIN MC hit GeomIds match",
                               inMCHit->GetGeomId(), 
                               outMCHit->GetGeomId());
-                ensure_equals("P0D MC hit charges match",
+                ensure_equals("CAPTAIN MC hit charges match",
                               inMCHit->GetCharge(), outMCHit->GetCharge());
-                ensure_equals("P0D MC hit times match",
+                ensure_equals("CAPTAIN MC hit times match",
                               inMCHit->GetTime(), outMCHit->GetTime());
 
                 const CP::TMCHit::ContributorContainer& inContrib 
@@ -404,17 +371,17 @@ namespace tut {
                 const CP::TMCHit::ContributorContainer& outContrib 
                     = outMCHit->GetContributors();
                 
-                ensure_greaterthan("P0D contributors exist",
+                ensure_greaterthan("CAPTAIN contributors exist",
                                    inContrib.size(),
                                    (unsigned) 0);
-                ensure_equals("P0D number of contributors match",
+                ensure_equals("CAPTAIN number of contributors match",
                               inContrib.size(), outContrib.size());
                 
                 CP::TG4VHit* inG4VHit = inContrib[0];
                 CP::TG4VHit* outG4VHit = inContrib[0];
 
-                ensure("P0D input CP::TG4VHit exists", inG4VHit);
-                ensure("P0D output CP::TG4VHit exists", outG4VHit);
+                ensure("CAPTAIN input CP::TG4VHit exists", inG4VHit);
+                ensure("CAPTAIN output CP::TG4VHit exists", outG4VHit);
                 
                 CP::TG4HitSegment* inG4HitSegment 
                     = dynamic_cast<CP::TG4HitSegment*>(inG4VHit);
@@ -422,35 +389,35 @@ namespace tut {
                 CP::TG4HitSegment* outG4HitSegment 
                     = dynamic_cast<CP::TG4HitSegment*>(outG4VHit);
                 
-                ensure("P0D input contributor is a CP::TG4HitSegment",
+                ensure("CAPTAIN input contributor is a CP::TG4HitSegment",
                        inG4HitSegment);
-                ensure("P0D output contributor is a CP::TG4HitSegment",
+                ensure("CAPTAIN output contributor is a CP::TG4HitSegment",
                        outG4HitSegment);
                 
-                ensure_equals("P0D primary particle identifiers match",
+                ensure_equals("CAPTAIN primary particle identifiers match",
                               inG4HitSegment->GetPrimaryId(),
                               outG4HitSegment->GetPrimaryId());
 
-                ensure_greaterthan("P0D primary particle identifiers not zero",
+                ensure_greaterthan("CAPTAIN primary particle identifiers not zero",
                                    inG4HitSegment->GetPrimaryId(),0);
                     
-                ensure_distance("P0D energy deposits match",
+                ensure_distance("CAPTAIN energy deposits match",
                                 inG4HitSegment->GetEnergyDeposit(),
                                 outG4HitSegment->GetEnergyDeposit(), 0.001);
 
                 double inPrim = 10.0 + 1.0*inG4HitSegment->GetPrimaryId();
-                ensure_distance("P0D energy deposits match id",
+                ensure_distance("CAPTAIN energy deposits match id",
                                 inG4HitSegment->GetEnergyDeposit(),
                                 inPrim, 0.0001);
 
-                ensure_greaterthan("P0D energy deposit not zero",
+                ensure_greaterthan("CAPTAIN energy deposit not zero",
                                    inG4HitSegment->GetEnergyDeposit(),5.0);
 
                 inG4VHit = inContrib[1];
                 outG4VHit = inContrib[1];
 
-                ensure("P0D NULL CP::TG4VHits are saved",inG4VHit == NULL);
-                ensure("P0D NULL CP::TG4VHits are saved",outG4VHit == NULL);
+                ensure("CAPTAIN NULL CP::TG4VHits are saved",inG4VHit == NULL);
+                ensure("CAPTAIN NULL CP::TG4VHits are saved",outG4VHit == NULL);
                        
             }
         }
@@ -618,6 +585,5 @@ namespace tut {
             ensure("State 2 track does not have a cluster state",!clusterState);
         }
     }
-
-
 };
+#endif

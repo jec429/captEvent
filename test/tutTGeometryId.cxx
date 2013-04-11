@@ -6,8 +6,8 @@
 #define private public
 #define protected public
 #include "TGeometryId.hxx"
-#include "ND280GeomId.hxx"
-#include "ND280GeomIdDef.hxx"
+#include "CaptGeomId.hxx"
+#include "CaptGeomIdDef.hxx"
 #undef private
 #undef protected
 
@@ -90,58 +90,25 @@ namespace tut {
         }
     }
     
-    // Test the bit definition for P0D scintillator bars.
+    // Test the bit definition for captain wires.
     template<> template<>
     void testTGeometryId::test<6> () {
-        ensure_equals("Bar LSB",CP::GeomId::Def::P0D::Bar::kBarLSB,
+        ensure_equals("Wire LSB",CP::GeomId::Def::Captain::Wire::kWireLSB,
                       (unsigned)0);
-        ensure_equals("Bar MSB",CP::GeomId::Def::P0D::Bar::kBarMSB,
-                      (unsigned)10);
-        ensure_equals("P0Dule LSB",CP::GeomId::Def::P0D::Bar::kP0DuleLSB,
-                      (unsigned)11);
-        ensure_equals("P0Dule MSB",CP::GeomId::Def::P0D::Bar::kP0DuleMSB,
-                      (unsigned)16);
-        ensure_equals("Layer LSB",CP::GeomId::Def::P0D::Bar::kLayerLSB,
-                      (unsigned)17);
-        ensure_equals("Layer MSB",CP::GeomId::Def::P0D::Bar::kLayerMSB,
-                      (unsigned)17);
-        ensure_equals("SP0Dule LSB",CP::GeomId::Def::P0D::Bar::kSP0DuleLSB,
-                      (unsigned)18);
-        ensure_equals("SP0Dule MSB",CP::GeomId::Def::P0D::Bar::kSP0DuleMSB,
-                      (unsigned)20);
-    }
-
-    // Test the bit definition for TPC pads.
-    template<> template<>
-    void testTGeometryId::test<7> () {
-        ensure_equals("Pad LSB",CP::GeomId::Def::TPC::Pad::kPadLSB,
-                      (unsigned)0);
-        ensure_equals("Pad MSB",CP::GeomId::Def::TPC::Pad::kPadMSB,
-                      (unsigned)10);
-        ensure_equals("Micromega LSB",CP::GeomId::Def::TPC::Pad::kMMegaLSB,
-                      (unsigned)11);
-        ensure_equals("Micromega MSB",CP::GeomId::Def::TPC::Pad::kMMegaMSB,
-                      (unsigned)15);
-        ensure_equals("Pad flag LSB",CP::GeomId::Def::TPC::Pad::kPadFlagLSB,
-                      (unsigned)16);
-        ensure_equals("Pad flag MSB",CP::GeomId::Def::TPC::Pad::kPadFlagMSB,
-                      (unsigned)16);
-        ensure_equals("Half LSB",CP::GeomId::Def::TPC::Pad::kHalfLSB,
-                      (unsigned)17);
-        ensure_equals("Half MSB",CP::GeomId::Def::TPC::Pad::kHalfMSB,
-                      (unsigned)17);
-        ensure_equals("TPC LSB",CP::GeomId::Def::TPC::Pad::kTPCLSB,
-                      (unsigned)18);
-        ensure_equals("TPC MSB",CP::GeomId::Def::TPC::Pad::kTPCMSB,
+        ensure_equals("Wire MSB",CP::GeomId::Def::Captain::Wire::kWireMSB,
+                      (unsigned)12);
+        ensure_equals("Plane LSB",CP::GeomId::Def::Captain::Wire::kPlaneLSB,
+                      (unsigned)13);
+        ensure_equals("Plane MSB",CP::GeomId::Def::Captain::Wire::kPlaneMSB,
                       (unsigned)20);
     }
 
     /// Test the equality operators.
     template<> template<>
     void testTGeometryId::test<8> () {
-        CP::TGeometryId a(CP::GeomId::P0D::Bar(30,1,30));
-        CP::TGeometryId b(CP::GeomId::P0D::Bar(30,1,30));
-        CP::TGeometryId c(CP::GeomId::P0D::Bar(30,1,31));
+        CP::TGeometryId a(CP::GeomId::Captain::Wire(1,30));
+        CP::TGeometryId b(CP::GeomId::Captain::Wire(1,30));
+        CP::TGeometryId c(CP::GeomId::Captain::Wire(1,31));
 
         ensure("Geometry Id equal to itself",(a == a));
         ensure("Geometry Id not not equal to itself",!(a != a));
@@ -158,9 +125,9 @@ namespace tut {
     template<> template<>
     void testTGeometryId::test<9> () {
         std::map<CP::TGeometryId, CP::TGeometryId> geoMap;
-        CP::TGeometryId a(CP::GeomId::P0D::Bar(30,1,30));
-        CP::TGeometryId b(CP::GeomId::P0D::Bar(30,1,30));
-        CP::TGeometryId c(CP::GeomId::P0D::Bar(30,1,31));
+        CP::TGeometryId a(CP::GeomId::Captain::Wire(1,30));
+        CP::TGeometryId b(CP::GeomId::Captain::Wire(1,30));
+        CP::TGeometryId c(CP::GeomId::Captain::Wire(1,31));
         
         geoMap[a] = a;
         geoMap[c] = c;

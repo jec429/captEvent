@@ -3,7 +3,7 @@
 
 #include "TManager.hxx"
 #include "TGeomIdManager.hxx"
-#include "ND280GeomId.hxx"
+#include "CaptGeomId.hxx"
 
 #include <eventLoop.hxx>
 

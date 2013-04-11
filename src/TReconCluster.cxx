@@ -260,8 +260,8 @@ void CP::TReconCluster::FillFromHits(const char* name,
         }
     }
 
-    // Add the correction for finite size of the hits (i.e. the bars).
-    TVectorT<double> barWeights(dim);
+    // Add the correction for finite size of the hits.
+    TVectorT<double> hitWeights(dim);
     for (CP::THitSelection::const_iterator h = beg;
          h != end;
          ++h) {
@@ -276,13 +276,13 @@ void CP::TReconCluster::FillFromHits(const char* name,
             if (idx == posY && !(*h)->IsYHit()) continue;
             if (idx == posZ && !(*h)->IsZHit()) continue;
             double weight = 1.0/(sigs(idx)*sigs(idx));
-            barWeights(idx) += weight;
+            hitWeights(idx) += weight;
         }
     }
     
     for (int idx = 0; idx<dim; ++idx) {
-        if (barWeights(idx)<1E-8) continue;
-        stateCov(idx,idx) += 1.0/barWeights(idx);
+        if (hitWeights(idx)<1E-8) continue;
+        stateCov(idx,idx) += 1.0/hitWeights(idx);
     }
     
     // Fix the variance of the deposited energy.  This assumes it's Poisson

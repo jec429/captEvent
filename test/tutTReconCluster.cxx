@@ -8,7 +8,7 @@
 #include "TReconTrack.hxx"
 #include "TCaptLog.hxx"
 #include "TMCHit.hxx"
-#include "ND280GeomId.hxx"
+#include "CaptGeomId.hxx"
 #include "HEPUnits.hxx"
 
 namespace tut {
@@ -169,6 +169,7 @@ namespace tut {
         }
     }
 
+#ifdef TEST_FILLFROMHITS
     // Check TReconCluster::FillFromHits for one hit in a layer.
     template<> template<>
     void testTReconCluster::test<5> () {
@@ -561,4 +562,6 @@ namespace tut {
                         (double) ident(2,2), 1.0, 1E-6);
 
     }
+#endif /* TEST_FILLFROMHITS */
+
 };

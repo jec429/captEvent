@@ -89,9 +89,9 @@ namespace CP {
             ///
             /// Depending on the particular sequence, the field values may be
             /// further sub-divided.
-            namespace Cryo {
+            namespace Captain {
                 /// Define the sequences required in the CRYO.
-                enum CryoSeqId {
+                enum CaptainSeqId {
                     /// A global volume.  This is used for identifiers that
                     /// refer to volumes which contain other geometry
                     /// identifiers.
@@ -120,7 +120,7 @@ namespace CP {
                 namespace Global {
                     /// @{ Define a field to hold the type of global volume
                     /// being identified.
-                    const GeomIdBit kSeqIdMSB = Def::Cryo::kSeqIdLSB-1;
+                    const GeomIdBit kSeqIdMSB = Def::Captain::kSeqIdLSB-1;
                     const GeomIdBit kSeqIdLSB = kSeqIdMSB-7;
                     const GeomIdMask kSeqIdMask=MAKE_MASK(kSeqIdMSB,kSeqIdLSB);
                     /// @}
@@ -150,7 +150,7 @@ namespace CP {
                 namespace Wire {
                     /// @{ The wire plane.  The 0) X Plane 1) U Plane 2) V
                     /// Plane.
-                    const GeomIdBit kPlaneMSB = Def::Cryo::kSeqIdLSB-1;
+                    const GeomIdBit kPlaneMSB = Def::Captain::kSeqIdLSB-1;
                     const GeomIdBit kPlaneLSB = kPlaneMSB-7;
                     const GeomIdMask kPlaneMask = MAKE_MASK(kPlaneMSB,
                                                               kPlaneLSB);

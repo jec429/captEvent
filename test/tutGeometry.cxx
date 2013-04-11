@@ -15,7 +15,7 @@
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "TGeomIdManager.hxx"
-#include "ND280GeomId.hxx"
+#include "CaptGeomId.hxx"
 #include "HEPUnits.hxx"
 
 namespace tut {
@@ -63,7 +63,7 @@ namespace tut {
     class AlignmentLookup: public CP::TManager::AlignmentLookup {
         unsigned int fCalls;
     public:
-        std::vector< std::pair<CP::TGeometryId,double> > fGeomIdYShift;
+        std::vector< std::pair<CP::TGeometryId,double> > fGeomIdZShift;
         AlignmentLookup() {}
         virtual ~AlignmentLookup() {}
         bool CheckAlignment(const CP::TEvent* const event) {
@@ -72,19 +72,19 @@ namespace tut {
         CP::TAlignmentId StartAlignment(const CP::TEvent* const event) {
             fCalls = 0;
             unsigned int aid[5] = {0,0,0,0,0};
-            aid[0] = fGeomIdYShift.size();
-            for (unsigned i=0; i<fGeomIdYShift.size(); ++i) {
-                aid[1 + (i%4)] += fGeomIdYShift[i].second/unit::mm;
+            aid[0] = fGeomIdZShift.size();
+            for (unsigned i=0; i<fGeomIdZShift.size(); ++i) {
+                aid[1 + (i%4)] += fGeomIdZShift[i].second/unit::mm;
             }
             return CP::TAlignmentId(aid);
         }
         TGeoMatrix* Align(const CP::TEvent* const event,
                           CP::TGeometryId& geomId) {
             TGeoMatrix* result = NULL;
-            if (fCalls<fGeomIdYShift.size()) {
-                geomId = fGeomIdYShift[fCalls].first;
-                double yShift = fGeomIdYShift[fCalls].second;
-                result = new TGeoTranslation(0,yShift,0);
+            if (fCalls<fGeomIdZShift.size()) {
+                geomId = fGeomIdZShift[fCalls].first;
+                double zShift = fGeomIdZShift[fCalls].second;
+                result = new TGeoTranslation(0,0,zShift);
             }
             ++fCalls;
             return result;
@@ -96,25 +96,26 @@ namespace tut {
     template<> template<>
     void testGeometry::test<2> () {
         // CP::TManager::Get().Geometry();
+        ensure("Have valid geometry", gGeoManager != NULL);
 
         // Get the original position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::Detector());
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Detector());
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
         double oldY = master[1];
 
         // Prepare the alignments.
-        alignmentLookup.fGeomIdYShift.clear();
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
+        alignmentLookup.fGeomIdZShift.clear();
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Detector(),
                                               2*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
         CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::Detector());
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Detector());
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -125,29 +126,30 @@ namespace tut {
     template<> template<>
     void testGeometry::test<3> () {
         // CP::TManager::Get().Geometry();
+        ensure("Have valid geometry", gGeoManager != NULL);
 
         // Get the original position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
         double oldY = master[1];
 
         // Prepare the alignments.
-        alignmentLookup.fGeomIdYShift.clear();
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
+        alignmentLookup.fGeomIdZShift.clear();
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Detector(),
                                               3*unit::mm));
 
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Plane(0),
                                               2*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
         CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -158,29 +160,30 @@ namespace tut {
     template<> template<>
     void testGeometry::test<4> () {
         // CP::TManager::Get().Geometry();
+        ensure("Have valid geometry", gGeoManager != NULL);
 
         // Get the original position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
         double oldY = master[1];
 
         // Prepare the alignments.
-        alignmentLookup.fGeomIdYShift.clear();
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
+        alignmentLookup.fGeomIdZShift.clear();
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Plane(0),
                                               2*unit::mm));
 
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::Detector(),
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Detector(),
                                               3*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
         CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -191,33 +194,34 @@ namespace tut {
     template<> template<>
     void testGeometry::test<5> () {
         // CP::TManager::Get().Geometry();
+        ensure("Have valid geometry", gGeoManager != NULL);
 
         // Get the original position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         double local[3] = {0,0,0};
         double master[3];
         gGeoManager->LocalToMaster(local,master);
         double oldY = master[1];
 
         // Prepare the alignments.
-        alignmentLookup.fGeomIdYShift.clear();
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
+        alignmentLookup.fGeomIdZShift.clear();
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Plane(0),
                                               2*unit::mm));
 
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Plane(0),
                                               3*unit::mm));
 
-        alignmentLookup.fGeomIdYShift.push_back(
-            std::pair<CP::TGeometryId,double>(CP::GeomId::P0D::P0Dule(3),
+        alignmentLookup.fGeomIdZShift.push_back(
+            std::pair<CP::TGeometryId,double>(CP::GeomId::Captain::Plane(0),
                                               4*unit::mm));
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
         CP::TManager::Get().GeomId().ApplyAlignment(NULL);
 
         // Get the shifted position of the P0D detector.
-        CP::TManager::Get().GeomId().CdId(CP::GeomId::P0D::P0Dule(3));
+        CP::TManager::Get().GeomId().CdId(CP::GeomId::Captain::Plane(0));
         gGeoManager->LocalToMaster(local,master);
         double newY = master[1];
         ensure_distance("Alignment shift", newY-oldY, 
@@ -229,6 +233,7 @@ namespace tut {
     void testGeometry::test<6> () {
         // Get the existing geometry.
         // CP::TManager::Get().Geometry();
+        ensure("Have valid geometry", gGeoManager != NULL);
 
         CP::TManager::Get().RegisterAlignmentLookup(&alignmentLookup);
         CP::TManager::Get().GeomId().ApplyAlignment(NULL);
@@ -249,15 +254,17 @@ namespace tut {
     /// Make sure that the CdId method is working.
     template<> template<>
     void testGeometry::test<7> () {
+        ensure("Have valid geometry", gGeoManager != NULL);
+
         // CP::TManager::Get().Geometry();
         for (int i=0; i<40; ++i) {
             ensure("CdId finds volume matching geometry id.",
                    CP::TManager::Get().GeomId().CdId(
-                       CP::GeomId::P0D::P0Dule(i)));
+                       CP::GeomId::Captain::Plane(i)));
         }
         ensure("CdId returns false for non-existent volume.",
                !CP::TManager::Get().GeomId().CdId(
-                   CP::GeomId::P0D::P0Dule(40)));
+                   CP::GeomId::Captain::Plane(40)));
     }        
 
     class LocalGeometryChange: public CP::TManager::GeometryChange {
@@ -271,6 +278,8 @@ namespace tut {
     /// Test that the GeometryChange call back is working.
     template<> template<>
     void testGeometry::test<8> () {
+        ensure("Have valid geometry", gGeoManager != NULL);
+
         CP::TSHAHashValue hash 
             = CP::TManager::Get().GeomId().GetHash();
         CP::TManager::Get().SetGeometryOverride(hash);
@@ -281,16 +290,4 @@ namespace tut {
         ensure_equals("Call backs called", localGeometryChange.fCallCount,1);
     }
 
-    /// Test that the water target identifiers.
-    template<> template<>
-    void testGeometry::test<9> () {
-        for (int i=0; i<25; ++i) {
-            CP::TGeometryId targetId = CP::GeomId::P0D::Target(i);
-            ensure("CdId find the target volume.",
-                   CP::TManager::Get().GeomId().CdId(targetId));
-        }
-        ensure("CdId returns false for non-existent target.",
-               !CP::TManager::Get().GeomId().CdId(
-                   CP::GeomId::P0D::Target(25)));
-    }
 };
