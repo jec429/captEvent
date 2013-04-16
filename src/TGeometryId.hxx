@@ -101,18 +101,6 @@ public:
         return AsInt() < rhs.AsInt();
     }
 
-    /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the CaptGeomId CP::GeomId
-    /// namespace to set the TGeometryId fields.
-    void SetField(int val, int msb, int lsb) METHOD_DEPRECATED
-        {SetFieldSafe(val,msb,lsb);}
-
-    /// DO NOT USE.  This method is deprecated and will be removed in a future
-    /// release.  Use the functions provided in the CaptGeomId CP::GeomId
-    /// namespace to get the TGeometryId fields.
-    int GetField(int msb, int lsb) const METHOD_DEPRECATED
-        {return GetFieldSafe(msb,lsb);}
-
 protected:
     /// Set the field in a bit range. The bit range is between 0
     /// (lsb) and 31 (msb).  Note that to set a single bit, the lsb will equal
