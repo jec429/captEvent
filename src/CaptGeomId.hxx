@@ -31,6 +31,12 @@ namespace CP {
             /// Get the wire plane from the id.
             int GetPlane(TGeometryId i);
 
+            /// Get the geometry identifier for a wire light sensor.
+            TGeometryId LightSensor(int lightSensor);
+
+            /// Get the light sensor number from the id.
+            int GetLightSensor(TGeometryId i);
+
             /// The geometry identifiers for wires
             TGeometryId Wire(int plane, int wire);
 

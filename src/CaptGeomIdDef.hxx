@@ -10,7 +10,8 @@ namespace CP {
         ///
         /// \code 
         /// r dddddd sssssssssssssssssssssssss
-        /// r(1)  -- Reserved
+        /// r(1)  -- Reserved.  This is actually a "guard bit" that 
+        ///          must be zero. 
         /// d(6)  -- The sub-detector identifier
         /// s(25) -- The sub-detector specific field
         /// \endcode
@@ -132,6 +133,8 @@ namespace CP {
                         kDriftRegion,
                         /// A wire plane.
                         kWirePlane,
+                        /// A light sensor (i.e a PMT)
+                        kLightSensor,
                     };
                 
                     /// @{ The sequence value for this type of global volume.
