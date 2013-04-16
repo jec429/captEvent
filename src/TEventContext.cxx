@@ -51,7 +51,7 @@ bool CP::TEventContext::IsDetector() const {
     return true;
 }
 
-bool CP::TEventContext::Valid() const {
+bool CP::TEventContext::IsValid() const {
     if (GetPartition()!=CP::TEventContext::Invalid) return true;
     if (GetRun()!=CP::TEventContext::Invalid)  return true;
     if (GetSubRun()!=CP::TEventContext::Invalid) return true;

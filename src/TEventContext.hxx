@@ -97,7 +97,7 @@ public:
 
     /// Return true if the context is valid.  A valid context is defined as a
     /// context where one or more fields is valid.
-    bool Valid() const;
+    bool IsValid() const;
 
 private:
     /// The partition associated with this context
