@@ -25,8 +25,14 @@ namespace CP {
             /// Get the geometry identifier for the drift region.
             TGeometryId Drift();
 
+            /// Check if the id is for the drift region.
+            bool IsDrift(TGeometryId i);
+
             /// Get the geometry identifier for a wire plane.
             TGeometryId Plane(int plane);
+
+            /// Check if the id is for a plane.
+            bool IsPlane(TGeometryId i);
 
             /// Get the wire plane from the id.
             int GetPlane(TGeometryId i);
@@ -34,20 +40,24 @@ namespace CP {
             /// Get the geometry identifier for a wire light sensor.
             TGeometryId LightSensor(int lightSensor);
 
+            /// Check if the id is for a light sensor.
+            bool IsLightSensor(TGeometryId i);
+
             /// Get the light sensor number from the id.
             int GetLightSensor(TGeometryId i);
 
             /// The geometry identifiers for wires
             TGeometryId Wire(int plane, int wire);
 
+            /// Check if the id is for a wire.
+            bool IsWire(TGeometryId id);
+
             /// Get the wire plane from an id for a wire.
             int GetWirePlane(TGeometryId id);
 
             /// Get the wire number from an id.
             int GetWireNumber(TGeometryId id);
-
         };
-
     };
 };
 #endif

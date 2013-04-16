@@ -74,6 +74,25 @@ CP::TGeometryId CP::GeomId::Captain::Drift() {
     return id;
 }
 
+bool CP::GeomId::Captain::IsDrift(TGeometryId i) {
+    TSettableGeometryId id(i);
+    if (CP::GeomId::Def::kCryostat 
+        != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
+                       CP::GeomId::Def::kDetectorIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::kGlobal
+        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
+                       CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::Global::kDriftRegion
+        != id.GetField(
+            CP::GeomId::Def::Captain::Global::kSeqIdMSB,
+            CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return false;
+    if (0
+        != id.GetField(
+            CP::GeomId::Def::Captain::Global::kFieldMSB,
+            CP::GeomId::Def::Captain::Global::kFieldLSB)) return false;
+    return true;
+}
+
 CP::TGeometryId CP::GeomId::Captain::Plane(int plane) {
     TSettableGeometryId id;
     id.SetField(CP::GeomId::Def::kCryostat,
@@ -91,17 +110,24 @@ CP::TGeometryId CP::GeomId::Captain::Plane(int plane) {
     return id;
 }
 
-int CP::GeomId::Captain::GetPlane(TGeometryId i) {
+bool CP::GeomId::Captain::IsPlane(TGeometryId i) {
     TSettableGeometryId id(i);
-    if (CP::GeomId::Def::kCryostat
+    if (CP::GeomId::Def::kCryostat 
         != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
-                       CP::GeomId::Def::kDetectorIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::kGlobal 
-        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::kSeqIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::Global::kWirePlane 
-        != id.GetField(CP::GeomId::Def::Captain::Global::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return -1;
+                       CP::GeomId::Def::kDetectorIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::kGlobal
+        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
+                       CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::Global::kWirePlane
+        != id.GetField(
+            CP::GeomId::Def::Captain::Global::kSeqIdMSB,
+            CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return false;
+    return true;
+}
+
+int CP::GeomId::Captain::GetPlane(TGeometryId i) {
+    if (!IsPlane(i)) return -1;
+    TSettableGeometryId id(i);
     return id.GetField(CP::GeomId::Def::Captain::Global::kFieldMSB,
                        CP::GeomId::Def::Captain::Global::kFieldLSB);
 }
@@ -123,17 +149,24 @@ CP::TGeometryId CP::GeomId::Captain::LightSensor(int sensor) {
     return id;
 }
 
-int CP::GeomId::Captain::GetLightSensor(TGeometryId i) {
+bool CP::GeomId::Captain::IsLightSensor(TGeometryId i) {
     TSettableGeometryId id(i);
-    if (CP::GeomId::Def::kCryostat
+    if (CP::GeomId::Def::kCryostat 
         != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
-                       CP::GeomId::Def::kDetectorIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::kGlobal 
-        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::kSeqIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::Global::kLightSensor 
-        != id.GetField(CP::GeomId::Def::Captain::Global::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return -1;
+                       CP::GeomId::Def::kDetectorIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::kGlobal
+        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
+                       CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::Global::kLightSensor
+        != id.GetField(
+            CP::GeomId::Def::Captain::Global::kSeqIdMSB,
+            CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return false;
+    return true;
+}
+
+int CP::GeomId::Captain::GetLightSensor(TGeometryId i) {
+    if (!IsLightSensor(i)) return -1;
+    TSettableGeometryId id(i);
     return id.GetField(CP::GeomId::Def::Captain::Global::kFieldMSB,
                        CP::GeomId::Def::Captain::Global::kFieldLSB);
 }
@@ -156,26 +189,27 @@ CP::TGeometryId CP::GeomId::Captain::Wire(int plane,
     return id;
 }
 
-int CP::GeomId::Captain::GetWirePlane(TGeometryId i) {
+bool CP::GeomId::Captain::IsWire(TGeometryId i) {
     TSettableGeometryId id(i);
     if (CP::GeomId::Def::kCryostat 
         != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
-                       CP::GeomId::Def::kDetectorIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::kWire 
-        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::kSeqIdLSB)) return -1;
+                       CP::GeomId::Def::kDetectorIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::kWire
+        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
+                       CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
+    return true;
+}
+
+int CP::GeomId::Captain::GetWirePlane(TGeometryId i) {
+    if (!IsWire(i)) return -1;
+    TSettableGeometryId id(i);
     return id.GetField(CP::GeomId::Def::Captain::Wire::kPlaneMSB,
                        CP::GeomId::Def::Captain::Wire::kPlaneLSB);
 }
 
 int CP::GeomId::Captain::GetWireNumber(TGeometryId i) {
+    if (!IsWire(i)) return -1;
     TSettableGeometryId id(i);
-    if (CP::GeomId::Def::kCryostat
-        != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
-                       CP::GeomId::Def::kDetectorIdLSB)) return -1;
-    if (CP::GeomId::Def::Captain::kWire 
-        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB, 
-                       CP::GeomId::Def::Captain::kSeqIdLSB)) return -1;
     return id.GetField(CP::GeomId::Def::Captain::Wire::kWireMSB,
                        CP::GeomId::Def::Captain::Wire::kWireLSB);
 }
