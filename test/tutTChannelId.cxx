@@ -49,121 +49,29 @@ namespace tut {
         ensure("Sub-detector out of range", !g3.IsValid()); 
 
         CP::TChannelId g4;
-        g4.SetSubDetector(CP::TChannelId::kP0D);
+        g4.SetSubDetector(CP::TChannelId::kMC);
         ensure("Invalid guard bit", !g4.IsValid()); 
 
         CP::TChannelId g5;
         g5.SetGuardBit();
-        g5.SetSubDetector(CP::TChannelId::kP0D);
+        g5.SetSubDetector(CP::TChannelId::kMC);
         ensure("Valid channel id.", g5.IsValid()); 
     }
 
-    // Test the kP0D subdetector getter and setter.
+    // Test the kMC subdetector getter and setter.
     template<> template<>
     void testTChannelId::test<3> () {
         CP::TChannelId g1;
         g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kP0D);
+        g1.SetSubDetector(CP::TChannelId::kMC);
         ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct P0D sub-detector value",
-                      CP::TChannelId::kP0D,1);
+        ensure_equals("Correct MC sub-detector value",
+                      CP::TChannelId::kMC,1);
         ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kP0D);
+                      g1.GetSubDetector(),CP::TChannelId::kMC);
         ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"P0D");
-        ensure("Is a TFB channel",g1.IsTFBChannel());
-        ensure("Is not a TPC channel",!g1.IsTPCChannel());
-        ensure("Is not a FGD channel",!g1.IsFGDChannel());
-    }
-
-    // Test the kTPC subdetector getter and setter.
-    template<> template<>
-    void testTChannelId::test<4> () {
-        CP::TChannelId g1;
-        g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kTPC);
-        ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct TPC sub-detector value",
-                      CP::TChannelId::kTPC,2);
-        ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kTPC);
-        ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"TPC");
-        ensure("Is a TPC channel",g1.IsTPCChannel());
-        ensure("Is not a TFB channel",!g1.IsTFBChannel());
-        ensure("Is not a FGD channel",!g1.IsFGDChannel());
-    }
-
-    // Test the kFGD subdetector getter and setter.
-    template<> template<>
-    void testTChannelId::test<5> () {
-        CP::TChannelId g1;
-        g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kFGD);
-        ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct FGD sub-detector value",
-                      CP::TChannelId::kFGD,3);
-        ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kFGD);
-        ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"FGD");
-        ensure("Is a FGD channel",g1.IsFGDChannel());
-        ensure("Is not a TFB channel",!g1.IsTFBChannel());
-        ensure("Is not a TPC channel",!g1.IsTPCChannel());
-    }
-
-    // Test the kECal subdetector getter and setter.
-    template<> template<>
-    void testTChannelId::test<6> () {
-        CP::TChannelId g1;
-        g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kECal);
-        ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct ECal sub-detector value",
-                      CP::TChannelId::kECal,4);
-        ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kECal);
-        ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"ECal");
-        ensure("Is a TFB channel",g1.IsTFBChannel());
-        ensure("Is not a TPC channel",!g1.IsTPCChannel());
-        ensure("Is not a FGD channel",!g1.IsFGDChannel());
-    }
-
-    // Test the kSMRD subdetector getter and setter.
-    template<> template<>
-    void testTChannelId::test<9> () {
-        CP::TChannelId g1;
-        g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kSMRD);
-        ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct SMRD sub-detector value",
-                      CP::TChannelId::kSMRD,7);
-        ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kSMRD);
-        ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"SMRD");
-        ensure("Is a TFB channel",g1.IsTFBChannel());
-        ensure("Is not a TPC channel",!g1.IsTPCChannel());
-        ensure("Is not a FGD channel",!g1.IsFGDChannel());
-    }
-
-    // Test the kINGRID subdetector getter and setter.
-    template<> template<>
-    void testTChannelId::test<10> () {
-        CP::TChannelId g1;
-        g1.SetGuardBit();
-        g1.SetSubDetector(CP::TChannelId::kINGRID);
-        ensure("Valid channel id", g1.IsValid());
-        ensure_equals("Correct INGRID sub-detector value",
-                      CP::TChannelId::kINGRID,8);
-        ensure_equals("Correct sub-detector value in channel id",
-                      g1.GetSubDetector(),CP::TChannelId::kINGRID);
-        ensure_equals("Correct sub-detector name ",
-                      g1.SubDetAsString(),"INGRID");
-        ensure("Is a TFB channel",g1.IsTFBChannel());
-        ensure("Is not a TPC channel",!g1.IsTPCChannel());
-        ensure("Is not a FGD channel",!g1.IsFGDChannel());
+                      g1.SubDetAsString(),"MC");
+        ensure("Is an MC channel",g1.IsMCChannel());
     }
 
     // Test that subdetector zero is correctly flaged as a "bad" sub-detector
@@ -210,17 +118,5 @@ namespace tut {
                !g1.IsValid());
     }
 
-    // Test that the full range of the bit field can be set.
-    template <> template <>
-    void testTChannelId::test<14> () {
-        for (int i=0; i<64; ++i) {
-            CP::TChannelId g1;
-            g1.SetSubDetector(i);
-            ensure_equals("Sub detector field value saved",
-                          g1.GetSubDetector(), i);
-            ensure_equals("Field doesn't over flow",
-                          (g1.AsUInt()&CP::TChannelId::kGuard_Mask), (unsigned) 0);
-        }
-    }
 };
 

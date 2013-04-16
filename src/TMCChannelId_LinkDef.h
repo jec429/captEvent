@@ -1,3 +1,3 @@
 #ifdef __CINT__
-#pragma link C++ class CP::TTFBChannelId+;
+#pragma link C++ class CP::TMCChannelId+;
 #endif

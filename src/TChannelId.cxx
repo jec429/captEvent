@@ -3,9 +3,8 @@
 #include <sstream>
 
 #include "TChannelId.hxx"
-#include "TTFBChannelId.hxx"
-#include "TFGDChannelId.hxx"
-#include "TTPCChannelId.hxx"
+#include "TMCChannelId.hxx"
+
 #include "TCaptLog.hxx"
 
 ClassImp(CP::TChannelId);
@@ -13,16 +12,12 @@ ClassImp(CP::TChannelId);
 namespace {
 };
 
-//----------------------------------------------------------------------
 CP::TChannelId::TChannelId(UInt_t id): fChannelId(id) {}
 
-//----------------------------------------------------------------------
 CP::TChannelId::TChannelId(const TChannelId& src): fChannelId(src.fChannelId) {}
 
-//----------------------------------------------------------------------
 CP::TChannelId::~TChannelId() {}
 
-//----------------------------------------------------------------------
 unsigned int CP::TChannelId::GetField(int msb, int lsb) const {
     if (lsb>msb || lsb<0 || 31<msb){ 
         CaptError("Requesting TChannelId Field with invalid bit range"
@@ -34,7 +29,6 @@ unsigned int CP::TChannelId::GetField(int msb, int lsb) const {
     return (field & mask);
 }
 
-//----------------------------------------------------------------------
 void CP::TChannelId::SetField(int val, int msb, int lsb) {
     // Make sure the bit range is valid.
     if (lsb>msb || lsb<0 || 31<msb) {
@@ -64,17 +58,14 @@ void CP::TChannelId::SetField(int val, int msb, int lsb) {
     fChannelId |= ((val << lsb)&mask);
 }
 
-//----------------------------------------------------------------------
 void CP::TChannelId::SetGuardBit() {
     SetField(1,kGuardBitMSB, kGuardBitLSB);
 }
 
-//----------------------------------------------------------------------
 const CP::TChannelId::SubDetId CP::TChannelId::GetSubDetector() const {
     return CP::TChannelId::SubDetId(GetField(kSubDetMSB,kSubDetLSB));
 }
 
-//----------------------------------------------------------------------
 void CP::TChannelId::SetSubDetector(int det) {
     if ( det < 1 || kMaxDetector <= det) {
         CaptSevere("Setting invalid sub-detector value: " << det);
@@ -82,79 +73,39 @@ void CP::TChannelId::SetSubDetector(int det) {
     SetField(det,kSubDetMSB,kSubDetLSB);
 }
 
-//----------------------------------------------------------------------
 const Bool_t CP::TChannelId::IsValid() const {
     if (!(fChannelId & kGuard_Mask)) {
-        CaptSevere("Channel identifier has invalid guard bit");
+        CaptError("Channel identifier has invalid guard bit");
         return false;
     }
     int det = GetSubDetector();
     if (det < 1 || kMaxDetector <= det) {
-        CaptSevere("Channel identifier has invalid sub-detector: " << det);
+        CaptError("Channel identifier has invalid sub-detector: " << det);
         return false;
     }
     return true;
 }
 
-//----------------------------------------------------------------------
-const Bool_t CP::TChannelId::IsFGDChannel() const {
-    return (kFGD == GetSubDetector());
-}
-
-//----------------------------------------------------------------------
-const Bool_t CP::TChannelId::IsTFBChannel() const {
-    UInt_t det = GetSubDetector();
-    return((det == kP0D) 
-           || (det == kECal)
-#ifdef  USE_DEPRECATED_SubDetId
-           || (det == kDSECal) || (det == kTECal) || (det == kPECal) 
-#endif
-           || (det == kSMRD) || (det == kINGRID));
-}
-
-//----------------------------------------------------------------------
-const Bool_t CP::TChannelId::IsTPCChannel() const {
-    return (kTPC == GetSubDetector());
-}
-
-//----------------------------------------------------------------------
 std::string CP::TChannelId::SubDetAsString() const {
     std::string det = "Unset";
   
     switch (GetSubDetector()) {
-    case kP0D:     det = "P0D";     break;
-    case kTPC:     det = "TPC";     break;
-    case kFGD:     det = "FGD";     break;
-#ifdef  USE_DEPRECATED_SubDetId
-    case kDSECal:  det = "DS-ECal"; break;
-    case kTECal:   det = "T-ECal";  break;
-    case kPECal:   det = "P0DECal"; break;
-#else
-    case kECal:    det = "ECal";    break;
-#endif
-    case kSMRD:    det = "SMRD";    break;
-    case kINGRID:  det = "INGRID";  break;
-    default:       det = "-------";     break; 
+    case kMC:      det = "MC";     break;
+    default:       det = "--";     break; 
     }
 
     return det;
 }
 
-//----------------------------------------------------------------------
+const Bool_t CP::TChannelId::IsMCChannel() const {
+    return (kMC == GetSubDetector());
+}
+
 std::string CP::TChannelId::AsString() const {
-    if (IsTFBChannel()) {
-        TTFBChannelId tfb(*this);
-        return tfb.AsString();
-    }
 
-    if (IsFGDChannel()) {
-        TFGDChannelId fgd(*this);
-        return fgd.AsString();
-    }
-
-    if (IsTPCChannel()) {
-        TTPCChannelId tpc(*this);
-        return tpc.AsString();
+    if (IsMCChannel()) {
+        TMCChannelId id(*this);
+        return id.AsString();
     }
 
     std::ostringstream buffer;
