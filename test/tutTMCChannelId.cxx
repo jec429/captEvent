@@ -42,12 +42,12 @@ namespace tut {
     template<> template<>
     void testTMCChannelId::test<2> () {
         unsigned int type = 2;
-        unsigned int plane = 15;
-        unsigned int wire = 21;
-        CP::TMCChannelId g1(type,plane,wire);
+        unsigned int field = 15;
+        unsigned int number = 21;
+        CP::TMCChannelId g1(type,field,number);
         ensure_equals("type value matchs", g1.GetType(),type);
-        ensure_equals("plane value matchs", g1.GetPlane(),plane);
-        ensure_equals("wire value matchs", g1.GetWire(),wire);
+        ensure_equals("field value matchs", g1.GetSequence(),field);
+        ensure_equals("number value matchs", g1.GetNumber(),number);
         ensure("TMCChannelId is valid", g1.IsValid());
     }
 

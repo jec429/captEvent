@@ -29,14 +29,15 @@ public:
     /// Format as a human readable string
     virtual std::string AsString() const; 
 
-    /// Get the type of this channel.
+    /// Get the type of this channel.  The type 0) is for wires, and 1) is for
+    /// light sensors.
     UInt_t GetType() const;
 
     /// Get the plane for this channel.
-    UInt_t GetPlane() const;
+    UInt_t GetSequence() const;
 
-    /// Get the wire for this channel.
-    UInt_t GetWire() const;
+    /// Get the number (usually of the wire) for this channel.
+    UInt_t GetNumber() const;
 
 protected:
 
@@ -46,16 +47,17 @@ protected:
     ///
     /// TTT ppppppp ccccccccccccccc
     ///
-    ///    - T(3)  Bit 24-22:  The types of field.  For now this is 
+    ///    - T(3)  Bit 24-22:  The type of field.  For now this is 
     ///                              0) wires, and 1) light sensors.
-    ///    - p(7)  Bit 15-21: The plane (for wires), otherwise zero.
-    ///    - c(15) Bit 14- 0: The counter for the field (0-32767).
+    ///    - p(7)  Bit 15-21: The field (it's the plane for wires, otherwise
+    ///                              zero).
+    ///    - c(15) Bit 14- 0: The number for the field (0-32767).
     /// 
     /// Note: The shift and the least significant bit (lsb) must be the same.
     enum BitDefinitions {
         kTypeMSB         = 24,    kTypeLSB         = 22,
-        kPlaneMSB        = 21,    kPlaneLSB        = 15,
-        kWireMSB         = 14,    kWireLSB         = 0
+        kSequenceMSB     = 21,    kSequenceLSB     = 15,
+        kNumberMSB       = 14,    kNumberLSB       = 0
     };
     /// @}
 
@@ -65,10 +67,10 @@ private:
     void SetType(int val);
 
     /// Get the plane for this channel.
-    void SetPlane(int val);
+    void SetSequence(int val);
 
     /// Get the wire for this channel.
-    void SetWire(int val);
+    void SetNumber(int val);
 
     ClassDef(TMCChannelId, 1)
 };

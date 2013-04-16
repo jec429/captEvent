@@ -14,8 +14,8 @@ CP::TMCChannelId::TMCChannelId(UInt_t type,  UInt_t plane,  UInt_t wire) {
     SetGuardBit();
     SetSubDetector(kMC);
     SetType(type);
-    SetPlane(plane);
-    SetWire(wire);
+    SetSequence(plane);
+    SetNumber(wire);
 }
 
 CP::TMCChannelId::~TMCChannelId() {}
@@ -28,7 +28,7 @@ std::string CP::TMCChannelId::AsString() const {
     switch (GetType()) {
     case 0:     
         str << "-W-";
-        switch (GetPlane()) {
+        switch (GetSequence()) {
         case 0:
             str << "X";
             break;
@@ -41,13 +41,13 @@ std::string CP::TMCChannelId::AsString() const {
         default:
             str << "?";
         }
-        str << "-" << GetWire();
+        str << "-" << GetNumber();
         break;
     case 1:
-        str << "-P-" << GetWire();
+        str << "-P-" << GetNumber();
         break;
     default:
-        str << "-?-" << GetPlane() << "-" << GetWire();
+        str << "-?-" << GetSequence() << "-" << GetNumber();
         break;
     }
 
@@ -62,18 +62,18 @@ void CP::TMCChannelId::SetType(int val) {
     SetField(val,kTypeMSB,kTypeLSB);
 }
 
-UInt_t CP::TMCChannelId::GetPlane() const {
-    return GetField(kPlaneMSB,kPlaneLSB);
+UInt_t CP::TMCChannelId::GetSequence() const {
+    return GetField(kSequenceMSB,kSequenceLSB);
 }
 
-void CP::TMCChannelId::SetPlane(int val) {
-    SetField(val,kPlaneMSB,kPlaneLSB);
+void CP::TMCChannelId::SetSequence(int val) {
+    SetField(val,kSequenceMSB,kSequenceLSB);
 }
 
-UInt_t CP::TMCChannelId::GetWire() const {
-    return GetField(kWireMSB,kWireLSB);
+UInt_t CP::TMCChannelId::GetNumber() const {
+    return GetField(kNumberMSB,kNumberLSB);
 }
 
-void CP::TMCChannelId::SetWire(int val) {
-    SetField(val,kWireMSB,kWireLSB);
+void CP::TMCChannelId::SetNumber(int val) {
+    SetField(val,kNumberMSB,kNumberLSB);
 }
