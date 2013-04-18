@@ -16,10 +16,12 @@ public:
     TTPCmcDigit ();
     virtual ~TTPCmcDigit();
 
-    /// Construct a digit for a particular channel
+    /// Construct a digit for a particular channel.  See the documentation for
+    /// CP::TTPCDigit for details.  The contrib container is documented in
+    /// CP::TMCDigit.
     TTPCmcDigit(CP::TChannelId chan, 
-                short startTime, 
-                std::vector<short> adcs,
+                int first, 
+                const CP::TTPCDigit::Vector& adcs,
                 const CP::TMCDigit::ContributorContainer& contrib);
 
     ClassDef(TTPCmcDigit,2);

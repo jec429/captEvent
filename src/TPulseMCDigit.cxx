@@ -5,10 +5,10 @@ ClassImp(CP::TTPCmcDigit);
 CP::TTPCmcDigit::TTPCmcDigit() {}
 
 CP::TTPCmcDigit::TTPCmcDigit(CP::TChannelId chan, 
-                             short startTime, 
-                             std::vector<short> adcs,
+                             int first, 
+                             const CP::TTPCDigit::Vector& adcs,
                              const CP::TMCDigit::ContributorContainer& contrib)
-    : TTPCDigit(chan,startTime,adcs), 
+    : TTPCDigit(chan,first,adcs), 
       TMCDigit(contrib) {}
 
 
