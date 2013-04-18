@@ -7,14 +7,11 @@ CP::TDigitContainer::TDigitContainer(const char* name, const char* title)
     : TDatum(name,title), fSignature(0) {}
 
 CP::TDigitContainer::~TDigitContainer() {
-    for (CP::TDigitContainer::iterator d = begin();
-         d != end();
-         ++d) {
+    for (CP::TDigitContainer::iterator d = begin(); d != end(); ++d) {
         delete (*d);
     }
     for (std::vector<CP::TDigitHeader*>::iterator h = fHeaders.begin();
-         h != fHeaders.end();
-         ++h) {
+         h != fHeaders.end(); ++h) {
         delete (*h);
     }
     fHeaders.clear();
@@ -34,7 +31,7 @@ unsigned int CP::TDigitContainer::GetSignature() const {
         // Calculate the signature using a modified Fowler, Noll, and Vo hash
         // type 1a (FNV-1a).  The signature is calculated so that it will be
         // equal if two TDigitContainers that have the same name, title and
-        // data.  This gives the oaEvent code freedom to delete
+        // data.  This gives the event i/o code freedom to delete
         // TDigitContainers which can be regenerated at a later point, while
         // making sure that the regenerated TDigitContainers have the same
         // data.
@@ -92,4 +89,3 @@ void CP::TDigitContainer::ls(Option_t* opt) const {
     }
     TROOT::DecreaseDirLevel();
 }
-

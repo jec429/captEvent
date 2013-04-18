@@ -1,25 +1,18 @@
-#ifndef TTPCDigitHeader_hxx_seen
-#define TTPCDigitHeader_hxx_seen
+#ifndef TPulseDigitHeader_hxx_seen
+#define TPulseDigitHeader_hxx_seen
 
 #include <TDigitHeader.hxx>
 
 namespace CP {
-    class TTPCDigitHeader;
+    class TPulseDigitHeader;
 };
 
-class CP::TTPCDigitHeader : public CP::TDigitHeader{
+class CP::TPulseDigitHeader : public CP::TDigitHeader{
 public:
-    TTPCDigitHeader();
-    TTPCDigitHeader(bool comp, bool lflag, bool sync);
-    virtual ~TTPCDigitHeader();
-
+    TPulseDigitHeader();
+    explicit TPulseDigitHeader(const std::string& name);
+    virtual ~TPulseDigitHeader();
 private:
-
-  bool fCompressed;
-  bool fLosFlag;
-  bool fSyncFail;
-
-
-    ClassDef(TTPCDigitHeader, 1);
+    ClassDef(TPulseDigitHeader, 1);
 };
 #endif

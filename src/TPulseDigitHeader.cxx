@@ -1,24 +1,11 @@
-#include "TTPCDigitHeader.hxx"
+#include "TPulseDigitHeader.hxx"
 
-ClassImp(CP::TTPCDigitHeader);
+ClassImp(CP::TPulseDigitHeader);
 
-//***********************************
-CP::TTPCDigitHeader::TTPCDigitHeader():
-  fCompressed(-1), fLosFlag(-1), fSyncFail(-1) {
-//************************************************************
+CP::TPulseDigitHeader::TPulseDigitHeader(): TDigitHeader("pulse") { }
 
-}
+CP::TPulseDigitHeader::TPulseDigitHeader(const std::string& name)
+    : TDigitHeader(name) {}
 
-//***********************************
-CP::TTPCDigitHeader::TTPCDigitHeader(bool c, bool l, bool s): 
-  TDigitHeader("tpc"), fCompressed(c), fLosFlag(l), fSyncFail(s)  {
-//************************************************************
-
-}
-
-//***********************************
-CP::TTPCDigitHeader::~TTPCDigitHeader() {
-//***********************************
-
-}
+CP::TPulseDigitHeader::~TPulseDigitHeader() { }
 

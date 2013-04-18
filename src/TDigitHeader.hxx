@@ -87,7 +87,7 @@ private:
 
     /// The index one past the last digit for which this header information is
     /// valid.
-    unsigned fEndValid;
+    unsigned int fEndValid;
 
     CP::TDataVector* fDataVector;
 

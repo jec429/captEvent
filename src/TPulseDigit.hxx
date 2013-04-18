@@ -1,5 +1,5 @@
-#ifndef TTPCDigit_hxx_seen
-#define TTPCDigit_hxx_seen
+#ifndef TPulseDigit_hxx_seen
+#define TPulseDigit_hxx_seen
 
 #include <vector>
 #include <TROOT.h>
@@ -8,22 +8,22 @@
 #include <TDigit.hxx>
 
 namespace CP {
-    class TTPCDigit;
+    class TPulseDigit;
 };
 
 /// Digit for TPC based detectors.  This holds the actual digitization data
 /// for a TPC channel.
-class CP::TTPCDigit : public TDigit {
+class CP::TPulseDigit : public TDigit {
 public:
     typedef std::vector<unsigned short> Vector;
 
-    TTPCDigit ();
-    virtual ~TTPCDigit();
+    TPulseDigit ();
+    virtual ~TPulseDigit();
 
     /// Construct a digit for a particular channel.  The first time bin is
     /// specified, and then the vector of adcs values for the next set of adcs
     /// need to be provided.
-    TTPCDigit(CP::TChannelId chan, int first, const Vector& adcs);
+    TPulseDigit(CP::TChannelId chan, int first, const Vector& adcs);
 
     /// Get the index of the first sample.  This can be negative since some
     /// ADCs may give a delta relative to an index saved in the header.
@@ -51,6 +51,6 @@ private:
     /// vector of ADC counts 
     Vector fADCs;
 
-    ClassDef(TTPCDigit,1);
+    ClassDef(TPulseDigit,1);
 };
 #endif

@@ -30,7 +30,7 @@ public:
     CP::TDigitHeader *const GetHeader(int i) const;
 
     /// Get the total number of headers in the container.
-    unsigned int GetHeaderCount() const {return fHeaders.size();}
+    std::size_t GetHeaderCount() const {return fHeaders.size();}
 
     /// Add a header to the container.
     void AddHeader(CP::TDigitHeader* header);

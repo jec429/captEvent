@@ -1,15 +1,15 @@
-#include "TTPCmcDigit.hxx"
+#include "TPulseMCDigit.hxx"
 
-ClassImp(CP::TTPCmcDigit);
+ClassImp(CP::TPulseMCDigit);
 
-CP::TTPCmcDigit::TTPCmcDigit() {}
+CP::TPulseMCDigit::TPulseMCDigit() {}
 
-CP::TTPCmcDigit::TTPCmcDigit(CP::TChannelId chan, 
+CP::TPulseMCDigit::TPulseMCDigit(CP::TChannelId chan, 
                              int first, 
-                             const CP::TTPCDigit::Vector& adcs,
+                             const CP::TPulseDigit::Vector& adcs,
                              const CP::TMCDigit::ContributorContainer& contrib)
-    : TTPCDigit(chan,first,adcs), 
+    : TPulseDigit(chan,first,adcs), 
       TMCDigit(contrib) {}
 
 
-CP::TTPCmcDigit::~TTPCmcDigit() {}
+CP::TPulseMCDigit::~TPulseMCDigit() {}

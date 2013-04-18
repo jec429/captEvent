@@ -1,35 +1,35 @@
-#include "TTPCDigit.hxx"
+#include "TPulseDigit.hxx"
 
-ClassImp(CP::TTPCDigit);
+ClassImp(CP::TPulseDigit);
 
-CP::TTPCDigit::TTPCDigit() {}
+CP::TPulseDigit::TPulseDigit() {}
 
-CP::TTPCDigit::TTPCDigit(CP::TChannelId chan, int first, const Vector& adc) 
+CP::TPulseDigit::TPulseDigit(CP::TChannelId chan, int first, const Vector& adc) 
     : TDigit(chan), fFirstSample(first), fADCs(adc) {}
 
 
-CP::TTPCDigit::~TTPCDigit() {}
+CP::TPulseDigit::~TPulseDigit() {}
 
-int CP::TTPCDigit::GetFirstSample() const {
+int CP::TPulseDigit::GetFirstSample() const {
     return fFirstSample;
 }
 
-std::size_t CP::TTPCDigit::GetNumberOfSamples() const {
+std::size_t CP::TPulseDigit::GetNumberOfSamples() const {
     return fADCs.size();
 }
 
-int CP::TTPCDigit::GetADC(int t) const {
+int CP::TPulseDigit::GetADC(int t) const {
     if (t < 0) return 0;
     if (fADCs.size() <= (std::size_t) t) return 0;
     return fADCs[t];
 }
 
 
-const CP::TTPCDigit::Vector& CP::TTPCDigit::GetADCs() const {
+const CP::TPulseDigit::Vector& CP::TPulseDigit::GetADCs() const {
     return fADCs;
 }
 
-void CP::TTPCDigit::ls(Option_t* opt) const {
+void CP::TPulseDigit::ls(Option_t* opt) const {
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << GetChannelId()
