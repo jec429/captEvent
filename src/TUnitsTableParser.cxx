@@ -111,6 +111,7 @@ CP::TUnitsTableParser::TUnitsTableParser() {
     // Speed
     units["cm/us"] = units["cm"]/units["mus"]  ;
     units["cm/ns"] = units["cm"]/units["ns"]  ;
+    units["mm/mus"] = units["mm"]/units["mus"]  ;
     units["mm/ns"] = units["mm"]/units["ns"]  ;
 
     // Length/Energy
@@ -120,12 +121,8 @@ CP::TUnitsTableParser::TUnitsTableParser() {
     units["cm/keV"] = units["cm"]/units["keV"];
 
     // Dummy units for diffusion coefficient
-    units["cm/sqrt(cm)"] = units["cm"]/std::sqrt(units["cm"]);
-    units["mm/sqrt(cm)"] = units["mm"]/std::sqrt(units["cm"]);
-    units["um/sqrt(cm)"] = units["um"]/std::sqrt(units["cm"]);
+    units["cm2/s"] = units["cm2"]/(units["s"]);
 
-    // Dummy units for electron mobility
-    units["cm2/(Vs)"] = units["cm2"]/(units["V"]*units["s"]);
 }
 
 CP::TUnitsTableParser::~TUnitsTableParser() {}
