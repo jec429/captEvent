@@ -20,9 +20,9 @@ public:
     /// CP::TPulseDigit for details.  The contrib container is documented in
     /// CP::TMCDigit.
     TPulseMCDigit(CP::TChannelId chan, 
-                int first, 
-                const CP::TPulseDigit::Vector& adcs,
-                const CP::TMCDigit::ContributorContainer& contrib);
+                  int first, 
+                  const CP::TPulseDigit::Vector& adcs,
+                  const CP::TMCDigit::ContributorContainer& contrib);
 
     ClassDef(TPulseMCDigit,2);
 };

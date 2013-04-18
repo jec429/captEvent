@@ -80,7 +80,8 @@ void CP::TDigitContainer::ls(Option_t* opt) const {
         CP::TDigitHeader *const hdr = GetHeader(i);
         hdr->ls(opt);
     }
-    if (option.find("dump") != std::string::npos) {
+    if (option.find("dump") != std::string::npos
+        || option.find("digits") != std::string::npos) {
         for (TDigitContainer::const_iterator v = begin();
              v != end(); 
              ++v) {

@@ -24,17 +24,38 @@ int CP::TPulseDigit::GetADC(int t) const {
     return fADCs[t];
 }
 
-
 const CP::TPulseDigit::Vector& CP::TPulseDigit::GetADCs() const {
     return fADCs;
 }
 
 void CP::TPulseDigit::ls(Option_t* opt) const {
+    std::string option(opt);
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
+
     std::cout << GetChannelId()
-              << " T: (" << GetFirstSample() 
-              << " (" << GetNumberOfSamples() << ")" 
-              << std::endl;
+              << " T: " << GetFirstSample() 
+              << " (" << GetNumberOfSamples() << ")";
+
+    TROOT::IncreaseDirLevel();
+
+    if (option.find("digits") != std::string::npos) {
+        int sample = 0;
+        for (CP::TPulseDigit::Vector::const_iterator d = fADCs.begin();
+             d != fADCs.end(); ++d) {
+            if ((0<sample) && 0 == (sample%10)) {
+                std::cout << std::endl;
+                TROOT::IndentLevel();
+                std::cout << sample << " --";
+            }
+            std::cout << " " << *d;
+            ++sample;
+        }
+    }
+
+    TROOT::DecreaseDirLevel();
+
+    std::cout << std::endl;
+
     TROOT::DecreaseDirLevel();
 }
