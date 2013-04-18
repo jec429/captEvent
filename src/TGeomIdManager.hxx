@@ -257,12 +257,12 @@ private:
     void RecurseHashCode(std::vector<std::string>& names);
 
     /// Find a file with a geometry matching a particular hash.  Looks in a
-    /// standarized location (${OAEVENTROOT}/${OAEVENTCONFIG}/geometry) for a
-    /// file which advertises a geometry matching the requested hash value.
-    /// If the file is found, this returns the file name, otherwise it returns
-    /// an empty stream.  This requires the first hash, but the other hashs
-    /// may be left to the default value.  If the other hashs have a non-zero
-    /// value, then the file name is searched for that hash.
+    /// standarized location for a file which advertises a geometry matching
+    /// the requested hash value.  If the file is found, this returns the file
+    /// name, otherwise it returns an empty string.  This requires the first
+    /// hash, but the other hashs may be left to the default value.  If the
+    /// other hashs have a non-zero value, then the file name is searched for
+    /// that hash.
     std::string FindGeometryFile(const CP::TSHAHashValue& hc) const;
 
     /// Find and load the geometry that best matchs this event.  If this

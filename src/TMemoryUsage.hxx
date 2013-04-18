@@ -13,7 +13,7 @@ namespace CP {
 /// by a program.  By default, logging is disabled. Enable by calling
 /// Enable().  The expected usage is to call LogMemory() once per event, and
 /// Write() once all event have been processed.  This class is used inside the
-/// default eventLoop, so it isn't generally used outside of oaEvent.
+/// default eventLoop, so it isn't generally used outside of this library.
 class CP::TMemoryUsage {
 public:
     /// Construct the memory usage class with logging disabled.
