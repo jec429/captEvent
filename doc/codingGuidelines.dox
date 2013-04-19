@@ -1,0 +1,232 @@
+/*! \page codingGuidelines Coding Guidelines.
+
+This is an attempt to provide a little bit of unification within the
+software.  The main goal of this document is to help us to develop
+maintainable code that will last for the life of the experiment.  The
+suggested C++ coding style is based on the one suggested by the ROOT
+developers and is mostly concerned with naming conventions.  Please try to
+follow these conventions since it really does help make the code readable.
+
+\attention Please be aware that the detector simulation does not follow
+these guidelines, but more or less matches the G4 coding style.
+
+Finally, please follow the programming guidelines given in
+``Effective C++'' and ``More Effective C++''.  These books are a nice
+concise style guide for C++.
+
+\section fileNames FILE NAME EXTENSIONS
+
+File name extensions are not required by any modern operating system, but
+they help people read the source code.  The following extensions are used
+by the software:
+
+   - C++ source files are named \c <em>filename</em>.cxx with a single class
+     defined in each file.  The file name should match the name of the
+     class.  Sometimes it makes since to define more than one class in a
+     single file.  In this case, the file name comes from the most
+     important class.  A typical example is THit.cxx which defines a class
+     for a single calibrated hit.
+   
+   - C++ header files are named \c <em>filename</em>.hxx with a single class in
+     each file.  There should be a single header associated with each
+     source file.  A typical example is THit.hxx which declares a class for
+     a single calibrated hit.
+
+   - C source files are named \c <em>filename</em>.c
+
+   - C header files are named \c <em>filename</em>.h
+
+\subsection mcFileNames Extensions in the detector simulation
+
+The detector simulation uses the G4 file naming conventions which are
+different from the rest of the libraries.  In the simulation, the files are
+named  \c <em>filename</em>.cc and  \c <em>filename</em>.hh
+
+\section namespaces NAMESPACES
+
+All of the classes should be contained inside a single top level
+namespace.  The top level is the \c CP namespace.
+Packages within the \c CP namespace may define further sub-spaces
+(e.g. the reconstruction might, but does not currently, use the \c
+CP::recon namespace.  If a sub-namespace is used, the include files
+should be saved in a sub-directory.  If the reconstruction is using the \c
+CP::recon namespace, then the include files are included \c "#include
+<recon/...>").
+
+It can be very convenient to include a \c use directive into your source
+code to save typing the namespace name.  However, \c use directives must
+not be added to header files since they may cause unexpected namespace
+collisions.  In general, the \c use directive is discouraged.
+
+The standard library should be explicitly referenced using the \c std
+namespace so that it is very clear where to find the documentation.  The \c
+std namespace should not be abbreviated using a \c use directive.
+ 
+\section classes CLASS NAMING CONVENTIONS
+
+Here is an example of a simple class definition.  Notice than names use a
+variant of "CamelCase".
+
+\code
+//////////////////////////////////////////////////////////////////
+// A standard class.
+//////////////////////////////////////////////////////////////////
+namespace CP {
+    class TExample;
+};
+
+class CP::TExample {
+private:
+    // A field variable starts with "f" to distinguish it from a
+    //   local variable.  All field variables should be declared
+    //    as private.
+    int fOneField;
+public:
+    TExample();
+
+    // Destructors should be declared as virtual so that the current class
+    //   can be used as a base class.
+    virtual ~TExample();
+
+    // Methods should be provided to set field variables values.
+    void SetOneField(int);
+
+    // Methods should be provided to get field variable values.  The 
+    //   Get<> methods should be declared as const.
+    int GetOneField(void) const;
+
+    // Method names should start with upper case letters.
+    double AnExampleMethod(void);
+
+    // Sub classes should not start with a "T".
+    class SubClass {
+        SubClass();
+        virtual ~SubClass();
+    };
+};
+
+void CP::TExample::SetOneField(int theValue) {
+    fOneField = theValue;
+}
+
+void CP::TExample::GetOneField(void) const {return fOneField;}
+
+void CP::TExample::AnExampleMethod() {
+    // Internal variables should start with lower case letters
+    int anInternalVariable = 3;
+    SubClass aSubClassVariable;
+}
+\endcode
+
+Notice that the class is placed into the namespace before it's declaration,
+and then the declarations explicitly include the namespace. 
+
+\subsection typeAndClass Type and Class Names
+
+A type name should begin with a capital ``T'' (for instance ``TObject'').
+You should use a single "T" in most cases, but if you are writing a pure
+abstract base class (an ABC), or a pure mix-in class, they can be marked as
+"TV" or "TM" respectively.  It is important to realize that the leading "T"
+is used flag a name as a "type name", and is not intended to make the name
+unique.  Names are disambiguated using namespaces.
+  
+\subsection exceptionNames Exception Names
+
+An exception is a special type of object so it has a special name.  Follow
+all of the rules listed above, but use \c ``E'' instead (for instance,
+\c ``EAnException'').  The ultimate base class of all exceptions should be
+\c std::exception, but exceptions will typically be more directly derived
+from an exception class that is part of the project libraries.
+
+\subsection classMethods Class Methods
+
+The class methods should all start with a capital letter.  For long method
+names, any words inside the name should be capitalized (e.g. \c
+ALongMethodName).  This is a version of what is sometimes called
+"CamelCase".  Since none of the class fields are visible outside of
+the class, you need to provide a routines to get and set their values
+(named Get<em>Variable</em> and Set<em>Variable</em>).
+  
+\subsection classFields Class Field Names
+
+One of the ``problems'' with C++ is that inside of a class definition there
+is no easy way to distinguish local variables from class fields.  The
+situation is made much easier if every class field is prefixed with an
+``f''.  If a field has a multi-word name then each word should be
+capitalized (e.g. fFieldWithLongName).  Fields should be \c private
+(best) or \c protected and you should avoid \c public fields.  Class fields
+should be set and accessed using methods named \c Set<field> and \c
+Get<field>.  This is shown in the example above.  There is a field named \c
+fOneField.  It is accessed using \c SetOneField() and \c GetOneField().  
+
+\subsection classDestructors Class Destructors
+
+Since you never know when a class might be used as a base class, always use
+a virtual distructor.  In the (rare) case where a non-virtual destructor is
+required, clearly document the reasons.
+  
+\subsection subClass Sub-Class Names 
+
+A type name that is defined inside of a class should not begin with a
+``T'', but should begin with a capital.  For instance, a sub-class should
+be named \c TMainObject::SubObject.  The exception to this guideline is
+that typedefs which mimic STL types (e.g. iterators) should follow the STL
+rules (i.e. \c TMainObject::iterator).
+
+\section otherNames FUNCTIONS, VARIABLE AND PARAMETER NAMES
+
+\subsection functionNames Function Names 
+
+Functions should all be inside of a namespace, and should be named using
+CamelCase.  Functions that are intended for use outside of the package (or
+even the source file) should be named starting with a capitol letter.
+Functions that are intended to be internal to the code should start with a
+lower case letter (similar to a local variable), and if possible should be
+placed in the unnamed namespace.  A function that is intended for general
+use might be named \c CP::ALongFunctionName().  A function for internal use
+might be named aLongFunctionName(), and be declared inside the unnamed
+namespace. 
+
+\subsection localVariables Local Variables and method parameters
+
+Local variable and method parameters should always
+start with a lower case letter.  If a variable has a long name
+(multi-word), then the second and third words should be capitalized
+(e.g. \c aLongVariableName).  
+
+\subsection globalVariables Global variables
+
+Don't use global variables!  If you think you need a global variable, write
+a singleton class instead.  If you <em>absolutely</em> must use a global
+variable, reconsider.  You <em>really can</em> use a singleton class instead.
+If you still need that global variable, prefix it with a ``g'' and document
+it <b>really really well</b>.  Having created a global variable, consider
+finding somebody else to program for you.  Tongue in cheek aside, please do
+use global variables sparingly.  It's understood that global variables are
+sometimes required, but overuse can quickly lead to unreliable code.  
+
+\note At first glance, you might think that ROOT uses a lot of globals
+(e.g. gROOT, gStyle, gPad, etc).  However, these are actually macro
+definitions around static class methods.
+
+\code
+//////////////////////////////////////////////////////////////////
+// A singleton class.
+//////////////////////////////////////////////////////////////////
+class TSingleton {
+private:
+    static TSingleton *fTSingleton;
+    TSingleton();   // The constructor is protected (or private).
+public:
+    static TSingleton *GetTSingleton(void);
+    virtual ~TSingleton();
+}
+
+TSingleton::fTSingleton = NULL;
+
+static TSingleton *TSingleton::GetTSingleton(void) {
+    if (!fTSingleton) fTSingleton = new TSingleton;
+    return fTSingleton;
+}
+\endcode
+*/

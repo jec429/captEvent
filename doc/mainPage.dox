@@ -3,6 +3,8 @@
   \section captEvent Introduction
 
   This library provides the basic I/O functions for the CAPTAIN software.
+  It is also an example of the \ref codingGuidelines that are encouraged
+  for CAPTAIN software.
 
   The I/O is provided by ROOT which is used to save CP::TEvent objects and
   the TGeoManager description of the detector geometry.  The output to log
@@ -10,10 +12,10 @@
   the classes are in the ND namespace.  This namespace should contain all
   CAPTAIN code.  
 
-  This library also provides the ability to read a MIDAS raw data file
-  sequentially and return each record as a CP::TND280RawEvent. This object gives
-  access to raw MIDAS banks but in order to interpret this data the, soon to
-  be developed, oaRawEvent package must be present.
+  This library also provides the ability to read raw data files
+  sequentially and return each record as a CP::TRawEvent. This object
+  gives access to raw data, but in order to interpret this data the,
+  soon to be developed, captRawEvent library must be present.  
 
   \subsection eventFiles The CAPTAIN Offline Event File Format
 
