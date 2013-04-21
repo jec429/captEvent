@@ -1,12 +1,15 @@
 #include "TCalibPulseDigit.hxx"
+#include "TPulseDigit.hxx"
 
 ClassImp(CP::TCalibPulseDigit);
 
 CP::TCalibPulseDigit::TCalibPulseDigit() {}
 
-CP::TCalibPulseDigit::TCalibPulseDigit(CP::TChannelId chan, double first,
+CP::TCalibPulseDigit::TCalibPulseDigit(CP::TPulseDigit* parent,
+                                       double first,
                                        const Vector& samples) 
-    : TDigit(chan), fFirstSample(first), fSamples(samples) {}
+    : TDigit(fParent->GetChannelId()), fParent(parent),
+      fFirstSample(first), fSamples(samples) {}
 
 
 CP::TCalibPulseDigit::~TCalibPulseDigit() {}

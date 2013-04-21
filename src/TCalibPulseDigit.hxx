@@ -9,6 +9,7 @@
 
 namespace CP {
     class TCalibPulseDigit;
+    class TPulseDigit;
 };
 
 /// A calibrated "digit" for pulse based detectors.  This holds the calibrated
@@ -24,7 +25,12 @@ public:
     /// Construct a digit for a particular channel.  The first time bin is
     /// specified, and then the vector of adcs values for the next set of adcs
     /// need to be provided.
-    TCalibPulseDigit(CP::TChannelId chan, double first, const Vector& adcs);
+    TCalibPulseDigit(CP::TPulseDigit* parent, 
+                     double first, const Vector& adcs);
+
+
+    /// Return a pointer to the uncalibrated parent TPulseDigit.
+    CP::TPulseDigit* GetParent() const {return fParent;}
 
     /// Get the time of the first sample.  This can be negative since some
     /// ADCs may give a delta relative to an index saved in the header.
@@ -43,6 +49,10 @@ public:
     virtual void ls(Option_t* opt = "") const;
     
 private: 
+
+    /// The digit that the calibrated digit came from.  This must be present
+    /// since the calibrated digit will lose information otherwise.
+    CP::TPulseDigit* fParent;
 
     /// The index of the first sample in the pulse.  This is signed since some
     /// digitizers may return a delta from a sample number saved in the
