@@ -35,6 +35,9 @@ public:
 
 private:
 
+    /// Do the class initialization once.  This is used in the constructors.
+    void Init();
+
     /// The intensity used to generate this event.  The definition of the
     /// intensity can depend on the MC run type, but for a beam spill run, it
     /// will contain the number of protons per pulse. 
