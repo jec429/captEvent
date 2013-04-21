@@ -11,8 +11,8 @@ namespace CP {
     class TPulseDigit;
 };
 
-/// Digit for TPC based detectors.  This holds the actual digitization data
-/// for a TPC channel.
+/// Digit for pulse based detectors.  This holds the actual digitization data
+/// for a channel where an sample values are read with a fixed frequency.
 class CP::TPulseDigit : public TDigit {
 public:
     typedef std::vector<unsigned short> Vector;
@@ -21,22 +21,22 @@ public:
     virtual ~TPulseDigit();
 
     /// Construct a digit for a particular channel.  The first time bin is
-    /// specified, and then the vector of adcs values for the next set of adcs
+    /// specified, and then the vector of sample values for the next set of adcs
     /// need to be provided.
     TPulseDigit(CP::TChannelId chan, int first, const Vector& adcs);
 
     /// Get the index of the first sample.  This can be negative since some
-    /// ADCs may give a delta relative to an index saved in the header.
+    /// Samples may give a delta relative to an index saved in the header.
     int GetFirstSample() const;
 
     // number of time bins in this digit
-    std::size_t GetNumberOfSamples() const;
+    std::size_t GetSampleCount() const;
 
-    /// Get the ADC value for a specific time bin
-    int GetADC(int t) const;
+    /// Get the sample value for a specific time bin
+    int GetSample(int t) const;
 
-    /// vector of ADC counts
-    const Vector& GetADCs() const;
+    /// vector of sample counts
+    const Vector& GetSamples() const;
 
     /// Print the digit information.
     virtual void ls(Option_t* opt = "") const;
@@ -48,8 +48,8 @@ private:
     /// header.
     int fFirstSample;    
 
-    /// vector of ADC counts 
-    Vector fADCs;
+    /// vector of Samples 
+    Vector fSamples;
 
     ClassDef(TPulseDigit,1);
 };

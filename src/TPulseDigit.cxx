@@ -5,8 +5,7 @@ ClassImp(CP::TPulseDigit);
 CP::TPulseDigit::TPulseDigit() {}
 
 CP::TPulseDigit::TPulseDigit(CP::TChannelId chan, int first, const Vector& adc) 
-    : TDigit(chan), fFirstSample(first), fADCs(adc) {}
-
+    : TDigit(chan), fFirstSample(first), fSamples(adc) {}
 
 CP::TPulseDigit::~TPulseDigit() {}
 
@@ -14,18 +13,18 @@ int CP::TPulseDigit::GetFirstSample() const {
     return fFirstSample;
 }
 
-std::size_t CP::TPulseDigit::GetNumberOfSamples() const {
-    return fADCs.size();
+std::size_t CP::TPulseDigit::GetSampleCount() const {
+    return fSamples.size();
 }
 
-int CP::TPulseDigit::GetADC(int t) const {
+int CP::TPulseDigit::GetSample(int t) const {
     if (t < 0) return 0;
-    if (fADCs.size() <= (std::size_t) t) return 0;
-    return fADCs[t];
+    if (fSamples.size() <= (std::size_t) t) return 0;
+    return fSamples[t];
 }
 
-const CP::TPulseDigit::Vector& CP::TPulseDigit::GetADCs() const {
-    return fADCs;
+const CP::TPulseDigit::Vector& CP::TPulseDigit::GetSamples() const {
+    return fSamples;
 }
 
 void CP::TPulseDigit::ls(Option_t* opt) const {
@@ -35,14 +34,14 @@ void CP::TPulseDigit::ls(Option_t* opt) const {
 
     std::cout << GetChannelId()
               << " T: " << GetFirstSample() 
-              << " (" << GetNumberOfSamples() << ")";
+              << " (" << GetSampleCount() << ")";
 
     TROOT::IncreaseDirLevel();
 
     if (option.find("digits") != std::string::npos) {
         int sample = 0;
-        for (CP::TPulseDigit::Vector::const_iterator d = fADCs.begin();
-             d != fADCs.end(); ++d) {
+        for (CP::TPulseDigit::Vector::const_iterator d = fSamples.begin();
+             d != fSamples.end(); ++d) {
             if ((0<sample) && 0 == (sample%10)) {
                 std::cout << std::endl;
                 TROOT::IndentLevel();
