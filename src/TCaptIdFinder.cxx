@@ -41,14 +41,14 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
         return true;
     }
         
-    if (names.back().find("UPlane_")!=std::string::npos) {
+    if (names.back().find("VPlane_")!=std::string::npos) {
         fPlane = 1;
         id = CP::GeomId::Captain::Plane(fPlane);
         fWire = -1;
         return true;
     }
         
-    if (names.back().find("VPlane_")!=std::string::npos) {
+    if (names.back().find("UPlane_")!=std::string::npos) {
         fPlane = 2;
         id = CP::GeomId::Captain::Plane(fPlane);
         fWire = -1;

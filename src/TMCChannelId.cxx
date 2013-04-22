@@ -33,10 +33,10 @@ std::string CP::TMCChannelId::AsString() const {
             str << "X";
             break;
         case 1:
-            str << "U";
+            str << "V";
             break;
         case 2:
-            str << "V";
+            str << "U";
             break;
         default:
             str << "?";

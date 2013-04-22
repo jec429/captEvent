@@ -20,7 +20,7 @@ public:
 
     /// Construct an MC channel dentifier from its electronics-space
     /// coordinates.  The type is 0) for wires and 1) for PMTs.  The plane is
-    /// 0) for X, 1) for U, and 2) for V (it's ignored for PMTs.  The "wire"
+    /// 0) for X, 1) for V, and 2) for U (it's ignored for PMTs.  The "wire"
     /// is the wire number of the PMT number.
     TMCChannelId(UInt_t type,  UInt_t plane,  UInt_t wire);
 
