@@ -19,10 +19,11 @@ public:
     explicit TMCChannelId(const CP::TChannelId& src);
 
     /// Construct an MC channel dentifier from its electronics-space
-    /// coordinates.  The type is 0) for wires and 1) for PMTs.  The plane is
-    /// 0) for X, 1) for V, and 2) for U (it's ignored for PMTs.  The "wire"
-    /// is the wire number of the PMT number.
-    TMCChannelId(UInt_t type,  UInt_t plane,  UInt_t wire);
+    /// coordinates.  The type is 0) for wires and 1) for PMTs.  The "seq" is 0)
+    /// for the X wire plane, 1) for the V wire plane, and 2) for the U wire
+    /// plane.  It iss ignored for the light sensors.  The "num" is the wire
+    /// number of the PMT number.
+    TMCChannelId(UInt_t type,  UInt_t seq,  UInt_t num);
 
     virtual ~TMCChannelId();
 
@@ -33,10 +34,14 @@ public:
     /// light sensors.
     UInt_t GetType() const;
 
-    /// Get the plane for this channel.
+    /// Get the sequence number for this channel.  For the wire planes, this
+    /// is 0) for X, 1) for V, and 2) for U.  It is ignored for light sensors
+    /// where it should always be set to zero.
     UInt_t GetSequence() const;
 
-    /// Get the number (usually of the wire) for this channel.
+    /// Get the number (usually of the wire) for this channel.  For the wire
+    /// planes, this is the wire number for the current channel.  For the
+    /// light sensors, this is the PMT number.
     UInt_t GetNumber() const;
 
 protected:
@@ -63,13 +68,13 @@ protected:
 
 private:		
 
-    /// Get the type of this channel.
+    /// Set the type of this channel.
     void SetType(int val);
 
-    /// Get the plane for this channel.
+    /// Set the sequence for this channel.
     void SetSequence(int val);
 
-    /// Get the wire for this channel.
+    /// Set the number for this channel.
     void SetNumber(int val);
 
     ClassDef(TMCChannelId, 1)
