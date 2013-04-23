@@ -5,17 +5,21 @@ ClassImp(CP::TCalibPulseDigit);
 
 CP::TCalibPulseDigit::TCalibPulseDigit() {}
 
-CP::TCalibPulseDigit::TCalibPulseDigit(CP::TPulseDigit* parent,
-                                       double first,
+CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TPulseDigit* parent,
+                                       double first, double last,
                                        const Vector& samples) 
-    : TDigit(fParent->GetChannelId()), fParent(parent),
-      fFirstSample(first), fSamples(samples) {}
+    : TDigit(parent->GetChannelId()), fParent(parent),
+      fFirstSample(first), fLastSample(last), fSamples(samples) {}
 
 
 CP::TCalibPulseDigit::~TCalibPulseDigit() {}
 
 double CP::TCalibPulseDigit::GetFirstSample() const {
     return fFirstSample;
+}
+
+double CP::TCalibPulseDigit::GetLastSample() const {
+    return fLastSample;
 }
 
 std::size_t CP::TCalibPulseDigit::GetSampleCount() const {
@@ -38,7 +42,7 @@ void CP::TCalibPulseDigit::ls(Option_t* opt) const {
     TROOT::IndentLevel();
 
     std::cout << GetChannelId()
-              << " T: " << GetFirstSample() 
+              << " T: " << GetFirstSample() << " to " << GetLastSample()
               << " (" << GetSampleCount() << ")";
 
     TROOT::IncreaseDirLevel();
