@@ -38,7 +38,7 @@ macro_append linkdef_dependencies " register "
 document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox
 
 # The library to build
-library captEvent bogusVariable=helloBogus *.cxx *.hxx $(bin)dict/*.cxx
+library captEvent *.cxx *.hxx $(bin)dict/*.cxx
 macro_append captEvent_dependencies " linkdef "
 
 # Build information used by packages that use this one.
@@ -51,8 +51,7 @@ path_remove LD_LIBRARY_PATH "$(CAPTEVENTROOT)"
 path_prepend LD_LIBRARY_PATH "$(CAPTEVENTROOT)/$(captEvent_tag)"
 
 path_remove PATH "$(CAPTEVENTROOT)"
-path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)" \
-      WIN32      "$(CAPTEVENTROOT)/$(captEvent_tag)" 
+path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)"
 
 # Applications to build
 application dump-event ../app/dump-event.cxx
