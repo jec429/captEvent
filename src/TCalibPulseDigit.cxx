@@ -5,11 +5,17 @@ ClassImp(CP::TCalibPulseDigit);
 
 CP::TCalibPulseDigit::TCalibPulseDigit() {}
 
-CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TPulseDigit* parent,
+CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TDigit* parent,
                                        double first, double last,
                                        const Vector& samples) 
     : TDigit(parent->GetChannelId()), fParent(parent),
       fFirstSample(first), fLastSample(last), fSamples(samples) {}
+
+CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TCalibPulseDigit& cpd) 
+    : TDigit(cpd.GetChannelId()), fParent(cpd.GetParent()),
+      fFirstSample(cpd.GetFirstSample()), fLastSample(cpd.GetLastSample()),
+      fSamples(cpd.GetSamples()) { }
+                                        
 
 
 CP::TCalibPulseDigit::~TCalibPulseDigit() {}
@@ -30,6 +36,10 @@ double CP::TCalibPulseDigit::GetSample(int t) const {
     if (t < 0) return 0;
     if (fSamples.size() <= (std::size_t) t) return 0;
     return fSamples[t];
+}
+
+void CP::TCalibPulseDigit::SetSample(int t, double v) {
+    fSamples[t] = v;
 }
 
 const CP::TCalibPulseDigit::Vector& CP::TCalibPulseDigit::GetSamples() const {

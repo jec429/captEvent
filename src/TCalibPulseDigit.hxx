@@ -19,7 +19,9 @@ namespace CP {
 /// and stop times are held in doubles.  It also holds a pointer to the
 /// original (uncalibrated) CP::TPulseDigit object.  While this class is
 /// intended to hold intermediate, temporary results, it can, but is not
-/// intended to, be saved to a file.
+/// intended to, be saved to a file.  Notice that TCalibPulseDigit objects are
+/// mutable.  This is so they can be modified in the course of the calibration
+/// and reduce the amount of copying.
 class CP::TCalibPulseDigit : public TDigit {
 public:
     typedef std::vector<float> Vector;
@@ -30,11 +32,16 @@ public:
     /// Construct a digit for a particular channel.  The first time bin is
     /// specified, and then the vector of adcs values for the next set of adcs
     /// need to be provided.
-    TCalibPulseDigit(const CP::TPulseDigit* parent, double first, double last,
+    TCalibPulseDigit(const CP::TDigit* parent, double first, double last,
                      const Vector& samples);
 
-    /// Return a pointer to the uncalibrated parent TPulseDigit.
-    const CP::TPulseDigit* GetParent() const {return fParent;}
+    /// Construct a digit from an existing calibrated pulse digit.  This is
+    /// used to allow a progressive calibration chain with the intermediate
+    /// results being saved.
+    TCalibPulseDigit(const CP::TCalibPulseDigit& cpd);
+
+    /// Return a pointer to the parent digit.
+    const CP::TDigit* GetParent() const {return fParent;}
 
     /// Get the time of the first sample.  This can be negative since some
     /// electronics may give a delta relative to an index saved in the header.
@@ -56,6 +63,11 @@ public:
     /// charges).
     double GetSample(int t) const;
 
+    /// The calibrated pulse digit is actually mutable, so this allows the
+    /// value to be set.  This helps reduce the amount of copying required in
+    /// the calibration.
+    void SetSample(int i, double v);
+
     /// Get the vector of samples.
     const Vector& GetSamples() const;
 
@@ -66,7 +78,7 @@ private:
 
     /// The digit that the calibrated digit came from.  This must be present
     /// since the calibrated digit will lose information otherwise.
-    const CP::TPulseDigit* fParent;
+    const CP::TDigit* fParent;
 
     /// The time of the first sample in the pulse.  This is signed since some
     /// digitizers may return a delta from a sample number saved in the
