@@ -46,6 +46,21 @@ const TVector3& CP::THit::GetRMS(void) const {throw CP::EHit();}
 
 const TMatrixD& CP::THit::GetRotation(void) const {throw CP::EHit();}
 
+TVector3 CP::THit::GetXAxis(void) const {
+    const TMatrixD& rot = GetRotation();
+    return TVector3(rot(0,0),rot(1,0), rot(2,0));
+}
+
+TVector3 CP::THit::GetYAxis(void) const {
+    const TMatrixD& rot = GetRotation();
+    return TVector3(rot(0,1),rot(1,1), rot(2,1));
+}
+
+TVector3 CP::THit::GetZAxis(void) const {
+    const TMatrixD& rot = GetRotation();
+    return TVector3(rot(0,2),rot(1,2), rot(2,2));
+}
+
 const TMatrixD& CP::THit::GetCovariance(void) const {
     // Check if the covariance is already initialized.
     if (fCovariance.GetNcols() == 3 && fCovariance.GetNrows() == 3) {

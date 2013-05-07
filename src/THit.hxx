@@ -78,6 +78,15 @@ public:
     /// coordinates.
     virtual const TMatrixD& GetRotation(void) const = 0;
 
+    /// Get the local X axis.
+    virtual TVector3 GetXAxis(void) const;
+
+    /// Get the local Y axis.
+    virtual TVector3 GetYAxis(void) const;
+
+    /// Get the local Z axis.
+    virtual TVector3 GetZAxis(void) const;
+
     /// Get the covariance in the global coordinate system.  This is the local
     /// uncertainty (which is diagonal) rotated into the global coordinate
     /// system.  It's provided so that the result can be conveniently cached.
