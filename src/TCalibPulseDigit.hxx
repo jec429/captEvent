@@ -6,6 +6,7 @@
 
 #include <TChannelId.hxx>
 #include <TDigit.hxx>
+#include <TDigitProxy.hxx>
 
 namespace CP {
     class TCalibPulseDigit;
@@ -32,7 +33,7 @@ public:
     /// Construct a digit for a particular channel.  The first time bin is
     /// specified, and then the vector of adcs values for the next set of adcs
     /// need to be provided.
-    TCalibPulseDigit(const CP::TDigit* parent, double first, double last,
+    TCalibPulseDigit(const CP::TDigitProxy& parent, double first, double last,
                      const Vector& samples);
 
     /// Construct a digit from an existing calibrated pulse digit.  This is
@@ -41,7 +42,7 @@ public:
     TCalibPulseDigit(const CP::TCalibPulseDigit& cpd);
 
     /// Return a pointer to the parent digit.
-    const CP::TDigit* GetParent() const {return fParent;}
+    const CP::TDigitProxy& GetParent() const {return fParent;}
 
     /// Get the time of the first sample.  This can be negative since some
     /// electronics may give a delta relative to an index saved in the header.
@@ -78,7 +79,7 @@ private:
 
     /// The digit that the calibrated digit came from.  This must be present
     /// since the calibrated digit will lose information otherwise.
-    const CP::TDigit* fParent;
+    CP::TDigitProxy fParent;
 
     /// The time of the first sample in the pulse.  This is signed since some
     /// digitizers may return a delta from a sample number saved in the

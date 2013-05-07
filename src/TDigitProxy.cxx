@@ -43,6 +43,22 @@ CP::TDigitProxy::TDigitProxy(const CP::TDigitContainer& container,
     SetProxyCache(digit,NULL);
 }
 
+CP::TDigitProxy::TDigitProxy(const CP::TDigitContainer& container,
+                             const CP::TDigitContainer::const_iterator index) 
+    : fDigitSignature(0), fDigit(NULL), fContainer(NULL) {
+
+    int type = TDigitProxy::ConvertName(container.GetName());
+    SetProxyType(type);
+    int offset = index-container.begin();
+    if (offset<0 || container.size()<=(unsigned)offset) throw EDigitNotFound();
+    CP::TDigit* digit = container[offset];
+    unsigned int cid = digit->GetChannelId().AsUInt();
+    unsigned int salt = container.GetSignature()+cid;
+    SetProxySalt(salt);
+    SetProxyOffset(offset);
+    SetProxyCache(digit,NULL);
+}
+
 CP::TDigitProxy::TDigitProxy(int proxy) 
     : fDigitSignature(proxy), fDigit(NULL), fContainer(NULL) {}
 

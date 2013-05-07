@@ -12,7 +12,7 @@ ClassImp(CP::TWritableMCHit);
 CP::TMCHit::TMCHit() {}
 
 CP::TMCHit::TMCHit(const CP::TWritableMCHit& h) 
-    : CP::TSingleHit(h), fContributors(h.fContributors) { }
+    : CP::TSingleHit(h), fTruth(h.fTruth) { }
 
 CP::TMCHit::~TMCHit() { }
 
@@ -23,8 +23,8 @@ void CP::TMCHit::ls(Option_t *opt) const {
     if (option.find("dump") != std::string::npos) {
         TROOT::IncreaseDirLevel();
         // Print the contributors.
-        for (ContributorContainer::const_iterator h = fContributors.begin();
-             h != fContributors.end();
+        for (TruthContainer::const_iterator h = fTruth.begin();
+             h != fTruth.end();
              ++h) {
 	  if(*h) (*h)->ls(opt);
         }
@@ -33,7 +33,8 @@ void CP::TMCHit::ls(Option_t *opt) const {
 }
 
 CP::TWritableMCHit::TWritableMCHit() {}
-CP::TWritableMCHit::TWritableMCHit(const CP::TWritableMCHit& h) : CP::TMCHit(h) {}
+CP::TWritableMCHit::TWritableMCHit(const CP::TWritableMCHit& h) 
+  : CP::TMCHit(h) {}
 CP::TWritableMCHit::~TWritableMCHit() {}
 
 //////////////////////////////////////////////////
@@ -47,8 +48,6 @@ void CP::TWritableMCHit::SetGeomId(CP::TGeometryId id) {
 void CP::TWritableMCHit::SetCharge(double q) {fCharge = q;}
 
 void CP::TWritableMCHit::SetTime(double t) {fTime = t;}
-
-void CP::TWritableMCHit::SetChannelId(CP::TChannelId id) {fChannelId = id;}
 
 void CP::TWritableMCHit::SetChargeValidity(bool valid) {
     CP::THit::SetChargeValidity(valid);

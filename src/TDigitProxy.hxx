@@ -71,6 +71,10 @@ public:
     TDigitProxy(const CP::TDigitContainer& container, 
                 const CP::TDigitContainer::iterator index);
     
+    /// Construct a proxy for a digit in a container.
+    TDigitProxy(const CP::TDigitContainer& container, 
+                const CP::TDigitContainer::const_iterator index);
+    
     /// Construct a digit from an integer value.  This is used to allow
     /// TDigit's to be written as a single integer an output file and saves
     /// significant space in the THit record.

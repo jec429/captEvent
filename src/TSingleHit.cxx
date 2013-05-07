@@ -15,26 +15,24 @@
 ClassImp(CP::TSingleHit);
 
 CP::TSingleHit::TSingleHit() 
-    : fGeomId(0), fCharge(0), fTime(0), fChannelId(0),
+    : fGeomId(0), 
+      fCharge(0), fChargeUncertainty(1*unit::coulomb),
+      fTime(0), fTimeUncertainty(1*unit::second),
       fInitialized(false),
       fPosition(0,0,0), 
-      fIsXHit(false), fIsYHit(false), fIsZHit(false),
-      fSpread(100*unit::meter,100*unit::meter,100*unit::meter),
       fUncertainty(100*unit::meter,100*unit::meter,100*unit::meter),
-      fTimeUncertainty(1*unit::ns) {
+      fRMS(100*unit::meter,100*unit::meter,100*unit::meter) {
     SetBit(kCanDelete,false);
 }
 
 CP::TSingleHit::TSingleHit(const CP::TSingleHit& h) 
     : CP::THit(h), fGeomId(h.fGeomId),
-      fCharge(h.fCharge), fTime(h.fTime), 
-      fChannelId(h.fChannelId),
+      fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
+      fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
       fInitialized(h.fInitialized),
       fPosition(h.fPosition),
-      fIsXHit(h.fIsXHit), fIsYHit(h.fIsYHit), fIsZHit(h.fIsZHit),
-      fSpread(h.fSpread),
       fUncertainty(h.fUncertainty),
-      fTimeUncertainty(h.fTimeUncertainty) {
+      fRMS(h.fRMS) {
     SetBit(kCanDelete,false);
 }
 
@@ -44,21 +42,26 @@ CP::TSingleHit::~TSingleHit() { }
 // Getter methods for CP::TSingleHit
 //////////////////////////////////////////////////
 
-CP::TGeometryId CP::TSingleHit::GetGeomId(void) const {
+CP::TGeometryId CP::TSingleHit::GetGeomId(int i) const {
+    if (i != 0) throw CP::EHitOutOfRange();
     return TGeometryId(fGeomId);
 }
 
 double CP::TSingleHit::GetCharge(void) const {return fCharge;}
 
-double CP::TSingleHit::GetTime(void) const {return fTime;}
+double CP::TSingleHit::GetChargeUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fChargeUncertainty;
+}
 
-// Return the associated channel id.
-CP::TChannelId CP::TSingleHit::GetChannelId(int i) const {return fChannelId;}
+double CP::TSingleHit::GetTime(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fTime;
+}
 
-// Return the number of channel ids associated with this hit.
-int CP::TSingleHit::GetChannelIdCount() const {
-    if (!fChannelId.IsValid()) return 0;
-    return 1;
+double CP::TSingleHit::GetTimeRMS(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fTimeRMS;
 }
 
 const TVector3& CP::TSingleHit::GetPosition(void) const {
@@ -66,9 +69,14 @@ const TVector3& CP::TSingleHit::GetPosition(void) const {
     return fPosition;
 }
 
-const TVector3& CP::TSingleHit::GetSpread(void) const {
+const TMatrixD& CP::TSingleHit::GetRotation(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fRotation;
+}
+
+const TVector3& CP::TSingleHit::GetRMS(void) const {
     if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize(); 
-    return fSpread;
+    return fRMS;
 }
 
 const TVector3& CP::TSingleHit::GetUncertainty(void) const {
@@ -81,25 +89,22 @@ double CP::TSingleHit::GetTimeUncertainty(void) const {
     return fTimeUncertainty;
 }
 
-bool CP::TSingleHit::IsXHit(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
-    return fIsXHit;
-}
-
-bool CP::TSingleHit::IsYHit(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
-    return fIsYHit;
-}
-
-bool CP::TSingleHit::IsZHit(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
-    return fIsZHit;
-}
-
 bool CP::TSingleHit::InitializeGeneric() {
     TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
-    CP::TManager::Get().GeomId().CdId(GetGeomId());
+    if (!CP::TManager::Get().GeomId().CdId(TGeometryId(fGeomId))) {
+        geom->PopPath();
+        fPosition.SetXYZ(0,0,0);
+        double v = 100*unit::meter;
+        fUncertainty.SetXYZ(v,v,v);
+        fRMS.SetXYZ(v,v,v);
+        fRotation.ResizeTo(3,3);
+        fRotation.Zero();
+        fRotation(0,0) = 1;
+        fRotation(1,1) = 1;
+        fRotation(2,2) = 1;
+        return false;
+    }
     TGeoNode* node = geom->GetCurrentNode();
 
     // Find the global position
@@ -108,39 +113,26 @@ bool CP::TSingleHit::InitializeGeneric() {
     geom->LocalToMaster(local,master);
     fPosition.SetXYZ(master[0],master[1],master[2]);
     
-    // Find the spread.
+    // Find the size of the object.
     TGeoBBox *shape = dynamic_cast<TGeoBBox*>(node->GetVolume()->GetShape());
-    double spread[3] = {0,0,0};
-    double localX[3] = {shape->GetDX(),0,0};
-    double tmp[3];
-    geom->LocalToMasterVect(localX,tmp);
-    for (int i=0; i<3; ++i) {
-        spread[i] = std::max(spread[i],std::abs(tmp[i]));
+    fUncertainty.SetXYZ(shape->GetDX(), shape->GetDY(), shape->GetDZ());
+    fUncertainty = fUncertainty*(2.0/std::sqrt(12.0));
+    
+    fRMS = fUncertainty;
+    if (fRMS.X() < 1.5*unit::mm/std::sqrt(12.0)) {
+        fRMS.SetX(1.5*unit::mm/std::sqrt(12.0));
     }
-    double localY[3] = {0,shape->GetDY(),0};
-    geom->LocalToMasterVect(localY,tmp);
-    for (int i=0; i<3; ++i) {
-        spread[i] = std::max(spread[i],std::abs(tmp[i]));
+    if (fRMS.Y() < 1.5*unit::mm/std::sqrt(12.0)) {
+        fRMS.SetY(1.5*unit::mm/std::sqrt(12.0));
     }
-    double localZ[3] = {0,0,shape->GetDZ()};
-    geom->LocalToMasterVect(localZ,tmp);
-    for (int i=0; i<3; ++i) {
-        spread[i] = std::max(spread[i],std::abs(tmp[i]));
+    if (fRMS.Z() < 1.5*unit::mm/std::sqrt(12.0)) {
+        fRMS.SetZ(1.5*unit::mm/std::sqrt(12.0));
     }
 
-    fSpread.SetXYZ(spread[0],spread[1],spread[2]);
-    fUncertainty = fSpread*(2.0/std::sqrt(12.0*fCharge));
-    if (HasValidTime()) {
-        fTimeUncertainty = 2.5*unit::ns/std::sqrt(12.0);
-    }
-    else {
-        fTimeUncertainty = 580*unit::ns/std::sqrt(12.0);
-    }
-
-    // Determine if the hit is an X, Y, or Z hit.
-    fIsXHit = (fSpread.X() < 10*unit::cm);
-    fIsYHit = (fSpread.Y() < 10*unit::cm);
-    fIsZHit = (fSpread.Z() < 10*unit::cm);
+    // Need to check if the TGeomManager current matrix is an active or
+    // passive rotation.
+    fRotation.ResizeTo(3,3);
+    fRotation.SetMatrixArray(geom->GetCurrentMatrix()->GetRotationMatrix());
 
     geom->PopPath();
     
@@ -148,10 +140,6 @@ bool CP::TSingleHit::InitializeGeneric() {
 }
 
 void CP::TSingleHit::Initialize(void) {
-#ifdef TSINGLE_HIT_SAVE_POSITION
-    TVector3 origPos = fPosition;
-#endif
-  
     try {
         do {
             // Try initializations looking for the first one to work.  The
@@ -170,22 +158,4 @@ void CP::TSingleHit::Initialize(void) {
         CaptSevere("TSingleHit Exception: unknown");
         return;
     }
-  
-#ifdef TSINGLE_HIT_SAVE_POSITION
-    if (origPos.Mag()>1*unit::mm
-        && (fPosition-origPos).Mag()>1*unit::mm) {
-        CaptError("Position and node position mismatch"
-                   << std::endl
-                   << "  Geometry Id " << GetGeomId().AsInt() << std::endl
-                   << "  Saved Position is " 
-                   << " " << fPosition.X()
-                   << " " << fPosition.Y()
-                   << " " << fPosition.Z()
-                   << std::endl
-                   << "  Node Position is  " 
-                   << " " << origPos.X()
-                   << " " << origPos.Y()
-                   << " " << origPos.Z());
-    }
-#endif
-}
+  }

@@ -36,12 +36,20 @@ CP::TWritableDataHit::~TWritableDataHit() {}
 //////////////////////////////////////////////////
 
 void CP::TWritableDataHit::SetGeomId(CP::TGeometryId id) {
-    fGeomId = id.AsInt();
+    fGeomId = id.AsUInt();
 }
 
 void CP::TWritableDataHit::SetCharge(double q) {fCharge = q;}
 
+void CP::TWritableDataHit::SetChargeUncertainty(double q) {
+    fChargeUncertainty = q;
+}
+
 void CP::TWritableDataHit::SetTime(double t) {fTime = t;}
+
+void CP::TWritableDataHit::SetTimeUncertainty(double t) {fTimeUncertainty = t;}
+
+void CP::TWritableDataHit::SetTimeRMS(double t) {fTimeRMS = t;}
 
 void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
     fProxy = proxy;
@@ -49,10 +57,10 @@ void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
         try {
             CP::TDigit* digit = *fProxy;
             if (digit) {
-                if (fChannelId.AsUInt() == 0) {
-                    fChannelId = digit->GetChannelId();
+                if (fChannelId == 0) {
+                    fChannelId = digit->GetChannelId().AsUInt();
                 }
-                else if (fChannelId != digit->GetChannelId()
+                else if (fChannelId != digit->GetChannelId().AsUInt()
                          && digit->GetChannelId().AsUInt() != 0) {
                     CaptError("Hit channel id disagrees with digit proxy");
                 }
@@ -60,13 +68,15 @@ void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
         }
         catch (...) {}
     }
-    else if (fChannelId.AsUInt() == 0) {
+    else if (fChannelId == 0) {
         CaptError("Invalid digit used to create hit."
                    "  Use SetChannelId to set channel before SetDigit.");
     }
 }
 
-void CP::TWritableDataHit::SetChannelId(CP::TChannelId id) {fChannelId = id;}
+void CP::TWritableDataHit::SetChannelId(CP::TChannelId id) {
+    fChannelId = id.AsUInt();
+}
 
 void CP::TWritableDataHit::SetChargeValidity(bool valid) {
     CP::THit::SetChargeValidity(valid);

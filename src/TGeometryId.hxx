@@ -64,7 +64,8 @@ public:
     virtual ~TGeometryId();
 
     /// Get the internal integer representation
-    const int AsInt() const {return fGeometryId;}
+    const Int_t AsInt() const {return fGeometryId;}
+    const UInt_t AsUInt() const {return fGeometryId;}
 
     /// Check that this is a valid geometry id.  This method checks that the
     /// geometry id is correctly formed, and not that it corresponds to a real

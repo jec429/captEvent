@@ -7,108 +7,90 @@
 ClassImp(CP::TReconHit);
 ClassImp(CP::TWritableReconHit);
 
-CP::TReconHit::TReconHit() {
-    fInitialized = false;
-}
+TMatrixD* CP::TReconHit::fRotation = NULL;
+
+CP::TReconHit::TReconHit() 
+    : fCharge(-9999), fChargeUncertainty(-9999),
+      fTime(-9999), fTimeUncertainty(-9999), 
+      fTimeRMS(-9999) {}
 
 CP::TReconHit::TReconHit(const CP::TWritableReconHit& h)  
-    : fCharge(h.fCharge), fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
-      fReconPosition(h.fReconPosition), fReconUncertainty(h.fReconUncertainty),
-      fConstituents(h.fConstituents) {
-    // This means that initalize will run the first time the hits are used.
-    fInitialized = false;
-}
+    : THit(h), fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
+      fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty), 
+      fTimeRMS(h.fTimeRMS), fPosition(h.fPosition),
+      fUncertainty(h.fUncertainty), fRMS(h.fRMS),
+      fConstituents(h.fConstituents) {}
 
 CP::TReconHit::~TReconHit() { }
 
-// Initialization method for TReconHits.
-void CP::TReconHit::Initialize(){
-    // Initalize the recon hit information from the consituants and stored
-    // data.  All constituents must be from the same geometry object.  This is
-    // checked in the constructor and setters.
-    fInitialized = true;
-    fGeomId = fConstituents.at(0)->GetGeomId();
-    fIsXHit = fConstituents.at(0)->IsXHit();
-    fIsYHit = fConstituents.at(0)->IsYHit();
-    fIsZHit = fConstituents.at(0)->IsZHit();
-    fSpread = fConstituents.at(0)->GetSpread();
-
-    // To do positions we need the geometry.
-    TGeoManager* geom = CP::TManager::Get().Geometry();
-    geom->PushPath();
-    TManager::Get().GeomId().CdId(fGeomId);
-    double local[3] = {fReconPosition.X(),
-                       fReconPosition.Y(),
-                       fReconPosition.Z()};
-    double master[3] = {0,0,0};
-    geom->LocalToMaster(local,master);
-    fPosition.SetXYZ(master[0],master[1],master[2]);
-  
-    /// \bug The uncertainty is stored as the 1 sigma offset, so we'll need to
-    /// subtract the raw position in the end.  I think this should be
-    /// converted to use LocalToMasterVect() so that the raw position is not
-    /// handled explicitly.
-    double masterunc[3] = {0,0,0};
-    double localunc[3] = {
-        fReconUncertainty.X(),
-        fReconUncertainty.Y(),
-        fReconUncertainty.Z()
-    };
-    geom->LocalToMaster(localunc,masterunc);
-    TVector3 Offset(masterunc);
-    // The uncertainty is stored as the 1 sigma offset, so we'll need to 
-    // subtract the raw position.
-    fUncertainty = Offset -  fConstituents.at(0)->GetPosition();
-    geom->PopPath();
-
-}
-
-// Getter methods.
-CP::TGeometryId CP::TReconHit::GetGeomId(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
-    return fGeomId;
-}
-
 double CP::TReconHit::GetCharge(void) const {return fCharge;}
+
+double CP::TReconHit::GetChargeUncertainty(void) const {
+    return fChargeUncertainty;
+}
 
 double CP::TReconHit::GetTime(void) const {return fTime;}
 
+double CP::TReconHit::GetTimeUncertainty(void) const {return fTimeUncertainty;}
+
+double CP::TReconHit::GetTimeRMS(void) const {return fTimeRMS;}
+
 const TVector3& CP::TReconHit::GetPosition(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fPosition;
 }
 
-const TVector3& CP::TReconHit::GetSpread(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
-    return fSpread;
+const TMatrixD& CP::TReconHit::GetRotation(void) const {
+    if (!fRotation) {
+        fRotation = new TMatrixD(3,3);
+        (*fRotation)(0,0) = 1.0;
+        (*fRotation)(1,1) = 1.0;
+        (*fRotation)(2,2) = 1.0;
+    }
+
+    return (*fRotation);
+}
+
+const TVector3& CP::TReconHit::GetRMS(void) const {
+    return fRMS;
 }
 
 const TVector3& CP::TReconHit::GetUncertainty(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
     return fUncertainty;
 }
 
-double CP::TReconHit::GetTimeUncertainty(void) const {return fTimeUncertainty;}
-
-bool CP::TReconHit::IsXHit(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
-    return fIsXHit;
-}
-bool CP::TReconHit::IsYHit(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
-    return fIsYHit;
-}
-bool CP::TReconHit::IsZHit(void) const {
-    if (!fInitialized) const_cast<CP::TReconHit*>(this)->Initialize();
-    return fIsZHit;
+CP::TGeometryId CP::TReconHit::GetGeomId(int i) const {
+    CP::THandle<CP::THit> hit = GetConstituent(i);
+    return hit->GetGeomId();
 }
 
-CP::THandle <CP::THit> CP::TReconHit::GetContributor(int i) const {
+int CP::TReconHit::GetGeomIdCount() const {
+    return fConstituents.size();
+}
+
+CP::TChannelId CP::TReconHit::GetChannelId(int i) const {
+    CP::THandle<CP::THit> hit = GetConstituent(i);
+    return hit->GetChannelId();
+}
+
+int CP::TReconHit::GetChannelIdCount() const {
+    return fConstituents.size();
+}
+
+const CP::TDigitProxy& CP::TReconHit::GetDigit(int i) const {
+    CP::THandle<CP::THit> hit = GetConstituent(i);
+    return hit->GetDigit();
+}
+
+int CP::TReconHit::GetDigitCount() const {
+    return fConstituents.size();
+}
+
+CP::THandle <CP::THit> CP::TReconHit::GetConstituent(int i) const {
     if (i<0 || fConstituents.size()<= (unsigned) i) throw EHitOutOfRange();
     return fConstituents[i];
 }
 
-int CP::TReconHit::GetContributorCount() const {
+int CP::TReconHit::GetConstituentCount() const {
     return fConstituents.size();
 }
 
@@ -117,7 +99,6 @@ CP::TWritableReconHit::TWritableReconHit(const CP::TWritableReconHit& h)
     : CP::TReconHit(h) {}
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
-    fGeomId=hit->GetGeomId();
     fConstituents.push_back(hit);
     fCharge = -9999.;
     fTime = -9999.;
@@ -126,13 +107,6 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2) {
-    // Check that the hits are on the same bar
-    if (hit1->GetGeomId() != hit2->GetGeomId()){
-        CaptError("TReconHits can only be created from hits"
-                   " with the same geometrical ID");
-        throw EReconHitIllegal();
-    }  
-    fGeomId=hit1->GetGeomId();
     fConstituents.push_back(hit1);
     fConstituents.push_back(hit2);
     fCharge = -9999.;
@@ -141,12 +115,6 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
 }
 
 void CP::TWritableReconHit::AddHit(CP::THandle<CP::THit> hit) {
-    // Check that the hits are on the same bar
-    if (fGeomId != hit->GetGeomId()){
-        CaptError("TReconHits can only be created from hits"
-                   " with the same geometrical ID");
-        throw EReconHitIllegal();
-    }  
     fConstituents.push_back(hit);
 }
 
@@ -158,44 +126,30 @@ CP::TWritableReconHit::~TWritableReconHit() {}
 
 void CP::TWritableReconHit::SetCharge(double q) {fCharge = q;}
 
+void CP::TWritableReconHit::SetChargeUncertainty(double q) {
+    fChargeUncertainty = q;
+}
+
 void CP::TWritableReconHit::SetTime(double t) {fTime = t;}
 
 void CP::TWritableReconHit::SetTimeUncertainty(double tunc) {
     fTimeUncertainty = tunc;
 }
 
-void CP::TWritableReconHit::SetPosition(TVector3& pos){
-    // Need to store in local position.
-    
-    // To do positions we need the geometry.
-    TGeoManager* geom = CP::TManager::Get().Geometry();
-    geom->PushPath();
-    CP::TManager::Get().GeomId().CdId(fGeomId);
-    double local[3] = {0,0,0};
-    double master[3] = {pos.X(),pos.Y(),pos.Z()};
-    geom->MasterToLocal(master,local);
-    fReconPosition = TVector3(local);
-    geom->PopPath();
+void CP::TWritableReconHit::SetTimeRMS(double tunc) {
+    fTimeRMS = tunc;
 }
 
-void CP::TWritableReconHit::SetUncertainty(TVector3& unc){
-    // Save the 1 sigma offset in local.
-  
-    // To do positions we need the geometry.
-    TGeoManager* geom = CP::TManager::Get().Geometry();
-    geom->PushPath();
-    CP::TManager::Get().GeomId().CdId(fGeomId);
+void CP::TWritableReconHit::SetPosition(const TVector3& pos) {
+    fPosition = pos;
+}
 
-    /// \bug Shouldn't the conversion of the global coordinates uncertainty to
-    /// the the local coordinates uncertainty be done using
-    /// MasterToLocalVect()?  I think the results will be equivalent, but the
-    /// logic would be much clearer.
-    TVector3 Offset = unc + fConstituents.at(0)->GetPosition();
-    double local[3] = {0,0,0};
-    double master[3] = {Offset.X(),Offset.Y(),Offset.Z()};
-    geom->MasterToLocal(master,local);
-    fReconUncertainty = TVector3(local);
-    geom->PopPath();
+void CP::TWritableReconHit::SetUncertainty(const TVector3& unc){
+    fUncertainty = unc;
+}
+
+void CP::TWritableReconHit::SetRMS(const TVector3& unc){
+    fRMS = unc;
 }
 
 void CP::TReconHit::ls(Option_t *opt) const {

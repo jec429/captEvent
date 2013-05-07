@@ -5,10 +5,10 @@ ClassImp(CP::TCalibPulseDigit);
 
 CP::TCalibPulseDigit::TCalibPulseDigit() {}
 
-CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TDigit* parent,
+CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TDigitProxy& parent,
                                        double first, double last,
                                        const Vector& samples) 
-    : TDigit(parent->GetChannelId()), fParent(parent),
+    : TDigit((*parent)->GetChannelId()), fParent(parent),
       fFirstSample(first), fLastSample(last), fSamples(samples) {}
 
 CP::TCalibPulseDigit::TCalibPulseDigit(const CP::TCalibPulseDigit& cpd) 

@@ -3,7 +3,6 @@
 
 #include "THit.hxx"
 #include "TMCHit.hxx"
-#include "TComboHit.hxx"
 #include "THandle.hxx"
 #include "THandleHack.hxx"
 
@@ -76,8 +75,6 @@ namespace tut {
             ensure("Handle cast copied pointer", GetPointer(b) == hit);
             ensure("Handles equal after cast", a == b);
             
-            CP::THandle<CP::TComboHit> combo(a);
-            ensure("Copy from CP::TMCHit to CP::TComboHit should produce null",!combo);
         }
         ensure("Handle Registry is clean", CP::CleanHandleRegistry());
     }
@@ -107,13 +104,6 @@ namespace tut {
         CP::THandle<CP::THit> f;
         f = e;
         ensure("Assignment with up cast", f == a);
-
-        CP::THandle<CP::TComboHit> g = a;
-        ensure("Assignment with down cast to incompatible base",!g);
-
-        CP::THandle<CP::TComboHit> h;
-        h = a;
-        ensure("Assign handle with down cast to incompatible base",!h);
 
     }
     

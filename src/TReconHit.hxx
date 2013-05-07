@@ -14,14 +14,15 @@ namespace CP {
     EXCEPTION(EReconHitIllegal,ECore);
 }
 
-/// A calibrated hit detector element where the hit information has
-/// been reconstructed from the raw hits.  A TReconHit object represents a hit
-/// that has been generated from one or more hits associated with a geometry
-/// object.  A common usage is to represent a hit that has been constructed
-/// from two hits on a bar that is read out at both ends.  The THit objects
-/// combined in a TReconHit must all come from the same geometry object
-/// (i.e. the same bar or TPC MM).  If you need to combine hits from different
-/// geometry objects, use a TReconCluster.
+/// A calibrated hit detector element where the hit information has been
+/// reconstructed from the raw hits.  A TReconHit object represents a hit that
+/// has been generated from one or more hits where the position and other
+/// properties are calculated from the constituient hits.  A common usage is to
+/// represent a hit that has been constructed from two or more hits on a wires
+/// that cross at a single X/Y positon.  This is a lighter object that
+/// TReconCluster and is primarily used for building up 2D hits into 3D
+/// objects.  Complex combinations of hits should be placed into a
+/// TReconCluster. 
 ///
 /// The TReconHit class can't be directly instantiated.  It is created
 /// using the TWritableReconHit class and is accessed as a THit class.
@@ -31,44 +32,107 @@ public:
     TReconHit(const TWritableReconHit& val);
     virtual ~TReconHit();
 
-    /// Get the geometry node that contains this hit.
-    virtual TGeometryId GetGeomId(void) const;
-
     /// Return the calibrated "charge" for the hit.
     virtual double GetCharge(void) const;
 
-    /// Return the calibrated "time" for the hit.
+    /// Return the uncertainty in the charge for the hit.
+    virtual double GetChargeUncertainty() const;
+
+    /// Return the calibrated "time" for the hit representing the mean (or
+    /// central) time of the hit.
     virtual double GetTime(void) const;
 
-    /// Return the reconstructed time uncertainty of the hit.
+    /// Return the uncertainty on the hit time.
     virtual double GetTimeUncertainty(void) const;
-  
-    /// The reconstructed position of the hit
+
+    /// Return the rms of the calibrated time for the hit.  This represents
+    /// the extent (or spread) of the time distribution.
+    virtual double GetTimeRMS(void) const; 
+
+    /// The center of the volume associated with this hit.
     virtual const TVector3& GetPosition(void) const;
 
-    /// Return the "uncertainty" of the reconstructed  hit position.
+    /// Return the uncertainty of the hit position in the local coordinate
+    /// system of the hit (diagonal by definition).
     virtual const TVector3& GetUncertainty(void) const;
 
-    /// Return true if this hit has useful X information.
-    virtual bool IsXHit(void) const;
+    /// Return the rms of the hit position in the local coordinate system of
+    /// the hit.  For objects like scintillator bars, or wires, this is the
+    /// spacing/sqrt(12).
+    virtual const TVector3& GetRMS(void) const;
 
-    /// Return true if this hit has useful Y information.
-    virtual bool IsYHit(void) const;
-
-    /// Return true if this hit has useful Z information.
-    virtual bool IsZHit(void) const;
-
-    /// Return the "spread" of the hit position.  This is the extent in the X,
-    /// Y, and Z directions.  For instance, a P0D bar is about
-    /// (3cm)x(2m)x(1.5cm), so the spread is (1.3cm)x(1m)x(0.75cm)
-    virtual const TVector3& GetSpread(void) const;
+    /// Get a rotation to transform from the local rotation to the global
+    /// coordinates.
+    virtual const TMatrixD& GetRotation(void) const;
 
     /// Return a contributing hit.  If the index is out of range, this will
-    /// throw an EHitOutOfRange exception.
-    CP::THandle<CP::THit> GetContributor(int i) const;
+    /// throw an EHitOutOfRange exception.  By default this will throw an
+    /// EHitOutOfRange, but it may be over-ridden in a derived class.
+    virtual CP::THandle<CP::THit> GetConstituent(int i=0) const;
 
     /// Return the number of hits that contribute to this hit.
-    int GetContributorCount() const;
+    virtual int GetConstituentCount() const;
+
+    /// Return a proxy to the digit that generated this hit.  The TDigitProxy
+    /// will be valid if a TDigitContainer is available, and if the digit
+    /// being accessed is in the first 131,000 hits (2^17).  Accessing hits
+    /// with an invalid index, missing TDigitContainer, or outside of that
+    /// range will cause a EHitOutOfRange exception.  For specialized studies,
+    /// digits after the first 131,000 can be accessed by using GetChannelId()
+    /// and then searching for the appropriate hit in the TDigitContainer.
+    /// This search requires knowledge of how the digits are translated into
+    /// hits.
+    virtual const CP::TDigitProxy& GetDigit(int i=0) const;
+
+    /// Return the number of digits that contribute to this hit.
+    virtual int GetDigitCount() const;
+
+    /// Return the channel identifier associated with this hit.  If the hit
+    /// has an associated channel identifier, then this will return a valid
+    /// TChannelId.  If there isn't an associated hit, this will return an
+    /// invalid value (check with TChannelId::IsValid).  If the index is out
+    /// of range, then this will throw an EHitOutOfRange exception.  This
+    /// information is also available through the digit, and it is an error
+    /// condition if the two values disagree.
+    virtual TChannelId GetChannelId(int i=0) const;
+
+    /// Return the number of channel identifiers associated with the hit.
+    virtual int GetChannelIdCount() const;
+
+    /// Return the geometry identifier of the volume associated with this hit.
+    /// This uniquely identifies the volume containing the hit (e.g. the
+    /// scintillator bar, or the TPC micromega pad).  Notice that it is
+    /// possible for there to be more than one hit in a single volume.  For
+    /// instance, if a scintillator has double ended readout, it will have two
+    /// associated channels that will both generate a hit for the same volume.
+    /// This sort of double hit will generally be handled using a TReconHit.
+    ///
+    /// For most users, the geometry identifiers replace the functionality of
+    /// the TGeoManager node identifiers.  The most common usage of the node
+    /// identifier is to set the current node using TGeoManager::CdNode().
+    /// The same operation can be done with a TGeometryId using
+    /// TGeomIdManager::CdId(TGeometryId).  The CdId method makes the volume
+    /// identified by the TGeometryId into the current TGeoManager volume, and
+    /// then the user can use the various TGeoManager methods to query
+    /// information.  For instance, the node identifier associated with a
+    /// TGeometryId can be found using
+    ///
+    /// \code
+    /// THandle<THit> myHit = ... Must have a value ...
+    /// TManager::Get().GeomId().CdId(myHit->GetGeomId());
+    /// int node = gGeoManager->GetCurrentNodeId();
+    /// \endcode
+    ///
+    /// Notice that using TGeomIdManager::CdId() changes the state of the
+    /// TGeoManager in exactly the same way as TGeoManager::CdNode().
+    ///
+    /// The name of the volume is accessible using TGeometryId::GetName(), and
+    /// the position is available either through THit::GetPosition(), or
+    /// TGeometryId::GetPosition().
+    virtual TGeometryId GetGeomId(int i=0) const;
+
+    /// Return the number of geometry identifiers associated with this hit.
+    virtual int GetGeomIdCount() const;
 
     /// Print the hit information.
     virtual void ls(Option_t *opt = "") const;
@@ -81,11 +145,10 @@ private:
 
 protected:
 
-    /// The geometry node that was hit
-    TGeometryId fGeomId;  //!Don't Save
-
     /// The measured "charge" for this hit.
     Float_t fCharge;
+
+    Float_t fChargeUncertainty;
 
     /// The measured "time" for this hit.
     Float_t fTime;
@@ -93,42 +156,28 @@ protected:
     /// The reconstructed time uncertainty
     Float_t fTimeUncertainty; 
   
-    /// The reconstructed position of the hit in *** LOCAL *** coordinates.
-    /// Saving the position in local coordinates allows the alignment
-    /// constants to be correctly applied.
-    TVector3 fReconPosition;
+    /// The RMS of the timing.
+    Float_t fTimeRMS;
 
-    /// The uncertainty of the hit position *** LOCAL *** coordinates.  Saving
-    /// the uncertainty in local coordinates allows the alignment constants to
-    /// be correctly applied.
-    TVector3 fReconUncertainty;
+    /// The reconstructed position of the hit in global coordinates.
+    TVector3 fPosition;
+
+    /// The uncertainty of the hit position in global coordinates.  The
+    /// uncertainty of the hit is in the global coordinates, and is by
+    /// definition diagonal.
+    TVector3 fUncertainty;
+
+    /// The RMS of the hit position in global coordinates.
+    TVector3 fRMS;
 
     /// The THits that make up this reconstructed hit.
     std::vector< CP::THandle < CP::THit > > fConstituents;
 
-    /// This is set to true if the fast access fields below have been
-    /// initialized.
-    bool fInitialized; //! Don't Save
+    /// A static constant TMatrixD to hold the rotation matrix for all
+    /// TReconHits.  This is by definition the identity matrix.
+    static TMatrixD* fRotation;
 
-    // The position of the hit after applying alignment corrections.  This is
-    // calculated from the fReconPosition field which is saved in local
-    // coordinates.  The alignment is applied by querying the geometry to find
-    // the current geometry object position.
-    TVector3 fPosition; //! Don't Save
-
-    /// Flags for what type of position information is available.
-    bool fIsXHit;  //! Don't Save
-    bool fIsYHit;  //! Don't Save
-    bool fIsZHit;  //! Don't Save
-
-    /// The spread of the hit position.
-    TVector3 fSpread; //! Don't Save
-
-    /// The uncertainty of the hit position.  See fPosition for more
-    /// information.
-    TVector3 fUncertainty; //! Don't Save
-
-    ClassDef(TReconHit,4);
+    ClassDef(TReconHit,1);
 };
 
 
@@ -165,19 +214,31 @@ public:
     /// Set the charge for the hit.
     void SetCharge(double q);
 
+    void SetChargeUncertainty(double unc);
+
     /// Set the time for the hit.
     void SetTime(double t);
 
     /// Set the time uncertainty for the hit.
     void SetTimeUncertainty(double tunc);
 
+    /// Set the time RMS for the hit.
+    void SetTimeRMS(double rms);
+
     /// Set the position for the hit in *** GLOBAL *** coordinates.
     /// Internally, this is translated to local coordinates.
-    void SetPosition(TVector3& pos);
+    void SetPosition(const TVector3& pos);
   
-    /// Set the position uncertainty for the hit in *** GLOBAL ***
-    /// coordinates.  Internally, this is translated to local coordinates.
-    void SetUncertainty(TVector3& unc);
+    /// Set the position uncertainty for the hit in global coordinates.  The
+    /// position covariance is diagonal by definition.  For a more complete
+    /// representation of the covariance, use a TReconCluster.
+    void SetUncertainty(const TVector3& unc);
+
+    /// Set the RMS of the hit in GLOBAL coordinates.  The RMS elements are
+    /// the diagonal elements of the charge moments, so this the moments are,
+    /// by definition, diagonal.  For a more complete representation of the
+    /// charge moments, use a TReconCluster.
+    void SetRMS(const TVector3& rms);
 
     ClassDef(TWritableReconHit,4);
 };

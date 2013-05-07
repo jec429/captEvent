@@ -35,9 +35,12 @@ public:
 
 protected:
     /// The digit that generated this hit.
-    TDigitProxy fProxy;
+    CP::TDigitProxy fProxy;
 
-    ClassDef(TDataHit,5);
+    /// The electronics channel for this hit.
+    UInt_t fChannelId;
+
+    ClassDef(TDataHit,1);
 };
 
 /// Provide a writable interface to a TDataHit that can be used to fill the
@@ -52,7 +55,13 @@ public:
 
     void SetCharge(double q);
 
+    void SetChargeUncertainty(double q);
+
     void SetTime(double t);
+
+    void SetTimeUncertainty(double t);
+
+    void SetTimeRMS(double t); 
 
     void SetChargeValidity(bool valid);
 

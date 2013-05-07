@@ -12,7 +12,6 @@
 #include "TRootInput.hxx"
 #include "TRootOutput.hxx"
 #include "TMCHit.hxx"
-#include "TMultiHit.hxx"
 #include "TG4VHit.hxx"
 #include "TG4HitSegment.hxx"
 #include "TAlgorithmResult.hxx"
@@ -89,8 +88,8 @@ namespace {
             mcHit.SetGeomId(CP::GeomId::Captain::Wire(0,50));
             mcHit.SetCharge(hitSeg->GetPrimaryId());
             mcHit.SetTime(hitSeg->GetPrimaryId());
-            mcHit.GetContributors().push_back(hitSeg);
-            mcHit.GetContributors().push_back(NULL);
+            mcHit.GetTruth().push_back(hitSeg);
+            mcHit.GetTruth().push_back(NULL);
             hits->push_back(CP::THandle<CP::TMCHit>(new CP::TMCHit(mcHit)));
         }
     }

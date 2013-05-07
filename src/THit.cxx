@@ -1,17 +1,16 @@
 ////////////////////////////////////////////////////////////
 // $Id: THit.cxx,v 1.24 2012/07/11 16:31:20 mcgrew Exp $
 //
-#include <TClass.h>
-#include <TStreamerInfo.h>
-
-#include <TGeoManager.h>
-
 #include "HEPUnits.hxx"
 #include "THit.hxx"
 #include "TDigitProxy.hxx"
 #include "TManager.hxx"
 #include "TGeomIdManager.hxx"
 #include "TCaptLog.hxx"
+
+#include <TClass.h>
+#include <TStreamerInfo.h>
+#include <TGeoManager.h>
 
 ClassImp(CP::THit);
 
@@ -21,85 +20,95 @@ CP::THit::THit() {
 
 CP::THit::~THit() {}
 
-// Get the geometry identifier for this hit.
-CP::TGeometryId CP::THit::GetGeomId(void) const {throw;}
+double CP::THit::GetCharge(void) const {throw CP::EHit();}
 
-#ifdef USE_DEPRECATED_GetGeoNodeId
-int CP::THit::GetGeoNodeId(void) const {
-    CaptError("Deprecated method being used");
-    CP::TManager::Get().Geometry();
-    gGeoManager->PushPath();
-    TManager::Get().GeomId().CdId(GetGeomId());
-    int node = gGeoManager->GetCurrentNodeId();
-    gGeoManager->PopPath();
-    return node;
-}
-#endif
-
-// The center of the volume associated with this hit.
-const TVector3& CP::THit::GetPosition(void) const {throw;}
-
-// Return the calibrated "charge" for the hit.
-double CP::THit::GetCharge(void) const {throw;}
+double CP::THit::GetChargeUncertainty() const {throw CP::EHit();}
 
 bool CP::THit::HasValidCharge() const {return !TestBit(kInvalidCharge);}
 
-void CP::THit::SetChargeValidity(bool valid) {
-    SetBit(kInvalidCharge, !valid);
-}
+void CP::THit::SetChargeValidity(bool valid) {SetBit(kInvalidCharge, !valid);}
 
-// Return the calibrated "time" for the hit.
-double CP::THit::GetTime(void) const {throw;}
+double CP::THit::GetTime(void) const {throw CP::EHit();}
+
+double CP::THit::GetTimeUncertainty(void) const {throw CP::EHit();}
+
+double CP::THit::GetTimeRMS(void) const {throw CP::EHit();}
 
 bool CP::THit::HasValidTime() const {return !TestBit(kInvalidTime);}
 
-void CP::THit::SetTimeValidity(bool valid) {
-    SetBit(kInvalidTime, !valid);
+void CP::THit::SetTimeValidity(bool valid) {SetBit(kInvalidTime, !valid);}
+
+const TVector3& CP::THit::GetPosition(void) const {throw CP::EHit();}
+
+const TVector3& CP::THit::GetUncertainty(void) const {throw CP::EHit();}
+
+const TVector3& CP::THit::GetRMS(void) const {throw CP::EHit();}
+
+const TMatrixD& CP::THit::GetRotation(void) const {throw CP::EHit();}
+
+const TMatrixD& CP::THit::GetCovariance(void) const {
+    // Check if the covariance is already initialized.
+    if (fCovariance.GetNcols() == 3 && fCovariance.GetNrows() == 3) {
+        return fCovariance;
+    }
+
+    // Fill the covariance in the local coordinate system.
+    fCovariance.ResizeTo(3,3);
+    for (int r = 0; r < 3; ++r) {
+        for (int c = 0; c < 3; ++c) {
+            fCovariance(r,c) = 0.0;
+        }
+    }
+    fCovariance(0,0) = GetUncertainty().X();
+    fCovariance(1,1) = GetUncertainty().Y();
+    fCovariance(2,2) = GetUncertainty().Z();
+    
+    // Rotate to the global coordinate system.  I'm doing this "brute force"
+    // since I don't think we need much efficiency here, and it makes the code
+    // easier to read.
+    TMatrixD rot(GetRotation());
+    TMatrixD rotInv(rot);
+    rotInv.InvertFast();
+
+    fCovariance = fCovariance*rotInv;
+    fCovariance = rot*fCovariance;
+
+    return fCovariance;
 }
 
-// Return the position spread.
-const TVector3& CP::THit::GetSpread(void) const {throw;}
+const TMatrixD& CP::THit::GetError(void) const {
+    // Check if the error matrix is already initialized.
+    if (fError.GetNcols() == 3 && fError.GetNrows() == 3) {
+        return fError;
+    }
 
-// Return the "uncertainty" of the hit position.  This is the position
-// resolution of the hit.
-const TVector3& CP::THit::GetUncertainty(void) const {throw;}
+    // Fill the error matrix with the covariance, and then invert.
+    fError.ResizeTo(3,3);
+    fError = GetCovariance();
+    fError.InvertFast();
 
-// Return the "uncertainty" for the time measurement.  This is the timing
-// resolution of the sensor.
-double CP::THit::GetTimeUncertainty(void) const {return 1.0*unit::ns;}
+    return fError;
+}
 
-// Has X information.
-bool CP::THit::IsXHit(void) const {throw;}
-
-// Has Y information.
-bool CP::THit::IsYHit(void) const {throw;}
-
-// Has Z information.
-bool CP::THit::IsZHit(void) const {throw;}
-
-// Return a contributing hit.
-CP::THandle<CP::THit> CP::THit::GetContributor(int i) const {
+CP::THandle<CP::THit> CP::THit::GetConstituent(int i) const {
     throw CP::EHitOutOfRange();
 }
 
-// Return the number of hits that contribute to this hit.
-int CP::THit::GetContributorCount() const {return 0;}
+int CP::THit::GetConstituentCount() const {return 0;}
 
-// Return the digit that generated this hit. 
 const CP::TDigitProxy& CP::THit::GetDigit(int i) const {
     throw CP::EHitOutOfRange();
 }
 
-// Return the number of digits that made this hit.
 int CP::THit::GetDigitCount() const {return 0;}
 
-// Return the associated channel id.
-CP::TChannelId CP::THit::GetChannelId(int i) const {
-    throw CP::EHitOutOfRange();
-}
+CP::TChannelId CP::THit::GetChannelId(int i) const {throw CP::EHitOutOfRange();}
 
-// Return the number of channel ids associated with this hit.
 int CP::THit::GetChannelIdCount() const {return 0;}
+
+CP::TGeometryId CP::THit::GetGeomId(int i) const {throw CP::EHitOutOfRange();}
+
+int CP::THit::GetGeomIdCount() const {return 0;}
 
 // Print the hit information.
 void CP::THit::ls(Option_t *opt) const {
@@ -111,9 +120,6 @@ void CP::THit::ls(Option_t *opt) const {
               << ", " << GetPosition().Y()/unit::cm << " cm"
               << ", " << GetPosition().Z()/unit::cm << " cm"
               << ", " << GetTime()/unit::ns << " ns)";
-    if (IsXHit()) std::cout << "X";
-    if (IsYHit()) std::cout << "Y";
-    if (IsZHit()) std::cout << "Z";
     std::cout << " Q: " << std::setprecision(1) << GetCharge() << " pe"
               << std::endl;
     std::string option(opt);
@@ -122,9 +128,9 @@ void CP::THit::ls(Option_t *opt) const {
         TROOT::IndentLevel();
         std::cout << "Spread:      " 
                   << std::setprecision(0)
-                  << "(" << GetSpread().X()/unit::cm << " cm"
-                  << ", " << GetSpread().Y()/unit::cm << " cm"
-                  << ", " << GetSpread().Z()/unit::cm << " cm)"
+                  << "(" << GetRMS().X()/unit::cm << " cm"
+                  << ", " << GetRMS().Y()/unit::cm << " cm"
+                  << ", " << GetRMS().Z()/unit::cm << " cm)"
                   << std::endl;
         TROOT::IndentLevel();
         std::cout << "Uncertainty: " 

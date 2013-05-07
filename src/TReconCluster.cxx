@@ -146,7 +146,7 @@ void CP::TReconCluster::FillFromHits(const char* name,
     int dim = state->GetDimensions();
     TVectorT<double> vals(dim);
     TVectorT<double> sigs(dim);
-    TVectorT<double> spreads(dim);
+    TVectorT<double> rms(dim);
 
     // TMatrixTSym<double> covar(dim);
     
@@ -179,9 +179,6 @@ void CP::TReconCluster::FillFromHits(const char* name,
         sigs(posT) = (*h)->GetTimeUncertainty();
 
         for (int i=0; i<dim; ++i) {
-            if (i == posX && !(*h)->IsXHit()) continue;
-            if (i == posY && !(*h)->IsYHit()) continue;
-            if (i == posZ && !(*h)->IsZHit()) continue;
             stateValues(i) += vals(i)/(sigs(i)*sigs(i));
             stateNorms(i) += 1/(sigs(i)*sigs(i));
         }
@@ -203,37 +200,31 @@ void CP::TReconCluster::FillFromHits(const char* name,
          ++h) {
         vals(eDep) = (*h)->GetCharge() - stateValues(eDep);
         sigs(eDep) = std::sqrt((*h)->GetCharge());
-        spreads(eDep) = 0.0;
+        rms(eDep) = 0.0;
 
         vals(posX) = (*h)->GetPosition().X() - stateValues(posX);
         sigs(posX) = (*h)->GetUncertainty().X();
-        spreads(posX) = (*h)->GetSpread().X();
+        rms(posX) = (*h)->GetRMS().X();
         
         vals(posY) = (*h)->GetPosition().Y() - stateValues(posY);
         sigs(posY) = (*h)->GetUncertainty().Y();
-        spreads(posY) = (*h)->GetSpread().Y();
+        rms(posY) = (*h)->GetRMS().Y();
         
         vals(posZ) = (*h)->GetPosition().Z() - stateValues(posZ);
         sigs(posZ) = (*h)->GetUncertainty().Z();
-        spreads(posZ) = (*h)->GetSpread().Z();
+        rms(posZ) = (*h)->GetRMS().Z();
 
         vals(posT) = (*h)->GetTime() - stateValues(posT);
         sigs(posT) = (*h)->GetTimeUncertainty();
-        spreads(posT) = 1.0;
+        rms(posT) = 1.0;
 
         for (int row = 0; row<dim; ++row) {
-            if (row == posX && !(*h)->IsXHit()) continue;
-            if (row == posY && !(*h)->IsYHit()) continue;
-            if (row == posZ && !(*h)->IsZHit()) continue;
             for (int col = row; col<dim; ++col) {
-                if (col == posX && !(*h)->IsXHit()) continue;
-                if (col == posY && !(*h)->IsYHit()) continue;
-                if (col == posZ && !(*h)->IsZHit()) continue;
                 double weight = 1.0/(sigs(row)*sigs(col));
                 stateCov(row,col) += weight*vals(row)*vals(col);
                 weights(row,col) += weight;
                 double degrees 
-                    = 4*spreads(row)*spreads(col)/(12*sigs(row)*sigs(col));
+                    = 4*rms(row)*rms(col)/(12*sigs(row)*sigs(col));
                 if (row == posT && col == posT) degrees = 1.0;
                 dof(row,col) += degrees;
             }
@@ -272,9 +263,6 @@ void CP::TReconCluster::FillFromHits(const char* name,
         sigs(posT) = (*h)->GetTimeUncertainty();
 
         for (int idx = 0; idx<dim; ++idx) {
-            if (idx == posX && !(*h)->IsXHit()) continue;
-            if (idx == posY && !(*h)->IsYHit()) continue;
-            if (idx == posZ && !(*h)->IsZHit()) continue;
             double weight = 1.0/(sigs(idx)*sigs(idx));
             hitWeights(idx) += weight;
         }
@@ -313,17 +301,11 @@ void CP::TReconCluster::FillFromHits(const char* name,
          ++h) {
         TVector3 diff = (*h)->GetPosition() - center;
         for (int row = 0; row<3; ++row) {
-            if (row == 0 && !(*h)->IsXHit()) continue;
-            if (row == 1 && !(*h)->IsYHit()) continue;
-            if (row == 2 && !(*h)->IsZHit()) continue;
             for (int col = row; col<3; ++col) {
-                if (col == 0 && !(*h)->IsXHit()) continue;
-                if (col == 1 && !(*h)->IsYHit()) continue;
-                if (col == 2 && !(*h)->IsZHit()) continue;
                 moments(row,col) += diff(row)*diff(col)*(*h)->GetCharge();
                 if (row==col) {
                     // double r = (*h)->GetUncertainty()[row];
-                    double r = 2.0*(*h)->GetSpread()[row]/std::sqrt(12.0);
+                    double r = 2.0*(*h)->GetRMS()[row]/std::sqrt(12.0);
                     moments(row,col) += r*r*(*h)->GetCharge();
                 }
                 chargeSum(row,col) += (*h)->GetCharge();

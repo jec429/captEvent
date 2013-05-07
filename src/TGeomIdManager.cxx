@@ -73,11 +73,16 @@ bool CP::TGeomIdManager::GetPosition(TGeometryId id, TVector3& position) const {
     CP::TManager::Get().Geometry();
     gGeoManager->PushPath();
     bool success = CdId(id);
-    double local[3] = {0,0,0};
-    double master[3];
-    gGeoManager->LocalToMaster(local,master);
-    position.SetXYZ(master[0], master[1], master[2]);
-    gGeoManager->PopPath();
+    if (success) {
+        double local[3] = {0,0,0};
+        double master[3];
+        gGeoManager->LocalToMaster(local,master);
+        position.SetXYZ(master[0], master[1], master[2]);
+        gGeoManager->PopPath();
+    }
+    else {
+        position.SetXYZ(0,0,0);
+    }
     return success;
 }
 
