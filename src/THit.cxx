@@ -138,7 +138,7 @@ void CP::THit::ls(Option_t *opt) const {
     std::cout << " Q: " << std::setprecision(1) << GetCharge() << " pe"
               << std::endl;
     std::string option(opt);
-    if (option.find("dump") != std::string::npos) {
+    if (option.find("hits") != std::string::npos) {
         TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
         std::cout << "Spread:      " 

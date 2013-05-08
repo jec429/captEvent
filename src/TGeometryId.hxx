@@ -113,6 +113,7 @@ protected:
     int GetFieldSafe(int msb, int lsb) const;
 
     int fGeometryId;
+
     ClassDef(TGeometryId, 1)
 };
 

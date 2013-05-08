@@ -158,4 +158,4 @@ void CP::TSingleHit::Initialize(void) {
         CaptSevere("TSingleHit Exception: unknown");
         return;
     }
-  }
+}

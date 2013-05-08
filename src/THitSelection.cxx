@@ -36,7 +36,8 @@ void CP::THitSelection::RemoveHit(const CP::THandle<CP::THit>& hit) {
 void CP::THitSelection::ls(Option_t* opt) const {
     CP::TDatum::ls(opt);
     std::string option(opt);
-    if (option.find("dump") != std::string::npos) {
+    if (option.find("dump") != std::string::npos
+        || option.find("hits") != std::string::npos) {
         TROOT::IncreaseDirLevel();
         for (const_iterator v = begin();
              v != end(); 
