@@ -16,6 +16,7 @@ namespace CP {
         
         /// Define the P0D specific geometry identifiers.
         namespace Captain {
+
             /// Define a geometry identifier to the entire Cryostat.
             TGeometryId Detector();
         
@@ -34,6 +35,12 @@ namespace CP {
             /// Check if the id is for a plane.
             bool IsPlane(TGeometryId i);
 
+            enum {
+                kXPlane = 0,
+                kVPlane = 1,
+                kUPlane = 2,
+            };
+
             /// Get the wire plane from the id.
             int GetPlane(TGeometryId i);
 
@@ -51,6 +58,15 @@ namespace CP {
 
             /// Check if the id is for a wire.
             bool IsWire(TGeometryId id);
+
+            /// Check if the id is for a x wire.
+            bool IsXWire(TGeometryId id);
+
+            /// Check if the id is for a v wire.
+            bool IsVWire(TGeometryId id);
+
+            /// Check if the id is for a u wire.
+            bool IsUWire(TGeometryId id);
 
             /// Get the wire plane from an id for a wire.
             int GetWirePlane(TGeometryId id);

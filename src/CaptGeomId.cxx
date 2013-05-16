@@ -200,6 +200,19 @@ bool CP::GeomId::Captain::IsWire(TGeometryId i) {
     return true;
 }
 
+bool CP::GeomId::Captain::IsXWire(TGeometryId i) {
+    return (0 == GetWirePlane(i));
+}
+
+bool CP::GeomId::Captain::IsVWire(TGeometryId i) {
+    return (1 == GetWirePlane(i));
+}
+
+bool CP::GeomId::Captain::IsUWire(TGeometryId i) {
+    return (2 == GetWirePlane(i));
+}
+
+
 int CP::GeomId::Captain::GetWirePlane(TGeometryId i) {
     if (!IsWire(i)) return -1;
     TSettableGeometryId id(i);

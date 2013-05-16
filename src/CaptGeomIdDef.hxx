@@ -151,7 +151,7 @@ namespace CP {
                 /// w(13) -- The wire number.
                 /// \endcode
                 namespace Wire {
-                    /// @{ The wire plane.  The 0) X Plane 1) U Plane 2) V
+                    /// @{ The wire plane.  The 0) X Plane 1) V Plane 2) U
                     /// Plane.
                     const GeomIdBit kPlaneMSB = Def::Captain::kSeqIdLSB-1;
                     const GeomIdBit kPlaneLSB = kPlaneMSB-7;
