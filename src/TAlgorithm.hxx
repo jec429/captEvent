@@ -21,8 +21,8 @@ namespace CP {
 }
 
 /// Base class for reconstruction algorithms.  It contains the basic
-/// information about the "flavour" and version.  Specific algorithms should
-/// inherit the class and returned results using a TAlgorithmResult object.  
+/// information about the "flavor" and version.  Specific algorithms should
+/// inherit the class and returned results using a TAlgorithmResult object.
 /// Inherited classes must implement the
 ///
 /// \code
@@ -32,7 +32,16 @@ namespace CP {
 /// which is a pure virtual member of this class.  The user should use
 /// TAlgorithm::CreateResult() to construct an empty result that is returned
 /// by the Process method.  This convenience function will set the algorithm
-/// result name, and fill the book keeping information.
+/// result name, and fill the bookkeeping information.
+///
+/// By convention, the algorithm should fill the TAlgorithmResult with some
+/// standard TReconObjectContainers and THitSelections.  See the
+/// TAlgorithmResult documentation for more information.
+///
+/// TAlgorithmResult objects are often created by one TAlgorithm, and then
+/// used as input to the next TAlgorithm.  In that case, the TAlgorithm will
+/// use the last container of objects, and hit selection for it's input.
+///
 class CP::TAlgorithm : public TNamed {
 public:
     TAlgorithm(const char* name, const char* title="An Algorithm");

@@ -38,7 +38,33 @@ namespace CP {
 /// contains "rej", then the event should be rejected.  The status can also be
 /// used to specify which cuts an event has passed.  Typically, an algorithm
 /// should create a status string, and added information using the "+="
-/// operator. 
+/// operator.
+///
+/// By convention, the algorithm should fill the TAlgorithmResult with some
+/// standard TReconObjectContainers and THitSelections.  See the
+/// TAlgorithmResult documentation for more information.
+///
+/// * final -- A TReconObjectContainer that contains the main output
+///            reconstruction objects for this algorithm.  Any TAlgorithms
+///            that take this result as input will use the "final"
+///            reconstruction objects.  This should be the last
+///            TReconObjectContainer added to the TAlgorithmResult.
+///
+/// * used -- A THitSelection of the input hits that were used in this event.
+///           If the TAlgorithm did not create new hits, then the used hit
+///           selection contains the final hits.  This should usually be the
+///           last THitSelection added to the TAlgorithmResult.  If "used" is
+///           not the final hit selection, the correct hit selection should be
+///           clearly documented.
+/// 
+/// * unused -- A THitSelection of input hits that were not used in this
+///             event.
+///
+/// Other object containers and hit selections can be added to the
+/// TAlgorithmResult.  TAlgorithmResult objects are often created by one
+/// TAlgorithm, and then used as input to the next TAlgorithm.  In that case,
+/// the TAlgorithm will use the last container of objects, and hit selection
+/// for it's input.
 class CP::TAlgorithmResult : public TDataVector {
 public:
     TAlgorithmResult();
