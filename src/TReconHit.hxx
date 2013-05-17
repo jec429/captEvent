@@ -206,6 +206,14 @@ public:
     explicit TWritableReconHit(CP::THandle<CP::THit> hit1,
                                CP::THandle<CP::THit> hit2);
 
+    /// A "convenience" constructor for the case where there are three
+    /// constituents.  This sets the constituent fields, but the position,
+    /// time, &c are not initialized.  These fields and their uncertainties
+    /// must be set using SetCharge, SetTime, &c.
+    explicit TWritableReconHit(CP::THandle<CP::THit> hit1,
+                               CP::THandle<CP::THit> hit2,
+                               CP::THandle<CP::THit> hit3);
+
     virtual ~TWritableReconHit();
     
     /// Add one more hit to an existing TWritableReconHit.

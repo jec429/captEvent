@@ -114,6 +114,17 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
     fTimeUncertainty = -9999;
 }
 
+CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
+                                         CP::THandle<CP::THit> hit2,
+                                         CP::THandle<CP::THit> hit3) {
+    fConstituents.push_back(hit1);
+    fConstituents.push_back(hit2);
+    fConstituents.push_back(hit3);
+    fCharge = -9999.;
+    fTime = -9999.;
+    fTimeUncertainty = -9999;
+}
+
 void CP::TWritableReconHit::AddHit(CP::THandle<CP::THit> hit) {
     fConstituents.push_back(hit);
 }
