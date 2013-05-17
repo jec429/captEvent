@@ -134,6 +134,7 @@ namespace unit {
     const double ns = nanosecond;			
     const double  s = second;
     const double ms = millisecond;
+    const double us = microsecond;
     ///@}
 
     /// Electric charge [Q]
