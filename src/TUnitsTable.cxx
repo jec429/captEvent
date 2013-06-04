@@ -157,6 +157,93 @@ std::string CP::TUnitsTable::ConvertWithUnit(std::string input) {
     return result.str();
 }
 
+std::string CP::TUnitsTable::ConvertLength(double len) {
+    std::stringstream output;
+
+    output << std::setprecision(3);
+    double val = len/unit::km;
+    if (std::abs(val) >= 1) {
+        output << val << " km";
+        return output.str();
+    }
+    
+    val = len/unit::m;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " m";
+        return output.str();
+    }
+
+    val = len/unit::cm;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 100) {
+        output << val << " cm";
+        return output.str();
+    }
+
+    val = len/unit::mm;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " mm";
+        return output.str();
+    }
+            
+    val = len/unit::micrometer;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " um";
+        return output.str();
+    }
+
+    val = len/unit::nm;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " nm";
+        return output.str();
+    }
+
+    val = len;
+    if (val < 0.001*unit::mm) val = 0.0;
+    output << val/unit::mm << " mm";
+    return output.str();
+}
+
+std::string CP::TUnitsTable::ConvertTime(double tim) {
+    std::stringstream output;
+
+    output << std::setprecision(3);
+    double val = tim/(3600*unit::second);
+    if (std::abs(val) >= 1) {
+        output << val << " hr";
+        return output.str();
+    }
+    
+    val = tim/unit::second;
+    if (std::abs(val) >= 1) {
+        output << val << " s";
+        return output.str();
+    }
+
+    val = tim/unit::millisecond;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " ms";
+        return output.str();
+    }
+
+    val = tim/unit::microsecond;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " um";
+        return output.str();
+    }
+            
+    val = tim/unit::nanosecond;
+    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+        output << val << " ns";
+        return output.str();
+    }
+
+    val = tim;
+    if (val < 0.1*unit::ns) val = 0.0;
+    output << val/unit::ns << " ns";
+
+    return output.str();
+}
+
 void CP::TUnitsTable::PrintListOfUnits() {
     std::cout << std::endl;
     std::cout << "***** List of available units *****" << std::endl;  

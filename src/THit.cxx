@@ -2,6 +2,7 @@
 // $Id: THit.cxx,v 1.24 2012/07/11 16:31:20 mcgrew Exp $
 //
 #include "HEPUnits.hxx"
+#include "TUnitsTable.hxx"
 #include "THit.hxx"
 #include "TDigitProxy.hxx"
 #include "TManager.hxx"
@@ -131,11 +132,11 @@ void CP::THit::ls(Option_t *opt) const {
     int prec = std::cout.precision();
     std::cout << " Id: " << GetGeomId().AsInt();
     std::cout << " P: " << std::setprecision(0)
-              << "(" << GetPosition().X()/unit::cm << " cm"
-              << ", " << GetPosition().Y()/unit::cm << " cm"
-              << ", " << GetPosition().Z()/unit::cm << " cm"
-              << ", " << GetTime()/unit::ns << " ns)";
-    std::cout << " Q: " << std::setprecision(1) << GetCharge() << " pe"
+              << "(" << CP::TUnitsTable::Get().ConvertLength(GetPosition().X())
+              << ", " << CP::TUnitsTable::Get().ConvertLength(GetPosition().Y())
+              << ", " << CP::TUnitsTable::Get().ConvertLength(GetPosition().Z())
+              << ", " << CP::TUnitsTable::Get().ConvertTime(GetTime()) << ")";
+    std::cout << " Q: " << std::setprecision(3) << GetCharge() << " pe"
               << std::endl;
     std::string option(opt);
     if (option.find("hits") != std::string::npos) {
@@ -143,16 +144,18 @@ void CP::THit::ls(Option_t *opt) const {
         TROOT::IndentLevel();
         std::cout << "Spread:      " 
                   << std::setprecision(0)
-                  << "(" << GetRMS().X()/unit::cm << " cm"
-                  << ", " << GetRMS().Y()/unit::cm << " cm"
-                  << ", " << GetRMS().Z()/unit::cm << " cm)"
+                  << "(" << CP::TUnitsTable::Get().ConvertLength(GetRMS().X())
+                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetRMS().Y())
+                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetRMS().Z())
+                  << ")"
                   << std::endl;
         TROOT::IndentLevel();
         std::cout << "Uncertainty: " 
                   << std::setprecision(2)
-                  << "(" << GetUncertainty().X()/unit::cm << " cm"
-                  << ", " << GetUncertainty().Y()/unit::cm << " cm"
-                  << ", " << GetUncertainty().Z()/unit::cm << " cm)"
+                  << "(" << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().X())
+                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Y())
+                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Z())
+                  << ")"
                   << std::endl;
         TROOT::DecreaseDirLevel();
     }

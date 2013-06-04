@@ -10,7 +10,8 @@ namespace CP {
 /// This class provides a method for converting a string like "1.5 cm" into a
 /// double with the appropriate unit.  To do so it defines a set of units,
 /// using the same base units as in HEPUnits.hxx (e.g. mm, ns, MeV).  Only a
-/// fairly limited set of units is defined.
+/// fairly limited set of units is defined.  Care must be taken to keep this
+/// in sync with HEPUnits.hxx.
 class CP::TUnitsTable {
 public:
     /// Constructor.  Creates list of units.
