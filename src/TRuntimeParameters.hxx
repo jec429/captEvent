@@ -68,10 +68,12 @@ public:
     /// Get parameter.  Value is returned as string. 
     std::string GetParameterS(std::string);
 
-    /// The te object to translate units.
+#ifdef DO_NOT_USE
+    /// The object to translate units.
     CP::TUnitsTableParser* GetUnitsTableParser() {
         return fUnitsTableParser;
     }
+#endif
 
     /// This command allows the user to set parameters from the
     /// command line; the command is different from the standard
@@ -118,8 +120,10 @@ private:
     /// parameter override files.
     std::set<std::string> fConstants;
 
+#ifdef DO_NOT_USE
     /// The units parser.
     CP::TUnitsTableParser *fUnitsTableParser;
+#endif
 
     /// The static pointer to the singleton instance.
     static TRuntimeParameters* fTRuntimeParameters;

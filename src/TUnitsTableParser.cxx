@@ -9,6 +9,9 @@
 #include <cmath> 
 #include <cstdlib>
 
+CP::TUnitsTableParser* 
+CP::TUnitsTableParser::fTUnitsTableParser = NULL;
+
 CP::TUnitsTableParser::TUnitsTableParser() {
     // Define units.  Add to this list as needed.
 

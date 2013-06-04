@@ -17,8 +17,10 @@ CP::TRuntimeParameters::TRuntimeParameters() {
 
     CaptLog("Initializing CP::TRuntimeParameters");
 
+#ifdef DO_NOT_USE
     // Build the set of units for Geant4.
     fUnitsTableParser = new CP::TUnitsTableParser();
+#endif
 
     // We do not open any parameter files by default in the constructor.
     // Instead, parameter files are open automatically when an entry in the
@@ -129,7 +131,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
                 // Use CP::TUnitsTableParser class to convert string of
                 // value+unit to a double with value+unit.
                 parameterValue 
-                    = fUnitsTableParser->ConvertWithUnit(parameterValueUnit);
+                    = CP::TUnitsTableParser::Get().ConvertWithUnit(parameterValueUnit);
             }
         }
     }
