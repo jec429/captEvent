@@ -1,5 +1,5 @@
 #include "TRuntimeParameters.hxx"
-#include "TUnitsTableParser.hxx"
+#include "TUnitsTable.hxx"
 
 #include "HEPUnits.hxx"
 #include "HEPConstants.hxx"
@@ -19,7 +19,7 @@ CP::TRuntimeParameters::TRuntimeParameters() {
 
 #ifdef DO_NOT_USE
     // Build the set of units for Geant4.
-    fUnitsTableParser = new CP::TUnitsTableParser();
+    fUnitsTableParser = new CP::TUnitsTable();
 #endif
 
     // We do not open any parameter files by default in the constructor.
@@ -70,8 +70,8 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
     int inputState = 0;
     std::string inputString;
     std::string parameterName;
-    std::string parameterValueUnit;
-    std::string parameterValue;
+    std::string parValueUnit;
+    std::string parValue;
 
     while (inputFile >> inputString) {
         if (inputState == 0) {
@@ -96,8 +96,8 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
             }
         }
         else if (inputState == 3) {	
-            parameterValue = inputString;
-            parameterValueUnit = inputString;
+            parValue = inputString;
+            parValueUnit = inputString;
             inputState = 4;
         }
         else if (inputState == 4) {	
@@ -105,7 +105,7 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
                 // Finished reading. Save parameter; but only if the parameter
                 // isn't already 'constant'
                 if (fConstants.find(parameterName) == fConstants.end()) {
-                    fRuntimeParameters[parameterName] = parameterValue;
+                    fRuntimeParameters[parameterName] = parValue;
                     // If fixParameters bool is set, fix this parameter now.
                     if (fixParameters)
                         fConstants.insert(parameterName);
@@ -125,13 +125,13 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
 
                 // The parameter must have a unit.  Resave the value with the
                 // correct unit.
-                parameterValueUnit.append(" ");
-                parameterValueUnit.append(inputString);
+                parValueUnit.append(" ");
+                parValueUnit.append(inputString);
 
-                // Use CP::TUnitsTableParser class to convert string of
+                // Use CP::TUnitsTable class to convert string of
                 // value+unit to a double with value+unit.
-                parameterValue 
-                    = CP::TUnitsTableParser::Get().ConvertWithUnit(parameterValueUnit);
+                parValue 
+                    = CP::TUnitsTable::Get().ConvertWithUnit(parValueUnit);
             }
         }
     }

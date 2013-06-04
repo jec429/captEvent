@@ -11,7 +11,7 @@
 
 namespace CP {
     class TRuntimeParameters;
-    class TUnitsTableParser;
+    class TUnitsTable;
 
     // General run time parameters exceptions
     EXCEPTION(EOARuntimeParameters,CP::ECore);
@@ -70,7 +70,7 @@ public:
 
 #ifdef DO_NOT_USE
     /// The object to translate units.
-    CP::TUnitsTableParser* GetUnitsTableParser() {
+    CP::TUnitsTable* GetUnitsTableParser() {
         return fUnitsTableParser;
     }
 #endif
@@ -122,7 +122,7 @@ private:
 
 #ifdef DO_NOT_USE
     /// The units parser.
-    CP::TUnitsTableParser *fUnitsTableParser;
+    CP::TUnitsTable *fUnitsTableParser;
 #endif
 
     /// The static pointer to the singleton instance.

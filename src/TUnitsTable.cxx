@@ -1,4 +1,4 @@
-#include "TUnitsTableParser.hxx"
+#include "TUnitsTable.hxx"
 
 #include "TCaptLog.hxx"
 #include "HEPUnits.hxx"
@@ -9,10 +9,10 @@
 #include <cmath> 
 #include <cstdlib>
 
-CP::TUnitsTableParser* 
-CP::TUnitsTableParser::fTUnitsTableParser = NULL;
+CP::TUnitsTable* 
+CP::TUnitsTable::fTUnitsTable = NULL;
 
-CP::TUnitsTableParser::TUnitsTableParser() {
+CP::TUnitsTable::TUnitsTable() {
     // Define units.  Add to this list as needed.
 
     // Length 
@@ -128,9 +128,9 @@ CP::TUnitsTableParser::TUnitsTableParser() {
 
 }
 
-CP::TUnitsTableParser::~TUnitsTableParser() {}
+CP::TUnitsTable::~TUnitsTable() {}
 
-std::string CP::TUnitsTableParser::ConvertWithUnit(std::string input) {
+std::string CP::TUnitsTable::ConvertWithUnit(std::string input) {
 
     double value;
     std::string unit;
@@ -145,7 +145,7 @@ std::string CP::TUnitsTableParser::ConvertWithUnit(std::string input) {
     // Check if requested unit is in map.
     if (units.find(unit) == units.end()) {
         PrintListOfUnits();
-        CaptError("CP::TUnitsTableParser: requested unit '"
+        CaptError("CP::TUnitsTable: requested unit '"
                    << unit << "' not found.");
         std::exit(1);
     }
@@ -157,7 +157,7 @@ std::string CP::TUnitsTableParser::ConvertWithUnit(std::string input) {
     return result.str();
 }
 
-void CP::TUnitsTableParser::PrintListOfUnits() {
+void CP::TUnitsTable::PrintListOfUnits() {
     std::cout << std::endl;
     std::cout << "***** List of available units *****" << std::endl;  
     for (std::map<std::string, double>::iterator unit = units.begin();
