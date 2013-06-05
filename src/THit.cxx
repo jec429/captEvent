@@ -142,7 +142,7 @@ void CP::THit::ls(Option_t *opt) const {
     if (option.find("hits") != std::string::npos) {
         TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
-        std::cout << "Spread:      " 
+        std::cout << "RMS          " 
                   << std::setprecision(0)
                   << "(" << CP::TUnitsTable::Get().ConvertLength(GetRMS().X())
                   << ", " << CP::TUnitsTable::Get().ConvertLength(GetRMS().Y())
