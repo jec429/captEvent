@@ -17,7 +17,7 @@ ClassImp(CP::TSingleHit);
 CP::TSingleHit::TSingleHit() 
     : fGeomId(0), 
       fCharge(0), fChargeUncertainty(1*unit::coulomb),
-      fTime(0), fTimeUncertainty(1*unit::second),
+      fTime(0), fTimeUncertainty(1*unit::second), fTimeRMS(1*unit::second),
       fInitialized(false),
       fPosition(0,0,0), 
       fUncertainty(100*unit::meter,100*unit::meter,100*unit::meter),
@@ -29,6 +29,7 @@ CP::TSingleHit::TSingleHit(const CP::TSingleHit& h)
     : CP::THit(h), fGeomId(h.fGeomId),
       fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
       fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
+      fTimeRMS(h.fTimeRMS),
       fInitialized(h.fInitialized),
       fPosition(h.fPosition),
       fUncertainty(h.fUncertainty),
