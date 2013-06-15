@@ -50,76 +50,35 @@ public:
     /// This method returns information about the compiled version 
     virtual const std::string& GetVersion() const {return fVersion;}
     
-    typedef enum {Quiet, Brief, Summary, Detailed} Verbosity;
-    
-    /// This string contains a description of the algorithm depending on the 
-    /// "verbosity" fVerbose :
-    ///   - 0 (Quiet)   : quiet
-    ///   - 1 (Brief)   : one quick line to describe the algorithm
-    ///   - 2 (Summary) : a summary of the algorithm features
-    ///   - 3 (Detailed): a more detailed description (encouraged for
-    ///                   non-trivial algorithms) 
-    virtual std::string GetDescription() const;
-    
-    /// Set the brief description of this algorithm.
-    void SetBriefDescription(const char* d) {
-        fBriefDescription = d;
-    }
-    
-    /// Set the summary description of this algorithm.
-    void SetSummaryDescription(const char* d) {
-        fSummaryDescription = d;
-    }
-
-    /// Set the detailed description of this algorithm.
-    void SetDetailedDescription(const char* d) {
-        fDetailedDescription = d;
-    }
-
-    /// Set verbosity level 
-    virtual void SetVerbose(Verbosity verb) {fVerbose = verb;}
-
-    /// Set the output state of the algorithm.
-    /// 
-    /// \todo This function should be transfered into a more general logging
-    /// class.  I wish some experiment someplace would make one generally
-    /// available.
-    void SetQuiet(Bool_t state) {fQuiet = state;}
-
-    /// A convenience method that doesn't require input and which MUST NOT be
-    /// implemented by the derived class.
-    THandle<CP::TAlgorithmResult> Execute(void);
-
     /// The routine that does the actual work.  This must be implemented by
-    /// any derived class.
+    /// any derived class.  By convention, the derived class should only name
+    /// the parameters that are actually used.  For instance, a derived class
+    /// that only uses the first TAlgorithmResult would be declared as
+    /// \code
+    /// THandle<CP::TAlgorithmResult> 
+    /// Process(const CP::TAlgorithmResult& input,
+    ///      const CP::TAlgorithmResult& input1 = CP::TAlgorithmResult::Empty,
+    ///      const CP::TAlgorithmResult& input2 = CP::TAlgorithmResult::Empty);
+    /// \endcode
+    /// and defined as
+    /// \code
+    /// THandle<CP::TAlgorithmResult> 
+    /// Process(const CP::TAlgorithmResult& input,
+    ///         const CP::TAlgorithmResult&,
+    ///         const CP::TAlgorithmResult&) { ... }
+    /// \endcode
     virtual THandle<CP::TAlgorithmResult> 
-    Process(const CP::TAlgorithmResult& input) = 0;
-
-    /// A convenience routine that will try to find a result from a previously
-    /// run version of this algorithm.  If the result is not found, then the
-    /// standard process methods is run, and the result is saved into the
-    /// event.
-    THandle<CP::TAlgorithmResult> MaybeProcess(const TAlgorithmResult& input);
-
-    /// Get the output state of the algorithm.
-    bool GetQuiet(void) const {return fQuiet;}
-
-    /// Get the algorithm tag.
-    TAlgorithmTag GetTag() const;
+    Process(const CP::TAlgorithmResult& input,
+            const CP::TAlgorithmResult& input1 = CP::TAlgorithmResult::Empty,
+            const CP::TAlgorithmResult& input2 = CP::TAlgorithmResult::Empty
+        ) = 0;
 
     /// Reset algorithm containers, but keep do not change the
     /// parameters by default
     virtual void Clear(Option_t* option);
 
-    /// Don't explicitly override the derived Execute method.
-    void Execute(const char *method,  const char *params, Int_t *error=0) {
-        TNamed::Execute(method,params,error);
-    }
-
-    /// Don't explicitly override the derived Execute method.
-    void Execute(TMethod *method, TObjArray *params, Int_t *error=0) {
-        TNamed::Execute(method,params,error);
-    }
+    /// Get the algorithm tag.
+    TAlgorithmTag GetTag() const;
 
 protected:
     /// Set the version of the algorithm.  This should be set in the derived
@@ -146,24 +105,6 @@ private:
     /// A version string that must be set in the constructor with SetVersion().
     std::string fVersion;
 
-    /// The verbosity of the description and output. 
-    Verbosity fVerbose;
-
-    /// A flag to switch on/off output
-    Bool_t fQuiet;
-
-    /// One quick line to describe the algorithm returned when the verbosity
-    /// is TAlgorithm::Brief.
-    std::string fBriefDescription;
-    
-    /// A short summary of the algorithm returned when the verbosity
-    /// is TAlgorithm::Summary.
-    std::string fSummaryDescription;
-    
-    /// A detailed description of the algorithm returned when the verbosity is
-    /// TAlgorithm::Detailed.
-    std::string fDetailedDescription;
-    
-    ClassDef(TAlgorithm, 4);
+    ClassDef(TAlgorithm, 1);
 };
 #endif
