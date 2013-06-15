@@ -72,6 +72,9 @@ public:
     TAlgorithmResult(const char* name, const char* title);
     virtual ~TAlgorithmResult();
     
+    /// A static empty value for use as a default parameter in TAlgorithm.
+    static const TAlgorithmResult Empty;
+
     /// A copy constructor to turn a THitSelection object into a
     /// TAlgorithmResult.  Through the magic of C++, this acts as a conversion
     /// operator from a THitSelection object and TAlgorithmResult, so any

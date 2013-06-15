@@ -8,6 +8,8 @@
 
 ClassImp(CP::TAlgorithmResult);
 
+const CP::TAlgorithmResult CP::TAlgorithmResult::Empty;
+
 CP::TAlgorithmResult::TAlgorithmResult(): fStatusSummary("") { }
 
 CP::TAlgorithmResult::TAlgorithmResult(const char* name, const char* title) 
