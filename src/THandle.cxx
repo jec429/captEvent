@@ -146,7 +146,9 @@ void CP::TVHandle::Release(void) {
 
 bool CP::TVHandle::operator == (const CP::TVHandle& rhs) const {
     if (fHandle == rhs.fHandle) return true;
-    return fHandle && (fHandle->GetObject() == rhs.fHandle->GetObject());
+    if (!fHandle) return false;
+    if (!rhs.fHandle) return false;
+    return (fHandle->GetObject() == rhs.fHandle->GetObject());
 }
 
 void CP::TVHandle::ls(Option_t *opt) const {
