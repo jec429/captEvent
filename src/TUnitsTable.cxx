@@ -46,6 +46,7 @@ CP::TUnitsTable::TUnitsTable() {
     // Time
     units["s"] = unit::second ;
     units["ms"] = unit::millisecond ;
+    units["us"] = unit::microsecond ;
     units["ns"] = unit::nanosecond ;
 
     // Frequency
@@ -112,9 +113,9 @@ CP::TUnitsTable::TUnitsTable() {
     units["G"] = unit::gauss ;
 
     // Speed
-    units["cm/us"] = units["cm"]/units["mus"]  ;
+    units["cm/us"] = units["cm"]/units["us"]  ;
     units["cm/ns"] = units["cm"]/units["ns"]  ;
-    units["mm/mus"] = units["mm"]/units["mus"]  ;
+    units["mm/us"] = units["mm"]/units["us"]  ;
     units["mm/ns"] = units["mm"]/units["ns"]  ;
 
     // Length/Energy
