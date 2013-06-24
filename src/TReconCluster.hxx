@@ -77,22 +77,41 @@ public:
     /// accessed.
     void SetMoments(const TMatrixT<double>& moments);
     
-    /// @{ Fill the CP::TReconCluster and CP::TClusterState objects from a
-    /// CP::THitSelection.  The position is set to average hit position (the
-    /// hit position uncertainty is used), and the energy deposit is the sum
-    /// of the hit charges.
+    /// Fill the CP::TReconCluster and CP::TClusterState objects from hits
+    /// between the begin and end iterators.  The position is set to average
+    /// hit position (the hit position uncertainty is used), and the energy
+    /// deposit is the sum of the hit charges.  The algorithm name is set to
+    /// the first argument.
+    template <typename T> 
+    void FillFromHits(const char* name, T begin,T end) {
+        // Set the algorithm name.
+        fAlgorithm = std::string(name);
+        
+        // Add a copy of the hits to the cluster.
+        if (end-begin < 1) return;
+        CP::THitSelection* hits = new THitSelection("clusterHits");
+        std::copy(begin, end, std::back_inserter(*hits));
+        AddHits(hits);
+        
+        // Update the cluster fields based on the hits.
+        UpdateFromHits();
+    }
+
+
+    /// A convenience method to fill the cluster from a CP::THitSelection.
+    /// The hits are copied into the the cluster, so this does not take owner
+    /// ship of the original CP::THitSelection.
     void FillFromHits(const char* name, const CP::THitSelection& hits) {
         FillFromHits(name, hits.begin(), hits.end());
     }
-    void FillFromHits(const char* name, 
-                      CP::THitSelection::const_iterator b,
-                      CP::THitSelection::const_iterator e);
-    /// @}
 
     /// List the results of in the cluster.
     virtual void ls(Option_t* opt = "") const; 
 
 private:
+
+    /// Fill all of the fields of the cluster based on the hits.
+    void UpdateFromHits();
 
     /// The moments for this cluster.
     MomentMatrix fMoments;

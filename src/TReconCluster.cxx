@@ -128,16 +128,16 @@ void CP::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
     }
 }
 
-void CP::TReconCluster::FillFromHits(const char* name, 
-                                     CP::THitSelection::const_iterator beg,
-                                     CP::THitSelection::const_iterator end) {
-    // Add a copy of the hits to the cluster.
-    if (end-beg < 1) return;
-    CP::THitSelection* hits = new THitSelection("clusterHits");
-    std::copy(beg, end, std::back_inserter(*hits));
-    AddHits(hits);
+void CP::TReconCluster::UpdateFromHits() {
+    // Make sure there is a hit container.
+    CP::THandle<CP::THitSelection> hits = GetHits();
+    if (!hits) return;
 
-    fAlgorithm = std::string(name);
+    // Make sure the hit container isn't empty.
+    CP::THitSelection::const_iterator beg = hits->begin();
+    CP::THitSelection::const_iterator end = hits->end();
+    if (end-beg < 1) return;
+
     fStatus = CP::TReconBase::kSuccess;
     fQuality = 1.0;
     fNDOF = std::max(1,int(end-beg-1));
