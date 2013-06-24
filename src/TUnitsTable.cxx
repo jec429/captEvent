@@ -228,7 +228,7 @@ std::string CP::TUnitsTable::ConvertTime(double tim) {
 
     val = tim/unit::microsecond;
     if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
-        output << val << " um";
+        output << val << " us";
         return output.str();
     }
             
