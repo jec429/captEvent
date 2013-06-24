@@ -26,10 +26,6 @@ double CP::TRealDatum::GetValue(void) const {return fValue.front();}
 
 void CP::TRealDatum::SetValue(double v) {fValue.front() = v;}
 
-std::vector<double>& CP::TRealDatum::GetVector(void) {return fValue;}
-
-const std::vector<double>& CP::TRealDatum::GetVector(void) const {return fValue;}
-
 void CP::TRealDatum::ls(Option_t* opt) const {
     ls_header(this, opt);
     for (std::vector<double>::const_iterator v = fValue.begin();

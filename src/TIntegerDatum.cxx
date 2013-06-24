@@ -26,10 +26,6 @@ int CP::TIntegerDatum::GetValue(void) const {return fValue.front();}
 
 void CP::TIntegerDatum::SetValue(int v) {fValue.front() = v;}
 
-std::vector<int>& CP::TIntegerDatum::GetVector(void) {return fValue;}
-
-const std::vector<int>& CP::TIntegerDatum::GetVector(void) const {return fValue;}
-
 void CP::TIntegerDatum::ls(Option_t*opt) const {
     ls_header(this, opt);
     for (std::vector<int>::const_iterator v = fValue.begin();
