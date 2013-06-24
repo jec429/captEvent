@@ -88,7 +88,7 @@ public:
         fAlgorithm = std::string(name);
         
         // Add a copy of the hits to the cluster.
-        if (end-begin < 1) return;
+        if (end == begin) return;
         CP::THitSelection* hits = new THitSelection("clusterHits");
         std::copy(begin, end, std::back_inserter(*hits));
         AddHits(hits);

@@ -205,7 +205,7 @@ void CP::TReconCluster::UpdateFromHits() {
         vals(posX) = (*h)->GetPosition().X() - stateValues(posX);
         sigs(posX) = (*h)->GetUncertainty().X();
         rms(posX) = (*h)->GetRMS().X();
-        
+
         vals(posY) = (*h)->GetPosition().Y() - stateValues(posY);
         sigs(posY) = (*h)->GetUncertainty().Y();
         rms(posY) = (*h)->GetRMS().Y();
@@ -216,7 +216,7 @@ void CP::TReconCluster::UpdateFromHits() {
 
         vals(posT) = (*h)->GetTime() - stateValues(posT);
         sigs(posT) = (*h)->GetTimeUncertainty();
-        rms(posT) = 1.0;
+        rms(posT) = (*h)->GetTimeRMS();
 
         for (int row = 0; row<dim; ++row) {
             for (int col = row; col<dim; ++col) {
