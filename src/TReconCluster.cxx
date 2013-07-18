@@ -20,8 +20,7 @@ CP::TReconCluster::TReconCluster(const CP::TReconCluster& cluster)
     : CP::TReconBase(cluster), fMoments(3) {
     fNodes = new TReconNodeContainerImpl<CP::TClusterState>;
     
-    // Copy the nodes 
-    // Create new nodes with TClusterState's 
+    // Copy the nodes.  Create new nodes with TClusterState's
     CP::TReconNodeContainer::const_iterator in;
     for (in=cluster.GetNodes().begin(); in!=cluster.GetNodes().end();in++){
         CP::THandle<CP::TReconNode> node(new CP::TReconNode);
@@ -148,8 +147,6 @@ void CP::TReconCluster::UpdateFromHits() {
     TVectorT<double> sigs(dim);
     TVectorT<double> rms(dim);
 
-    // TMatrixTSym<double> covar(dim);
-    
     // Save the index into the state for each of the values.
     int eDep = state->GetEDepositIndex();
     int posX = state->GetXIndex();

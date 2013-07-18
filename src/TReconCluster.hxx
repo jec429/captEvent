@@ -24,15 +24,10 @@ namespace CP {
 /// moments of the distribution can be retrieved using the GetMoments()
 /// method.
 /// 
-/// A TReconCluster object is a relatively heavy object.  Small collecions of
-/// hits (e.g. pairs of hits in a single P0D plane, or very local TPC charge
-/// depositions) should be saved using a TComboHit.  See CP::TChargeCluster2D
-/// as an example.
-///
 /// The CP::TReconCluster class is intended to describe the geometry of the
 /// energy deposition in a detector, and not make the association with a
 /// particular particle identification.  Assignment of particle types to the
-/// detector measurements is done in the CP::TReconParticle class.
+/// detector measurements is done in the CP::TReconPID class.
 class CP::TReconCluster: public CP::TReconBase {
 public: 
     typedef TMatrixTSym<float> MomentMatrix;
