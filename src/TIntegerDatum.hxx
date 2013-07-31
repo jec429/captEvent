@@ -37,7 +37,7 @@ public:
 
     int& operator [] (int i) {return fValue[i];}
     const int& operator [] (int i) const {return fValue[i];}
-    int At(int i) const {return fValue.at(i);}
+    int at(int i) const {return fValue.at(i);}
     unsigned int size() const {return fValue.size();}
     void push_back(int i) {fValue.push_back(i);}
     void clear(void) {fValue.clear();}

@@ -37,7 +37,7 @@ public:
 
     double& operator [] (int i) {return fValue[i];}
     const double& operator [] (int i) const {return fValue[i];}
-    double At(int i) const {return fValue.at(i);}
+    double at(int i) const {return fValue.at(i);}
     unsigned int size() const {return fValue.size();}
     void push_back(double r) {fValue.push_back(r);}
     void clear(void) {fValue.clear();}
