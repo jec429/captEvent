@@ -28,6 +28,11 @@ public:
 
     virtual ~TReconShower();
 
+    /// Return a handle to the state.
+    CP::THandle<CP::TShowerState> GetState() const {
+        return GetReconState();
+    }
+
     /// Get the energy deposited in the shower.
     double GetEDeposit() const;
 

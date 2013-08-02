@@ -34,6 +34,11 @@ public:
 
     virtual ~TReconTrack();
 
+    /// Return a handle to the state.
+    CP::THandle<CP::TTrackState> GetState() const {
+        return GetReconState();
+    }
+
     /// Get the energy deposited in the track.
     double GetEDeposit() const;
 

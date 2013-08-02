@@ -19,8 +19,6 @@ public:
 
     /// copy constructor 
     TReconPID(const CP::TReconPID& pid); 
-
-
     virtual ~TReconPID();
 
     /// Constructors for promotion.  This converts tracks or showers into a
@@ -92,6 +90,11 @@ public:
         kKaon
         /// @}
     } ParticleId;
+
+    /// Return a handle to the state.
+    CP::THandle<CP::TPIDState> GetState() const {
+        return GetReconState();
+    }
 
     /// Get the assigned particle id.
     ParticleId GetParticleId() const {return fParticleId;}

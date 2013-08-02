@@ -229,7 +229,7 @@ public:
     /// to access a CP::TReconCluster state, you should write code like:
     ///
     /// \code
-    /// CP::THandle<CP::TClusterState> state = recObj->GetState();
+    /// CP::THandle<CP::TClusterState> state = recObj->GetReconState();
     /// if (state) {
     ///    // the state
     /// }
@@ -242,7 +242,7 @@ public:
     /// And is used to get and set the values and covariances.  As an example,
     /// to set the direction of the TReconTrack object:
     /// \code
-    /// CP::THandle<CP::TTrackState> trackState = reconTrack->GetState();
+    /// CP::THandle<CP::TTrackState> trackState = reconTrack->GetReconState();
     /// TVector3 theDir(0,0,1);
     /// trackState->SetDirection(theDir); // This works  
     /// trackState->SetDirection(0,0,1);  // This also works.
@@ -255,7 +255,7 @@ public:
     ///     }
     /// }
     /// \endcode
-    CP::THandle<CP::TReconState> GetState() const {
+    CP::THandle<CP::TReconState> GetReconState() const {
         if (!fState) {
             CaptError("TReconBase with NULL State: "
                        << "State must be created in the derived class.");

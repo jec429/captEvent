@@ -15,6 +15,11 @@ public:
     TReconVertex();
     virtual ~TReconVertex();
 
+    /// Return a handle to the state.
+    CP::THandle<CP::TVertexState> GetState() const {
+        return GetReconState();
+    }
+
     /// Get the vertex position.
     TLorentzVector GetPosition() const;
 

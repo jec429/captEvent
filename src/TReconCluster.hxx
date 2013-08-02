@@ -39,6 +39,11 @@ public:
 
     virtual ~TReconCluster();
 
+    /// Return a handle to the state.
+    CP::THandle<CP::TClusterState> GetState() const {
+        return GetReconState();
+    }
+
     /// Get the energy deposited in the cluster.
     double GetEDeposit() const;
 
