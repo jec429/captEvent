@@ -56,122 +56,33 @@ public:
         /// using SetStatus and checked using CheckStatus().
         kLikelihoodFit  = BIT(3), 
         
-        /// A kalman fitting algorithm was used.  This bit is set using
-        /// SetStatus and checked using CheckStatus().
+        /// A analytic Bayesian filter fitting algorithm was used (i.e. a form
+        /// of a Kalman filter).  This bit is set using SetStatus and checked
+        /// using CheckStatus().
         kKalmanFit      = BIT(4),
 
+        /// A stocastic Bayesian filter fitting algorithm was used (i.e. a form
+        /// of a particle filter).  This bit is set using SetStatus and checked
+        /// using CheckStatus().
+        kStocasticFit      = BIT(5),
+
+        /// A mask of all the fitter bits.
+        kFitMask       = (kChi2Fit|kLikelihoodFit|kKalmanFit|kStocasticFit),
+
         /// A mask of all of the status bits.
-        kStatusMask     = kRan|kSuccess|kChi2Fit|kLikelihoodFit|kKalmanFit,
+        kStatusMask  = (kRan|kSuccess|kFitMask),
 
         /////////////////////////////////////////////////////////////////
         // The remaining bits define which detectors contribute information
         // to the reconstruction object.
         /////////////////////////////////////////////////////////////////
 
-        /// The result uses data from the bottom of the SMRD.  This bit is set
-        /// using AddDetector() and checked using UsesDetector().
-        kBottomSMRD     = BIT(12),
-        
-        /// The result uses data from the left side of the SMRD.  This bit is
-        /// set using AddDetector() and checked using UsesDetector().
-        kLeftSMRD       = BIT(13), 
-        
-        /// The result uses data from the top of the SMRD.  This bit is set
-        /// using AddDetector() and checked using UsesDetector().
-        kTopSMRD        = BIT(14), 
-        
-        /// The result uses data from the right side of the SMRD.  This bit is
-        /// set using AddDetector() and checked using UsesDetector().
-        kRightSMRD      = BIT(15), 
-        
-        /// A mask to check if the fit used data from the SMRD.  This is
-        /// checked using UsesDetector().
-	kSMRD           = kRightSMRD|kTopSMRD|kLeftSMRD|kBottomSMRD,
-        
-        /// The result uses data from the bottom of the P0D-ECal.  This bit is
-        /// set using AddDetector() and checked using UsesDetector().
-        kBottomPECal    = BIT(16),
-        
-        /// The result uses data from the left side of the P0D-ECal.  This bit
-        /// is set using AddDetector() and checked using UsesDetector().
-        kLeftPECal      = BIT(17), 
-        
-        /// The result uses data from the top of the P0D-ECal.  This bit is
-        /// set using AddDetector() and checked using UsesDetector().
-        kTopPECal       = BIT(18), 
-        
-        /// The result uses data from the right side of the P0D-ECal.  This
-        /// bit is set using AddDetector() and checked using UsesDetector().
-        kRightPECal     = BIT(19),
-        
-        /// A mask to check if the result used data from the P0D-ECal.  This
-        /// mask is checked using UsesDetector().
-	kPECal          = kRightPECal|kTopPECal|kLeftPECal|kBottomPECal,
-        
-        /// The result uses data from the bottom of the Tracker ECal.  This
-        /// bit is set using AddDetector() and checked using UsesDetector().
-        kBottomTECal    = BIT(20),
-        
-        /// The result uses data from the left side of the Tracker ECal.  This
-        /// bit is set using AddDetector() and checked using UsesDetector().
-        kLeftTECal      = BIT(21), 
-        
-        /// The result uses data from the top of the Tracker ECal.  This bit
-        /// is set using AddDetector() and checked using UsesDetector().
-        kTopTECal       = BIT(23),
-        
-        /// The result uses data from the right side of the Tracker ECal.
-        /// This bit is set using AddDetector() and checked using
-        /// UsesDetector().
-        kRightTECal     = BIT(24),
-        
-        /// A mask to check if the result used data from the Tracker ECal.
-        /// This mask is checked using UsesDetector().
-	kTECal          = kRightTECal|kTopTECal|kLeftTECal|kBottomTECal,
-        
-        /// A mask to check if the result used data from the ECal.  This mask
-        /// is checked using UsesDetector.
-	kECal          = kPECal|kTECal,
-        
-        /// The result uses data from the downstream ECal.  This bit is set
-        /// using AddDetector() and checked using UsesDetector().
-        kDSECal         = BIT(25),
-        
-        /// The result uses data from the downstream FGD w/ water target.
-        /// This bit is set using AddDetector() and checked using
-        /// UsesDetector().
-        kFGD2           = BIT(26),
-        
-        /// The result uses data from the upstream FGD.  This bit is set using
-        /// AddDetector() and checked using UsesDetector().
-        kFGD1           = BIT(27), 
-        
-        /// A mask to check if the result includes data from the FGD.  This
-        /// mask is checked using UsesDetector().
-	kFGD            = kFGD1|kFGD2,
-        
-        /// The result uses data from the downstream TPC.  This bit is set
-        /// using AddDetector() and checked using UsesDetector().
-        kTPC3           = BIT(28),
-        
-        /// The result uses data from the central TPC.  This bit is set using
-        /// AddDetector() and checked using UsesDetector().
-        kTPC2           = BIT(29), 
-        
-        /// The result uses data from the upstream TPC.  This bit is set using
-        /// AddDetector() and checked using UsesDetector().
-        kTPC1           = BIT(30), 
-        
         /// A mask to check if the result includes data from the TPC.  This
         /// mask is checked using UsesDetector().
-	kTPC            = kTPC1|kTPC2|kTPC3,
-        
-        /// The result uses data from the P0D.  This bit is set using
-        /// AddDetector() and checked using UsesDetector().
-        kP0D            = BIT(31),
+        kTPC     = BIT(12),
 
         /// A mask for all of the detector bits.
-        kDetectorMask   = kSMRD|kPECal|kTECal|kDSECal|kFGD|kTPC|kP0D,
+        kDetectorMask   = kTPC,
     } StateBits;
     
     /// A status value with one or more bits sets
@@ -315,7 +226,6 @@ public:
     /// GetConstituents method, or using the normal TDatum::Get<> method.
     /// This will create a constituents sub-object if one doesn't exist.
     void AddConstituent(CP::THandle<CP::TReconBase> obj);
-
   
     /// Add several constituents in one go by adding all objects in a 
     /// TReconObjectContainer

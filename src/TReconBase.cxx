@@ -187,6 +187,11 @@ std::string CP::TReconBase::ConvertStatus() const {
         s+= "kalman";
         notFirst = true;
     }
+    if (CheckStatus(kStocasticFit)) {
+        if (notFirst) s+=":";
+        s+= "stocastic";
+        notFirst = true;
+    }
     s+= ")";
     return s;
 }
@@ -194,98 +199,9 @@ std::string CP::TReconBase::ConvertStatus() const {
 std::string CP::TReconBase::ConvertDetector() const {
     std::string s("(");
     bool notFirst = false;
-    if (UsesDetector(kP0D)) {
-        s+= "P0D";
-        notFirst = true;
-    }
-    if (UsesDetector(kTPC1)) {
+    if (UsesDetector(kTPC)) {
         if (notFirst) s+="-";
-        s+= "TPC1";
-        notFirst = true;
-    }
-    if (UsesDetector(kTPC2)) {
-        if (notFirst) s+="-";
-        s+= "TPC2";
-        notFirst = true;
-    }
-    if (UsesDetector(kTPC3)) {
-        if (notFirst) s+="-";
-        s+= "TPC3";
-        notFirst = true;
-    }
-    if (UsesDetector(kFGD1)) {
-        if (notFirst) s+="-";
-        s+= "FGD1";
-        notFirst = true;
-    }
-    if (UsesDetector(kFGD2)) {
-        if (notFirst) s+="-";
-        s+= "FGD2";
-        notFirst = true;
-    }
-    if (UsesDetector(kDSECal)) {
-        if (notFirst) s+="-";
-        s+= "DSECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kRightTECal)) {
-        if (notFirst) s+="-";
-        s+= "RTECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kTopTECal)) {
-        if (notFirst) s+="-";
-        s+= "TTECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kLeftTECal)) {
-        if (notFirst) s+="-";
-        s+= "LTECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kBottomTECal)) {
-        if (notFirst) s+="-";
-        s+= "BTECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kRightPECal)) {
-        if (notFirst) s+="-";
-        s+= "RPECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kTopPECal)) {
-        if (notFirst) s+="-";
-        s+= "TPECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kLeftPECal)) {
-        if (notFirst) s+="-";
-        s+= "LPECal"; 
-        notFirst = true;
-    }
-    if (UsesDetector(kBottomPECal)) {
-        if (notFirst) s+="-";
-        s+= "BPECal";
-        notFirst = true;
-    }
-    if (UsesDetector(kRightSMRD)) {
-        if (notFirst) s+="-";
-        s+= "RSMRD";
-        notFirst = true;
-    }
-    if (UsesDetector(kTopSMRD)) {
-        if (notFirst) s+="-";
-        s+= "TSMRD";
-        notFirst = true;
-    }
-    if (UsesDetector(kLeftSMRD)) {
-        if (notFirst) s+="-";
-        s+= "LSMRD";
-        notFirst = true;
-    }
-    if (UsesDetector(kBottomSMRD)) {
-        if (notFirst) s+="-";
-        s+= "BSMRD";
+        s+= "TPC";
         notFirst = true;
     }
     s+= ")";
