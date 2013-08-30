@@ -1,5 +1,7 @@
 #include "TReconPID.hxx"
 
+#include <sstream>
+
 ClassImp(CP::TReconPID);
 
 CP::TReconPID::TReconPID() {
@@ -281,24 +283,34 @@ std::string CP::TReconPID::ConvertParticleId() const {
 }
 
 std::string CP::TReconPID::ConvertParticleId(CP::TReconPID::ParticleId id){
-    std::string s("");
 
-    if (id == kNotSet)     s= "Not Set";
-    if (id == kOther)      s= "Other";
-    if (id == kShower)     s= "Shower";
-    if (id == kEM)         s= "EM";
-    if (id == kElectron)   s= "Electron";
-    if (id == kGamma)      s= "Gamma";
-    if (id == kHadronic)   s= "Hadronic";
-    if (id == kPiZero)     s= "Pi0";
-    if (id == kLightTrack) s= "Light track";
-    if (id == kMuon)       s= "Muon";
-    if (id == kPion)       s= "Pion";
-    if (id == kHeavyTrack) s= "Heavy track";
-    if (id == kProton)     s= "Proton";
-    if (id == kKaon)       s= "Kaon";
+    switch (id) {
+    case kNotSet:      return std::string("Not Set");
+    case kOther:       return std::string("Other");
 
-    return s;
+    case kShower:      return std::string("Shower");
+    case kEM:          return std::string("EM");
+    case kElectron:    return std::string("Electron");
+    case kGamma:       return std::string("Gamma");
+    case kHadronic:    return std::string("Hadronic");
+
+    case kTrack:       return std::string("Track");
+    case kLightTrack:  return std::string("Light-Track");
+    case kMuon:        return std::string("Muon");
+    case kPion:        return std::string("Pion");
+    case kHeavyTrack:  return std::string("Heavy-Track");
+    case kProton:      return std::string("Proton");
+        
+    case kUser:        return std::string("User");
+    default:
+        int val = id - kUser;
+        if (val > 0)   {
+            std::ostringstream stream;
+            stream << "User" << val;
+            return stream.str();
+        }
+    }
+    return std::string("Invalid");
 }
 
 void CP::TReconPID::ls(Option_t *opt) const {

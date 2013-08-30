@@ -29,11 +29,11 @@ public:
     /// Define the particle types.  
     typedef enum {
         /// A particle that has not been handled by PID.
-        kNotSet,
+        kNotSet = 0,
 
         /// A particle that has been handled by PID, but was not
         /// successfully identified.
-        kOther,
+        kOther = 10,
 
         /// \name Showering Particle Types
         /// These are particle types that are often associated with
@@ -41,10 +41,10 @@ public:
         /// @{
         
         /// A generic shower.
-        kShower, 
+        kShower = 1000, 
 
         /// An electro magnetic shower.
-        kEM, 
+        kEM = 1100, 
         
         /// An electron.  Keep in mind that in the TPC, an electron will be
         /// reconstructed as a track, and then identified based on dEdX.
@@ -54,11 +54,13 @@ public:
         kGamma, 
         
         /// A generic hadronic shower.
-        kHadronic, 
+        kHadronic = 1200, 
 
-        /// A directly identified pizero. 
-        kPiZero,
         /// @}
+
+        /// A generic track that might be either a light or heavily ionizing
+        /// particle.
+        kTrack = 2000,
 
         /// @name Minimum Ionizing, or Light Particle Types
         /// These are particles that produce tracks with small ionization, or
@@ -66,8 +68,8 @@ public:
         /// particles will be muons, or possibly charged pions. 
         /// @{
 
-        /// A generic track, typically a MIP.
-        kLightTrack,
+        /// A generic track that is not heavily ionizing, typically a MIP.
+        kLightTrack= 2100,
 
         /// A track that has been identified as a muon.
         kMuon, 
@@ -81,14 +83,22 @@ public:
         /// @{
         
         /// A generic heavy track.
-        kHeavyTrack, 
+        kHeavyTrack = 2200, 
         
         /// A track identified as a proton.
         kProton,
 
-        /// A track identified as a kaon.
-        kKaon
         /// @}
+
+        /// @{ A particle that has a special "user" specified meaning.  These
+        /// are reserved for algorithms that might combine particles in
+        /// unanticipated ways (e.g. an algorithm that takes two particles and
+        /// identifies the combination as a pizero).  The meaning of these
+        /// identifiers are algorithm dependent.
+        kUser = 3000,
+        kUser1, kUser2, kUser3, kUser4, kUser5, kUser6, kUser7, kUser8, kUser9,
+        /// @}
+
     } ParticleId;
 
     /// Return a handle to the state.
@@ -172,7 +182,6 @@ private:
     /// avoid infinite recursion in alternates. It is used by the copy
     /// constructors
     void CopyTReconPID(const CP::TReconPID& pid);
-
 
     /// The particle id.
     ParticleId fParticleId;
