@@ -5,6 +5,7 @@ ClassImp(CP::TReconTrack);
 
 CP::TReconTrack::TReconTrack() {
     fState = new TTrackState;
+    fBackState = new TTrackState;
     fNodes = new TReconNodeContainerImpl<CP::TTrackState>;
 }
 
@@ -36,6 +37,15 @@ CP::TReconTrack::TReconTrack(const CP::TReconTrack& track)
     else {
         fState = new TTrackState;
     }
+
+    if (track.GetBack()) {
+        CP::THandle<CP::TTrackState> state = track.GetBack();  
+        fBackState = new TTrackState(*state);
+    }
+    else {
+        fBackState = new TTrackState;
+    }
+
 }
 
 CP::TReconTrack::~TReconTrack() {}

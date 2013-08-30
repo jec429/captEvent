@@ -34,9 +34,29 @@ public:
 
     virtual ~TReconTrack();
 
-    /// Return a handle to the state.
+    /// Return a handle to the state.  The state at the front end of the track
+    /// is not necessarily the same as the state at the first node.  For
+    /// instance, the first node may have a finite extent, and the starting
+    /// state of the track will be the estimated state at the edge of the node
+    /// extent.  The state of the node will be the state of the track at the
+    /// center of the node.
     CP::THandle<CP::TTrackState> GetState() const {
         return GetReconState();
+    }
+
+    /// Return a handle to the state at the front end of the track.  The front
+    /// and back of the track are defined by the order of the nodes.  See
+    /// GetState() for more details.
+    CP::THandle<CP::TTrackState> GetFront() const {
+        return GetState();
+    }
+
+    /// Return a handle to the state at the back end of the track.  The front
+    /// and back of the track are defined by the order of the nodes.  The
+    /// state at the back end of the track may not be the same as the state of
+    /// the last node.  See GetState() for more details.
+    CP::THandle<CP::TTrackState> GetBack() const {
+        return CP::THandle<CP::TTrackState>(fBackState,false);
     }
 
     /// Get the energy deposited in the track.
@@ -69,6 +89,11 @@ public:
     /// Get the width of the track.
     TVector3 GetWidth() const;
 
-    ClassDef(TReconTrack,1);
+private:
+
+    /// The state of the track at the back end.
+    CP::TTrackState* fBackState;
+
+    ClassDef(TReconTrack,2);
 };
 #endif

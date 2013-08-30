@@ -84,21 +84,14 @@ namespace tut {
         ensure("TPC is not used by default",
                !base.UsesDetector(CP::TReconBase::kTPC));
 
-        base.AddDetector(CP::TReconBase::kTPC1);
-        ensure("TPC1 was added",
-               base.UsesDetector(CP::TReconBase::kTPC1));
-        ensure("TPC2 was not added",
-               !base.UsesDetector(CP::TReconBase::kTPC2));
-        ensure("TPC3 was not added",
-               !base.UsesDetector(CP::TReconBase::kTPC3));
-        ensure("A TPC module was added",
+        base.AddDetector(CP::TReconBase::kTPC);
+        ensure("TPC was added",
                base.UsesDetector(CP::TReconBase::kTPC));
 
-        base.RemoveDetector(CP::TReconBase::kTPC1);
-        ensure("TPC1 was removed",
-               !base.UsesDetector(CP::TReconBase::kTPC1));
-        ensure("No TPC modules are used",
+        base.RemoveDetector(CP::TReconBase::kTPC);
+        ensure("TPC was removed",
                !base.UsesDetector(CP::TReconBase::kTPC));
+
     }
 
     // Check the copy constructor.
