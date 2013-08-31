@@ -218,7 +218,8 @@ void CP::TReconBase::ls(Option_t *opt) const {
         fState->ls(opt);
         TROOT::DecreaseDirLevel();
     }
-    if (fNodes && option.find("dump") != std::string::npos) {
+    if (fNodes && (option.find("dump") != std::string::npos
+                   || option.find("recon") != std::string::npos)) {
         TROOT::IncreaseDirLevel();
         fNodes->ls(opt);
         TROOT::DecreaseDirLevel();

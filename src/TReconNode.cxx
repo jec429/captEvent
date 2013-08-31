@@ -9,6 +9,8 @@ CP::TReconNode::TReconNode()
 CP::TReconNode::~TReconNode() {}
 
 void CP::TReconNode::ls(Option_t *opt) const {
+    std::string option(opt);
+
     TROOT::IndentLevel();
     std::cout << ClassName() << "(" << this << ")::" << std::endl;
     TROOT::IncreaseDirLevel();
@@ -22,7 +24,17 @@ void CP::TReconNode::ls(Option_t *opt) const {
         std::cout << "State Information is missing" << std::endl;
     }
     if (fObject) {
-        fObject->ls(opt);
+        if (option.find("dump") != std::string::npos) {
+            fObject->ls(opt);
+        }
+        else if (option.find("recon") != std::string::npos) {
+            // Dump the top level object, but not any children.
+            fObject->ls("");
+        }
+        else {
+            TROOT::IndentLevel();
+            std::cout << "Object Information not shown" << std::endl;
+        }
     }
     else {
         TROOT::IndentLevel();
