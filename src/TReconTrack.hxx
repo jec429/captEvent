@@ -87,7 +87,7 @@ public:
     double GetCurvature() const;
 
     /// Get the width of the track.
-    TVector3 GetWidth() const;
+    double GetWidth() const;
 
 private:
 

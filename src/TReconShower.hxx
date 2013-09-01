@@ -58,7 +58,7 @@ public:
     TVector3 GetDirection() const;
 
     /// Get the shower opening angle
-    TVector3 GetConeAngle() const;
+    double GetConeAngle() const;
 
     ClassDef(TReconShower,1);
 };

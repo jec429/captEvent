@@ -333,23 +333,23 @@ public:
     virtual ~TMConeState();
 
     /// Get the value of the Cone.
-    TVector3 GetCone() const;
+    double GetCone() const;
 
     /// Set the value of the Cone.
-    void SetCone(double c1, double c2);
+    void SetCone(double c1);
 
     /// Get the variance of the Cone.
-    TVector3 GetConeVariance(void) const;
+    double GetConeVariance(void) const;
 
     /// Set the variance of the Cone.
-    void SetConeVariance(double c1, double c2);
+    void SetConeVariance(double c1);
 
     /// Get the index of the Cone field in the TCorrValues vector.
     int GetConeIndex() const {return fConeIndex;}
 
     /// Return the number of entries for the Cone in the TCorrValues
     /// vector.
-    static int GetSize() {return 2;}
+    static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
@@ -424,9 +424,8 @@ public:
 };
 
 /// A mixable base class that adds the width of a curvilinear energy deposit
-/// property to a state.  The width is a 2 component vector the extent of an
-/// energy deposition perpendicular to local direction and the associated
-/// uncertainties.
+/// property to a state.  The width is the extent of an energy deposition
+/// perpendicular to local direction and the associated uncertainties.
 class CP::TMWidthState: virtual public TMReconState {
 public:
     TMWidthState();
@@ -434,23 +433,23 @@ public:
     virtual ~TMWidthState();
 
     /// Get the value of the Width.
-    TVector3 GetWidth() const;
+    double GetWidth() const;
 
     /// Set the value of the Width.
-    void SetWidth(double w1, double w2);
+    void SetWidth(double w1);
 
     /// Get the variance of the Width.
-    TVector3 GetWidthVariance(void) const;
+    double GetWidthVariance(void) const;
 
     /// Set the variance of the Width.
-    void SetWidthVariance(double w1, double w2);
+    void SetWidthVariance(double w1);
 
     /// Get the index of the Width field in the TCorrValues vector.
     int GetWidthIndex() const {return fWidthIndex;}
 
     /// Return the number of entries for the Width in the TCorrValues
     /// vector.
-    static int GetSize() {return 2;}
+    static int GetSize() {return 1;}
 
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);

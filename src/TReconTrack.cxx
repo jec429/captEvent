@@ -111,7 +111,7 @@ double CP::TReconTrack::GetCurvature() const {
     return state->GetCurvature();
 }
 
-TVector3 CP::TReconTrack::GetWidth() const {
+double CP::TReconTrack::GetWidth() const {
     THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetWidth();

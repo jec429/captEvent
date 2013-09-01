@@ -132,8 +132,8 @@ namespace tut {
         const double curvature = 2.17;
         recState->SetCurvature(curvature);
 
-        const TVector3 width(0.3, 0.4, 0.0);
-        recState->SetWidth(width.X(), width.Y());
+        const double width(0.3);
+        recState->SetWidth(width);
         
         ensure_distance("Track energy deposit saved",
                         recObj.GetEDeposit(), eDeposit, 0.00001);
@@ -148,7 +148,7 @@ namespace tut {
                         recObj.GetCurvature(), curvature, 0.00001);
 
         ensure_lessthan("Track width saved",
-                        (recObj.GetWidth()-width).Mag(), 0.0001);
+                        (recObj.GetWidth()-width), 0.0001);
 
     }
 

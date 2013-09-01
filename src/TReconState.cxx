@@ -485,52 +485,41 @@ CP::TMConeState::~TMConeState() {}
 
 CP::TMConeState::TMConeState() {
     fConeIndex = fLocalNames.size();
-    fLocalNames.push_back("C1");
-    fLocalNames.push_back("C2");
+    fLocalNames.push_back("Cone");
 }
 
-TVector3 CP::TMConeState::GetCone() const {
-    return TVector3(GetThis().GetValue(fConeIndex),
-                    GetThis().GetValue(fConeIndex+1),
-                    0);
+double CP::TMConeState::GetCone() const {
+    return GetThis().GetValue(fConeIndex);
 }
 
-void CP::TMConeState::SetCone(double x, double y) {
+void CP::TMConeState::SetCone(double x) {
     GetThis().SetValue(fConeIndex,x);
-    GetThis().SetValue(fConeIndex+1,y);
 }
 
-TVector3 CP::TMConeState::GetConeVariance() const {
-    return TVector3(GetThis().GetCovarianceValue(fConeIndex,
-                                                    fConeIndex),
-                    GetThis().GetCovarianceValue(fConeIndex+1,
-                                                    fConeIndex+1),
-                    0);
+double CP::TMConeState::GetConeVariance() const {
+    return GetThis().GetCovarianceValue(fConeIndex,fConeIndex);
 }
 
-void CP::TMConeState::SetConeVariance(double x, double y) {
-    GetThis().SetCovarianceValue(fConeIndex,
-                                         fConeIndex,x);
-    GetThis().SetCovarianceValue(fConeIndex+1,
-                                         fConeIndex+1,y);
+void CP::TMConeState::SetConeVariance(double x) {
+    GetThis().SetCovarianceValue(fConeIndex,fConeIndex,x);
 }
 
-CP::TCorrValues CP::TMConeState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
+CP::TCorrValues 
+CP::TMConeState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TMConeState::GetSize());
-    values.SetType("C1 C2 ");
+    values.SetType("Cone ");
     const TMConeState* coneState 
         = dynamic_cast<const TMConeState*>(GetPointer(proj));
     int base = 0;
     if (coneState) {
         const int offset = coneState->GetConeIndex();
         for (int i = 0; i < TMConeState::GetSize(); ++i) {
-            values.SetValue(i+base,
-                            coneState->GetThis().GetValue(i+offset));
+            values.SetValue(i+base,coneState->GetThis().GetValue(i+offset));
             for (int j = 0; j < TMConeState::GetSize(); ++j) {
                 values.SetCovarianceValue(
                     i+base, j+base,
                     coneState->GetThis().GetCovarianceValue(i+offset,
-                                                                    j+offset));
+                                                            j+offset));
             }
         }
     }
@@ -542,35 +531,24 @@ CP::TMWidthState::~TMWidthState() {}
 
 CP::TMWidthState::TMWidthState() {
     fWidthIndex = fLocalNames.size();
-    fLocalNames.push_back("W1");
-    fLocalNames.push_back("W2");
+    fLocalNames.push_back("width");
 }
 
 
-TVector3 CP::TMWidthState::GetWidth() const {
-    return TVector3(GetThis().GetValue(fWidthIndex),
-                    GetThis().GetValue(fWidthIndex+1),
-                    0);
+double CP::TMWidthState::GetWidth() const {
+    return GetThis().GetValue(fWidthIndex);
 }
 
-void CP::TMWidthState::SetWidth(double x, double y) {
+void CP::TMWidthState::SetWidth(double x) {
     GetThis().SetValue(fWidthIndex,x);
-    GetThis().SetValue(fWidthIndex+1,y);
 }
 
-TVector3 CP::TMWidthState::GetWidthVariance() const {
-    return TVector3(GetThis().GetCovarianceValue(fWidthIndex,
-                                                    fWidthIndex),
-                    GetThis().GetCovarianceValue(fWidthIndex+1,
-                                                    fWidthIndex+1),
-                    0);
+double CP::TMWidthState::GetWidthVariance() const {
+    return GetThis().GetCovarianceValue(fWidthIndex,fWidthIndex);
 }
 
-void CP::TMWidthState::SetWidthVariance(double x, double y) {
-    GetThis().SetCovarianceValue(fWidthIndex,
-                                         fWidthIndex,x);
-    GetThis().SetCovarianceValue(fWidthIndex+1,
-                                         fWidthIndex+1,y);
+void CP::TMWidthState::SetWidthVariance(double x) {
+    GetThis().SetCovarianceValue(fWidthIndex,fWidthIndex,x);
 }
 
 CP::TCorrValues CP::TMWidthState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
@@ -588,7 +566,7 @@ CP::TCorrValues CP::TMWidthState::ProjectState(const CP::THandle<CP::TReconState
                 values.SetCovarianceValue(
                     i+base, j+base,
                     wdthState->GetThis().GetCovarianceValue(i+offset,
-                                                                    j+offset));
+                                                            j+offset));
             }
         }
     }

@@ -129,8 +129,8 @@ namespace tut {
         dir = dir.Unit();
         recState->SetDirection(dir);
 
-        const TVector3 coneAngle(0.3, 0.4, 0.0);
-        recState->SetCone(coneAngle.X(), coneAngle.Y());
+        const double coneAngle(0.3);
+        recState->SetCone(coneAngle);
         
         ensure_distance("Shower energy deposit saved",
                         recObj.GetEDeposit(), eDeposit, 0.00001);
@@ -142,7 +142,7 @@ namespace tut {
                         (recObj.GetDirection()-dir).Mag(), 0.0001);
 
         ensure_lessthan("Shower coneAngle saved",
-                        (recObj.GetConeAngle()-coneAngle).Mag(), 0.0001);
+                        (recObj.GetConeAngle()-coneAngle), 0.0001);
 
     }
 };

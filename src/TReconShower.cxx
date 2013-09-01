@@ -96,7 +96,7 @@ TVector3 CP::TReconShower::GetDirection() const {
     return state->GetDirection();
 }
 
-TVector3 CP::TReconShower::GetConeAngle() const {
+double CP::TReconShower::GetConeAngle() const {
     THandle<CP::TShowerState> state = GetState();
     if (!state) throw EMissingField();
     return state->GetCone();
