@@ -1,6 +1,7 @@
 #include "TUnitsTable.hxx"
 
 #include "TCaptLog.hxx"
+#include "TCorrValues.hxx"
 #include "HEPUnits.hxx"
 
 #include <iostream>
@@ -255,4 +256,91 @@ void CP::TUnitsTable::PrintListOfUnits() {
                   <<  std::endl;
     }
     std::cout << std::endl;
+}
+
+std::string unit::AsString(double val, double sig, std::string type) {
+    CP::TUnitsTable& u = CP::TUnitsTable::Get();
+    std::ostringstream measure;
+    if (type == "length") {
+        measure << u.ConvertLength(val);
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << u.ConvertLength(sig);
+        }
+    }
+    else if (type == "time") {
+        measure << u.ConvertTime(val);
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << u.ConvertTime(sig);
+        }
+    }
+    else if (type == "direction") {
+        measure << std::fixed;
+        measure << std::setprecision(3);
+        measure << val;
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << sig;
+        }
+    }
+    else if (type == "angle") {
+        measure << std::fixed;
+        measure << std::setprecision(1);
+        measure << val/unit::degree;
+        if (sig<0) measure << " deg";
+        else if (CP::TCorrValues::IsFree(sig)) measure << " deg (free)";
+        else if (CP::TCorrValues::IsFixed(sig)) measure << " deg (fixed)";
+        else measure << "+-" << sig/unit::degree << " deg";
+    }
+    else if (type == "pe") {
+        measure << std::fixed;
+        measure << std::setprecision(1);
+        measure << val;
+        if (sig<0) measure << " pe";
+        else if (CP::TCorrValues::IsFree(sig)) measure << " pe (free)";
+        else if (CP::TCorrValues::IsFixed(sig)) measure << " pe (fixed)";
+        else measure << "+-" << sig << " pe";
+    }
+    else if (type == "momentum") {
+        measure << std::fixed;
+        measure << std::setprecision(1);
+        measure << val/unit::MeV << " MeV/c";
+        if (sig<0) measure << " MeV/c";
+        else if (CP::TCorrValues::IsFree(sig)) measure << " MeV/c (free)";
+        else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV/c (fixed)";
+        else measure << "+-" << sig << " MeV/c";
+    }
+    else if (type == "charge") {
+        measure << std::fixed;
+        measure << std::setprecision(1);
+        measure << val;
+        if (sig<0) measure << " e";
+        else if (CP::TCorrValues::IsFree(sig)) measure << " e (free)";
+        else if (CP::TCorrValues::IsFixed(sig)) measure << " e (fixed)";
+        else measure << "+-" << sig << " e";
+    }
+    else {
+        measure << std::fixed;
+        measure << std::setprecision(3);
+        measure << val;
+        if (sig<0) measure << " <" << type << ">";
+        else if (CP::TCorrValues::IsFree(sig)) {
+            measure << " <" << type << "> (free)";
+        }
+        else if (CP::TCorrValues::IsFixed(sig)) {
+            measure << " <" << type << "> (fixed)";
+        }
+        else measure << "+-" << sig << " <" << type << ">";
+    }
+
+    
+    return measure.str();
+}
+
+std::string unit::AsString(double val, std::string type) {
+    return AsString(val,-1.0,type);
 }

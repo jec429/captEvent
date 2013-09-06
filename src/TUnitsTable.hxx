@@ -7,6 +7,24 @@ namespace CP {
     class TUnitsTable;
 };
 
+namespace unit {
+    /// Take a value with a unit type and an uncertainty on the value and
+    /// format it into a string.  This handles values that are free, or fixed
+    /// based on the magnituded of the uncertainty (as defined by
+    /// CP::TCorrValues::IsFixed() and CP::TCorrValues::IsFree()).  This knows
+    /// about the following unit types: length, time, direction, angle,
+    /// momentum, and charge.  If the uncertainty is negative, then only the
+    /// value is printed. This provides a simplified interface to the
+    /// CP::TUnitsTable value conversion routines.
+    std::string AsString(double val, double sig, std::string type);
+
+    /// Take a value with a unit type and format it into a string.  This knows
+    /// about the following unit types: length, time, direction, angle,
+    /// momentum, and charge.  This provides a simplified interface to the
+    /// CP::TUnitsTable value conversion routines.
+    std::string AsString(double val, std::string type);
+};
+
 /// This class provides a method for converting a string like "1.5 cm" into a
 /// double with the appropriate unit.  To do so it defines a set of units,
 /// using the same base units as in HEPUnits.hxx (e.g. mm, ns, MeV).  Only a
