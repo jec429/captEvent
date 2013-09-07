@@ -4,6 +4,9 @@
 #include "TCorrValues.hxx"
 #include "HEPUnits.hxx"
 
+#include <TVector3.h>
+#include <TLorentzVector.h>
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -352,6 +355,15 @@ std::string unit::AsString(double val, double sig, std::string type) {
         else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV/c (fixed)";
         else measure << "+-" << sig << " MeV/c";
     }
+    else if (type == "energy") {
+        measure << std::fixed;
+        measure << std::setprecision(1);
+        measure << val/unit::MeV << " MeV";
+        if (sig<0) measure << " MeV";
+        else if (CP::TCorrValues::IsFree(sig)) measure << " MeV (free)";
+        else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV (fixed)";
+        else measure << "+-" << sig << " MeV";
+    }
     else if (type == "electrons" || type == "pe") {
         measure << std::fixed;
         measure << std::setprecision(1);
@@ -361,7 +373,7 @@ std::string unit::AsString(double val, double sig, std::string type) {
         else if (CP::TCorrValues::IsFixed(sig)) measure << " e (fixed)";
         else measure << "+-" << sig << " e";
     }
-    else {
+    else if (type != "") {
         measure << std::fixed;
         measure << std::setprecision(3);
         measure << val;
@@ -374,6 +386,19 @@ std::string unit::AsString(double val, double sig, std::string type) {
         }
         else measure << "+-" << sig << " <" << type << ">";
     }
+    else {
+        measure << std::fixed;
+        measure << std::setprecision(4);
+        measure << val;
+        if (sig<0) measure << "";
+        else if (CP::TCorrValues::IsFree(sig)) {
+            measure << " (free)";
+        }
+        else if (CP::TCorrValues::IsFixed(sig)) {
+            measure << " (fixed)";
+        }
+        else measure << "+-" << sig;
+    }
 
     
     return measure.str();
@@ -381,4 +406,46 @@ std::string unit::AsString(double val, double sig, std::string type) {
 
 std::string unit::AsString(double val, std::string type) {
     return AsString(val,-1.0,type);
+}
+
+std::string unit::AsString(const TVector3& val, std::string type) {
+    std::ostringstream measure;
+    if (type != "") {
+        measure << "(" << unit::AsString(val.X(),type)
+                << ", " << unit::AsString(val.Y(),type)
+                << ", " << unit::AsString(val.Z(),type) << ")";
+    }
+    else {
+        measure << "(" << unit::AsString(val.X(),type)
+                << ", " << unit::AsString(val.Y(),type)
+                << ", " << unit::AsString(val.Z(),type)
+                << ")";
+    }
+    return measure.str();
+}
+
+std::string unit::AsString(const TLorentzVector& val, std::string type) {
+    std::ostringstream measure;
+    if (type =="length") {
+        measure << "(" << unit::AsString(val.X(),"length")
+                << ", " << unit::AsString(val.Y(),"length")
+                << ", " << unit::AsString(val.Z(),"length")
+                << ", " << unit::AsString(val.T(),"time")
+                << ")";
+    }
+    else if (type =="momentum") {
+        measure << "(" << unit::AsString(val.X(),"momentum")
+                << ", " << unit::AsString(val.Y(),"momentum")
+                << ", " << unit::AsString(val.Z(),"momentum")
+                << ", " << unit::AsString(val.T(),"energy")
+                << ")";
+    }
+    else {
+        measure << "(" << unit::AsString(val.X(),type)
+                << ", " << unit::AsString(val.Y(),type)
+                << ", " << unit::AsString(val.Z(),type)
+                << ", " << unit::AsString(val.T(),type)
+                << ")";
+    }
+    return measure.str();
 }

@@ -1,11 +1,15 @@
 #ifndef TUnitsTable_h
 #define TUnitsTable_h 
+
 #include <string>
 #include <map>
 
 namespace CP {
     class TUnitsTable;
 };
+
+class TVector3;
+class TLorentzVector;
 
 namespace unit {
     /// Take a value with a unit type and an uncertainty on the value and
@@ -23,6 +27,21 @@ namespace unit {
     /// momentum, and charge.  This provides a simplified interface to the
     /// CP::TUnitsTable value conversion routines.
     std::string AsString(double val, std::string type);
+
+    /// Take a TVector3 with a unit type and format it into a string.  This
+    /// knows about the following unit types: length, time, direction, angle,
+    /// momentum, and charge.  If the type is empty, then the vector is
+    /// converted as a pure number.  This provides a simplified interface to
+    /// the CP::TUnitsTable value conversion routines.
+    std::string AsString(const TVector3& val, std::string type = "");
+
+    /// Take a TLorentzVector with a unit type and format it into a string.
+    /// This knows about the following unit types: length, time, direction,
+    /// angle, momentum, and charge.  If the type is empty, then the vector is
+    /// converted as a pure number.  This provides a simplified interface to
+    /// the CP::TUnitsTable value conversion routines.
+    std::string AsString(const TLorentzVector& val, std::string type = "");
+
 };
 
 /// This class provides a method for converting a string like "1.5 cm" into a
