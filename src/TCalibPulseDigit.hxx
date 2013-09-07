@@ -20,9 +20,10 @@ namespace CP {
 /// and stop times are held in doubles.  It also holds a pointer to the
 /// original (uncalibrated) CP::TPulseDigit object.  While this class is
 /// intended to hold intermediate, temporary results, it can, but is not
-/// intended to, be saved to a file.  Notice that TCalibPulseDigit objects are
-/// mutable.  This is so they can be modified in the course of the calibration
-/// and reduce the amount of copying.
+/// intended to, be saved to a file (e.g. to debug the calibration and for
+/// event display).  Notice that TCalibPulseDigit objects are mutable.  This
+/// is so they can be modified in the course of the calibration and reduce the
+/// amount of copying.
 class CP::TCalibPulseDigit : public TDigit {
 public:
     typedef std::vector<float> Vector;
