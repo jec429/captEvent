@@ -142,11 +142,15 @@ namespace unit {
     const double eplus = 1. ;		    // positron charge
     const double e_SI  = 1.60217733e-19;    // positron charge in coulomb
     const double coulomb = eplus/e_SI;	    // coulomb = 6.24150 e+18 * eplus
+    const double millicoulomb = milli*coulomb;
     const double microcoulomb = micro*coulomb;
-    const double femtocoulomb = femto*coulomb;
+    const double picocoulomb  = pico*coulomb;
+    const double femtocoulomb = femto*coulomb; // 6241.5 eplus
+    const double attocoulomb  = atto*coulomb;  // 6.24 eplus
 
     // symbols
     const double fC = femtocoulomb;
+    const double aC = attocoulomb;
     ///@}
 
     /// Energy [E]

@@ -54,6 +54,11 @@ public:
     /// and 999, and uu is a unit.
     std::string ConvertLength(double len);
 
+    /// Convert a charge value (i.e. in eplus) into a string for printing.  The
+    /// output will be formated as "xxx uu" where xxx is a number between -999
+    /// and 999, and uu is a unit.
+    std::string ConvertCharge(double q);
+
     /// Convert a time value (i.e. in ns) into a string for printing.  The
     /// output will be formated as "xxx uu" where xxx is a number between -999
     /// and 999, and uu is a unit.

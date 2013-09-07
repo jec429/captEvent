@@ -162,7 +162,7 @@ std::string CP::TUnitsTable::ConvertWithUnit(std::string input) {
 std::string CP::TUnitsTable::ConvertLength(double len) {
     std::stringstream output;
 
-    output << std::setprecision(3);
+    output << std::setprecision(4);
     double val = len/unit::km;
     if (std::abs(val) >= 1) {
         output << val << " km";
@@ -170,31 +170,31 @@ std::string CP::TUnitsTable::ConvertLength(double len) {
     }
     
     val = len/unit::m;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
         output << val << " m";
         return output.str();
     }
 
     val = len/unit::cm;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 100) {
+    if (std::abs(val) <= 1200 && std::abs(val) >= 100) {
         output << val << " cm";
         return output.str();
     }
 
     val = len/unit::mm;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
         output << val << " mm";
         return output.str();
     }
             
     val = len/unit::micrometer;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
         output << val << " um";
         return output.str();
     }
 
     val = len/unit::nm;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
         output << val << " nm";
         return output.str();
     }
@@ -205,10 +205,49 @@ std::string CP::TUnitsTable::ConvertLength(double len) {
     return output.str();
 }
 
+std::string CP::TUnitsTable::ConvertCharge(double q) {
+    std::stringstream output;
+
+    output << std::setprecision(4);
+    double val = q/unit::coulomb;
+    if (std::abs(val) >= 1) {
+        output << val << " C";
+        return output.str();
+    }
+    
+    val = q/unit::millicoulomb;
+    if (std::abs(val) >= 1) {
+        output << val << " mC";
+        return output.str();
+    }
+
+    val = q/unit::microcoulomb;
+    if (std::abs(val) >= 1) {
+        output << val << " uC";
+        return output.str();
+    }
+
+    val = q/unit::picocoulomb;
+    if (std::abs(val) >= 1) {
+        output << val << " pC";
+        return output.str();
+    }
+
+    val = q/unit::femtocoulomb;
+    if (std::abs(val) >= 1) {
+        output << val << " fC";
+        return output.str();
+    }
+
+    val = q/unit::attocoulomb;
+    output << val << " aC";
+    return output.str();
+}
+
 std::string CP::TUnitsTable::ConvertTime(double tim) {
     std::stringstream output;
 
-    output << std::setprecision(3);
+    output << std::setprecision(3) << std::fixed;
     double val = tim/(3600*unit::second);
     if (std::abs(val) >= 1) {
         output << val << " hr";
@@ -277,6 +316,14 @@ std::string unit::AsString(double val, double sig, std::string type) {
             else measure << "+-" << u.ConvertTime(sig);
         }
     }
+    else if (type == "charge") {
+        measure << u.ConvertCharge(val);
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << u.ConvertCharge(sig);
+        }
+    }
     else if (type == "direction") {
         measure << std::fixed;
         measure << std::setprecision(3);
@@ -296,15 +343,6 @@ std::string unit::AsString(double val, double sig, std::string type) {
         else if (CP::TCorrValues::IsFixed(sig)) measure << " deg (fixed)";
         else measure << "+-" << sig/unit::degree << " deg";
     }
-    else if (type == "pe") {
-        measure << std::fixed;
-        measure << std::setprecision(1);
-        measure << val;
-        if (sig<0) measure << " pe";
-        else if (CP::TCorrValues::IsFree(sig)) measure << " pe (free)";
-        else if (CP::TCorrValues::IsFixed(sig)) measure << " pe (fixed)";
-        else measure << "+-" << sig << " pe";
-    }
     else if (type == "momentum") {
         measure << std::fixed;
         measure << std::setprecision(1);
@@ -314,7 +352,7 @@ std::string unit::AsString(double val, double sig, std::string type) {
         else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV/c (fixed)";
         else measure << "+-" << sig << " MeV/c";
     }
-    else if (type == "charge") {
+    else if (type == "electrons" || type == "pe") {
         measure << std::fixed;
         measure << std::setprecision(1);
         measure << val;
