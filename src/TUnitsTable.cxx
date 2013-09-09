@@ -249,11 +249,36 @@ std::string CP::TUnitsTable::ConvertCharge(double q) {
 
 std::string CP::TUnitsTable::ConvertTime(double tim) {
     std::stringstream output;
+    double val;
 
-    output << std::setprecision(3) << std::fixed;
-    double val = tim/(3600*unit::second);
-    if (std::abs(val) >= 1) {
+    val = tim/(365*24*3600*unit::second);
+    if (std::abs(val) >= 100) {
+        output << val << " yr";
+        return output.str();
+    }
+    
+    output << std::setprecision(4);
+    val = tim/(7*24*3600*unit::second);
+    if (std::abs(val) >= 100) {
+        output << val << " wk";
+        return output.str();
+    }
+    
+    val = tim/(24*3600*unit::second);
+    if (std::abs(val) >= 3) {
+        output << val << " day";
+        return output.str();
+    }
+    
+    val = tim/(3600*unit::second);
+    if (std::abs(val) >= 15) {
         output << val << " hr";
+        return output.str();
+    }
+    
+    val = tim/(60*unit::second);
+    if (std::abs(val) > 15) {
+        output << val << " min";
         return output.str();
     }
     
@@ -264,25 +289,25 @@ std::string CP::TUnitsTable::ConvertTime(double tim) {
     }
 
     val = tim/unit::millisecond;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) >= 1) {
         output << val << " ms";
         return output.str();
     }
 
     val = tim/unit::microsecond;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) >= 1) {
         output << val << " us";
         return output.str();
     }
             
     val = tim/unit::nanosecond;
-    if (std::abs(val) <= 1000 && std::abs(val) >= 1) {
+    if (std::abs(val) >= 1) {
         output << val << " ns";
         return output.str();
     }
 
     val = tim;
-    if (val < 0.1*unit::ns) val = 0.0;
+    if (val < 0.001*unit::ns) val = 0.0;
     output << val/unit::ns << " ns";
 
     return output.str();

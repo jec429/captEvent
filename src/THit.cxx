@@ -147,6 +147,7 @@ void CP::THit::ls(Option_t *opt) const {
                   << "(" << CP::TUnitsTable::Get().ConvertLength(GetRMS().X())
                   << ", " << CP::TUnitsTable::Get().ConvertLength(GetRMS().Y())
                   << ", " << CP::TUnitsTable::Get().ConvertLength(GetRMS().Z())
+                  << ", " << CP::TUnitsTable::Get().ConvertTime(GetTimeRMS())
                   << ")"
                   << std::endl;
         TROOT::IndentLevel();
@@ -155,6 +156,7 @@ void CP::THit::ls(Option_t *opt) const {
                   << "(" << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().X())
                   << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Y())
                   << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Z())
+                  << ", " << CP::TUnitsTable::Get().ConvertTime(GetTimeUncertainty())
                   << ")"
                   << std::endl;
         TROOT::DecreaseDirLevel();
