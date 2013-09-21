@@ -33,37 +33,31 @@ namespace CP {
 /// running the program without an arguments.  The most common options are:
 ///
 /// \code
-///     -o <file>         Set the name of an output file.
-///                       Multiple output files can be provided.
-///     -a                Read all events
-///     -c <file>         Set the logging config file name
-///     -d                Increase the debug level
-///     -D <name>=[error,severe,warn,debug,trace]
-///                       Change the named debug level
-///     -f <event>        Look for a particular event number
-///     -f <run>,<event>    Look for a particular run and event number
-///     -G                Force a geometry file
-///     -g                Force the geometry to be saved
-///     -m                MIDAS input file
-///     -n <cnt>          Only read <cnt> events [Default: 1]
-///     -r                Open a ROOT file
-///     -s <cnt>          Skip <cnt> events
-///     -t [bpTPEFecC]    Only accept these triggers:
-///                          b  Beam triggers
-///                          p  Pedestal/noise triggers
-///                          T  TPC laser triggers
-///                          P  P0D light injection triggers
-///                          E  ECal LED triggers
-///                          F  FGD LED triggers
-///                          e  Electronics calibration triggers
-///                          c  TFB cosmic ray triggers
-///                          C  FGD cosmic ray triggers
-///     -u                Log memory usage
-///     -v                Increase the verbosity
-///     -V <name>=[quiet,log,info,verbose]
-///                       Change the named log level
-///
-///     -O <opt>[=<val>]  Set an option for the user code
+// usage: dump-event.exe [options] [input-file] ...
+
+// Options:
+//     -o <file>         Set the name of an output file.
+//                       Multiple output files can be provided.
+//     -a                Read all events
+//     -c <file>         Set the logging config file name
+//     -d                Increase the debug level
+//     -D <name>=[error,severe,warn,debug,trace]
+//                       Change the named debug level
+//     -f <event>        Look for an event number
+//     -f <run>,<event>  Look for a run and event number
+//     -G <file>         Force a geometry file
+//     -g                Don't save geometry in output
+//     -H                Debug THandle (slow)
+//     -n <cnt>          Only read <cnt> events  [Default: 1]
+//     -q                Decrease the verbosity
+//     -r                Open a ROOT file
+//     -R <override>     Name of an run-time parameter override file
+//     -s <cnt>          Skip <cnt> events
+//     -u                Log the memory and CPU usage
+//     -v                Increase the verbosity
+//     -V <name>=[quiet,log,info,verbose]
+//                       Change the named log level
+//     -O <opt>[=<val>]  Set an option for the user code
 /// \endcode
 ///
 /// \htmlonly
