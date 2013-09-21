@@ -107,8 +107,14 @@ void CP::TRuntimeParameters::ReadInputFile(std::string fileName,
                 if (fConstants.find(parameterName) == fConstants.end()) {
                     fRuntimeParameters[parameterName] = parValue;
                     // If fixParameters bool is set, fix this parameter now.
-                    if (fixParameters)
+                    if (fixParameters) {
+                        CaptLog("Override parameter \"" 
+                                << parameterName
+                                << "\" = \""
+                                << parValue
+                                << "\"");
                         fConstants.insert(parameterName);
+                    }
                 }
                 inputState = 0;
             }
