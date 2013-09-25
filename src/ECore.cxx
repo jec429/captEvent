@@ -2,10 +2,11 @@
 #include <cstdlib>
 
 #include "ECore.hxx"
-#include "Demangle.hxx"
 
 #ifdef _GNU_SOURCE
 #include <execinfo.h>
+#else
+#warning Not being compiled with gcc, so backtrace is not available.
 #endif
 
 unsigned int CP::ECore::gBacktraceSymbols = 5;
