@@ -159,10 +159,10 @@ protected:
 /// The position state is defined as a scaler and the
 /// associated uncertainty.  
 ///
-/// \bug The units of the energy deposit depend on the context.  For instance,
-/// before particle ID in the P0D, the deposit is in photo-electrons.  After
+/// \bug The units of the energy deposit depend on the context.  After
 /// particle ID, the deposit can be in uncalibrated or calibrated energy.  In
-/// the TPC the deposit might be in terms of fempto-coulombs.
+/// the TPC the deposit might be in terms of fempto-coulombs, but for a PMT
+/// the deposit might be based on photo-electrons.
 class CP::TMEDepositState: virtual public TMReconState {
 public:
     TMEDepositState();

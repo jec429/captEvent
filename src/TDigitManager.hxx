@@ -81,15 +81,15 @@ public:
     /// used as a diagnostic tool.
     void PersistentDigits(void) {fPersistentDigits=true;}
 
-    /// @{A Low level interface used to implement TEvent::GetDigits().
-    /// The higher level digit interface, TEvent::GetDigits() should be
-    /// prefered.  This gets the digit container for a type of data ("fgd",
-    /// "p0d", &c).  If the digits are available, this will return a valid
-    /// handle to the container, otherwise it will return a "NULL" handle.
-    /// This first checks to see if the requested digits have already been
-    /// unpacked using the available digit factories, and then if necessary,
-    /// will use the factories to find the digits.  By default, the cached
-    /// digits are saved as temporary banks, but can be made persistent using
+    /// @{A Low level interface used to implement TEvent::GetDigits().  The
+    /// higher level digit interface, TEvent::GetDigits() should be prefered.
+    /// This gets the digit container for a type of data.  If the digits are
+    /// available, this will return a valid handle to the container, otherwise
+    /// it will return a "NULL" handle.  This first checks to see if the
+    /// requested digits have already been unpacked using the available digit
+    /// factories, and then if necessary, will use the factories to find the
+    /// digits.  By default, the cached digits are saved as temporary banks,
+    /// but can be made persistent using
     /// TManager::Get().Digits().PersistentDigits().
     CP::THandle<CP::TDigitContainer> CacheDigits(std::string type);
     CP::THandle<CP::TDigitContainer> CacheDigits(CP::TEvent& event,

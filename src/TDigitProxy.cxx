@@ -72,12 +72,7 @@ CP::TDigitContainer& CP::TDigitProxy::GetContainer() const {
 }
 
 enum CP::TDigitProxy::ProxyType CP::TDigitProxy::ConvertName(std::string name) {
-    if (name == "p0d") return kP0D;
     if (name == "tpc") return kTPC;
-    if (name == "fgd") return kFGD;
-    if (name == "ecal") return kECal;
-    if (name == "smrd") return kSMRD;
-    if (name == "ingrid") return kINGRID;
     if (name == "test") return kTest;
     return kInvalid;
 }
@@ -88,12 +83,7 @@ std::string CP::TDigitProxy::ConvertType(int type) {
     // Find the name of the TDigitContainer based on the proxy type.
     switch (type) {
     case kTest: name = "test"; break;
-    case kP0D: name = "p0d"; break;
     case kTPC: name = "tpc"; break;
-    case kFGD: name = "fgd"; break;
-    case kECal: name = "ecal"; break;
-    case kSMRD: name = "smrd"; break;
-    case kINGRID: name = "ingrid"; break;
     case kInvalid: name = "invalid"; break;
     default:
         throw EDigitTypeInvalid();
@@ -150,12 +140,7 @@ void CP::TDigitProxy::SetProxyOffset(int off) {
 bool CP::TDigitProxy::IsValid() const {
     if (GetProxyOffset() == 0x1FFFFu) return false;
     if (GetProxyType() == kTest) return true;
-    if (GetProxyType() == kP0D) return true;
     if (GetProxyType() == kTPC) return true;
-    if (GetProxyType() == kFGD) return true;
-    if (GetProxyType() == kECal) return true;
-    if (GetProxyType() == kSMRD) return true;
-    if (GetProxyType() == kINGRID) return true;
     return false;
 }
 
