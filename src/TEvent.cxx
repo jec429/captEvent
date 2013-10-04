@@ -95,7 +95,7 @@ CP::THandle<CP::TDigitContainer> CP::TEvent::GetDigits(const char* name) {
     return CP::TManager::Get().Digits().CacheDigits(*this,name);
 }
 
-CP::THandle<CP::THitSelection> CP::TEvent::GetHitSelection(const char* name) 
+CP::THandle<CP::THitSelection> CP::TEvent::GetHits(const char* name) 
     const {
     std::string hitName("hits/");
     hitName += name;

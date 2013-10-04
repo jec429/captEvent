@@ -229,7 +229,7 @@ namespace tut {
              = event.Get<CP::TDataVector>("hits"); 
          hitDir->AddDatum(hits);
          
-         CP::THandle<CP::THitSelection> select = event.GetHitSelection("test");
+         CP::THandle<CP::THitSelection> select = event.GetHits("test");
 
          for (CP::THitSelection::iterator it = select->begin();
               it != select->end();

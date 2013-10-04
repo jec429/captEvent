@@ -141,11 +141,11 @@ public:
     /// hit selection CANNOT be named "hits".  Also, the hit selection
     /// will be owned by the TAlgorithmResult.  The most recently added
     /// THitSelection object will become the default set of hits.
-    void AddHitSelection(THitSelection* hitselection); 
+    void AddHits(THitSelection* hitselection); 
     
     /// Get a hit selection out of this TAlgorithmResult.
     CP::THandle<CP::THitSelection> 
-    GetHitSelection(const char* hit="hits") const;
+    GetHits(const char* hit="hits") const;
     
     /// Set the default set of hits.  
     void SetDefaultHitSelection(const char* hits);

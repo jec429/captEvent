@@ -29,7 +29,7 @@ CP::TAlgorithmResult::TAlgorithmResult(const CP::THitSelection& hits)
          ++h) {
         internalHits->push_back(*h);
     }
-    AddHitSelection(internalHits);
+    AddHits(internalHits);
 }
 
 CP::TAlgorithmResult::~TAlgorithmResult() { }
@@ -86,7 +86,7 @@ CP::TAlgorithmResult::GetResultsContainer(const char* name) const {
     return result;
 }
 
-void CP::TAlgorithmResult::AddHitSelection(CP::THitSelection* hits) {
+void CP::TAlgorithmResult::AddHits(CP::THitSelection* hits) {
     SetDefaultHitSelection(hits->GetName());
     AddDatum(hits);
 }
@@ -108,7 +108,7 @@ void CP::TAlgorithmResult::SetDefaultHitSelection(const char* name) {
     }
 }
 
-CP::THandle<CP::THitSelection> CP::TAlgorithmResult::GetHitSelection(
+CP::THandle<CP::THitSelection> CP::TAlgorithmResult::GetHits(
     const char* name) const {
     CP::THandle<CP::THitSelection> result = Get<CP::THitSelection>(name);
     return result;

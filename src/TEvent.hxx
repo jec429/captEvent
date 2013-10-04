@@ -122,7 +122,7 @@ public:
     THandle<CP::TDigitContainer> GetDigits(const char *name);
 
     /// Get the hit selection by name.
-    THandle<CP::THitSelection> GetHitSelection(const char *name) const;
+    THandle<CP::THitSelection> GetHits(const char *name) const;
 
     /// Get a TAlgorithmResult by name.
     THandle<CP::TAlgorithmResult> GetFit(const char* name) const;

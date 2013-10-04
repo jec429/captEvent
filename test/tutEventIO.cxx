@@ -99,19 +99,19 @@ namespace {
         CP::TAlgorithmResult *result
             = new CP::TAlgorithmResult("firstResult",
                                        "Test Result");
-        CP::THandle<CP::THitSelection> hits = event.GetHitSelection("p0d");
+        CP::THandle<CP::THitSelection> hits = event.GetHits("p0d");
         CP::THitSelection *newHits = new CP::THitSelection("newHits");
         std::copy(hits->begin(), hits->end(), std::back_inserter(*newHits));
-        result->AddHitSelection(newHits);
+        result->AddHits(newHits);
         event.AddFit(result);
 
         // Create a second algorithm result.
         result = new CP::TAlgorithmResult("secondResult",
                                           "Test Result");
-        hits = event.GetHitSelection("p0d");
+        hits = event.GetHits("p0d");
         CP::THitSelection* moreHits = new CP::THitSelection("moreHits");
         std::copy(hits->begin(),hits->end(),std::back_inserter(*moreHits));
-        result->AddHitSelection(moreHits);
+        result->AddHits(moreHits);
         event.AddFit(result);
 
         /// Create an CP::TAlgorithmResult with reconstruction objects.
@@ -437,8 +437,8 @@ namespace tut {
             CP::THandle<CP::TAlgorithmResult> r2 = (*in)->GetFit("secondResult");
             ensure("The first algorithm result exists in input",r1);
             ensure("The second algorithm result exists in input",r2);
-            CP::THandle<CP::THitSelection> h1 = r1->GetHitSelection();
-            CP::THandle<CP::THitSelection> h2 = r2->GetHitSelection();
+            CP::THandle<CP::THitSelection> h1 = r1->GetHits();
+            CP::THandle<CP::THitSelection> h2 = r2->GetHits();
             ensure("The first hit selection was  found",h1);
             ensure("There are hits in the first hit selection", h1->size()>0);
             ensure("The second hit selection was found",h2);
