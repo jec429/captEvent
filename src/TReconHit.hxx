@@ -68,10 +68,10 @@ public:
     /// Return a contributing hit.  If the index is out of range, this will
     /// throw an EHitOutOfRange exception.  By default this will throw an
     /// EHitOutOfRange, but it may be over-ridden in a derived class.
-    virtual CP::THandle<CP::THit> GetConstituent(int i=0) const;
+    virtual CP::THandle<CP::THit> GetContributor(int i=0) const;
 
     /// Return the number of hits that contribute to this hit.
-    virtual int GetConstituentCount() const;
+    virtual int GetContributorCount() const;
 
     /// Return a proxy to the digit that generated this hit.  The TDigitProxy
     /// will be valid if a TDigitContainer is available, and if the digit
@@ -171,7 +171,7 @@ protected:
     TVector3 fRMS;
 
     /// The THits that make up this reconstructed hit.
-    std::vector< CP::THandle < CP::THit > > fConstituents;
+    std::vector< CP::THandle < CP::THit > > fContributors;
 
     /// A static constant TMatrixD to hold the rotation matrix for all
     /// TReconHits.  This is by definition the identity matrix.

@@ -19,7 +19,7 @@ CP::TReconHit::TReconHit(const CP::TWritableReconHit& h)
       fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty), 
       fTimeRMS(h.fTimeRMS), fPosition(h.fPosition),
       fUncertainty(h.fUncertainty), fRMS(h.fRMS),
-      fConstituents(h.fConstituents) {}
+      fContributors(h.fContributors) {}
 
 CP::TReconHit::~TReconHit() { }
 
@@ -59,39 +59,39 @@ const TVector3& CP::TReconHit::GetUncertainty(void) const {
 }
 
 CP::TGeometryId CP::TReconHit::GetGeomId(int i) const {
-    CP::THandle<CP::THit> hit = GetConstituent(i);
+    CP::THandle<CP::THit> hit = GetContributor(i);
     return hit->GetGeomId();
 }
 
 int CP::TReconHit::GetGeomIdCount() const {
-    return fConstituents.size();
+    return fContributors.size();
 }
 
 CP::TChannelId CP::TReconHit::GetChannelId(int i) const {
-    CP::THandle<CP::THit> hit = GetConstituent(i);
+    CP::THandle<CP::THit> hit = GetContributor(i);
     return hit->GetChannelId();
 }
 
 int CP::TReconHit::GetChannelIdCount() const {
-    return fConstituents.size();
+    return fContributors.size();
 }
 
 const CP::TDigitProxy& CP::TReconHit::GetDigit(int i) const {
-    CP::THandle<CP::THit> hit = GetConstituent(i);
+    CP::THandle<CP::THit> hit = GetContributor(i);
     return hit->GetDigit();
 }
 
 int CP::TReconHit::GetDigitCount() const {
-    return fConstituents.size();
+    return fContributors.size();
 }
 
-CP::THandle <CP::THit> CP::TReconHit::GetConstituent(int i) const {
-    if (i<0 || fConstituents.size()<= (unsigned) i) throw EHitOutOfRange();
-    return fConstituents[i];
+CP::THandle <CP::THit> CP::TReconHit::GetContributor(int i) const {
+    if (i<0 || fContributors.size()<= (unsigned) i) throw EHitOutOfRange();
+    return fContributors[i];
 }
 
-int CP::TReconHit::GetConstituentCount() const {
-    return fConstituents.size();
+int CP::TReconHit::GetContributorCount() const {
+    return fContributors.size();
 }
 
 // TWritableReconHits.
@@ -99,7 +99,7 @@ CP::TWritableReconHit::TWritableReconHit(const CP::TWritableReconHit& h)
     : CP::TReconHit(h) {}
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
-    fConstituents.push_back(hit);
+    fContributors.push_back(hit);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
@@ -107,8 +107,8 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2) {
-    fConstituents.push_back(hit1);
-    fConstituents.push_back(hit2);
+    fContributors.push_back(hit1);
+    fContributors.push_back(hit2);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
@@ -117,16 +117,16 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2,
                                          CP::THandle<CP::THit> hit3) {
-    fConstituents.push_back(hit1);
-    fConstituents.push_back(hit2);
-    fConstituents.push_back(hit3);
+    fContributors.push_back(hit1);
+    fContributors.push_back(hit2);
+    fContributors.push_back(hit3);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
 }
 
 void CP::TWritableReconHit::AddHit(CP::THandle<CP::THit> hit) {
-    fConstituents.push_back(hit);
+    fContributors.push_back(hit);
 }
 
 CP::TWritableReconHit::~TWritableReconHit() {}
@@ -168,8 +168,8 @@ void CP::TReconHit::ls(Option_t *opt) const {
 
     TROOT::IncreaseDirLevel();
     for (std::vector< CP::THandle < CP::THit > >::const_iterator h
-             = fConstituents.begin();
-         h != fConstituents.end();
+             = fContributors.begin();
+         h != fContributors.end();
          ++h) {
         h->ls(opt);
     }
