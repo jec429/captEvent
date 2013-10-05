@@ -108,6 +108,33 @@ public:
     /// List the results of in the cluster.
     virtual void ls(Option_t* opt = "") const; 
 
+    /// A convenience routine to return the long axis of the cluster.  The
+    /// vector points in the direction of the long axis, and the magnitude is
+    /// equal to the moment along the axis.
+    const TVector3& GetLongAxis();
+
+    /// A convenience routine to return the major axis perpendicular to the
+    /// long axis of the cluster.  The vector points in the direction of the
+    /// major axis, and the magnitude is equal to the moment along the axis.
+    const TVector3& GetMajorAxis();
+
+    /// A convenience routine to return the minor axis perpendicular to the
+    /// long axis of the cluster.  The vector points in the direction of the
+    /// minor axis, and the magnitude is equal to the moment along the axis.
+    const TVector3& GetMinorAxis();
+
+    /// A convenience routine to return the distance to the furthest hit from
+    /// the cluster position along the long axis of the cluster.
+    double GetLongExtent();
+
+    /// A convenience routine to return the distance to the furthest hit from
+    /// the cluster position along the major axis of the cluster.
+    double GetMajorExtent();
+
+    /// A convenience routine to return the distance to the furthest hit from
+    /// the cluster position along the minor axis of the cluster.
+    double GetMinorExtent();
+
 private:
 
     /// Fill all of the fields of the cluster based on the hits.
@@ -115,6 +142,22 @@ private:
 
     /// The moments for this cluster.
     MomentMatrix fMoments;
+    
+    /// Fill the temporary fields.
+    bool fTemporariesInitialized; //! Don't Save
+    void FillTemporaries();
+
+    /// The cached length of the cluster calculated from the eigenvectors of
+    /// the moments.
+    TVector3 fLongAxis; //! Don't Save
+
+    /// The cached major axis (perpendicular to the length) calculated from
+    /// the eigenvectors of the moments.
+    TVector3 fMajorAxis; //! Don't Save
+
+    /// The cached major axis (perpendicular to the length) calculated from
+    /// the eigenvectors of the moments.
+    TVector3 fMinorAxis; //! Don't Save
 
     ClassDef(TReconCluster,1);
 };

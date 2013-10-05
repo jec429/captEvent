@@ -11,13 +11,13 @@
 ClassImp(CP::TReconCluster);
 
 CP::TReconCluster::TReconCluster() 
-    : fMoments(3) {
+    : fMoments(3), fTemporariesInitialized(false) {
     fState = new TClusterState;
     fNodes = new TReconNodeContainerImpl<CP::TClusterState>;
 }
 
 CP::TReconCluster::TReconCluster(const CP::TReconCluster& cluster)
-    : CP::TReconBase(cluster), fMoments(3) {
+    : CP::TReconBase(cluster), fMoments(3), fTemporariesInitialized(false) {
     fNodes = new TReconNodeContainerImpl<CP::TClusterState>;
     
     // Copy the nodes.  Create new nodes with TClusterState's
@@ -45,8 +45,6 @@ CP::TReconCluster::TReconCluster(const CP::TReconCluster& cluster)
         fState = new TClusterState;
     }
 }
-
-
 
 CP::TReconCluster::~TReconCluster() {}
 
@@ -372,4 +370,111 @@ void CP::TReconCluster::ls(Option_t *opt) const {
     TROOT::DecreaseDirLevel();
 
     TROOT::DecreaseDirLevel();
+}
+
+void CP::TReconCluster::FillTemporaries() {
+    if (fTemporariesInitialized) return;
+    fTemporariesInitialized = true;
+
+    TVectorF eigenValues;
+    TMatrixF eigenVectors(GetMoments().EigenVectors(eigenValues));
+
+    // Long axis comes first.
+    fLongAxis.SetXYZ(eigenVectors(0,0), eigenVectors(1,0), eigenVectors(2,0));
+    fLongAxis = std::sqrt(eigenValues(0))*fLongAxis;
+
+    // Major axis comes second.
+    fMajorAxis.SetXYZ(eigenVectors(0,1), eigenVectors(1,1), eigenVectors(2,1));
+    fMajorAxis = std::sqrt(eigenValues(1))*fMajorAxis;
+
+    // Minor axis comes last.
+    fMinorAxis.SetXYZ(eigenVectors(0,2), eigenVectors(1,2), eigenVectors(2,2));
+    fMinorAxis = std::sqrt(eigenValues(2))*fMinorAxis;
+
+    const double epsilon = 1E-6;
+    if (fLongAxis.X() < -epsilon) {
+        fLongAxis = -fLongAxis;
+    }
+    else if (fLongAxis.X() < epsilon && fLongAxis.Y() < -epsilon) {
+        fLongAxis = -fLongAxis;
+    }
+    else if (fLongAxis.Y() < epsilon && fLongAxis.Z() < 0.0) {
+        fLongAxis = -fLongAxis;
+    }
+
+    if (fMajorAxis.Y() < -epsilon) {
+        fMajorAxis = -fMajorAxis;
+    }
+    else if (fMajorAxis.Y() < epsilon && fMajorAxis.Z() < -epsilon) {
+        fMajorAxis = -fMajorAxis;
+    }
+    else if (fMajorAxis.Z() < epsilon && fMajorAxis.X() < 0.0) {
+        fMajorAxis = -fMajorAxis;
+    }
+
+    TVector3 temp = fLongAxis.Cross(fMajorAxis);
+    if (temp*fMinorAxis < 0) {
+        fMinorAxis = -fMinorAxis;
+    }
+
+}
+
+const TVector3& CP::TReconCluster::GetLongAxis() {
+    FillTemporaries();
+    return fLongAxis;
+}
+
+const TVector3& CP::TReconCluster::GetMajorAxis() {
+    FillTemporaries();
+    return fMajorAxis;
+}
+
+const TVector3& CP::TReconCluster::GetMinorAxis() {
+    FillTemporaries();
+    return fMinorAxis;
+}
+
+double CP::TReconCluster::GetLongExtent() {
+    FillTemporaries();
+
+    double maxLen = 0.0;
+    CP::THandle<CP::THitSelection> hits = GetHits();
+    for (CP::THitSelection::iterator h = hits->begin(); 
+         h != hits->end(); ++h) {
+        TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
+        maxLen = std::max(maxLen, std::abs(diff*fLongAxis));
+    }
+    maxLen /= fLongAxis.Mag();
+    return maxLen;
+
+}
+
+double CP::TReconCluster::GetMajorExtent() {
+    FillTemporaries();
+
+    double maxLen = 0.0;
+    CP::THandle<CP::THitSelection> hits = GetHits();
+    for (CP::THitSelection::iterator h = hits->begin(); 
+         h != hits->end(); ++h) {
+        TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
+        maxLen = std::max(maxLen, std::abs(diff*fMajorAxis));
+    }
+    maxLen /= fMajorAxis.Mag();
+    return maxLen;
+
+}
+
+double CP::TReconCluster::GetMinorExtent() {
+    FillTemporaries();
+
+    double maxLen = 0.0;
+    CP::THandle<CP::THitSelection> hits = GetHits();
+    for (CP::THitSelection::iterator h = hits->begin(); 
+         h != hits->end(); ++h) {
+        TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
+        maxLen = std::max(maxLen, std::abs(diff*fMinorAxis));
+    }
+    maxLen /= fMinorAxis.Mag();
+    return maxLen;
+
 }
