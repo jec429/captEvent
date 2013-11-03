@@ -3,6 +3,7 @@
 
 #include "HEPUnits.hxx"
 #include "TG4HitSegment.hxx"
+#include "TUnitsTable.hxx"
 
 ClassImp(CP::TG4HitSegment);
 
@@ -25,38 +26,27 @@ CP::TG4HitSegment::~TG4HitSegment() {}
 
 void CP::TG4HitSegment::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
-    std::cout << " Primary Id: " << GetPrimaryId();
-    double energy = GetEnergyDeposit();
-    int prec = std::cout.precision();
-    std::cout.precision(1);
-    if (energy > 1*unit::GeV) {
-        std::cout << " E: " << GetEnergyDeposit()/unit::GeV << " GeV";
-    }
-    else if (energy > 1*unit::MeV) {
-        std::cout << " E: " << GetEnergyDeposit()/unit::MeV << " MeV";
-    }
-    else {
-        std::cout << " E: " << GetEnergyDeposit()/unit::keV << " keV";
-    }
-    std::cout << " L: " << GetTrackLength()/unit::mm << " mm" << std::endl;
+    std::cout << " Primary Id: " << GetPrimaryId() << std::endl;
+    TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << " Energy Deposit: " 
+              << unit::AsString(GetEnergyDeposit(),"energy")
+              << " Length: " << unit::AsString(GetTrackLength(),"length") 
+              << std::endl;
     std::string option(opt);
     if (option.find("dump") != std::string::npos) {
         TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
-        std::cout << std::setprecision(1)
-                  << "Start: (" << fStartX << " cm"
-                  << ", " << fStartY << " cm"
-                  << ", " << fStartZ << " cm"
-                  << std::setprecision(0)
-                  << ", " << fStartT << " ns)"
+        std::cout << "Start: (" << unit::AsString(fStartX,"length")
+                  << ", " << unit::AsString(fStartY,"length")
+                  << ", " << unit::AsString(fStartZ,"length")
+                  << ", " << unit::AsString(fStartT,"time") << ")"
                   << std::endl;
         TROOT::IndentLevel();
-        std::cout << std::setprecision(1)
-                  << "Stop:  (" << fStopX << " cm"
-                  << ", " << fStopY << " cm"
-                  << ", " << fStopZ << " cm"
-                  << std::setprecision(0)
-                  << ", " << fStopT << " ns)"
+        std::cout << "Stop: (" << unit::AsString(fStopX,"length")
+                  << ", " << unit::AsString(fStopY,"length")
+                  << ", " << unit::AsString(fStopZ,"length")
+                  << ", " << unit::AsString(fStopT,"time") << ")"
                   << std::endl;
         TROOT::IndentLevel();
         std::cout << "Traj. Ids:";
@@ -66,5 +56,5 @@ void CP::TG4HitSegment::ls(Option_t *opt) const {
         std::cout << std::endl;
         TROOT::DecreaseDirLevel();
     }
-    std::cout.precision(prec);
+    TROOT::DecreaseDirLevel();
 }

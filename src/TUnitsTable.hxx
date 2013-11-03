@@ -68,6 +68,11 @@ public:
     /// converted to "15"
     std::string ConvertWithUnit(std::string line);
 
+    /// Convert a energy value (i.e. in MeV) into a string for printing.  The
+    /// output will be formated as "xxx uu" where xxx is a number between -999
+    /// and 999, and uu is a unit.
+    std::string ConvertEnergy(double enr);
+
     /// Convert a length value (i.e. in mm) into a string for printing.  The
     /// output will be formated as "xxx uu" where xxx is a number between -999
     /// and 999, and uu is a unit.

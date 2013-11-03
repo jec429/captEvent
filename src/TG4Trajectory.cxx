@@ -6,6 +6,7 @@
 #include <TDatabasePDG.h>
 
 #include "TG4Trajectory.hxx"
+#include "TUnitsTable.hxx"
 
 ClassImp(CP::TG4Trajectory);
 ClassImp(CP::TG4TrajectoryContainer);
@@ -24,16 +25,14 @@ const TParticlePDG* CP::TG4Trajectory::GetParticle() const {
 
 void CP::TG4Trajectory::ls(Option_t* opt) const {
     CP::ls_header(this,opt);
-    int prec = std::cout.precision();
-    std::cout.precision(1);
     TLorentzVector mom = GetInitialMomentum();
     std::cout << " Id: " << fTrackId
               << " " << fPDGEncoding << "(" << fParticleName << ")"
-              << " Points: " << fPositions.size()
-              << " E: " << mom.E()
-              << " P: (" << mom.Px()
-              << ", " << mom.Py()
-              << ", " << mom.Pz() << ")"
+              << std::endl;
+    TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << " Points: " << fPositions.size()
+              << " P: " << unit::AsString(mom,"momentum")
               << " from: " << fParentId
               << std::endl;
     std::string option(opt);
@@ -43,12 +42,11 @@ void CP::TG4Trajectory::ls(Option_t* opt) const {
                  = fPositions.begin();
              v != fPositions.end(); 
              ++v) {
-            std::cout.precision(prec);
             v->ls(opt);
         };
         TROOT::DecreaseDirLevel();
     }
-    std::cout.precision(prec);
+    TROOT::DecreaseDirLevel();
 }
 
 int CP::TG4TrajectoryContainer::GetPrimaryId(int id) const {

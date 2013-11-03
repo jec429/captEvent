@@ -9,6 +9,7 @@
 #include <TStreamerInfo.h>
 
 #include "HEPUnits.hxx"
+#include "TUnitsTable.hxx"
 #include "TG4PrimaryVertex.hxx"
 
 ClassImp(CP::TG4PrimaryVertex);
@@ -33,14 +34,11 @@ CP::TG4PrimaryVertex::~TG4PrimaryVertex() { }
 
 void CP::TG4PrimaryVertex::ls(Option_t* opt) const {
     CP::ls_header(this,opt);
-    std::cout << " #" << fInteractionNumber 
-              << " at: (" << fPosition.X()/unit::cm
-              << "," << fPosition.Y()/unit::cm
-              << "," << fPosition.Z()/unit::cm
-              << "," << fPosition.T()/unit::ns
-              << ") (cm,ns)" 
-              << std::endl;
+    std::cout << " #" << fInteractionNumber << std::endl;
     TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << " Position: " << unit::AsString(fPosition,"length")
+              << std::endl;
     std::string generatorName = GetGeneratorName();
     std::string reactionMode = GetReaction();
     if (generatorName != "" || reactionMode != "") {

@@ -162,6 +162,52 @@ std::string CP::TUnitsTable::ConvertWithUnit(std::string input) {
     return result.str();
 }
 
+std::string CP::TUnitsTable::ConvertEnergy(double enr) {
+    std::stringstream output;
+
+    output << std::setprecision(4);
+    double val = enr/unit::PeV;
+    if (std::abs(val) >= 1) {
+        output << val << " PeV";
+        return output.str();
+    }
+    
+    val = enr/unit::TeV;
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
+        output << val << " TeV";
+        return output.str();
+    }
+
+    val = enr/unit::GeV;
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
+        output << val << " GeV";
+        return output.str();
+    }
+
+    val = enr/unit::MeV;
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
+        output << val << " MeV";
+        return output.str();
+    }
+            
+    val = enr/unit::keV;
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
+        output << val << " keV";
+        return output.str();
+    }
+
+    val = enr/unit::eV;
+    if (std::abs(val) <= 1200 && std::abs(val) >= 1) {
+        output << val << " eV";
+        return output.str();
+    }
+
+    val = enr;
+    if (val < 0.001*unit::eV) val = 0.0;
+    output << val/unit::MeV << " eV";
+    return output.str();
+}
+
 std::string CP::TUnitsTable::ConvertLength(double len) {
     std::stringstream output;
 
@@ -352,6 +398,22 @@ std::string unit::AsString(double val, double sig, std::string type) {
             else measure << "+-" << u.ConvertCharge(sig);
         }
     }
+    else if (type == "momentum") {
+        measure << u.ConvertEnergy(val) << "/c";
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << u.ConvertEnergy(sig) << "/c";
+        }
+    }
+    else if (type == "energy") {
+        measure << u.ConvertEnergy(val);
+        if (sig >= 0) {
+            if (CP::TCorrValues::IsFree(sig)) measure << " (free)";
+            else if (CP::TCorrValues::IsFixed(sig)) measure << " (fixed)";
+            else measure << "+-" << u.ConvertEnergy(sig);
+        }
+    }
     else if (type == "direction") {
         measure << std::fixed;
         measure << std::setprecision(3);
@@ -370,24 +432,6 @@ std::string unit::AsString(double val, double sig, std::string type) {
         else if (CP::TCorrValues::IsFree(sig)) measure << " deg (free)";
         else if (CP::TCorrValues::IsFixed(sig)) measure << " deg (fixed)";
         else measure << "+-" << sig/unit::degree << " deg";
-    }
-    else if (type == "momentum") {
-        measure << std::fixed;
-        measure << std::setprecision(1);
-        measure << val/unit::MeV << " MeV/c";
-        if (sig<0) measure << " MeV/c";
-        else if (CP::TCorrValues::IsFree(sig)) measure << " MeV/c (free)";
-        else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV/c (fixed)";
-        else measure << "+-" << sig << " MeV/c";
-    }
-    else if (type == "energy") {
-        measure << std::fixed;
-        measure << std::setprecision(1);
-        measure << val/unit::MeV << " MeV";
-        if (sig<0) measure << " MeV";
-        else if (CP::TCorrValues::IsFree(sig)) measure << " MeV (free)";
-        else if (CP::TCorrValues::IsFixed(sig)) measure << " MeV (fixed)";
-        else measure << "+-" << sig << " MeV";
     }
     else if (type == "electrons" || type == "pe") {
         measure << std::fixed;

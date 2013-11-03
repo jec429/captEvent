@@ -7,6 +7,7 @@
 #include <TParticlePDG.h>
 
 #include "TG4PrimaryParticle.hxx"
+#include "TUnitsTable.hxx"
 #include "TCaptLog.hxx"
 
 ClassImp(CP::TG4PrimaryParticle);
@@ -29,7 +30,11 @@ void CP::TG4PrimaryParticle::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
     std::cout << " Id: " << fTrackId
               << " Particle: " << fPDGCode << " (" << GetTitle() << ")"
-              << " E: " << fMomentum.E()
               << std::endl;
+    TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << " E: " << unit::AsString(fMomentum, "momentum")
+              << std::endl;
+    TROOT::DecreaseDirLevel();
 }
 

@@ -7,8 +7,8 @@
 #include <TStreamerInfo.h>
 
 #include "TManager.hxx"
-
 #include "TG4TrajectoryPoint.hxx"
+#include "TUnitsTable.hxx"
 
 ClassImp(CP::TG4TrajectoryPoint);
 
@@ -20,17 +20,21 @@ CP::TG4TrajectoryPoint::~TG4TrajectoryPoint() {}
 
 void CP::TG4TrajectoryPoint::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
-    std::cout << " at: (" << fPositionX
-              << "," << fPositionY
-              << "," << fPositionZ
-              << "," << fPositionT
-              << ")--> "
-              << "(" << fMomentumX
-              << "," << fMomentumY
-              << "," << fMomentumZ
-              << ")"
-              << ", node: " << fVolumeNode
+    std::cout << std::endl;
+    TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << unit::AsString(TLorentzVector(fPositionX,
+                                               fPositionY,
+                                               fPositionZ,
+                                               fPositionT),
+                                "length")
+              << " P: " 
+              << unit::AsString(
+                  TVector3(fMomentumX,fMomentumY,fMomentumZ).Mag(),
+                  "momentum")
+              << " Volume: " << fVolumeNode
               << std::endl;
+    TROOT::DecreaseDirLevel();
 }
 
 std::string CP::TG4TrajectoryPoint::GetVolumeName(void) const {
