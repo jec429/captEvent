@@ -32,23 +32,25 @@ public:
     /// current file should be skipped, this should through the
     /// ENextEventLoopFile exception.
     bool operator () (TEvent& event) {
-        // Get the P0D hits
-	TBorrowed<THitSelection*> p0d(event.GetHitSelection("p0d"));
+        // Get the  hits
+	THandle<THitSelection> hits(event.GetHits("drift"));
 	// Update Tree values
-	if(p0d)
-	  fNP0DHits = p0d->size();
-	else
-	  fNP0DHits = 0;
+	if (hits) {
+	  fNHits = hits->size();
+        }
+	else {
+	  fNHits = 0;
+        }
         fOutputTree->Fill();
         return false; // Don't save events...
     }
 
-    /// Called after the arguments are processes by before reading the first
+    /// Called after the arguments are processed but before reading the first
     /// event.  The output file is open so any histograms will be added to the
-    /// output file.
+    /// output file.  This example creates a simple tree with one branch.
     virtual void Initialize(void) {
         fOutputTree = new TTree("userLoopTree","A simple summary tree");
-        fOutputTree->Branch("NP0DHits", &fNP0DHits, "NP0DHits/I");
+        fOutputTree->Branch("NHits", &fNHits, "NHits/I");
     }
 
     /// Called after reading the last event.  The output file is still open,
@@ -63,8 +65,8 @@ private:
     /// A pointer to the output tree that is being created.
     TTree* fOutputTree;
 
-    /// Number of P0D hits.
-    int    fNP0DHits;
+    /// Number of hits.
+    int    fNHits;
 };
 
 int main(int argc, char **argv) {

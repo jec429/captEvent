@@ -40,7 +40,7 @@ public:
         return -1;
     }
 
-    /// Called after the arguments are processes by before reading the first
+    /// Called after the arguments are processed but before reading the first
     /// event.  The output file is open so any histograms will be added to the
     /// output file.
     virtual void Initialize(void) {
