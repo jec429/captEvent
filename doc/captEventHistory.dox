@@ -1,2 +1,16 @@
 /*! \page captEventHistory History for the captEvent Package 
+
+\section captEvent_v0r0p0_history Version 0.0.0
+
+Freeze information:
+   - Freeze Date: Tue Nov  5 13:52:41 2013
+   - Freeze User: mcgrew
+   - Freeze Host: boxer.physics.sunysb.edu boxer.local 
+
+
+First frozen version of captEvent for the CAPTAIN experiment.  This is
+based off of the ND280 oaEvent library, and provides the definition of the
+CAPTAIN offline event format.  The dependencies of this library are limited
+to ROOT (and any of its dependencies).
+
 */
