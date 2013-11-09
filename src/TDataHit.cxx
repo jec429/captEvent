@@ -8,7 +8,8 @@
 ClassImp(CP::TDataHit);
 ClassImp(CP::TWritableDataHit);
 
-CP::TDataHit::TDataHit() {}
+CP::TDataHit::TDataHit() 
+    : fChannelId(0) {}
 
 CP::TDataHit::TDataHit(const CP::TWritableDataHit& h) 
     : CP::TSingleHit(h), fProxy(h.fProxy) {}
@@ -53,6 +54,8 @@ void CP::TWritableDataHit::SetTimeRMS(double t) {fTimeRMS = t;}
 
 void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
     fProxy = proxy;
+    CaptNamedDebug("dataHit","Set digit for " << proxy.AsString()
+                   << " " << fProxy.AsString() << " " << fProxy.IsValid());
     if (fProxy.IsValid()) {
         try {
             CP::TDigit* digit = *fProxy;
@@ -69,7 +72,8 @@ void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
         catch (...) {}
     }
     else if (fChannelId == 0) {
-        CaptError("Invalid digit used to create hit."
+        CaptError("Invalid digit used to create hit. ("
+                  << proxy.AsString() << ")"
                    "  Use SetChannelId to set channel before SetDigit.");
     }
 }

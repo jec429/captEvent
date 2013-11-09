@@ -41,7 +41,8 @@ public:
     enum ProxyType {
         kInvalid = 0,
         kTest,
-        kTPC,
+        kDrift,
+        kPhotosensor,
     };
 
     // The data type used to store the signature.
