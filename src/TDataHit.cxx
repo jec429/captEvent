@@ -69,7 +69,9 @@ void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
         catch (...) {}
     }
     else if (fChannelId == 0) {
-        CaptError("Invalid digit used to create hit."
+        
+        CaptError("Invalid digit used to create hit. ("
+                  << proxy.AsString() << ")"
                    "  Use SetChannelId to set channel before SetDigit.");
     }
 }

@@ -150,10 +150,10 @@ std::string CP::TDigitProxy::AsString() const {
         out << ConvertType(GetProxyType()) << ":";
     }
     catch (...) {
-        out << "invalid:";
+        out << "invalid(" << GetProxyType() << ")";
     }
     unsigned int offset = GetProxyOffset();
-    if (offset == 0x1FFFFu) out << " invalid offset";
+    if (offset == 0x1FFFFu) out << " invalid offset(" << offset << ")";
     else out << " " << offset;
     return out.str();
 }
