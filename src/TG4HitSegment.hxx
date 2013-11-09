@@ -32,8 +32,15 @@ public:
     /// Return a list of track identifiers that contributed to this hit.
     /// These track ids can be used as indicies to find trajectories in the
     /// TG4TrajectoryContainer object associated with an MC event.
-    const std::vector<Int_t>& GetContributors(void) const {
-        return fContributors;
+    const int GetContributor(int i) const {
+        return fContributors[i];
+    }
+
+    /// Return a list of track identifiers that contributed to this hit.
+    /// These track ids can be used as indicies to find trajectories in the
+    /// TG4TrajectoryContainer object associated with an MC event.
+    const int GetContributorCount() const {
+        return fContributors.size();
     }
 
     /// Get the TrackId of the "primary" particle that is associated with this
@@ -46,7 +53,7 @@ public:
     /// associated G4PrimaryParticle (You can tell that a trajectory comes
     /// from a primary particle by checking if it's ParentID is zero.  If it
     /// is zero, the trajectory came from a primary).
-    int GetPrimaryId(void) const {return fPrimaryId;}
+    int GetPrimaryTrajectoryId(void) const {return fPrimaryId;}
 
     /// Get the tota energy deposited in this hit.
     double GetEnergyDeposit(void) const {return (double) fEnergyDeposit;}

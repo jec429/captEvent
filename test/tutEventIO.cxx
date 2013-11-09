@@ -86,8 +86,8 @@ namespace {
             CP::TG4HitSegment* hitSeg
                 = dynamic_cast<CP::TG4HitSegment*>(*g4Hit);
             mcHit.SetGeomId(CP::GeomId::Captain::Wire(0,50));
-            mcHit.SetCharge(hitSeg->GetPrimaryId());
-            mcHit.SetTime(hitSeg->GetPrimaryId());
+            mcHit.SetCharge(hitSeg->GetPrimaryTrajectoryId());
+            mcHit.SetTime(hitSeg->GetPrimaryTrajectoryId());
             mcHit.GetTruth().push_back(hitSeg);
             mcHit.GetTruth().push_back(NULL);
             hits->push_back(CP::THandle<CP::TMCHit>(new CP::TMCHit(mcHit)));

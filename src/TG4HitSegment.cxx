@@ -26,7 +26,7 @@ CP::TG4HitSegment::~TG4HitSegment() {}
 
 void CP::TG4HitSegment::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
-    std::cout << " Primary Id: " << GetPrimaryId() << std::endl;
+    std::cout << " Primary Id: " << GetPrimaryTrajectoryId() << std::endl;
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
     std::cout << " Energy Deposit: " 
@@ -50,8 +50,8 @@ void CP::TG4HitSegment::ls(Option_t *opt) const {
                   << std::endl;
         TROOT::IndentLevel();
         std::cout << "Traj. Ids:";
-        for (std::vector<int>::const_iterator i = GetContributors().begin();
-             i != GetContributors().end();
+        for (std::vector<int>::const_iterator i = fContributors.begin();
+             i != fContributors.end();
              ++i) std::cout << " " << *i;
         std::cout << std::endl;
         TROOT::DecreaseDirLevel();
