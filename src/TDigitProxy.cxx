@@ -4,6 +4,7 @@
 #include "TDigitProxy.hxx"
 #include "TDigitManager.hxx"
 #include "TManager.hxx"
+#include "TCaptLog.hxx"
 
 ClassImp(CP::TDigitProxy);
 
@@ -17,6 +18,11 @@ CP::TDigitProxy::TDigitProxy(const CP::TDigitContainer& container,
     : fDigitSignature(0), fDigit(NULL), fContainer(NULL) {
 
     int type = TDigitProxy::ConvertName(container.GetName());
+    if (!type) {
+        CaptError("Creating TDigitProxy from invalid container: " 
+                  << container.GetName());
+        return;
+    }
     SetProxyType(type);
     if (container.size() <= offset) throw EDigitNotFound();
     CP::TDigit* digit = container[offset];
@@ -72,7 +78,8 @@ CP::TDigitContainer& CP::TDigitProxy::GetContainer() const {
 }
 
 enum CP::TDigitProxy::ProxyType CP::TDigitProxy::ConvertName(std::string name) {
-    if (name == "tpc") return kTPC;
+    if (name == "drift") return kDrift;
+    if (name == "pmt") return kPhotosensor;
     if (name == "test") return kTest;
     CaptError("Not a valid TDigitProxy type name: " << name);
     return kInvalid;
@@ -84,7 +91,8 @@ std::string CP::TDigitProxy::ConvertType(int type) {
     // Find the name of the TDigitContainer based on the proxy type.
     switch (type) {
     case kTest: name = "test"; break;
-    case kTPC: name = "tpc"; break;
+    case kDrift: name = "drift"; break;
+    case kPhotosensor: name = "pmt"; break;
     case kInvalid: name = "invalid"; break;
     default:
         throw EDigitTypeInvalid();
@@ -141,7 +149,8 @@ void CP::TDigitProxy::SetProxyOffset(int off) {
 bool CP::TDigitProxy::IsValid() const {
     if (GetProxyOffset() == 0x1FFFFu) return false;
     if (GetProxyType() == kTest) return true;
-    if (GetProxyType() == kTPC) return true;
+    if (GetProxyType() == kDrift) return true;
+    if (GetProxyType() == kPhotosensor) return true;
     return false;
 }
 
