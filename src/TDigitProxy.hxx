@@ -42,6 +42,7 @@ public:
         kInvalid = 0,
         kTest,
         kTPC,
+        kPhotoSensor,
     };
 
     // The data type used to store the signature.

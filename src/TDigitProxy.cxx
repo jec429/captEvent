@@ -74,6 +74,7 @@ CP::TDigitContainer& CP::TDigitProxy::GetContainer() const {
 enum CP::TDigitProxy::ProxyType CP::TDigitProxy::ConvertName(std::string name) {
     if (name == "tpc") return kTPC;
     if (name == "test") return kTest;
+    CaptError("Not a valid TDigitProxy type name: " << name);
     return kInvalid;
 }
 
@@ -150,7 +151,7 @@ std::string CP::TDigitProxy::AsString() const {
         out << ConvertType(GetProxyType()) << ":";
     }
     catch (...) {
-        out << "invalid(" << GetProxyType() << ")";
+        out << "invalid type(" << GetProxyType() << ")";
     }
     unsigned int offset = GetProxyOffset();
     if (offset == 0x1FFFFu) out << " invalid offset(" << offset << ")";
