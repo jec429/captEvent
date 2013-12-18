@@ -29,7 +29,8 @@ public:
     }
 
     /// The projection operator to get the full state.
-    static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
+    static CP::TCorrValues ProjectState(
+        const CP::THandle<CP::TReconState>& state);
 
     ClassDef(TShowerState,1);
 };
