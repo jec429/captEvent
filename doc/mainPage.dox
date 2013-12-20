@@ -101,6 +101,16 @@ global search and replace on "UserLoop", changing it to some more useful
 name.  That will help keep the doxygen documentation useful.
 \endhtmlonly
 
+\subsection reconResults The Reconstruction Results
+
+The reconstruction results are described by objects saved in the
+CP::TReconObjectContainer handle returned by
+CP::TAlgorithmResult::GetResultsContainer().  The reconstruction objects
+are saved in objects derived from CP::TReconBase (i.e. the CP::TReconCluster,
+CP::TReconShower, CP::TReconTrack, and CP::TReconPID classes).  These have
+the associated states CP::TClusterState, CP::TShowerState,
+CP::TTrackState, and CP::TPIDState.  
+
 \subsection Geometry Managing the Detector Geometry.
 
 The description of the detector geometry is done using the ROOT TGeoManager
@@ -167,8 +177,6 @@ addition to units, basic physical constants are defined in the
 HEPConstants.hxx file.
 
 \subsection compiledVersion Tracking the compiled library version.
-
-THIS MAY NOT BE USED FOR CAPTAIN...
 
 Each packages should provide a "version" class that is named by the convention
 "T[package]" (for instance, TcaptEvent, TeventDisplay, etc).  The simplest

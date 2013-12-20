@@ -326,7 +326,9 @@ public:
     // ClassDef(TMPositionDirectionState,0);
 };
 
-/// A mixable base class that adds the opening angle of a TReconShower object.
+/// A mixable base class that adds the width of a TReconShower object.  The
+/// cone value depends on the type of the shower fit.  For a EM fit, the cone
+/// value will represent the local width of the shower.
 class CP::TMConeState: virtual public TMReconState {
 public:
     TMConeState();
