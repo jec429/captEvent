@@ -104,6 +104,7 @@ const CP::TReconCluster::MomentMatrix& CP::TReconCluster::GetMoments() const {
 
 void CP::TReconCluster::SetMoments(double xx, double yy, double zz,
                                    double xy, double xz, double yz) {
+    fTemporariesInitialized = false;
     fMoments(0,0) = xx;
     fMoments(1,1) = yy;
     fMoments(2,2) = zz;
@@ -118,6 +119,7 @@ void CP::TReconCluster::SetMoments(double xx, double yy, double zz,
 void CP::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
     if (moments.GetNrows() != fMoments.GetNrows()) throw EMomentsSize();
     if (moments.GetNcols() != fMoments.GetNcols()) throw EMomentsSize();
+    fTemporariesInitialized = false;
     for (int row=0; row<3; ++row) {
         for (int col=0; col<3; ++col) {
             fMoments(row,col) = moments(row,col);
@@ -126,6 +128,7 @@ void CP::TReconCluster::SetMoments(const TMatrixT<double>& moments) {
 }
 
 void CP::TReconCluster::UpdateFromHits() {
+    fTemporariesInitialized = false;
     // Make sure there is a hit container.
     CP::THandle<CP::THitSelection> hits = GetHits();
     if (!hits) return;
