@@ -48,7 +48,7 @@ CP::TTrackState& CP::TTrackState::operator=(const CP::TTrackState& rhs) {
 CP::TCorrValues CP::TTrackState::ProjectState(
     const CP::THandle<CP::TReconState>& proj) {
     TCorrValues values(TTrackState::GetSize());
-    values.SetType("EDeposit X Y Z T DX DY DZ Curvature W1 W2 ");
+    values.SetType("EDeposit X Y Z T DX DY DZ Mass W1 W2 ");
     const TMEDepositState* eDepositState 
         = dynamic_cast<const TMEDepositState*>(GetPointer(proj));
     int base = 0;
@@ -99,15 +99,15 @@ CP::TCorrValues CP::TTrackState::ProjectState(
             }
         }
     }
-    const TMCurvatureState* curvState 
-        = dynamic_cast<const TMCurvatureState*>(GetPointer(proj));
+    const TMMassState* curvState 
+        = dynamic_cast<const TMMassState*>(GetPointer(proj));
     base += TMDirectionState::GetSize();
     if (curvState) {
-        const int offset = curvState->GetCurvatureIndex();
-        for (int i = 0; i < TMCurvatureState::GetSize(); ++i) {
+        const int offset = curvState->GetMassIndex();
+        for (int i = 0; i < TMMassState::GetSize(); ++i) {
             values.SetValue(i+base,
                             curvState->GetThis().fValues.GetValue(i+offset));
-            for (int j = 0; j < TMCurvatureState::GetSize(); ++j) {
+            for (int j = 0; j < TMMassState::GetSize(); ++j) {
                 values.SetCovarianceValue(
                     i+base, j+base,
                     curvState->GetThis().fValues.GetCovarianceValue(i+offset,
@@ -117,7 +117,7 @@ CP::TCorrValues CP::TTrackState::ProjectState(
     }
     const TMWidthState* widthState 
         = dynamic_cast<const TMWidthState*>(GetPointer(proj));
-    base += TMCurvatureState::GetSize();
+    base += TMMassState::GetSize();
     if (widthState) {
         const int offset = widthState->GetWidthIndex();
         for (int i = 0; i < TMWidthState::GetSize(); ++i) {

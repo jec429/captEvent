@@ -24,8 +24,8 @@ namespace CP {
     class TMDirectionState;
     class TMPositionDirectionState;
     class TMConeState;
-    class TMCurvatureState;
-    class TMPosDirCurvState;
+    class TMMassState;
+    class TMPosDirMassState;
     class TMWidthState;
     class TMMomentumState;
     class TMChargeState;
@@ -110,8 +110,8 @@ protected:
     friend class TMDirectionState;
     friend class TMPositionDirectionState;
     friend class TMConeState;
-    friend class TMCurvatureState;
-    friend class TMPosDirCurvState;
+    friend class TMMassState;
+    friend class TMPosDirMassState;
     friend class TMWidthState;
     friend class TMMomentumState;
     friend class TMChargeState;
@@ -363,31 +363,30 @@ protected:
     // ClassDef(TMConeState,0);
 };
 
-/// A mixable base class that adds the curvature property to a state.  The
-/// curvature state is defined around the X axis and also holds the associated
-/// uncertainties.
-class CP::TMCurvatureState: virtual public TMReconState {
+/// A mixable base class that adds the mass to a state.  The mass state also
+/// holds the associated uncertainties.
+class CP::TMMassState: virtual public TMReconState {
 public:
-    TMCurvatureState();
+    TMMassState();
 
-    virtual ~TMCurvatureState();
+    virtual ~TMMassState();
 
-    /// Get the value of the Curvature.
-    double GetCurvature() const;
+    /// Get the value of the Mass.
+    double GetMass() const;
 
-    /// Set the value of the Curvature.
-    void SetCurvature(double enr);
+    /// Set the value of the Mass.
+    void SetMass(double enr);
 
-    /// Get the variance of the Curvature.
-    double GetCurvatureVariance(void) const;
+    /// Get the variance of the Mass.
+    double GetMassVariance(void) const;
 
-    /// Set the variance of the Curvature.
-    void SetCurvatureVariance(double var);
+    /// Set the variance of the Mass.
+    void SetMassVariance(double var);
 
-    /// Get the index of the Curvature field in the TCorrValues vector.
-    int GetCurvatureIndex() const {return fCurvatureIndex;}
+    /// Get the index of the Mass field in the TCorrValues vector.
+    int GetMassIndex() const {return fMassIndex;}
 
-    /// Return the number of entries for the Curvature in the TCorrValues
+    /// Return the number of entries for the Mass in the TCorrValues
     /// vector.
     static int GetSize() {return 1;}
 
@@ -395,34 +394,34 @@ public:
     static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
 protected:
-    /// The index of the Curvature field in the TCorrValues object.
-    int fCurvatureIndex; //! Do not save.
+    /// The index of the Mass field in the TCorrValues object.
+    int fMassIndex; //! Do not save.
 
-    // ClassDef(TMCurvatureState,0);
+    // ClassDef(TMMassState,0);
 };
 
-/// A mixable base class that adds the position, direction and curvature
+/// A mixable base class that adds the position, direction and mass
 /// properties to a state using the TMPositionDirectionState and
-/// TMCurvatureState classes.
-class CP::TMPosDirCurvState: virtual public TMPositionDirectionState,
-                             virtual public TMCurvatureState {
+/// TMMassState classes.
+class CP::TMPosDirMassState: virtual public TMPositionDirectionState,
+                             virtual public TMMassState {
 public:
-    TMPosDirCurvState() {}
-    virtual ~TMPosDirCurvState();
+    TMPosDirMassState() {}
+    virtual ~TMPosDirMassState();
 
-    int GetPosDirCurvIndex() const {return GetPositionDirectionIndex();}
+    int GetPosDirMassIndex() const {return GetPositionDirectionIndex();}
 
     /// Return the number of entries for the Direction in the TCorrValues
     /// vector.
     static int GetSize() {
         return TMPositionDirectionState::GetSize()
-            + TMCurvatureState::GetSize();
+            + TMMassState::GetSize();
     }
 
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<TReconState>& state);
 
-    // ClassDef(TMPosDirCurvState,0);
+    // ClassDef(TMPosDirMassState,0);
 };
 
 /// A mixable base class that adds the width of a curvilinear energy deposit

@@ -56,6 +56,7 @@ CP::TPIDState::TPIDState(const CP::TTrackState& tstate): TMReconState(this) {
         }
     }  
     
+#ifdef USE_MAGNETIC_FIELD
     // If curvature is available, then convert to momentum.  This is bogus
     // since it depends on a magnetic field, so the momentum is initialized
     // assuming a constant 0.2T field, but is set as a free parameter.  be
@@ -69,29 +70,12 @@ CP::TPIDState::TPIDState(const CP::TTrackState& tstate): TMReconState(this) {
     
     SetValue(GetMomentumIndex(),p);
     SetFree(GetMomentumIndex());
+#endif
 
-    // If the curvature is available, then convert to charge.
-    double q = 0;
-    if (!tstate.IsFree(tstate.GetCurvatureIndex())
-        && tstate.GetValue(tstate.GetCurvatureIndex())>1E-15) {
-        q=-tstate.GetValue(tstate.GetCurvatureIndex())
-            /std::fabs(tstate.GetValue(tstate.GetCurvatureIndex()));
-    }
-    SetValue(GetChargeIndex(),q);
-    if (tstate.IsFree(tstate.GetCurvatureIndex()) || std::fabs(q) < 0.1) {
-        SetFree(GetChargeIndex());
-    }
-    else if (tstate.IsFixed(tstate.GetCurvatureIndex())) {
-        SetFixed(GetChargeIndex());
-    }
-    else {
-        double cv = tstate.GetCovarianceValue(tstate.GetCurvatureIndex(),
-                                              tstate.GetCurvatureIndex());
-        SetCovarianceValue(
-            GetChargeIndex(),GetChargeIndex(),
-            std::fabs(cv/tstate.GetValue(tstate.GetCurvatureIndex())));
-    }
-
+    // The track charge can't be determined, so set it to free with a charge
+    // of zero.
+    SetValue(GetChargeIndex(),0.0);
+    SetFree(GetChargeIndex());
 }
 
 

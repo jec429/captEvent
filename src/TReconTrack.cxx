@@ -104,11 +104,11 @@ TVector3 CP::TReconTrack::GetDirection() const {
     return state->GetDirection();
 }
 
-double CP::TReconTrack::GetCurvature() const {
+double CP::TReconTrack::GetMass() const {
     // This is the preferred way to access a state field.  
     THandle<CP::TTrackState> state = GetState();
     if (!state) throw EMissingField();
-    return state->GetCurvature();
+    return state->GetMass();
 }
 
 double CP::TReconTrack::GetWidth() const {

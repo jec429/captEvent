@@ -129,8 +129,8 @@ namespace tut {
         dir = dir.Unit();
         recState->SetDirection(dir);
 
-        const double curvature = 2.17;
-        recState->SetCurvature(curvature);
+        const double mass = 2.17;
+        recState->SetMass(mass);
 
         const double width(0.3);
         recState->SetWidth(width);
@@ -144,8 +144,8 @@ namespace tut {
         ensure_lessthan("Track direction saved",
                         (recObj.GetDirection()-dir).Mag(), 0.0001);
 
-        ensure_distance("Track curvature saved",
-                        recObj.GetCurvature(), curvature, 0.00001);
+        ensure_distance("Track mass saved",
+                        recObj.GetMass(), mass, 0.00001);
 
         ensure_lessthan("Track width saved",
                         (recObj.GetWidth()-width), 0.0001);

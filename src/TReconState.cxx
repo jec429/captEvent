@@ -434,45 +434,45 @@ CP::TCorrValues CP::TMChargeState::ProjectState(const CP::THandle<CP::TReconStat
 }
 
 ///////////////////////////////////////////////////////
-CP::TMCurvatureState::~TMCurvatureState() {}
+CP::TMMassState::~TMMassState() {}
 
-CP::TMCurvatureState::TMCurvatureState() {
-    fCurvatureIndex = fLocalNames.size();
-    fLocalNames.push_back("Curvature");
+CP::TMMassState::TMMassState() {
+    fMassIndex = fLocalNames.size();
+    fLocalNames.push_back("Mass");
 }
 
-double CP::TMCurvatureState::GetCurvature() const {
-    return GetThis().GetValue(fCurvatureIndex);
+double CP::TMMassState::GetMass() const {
+    return GetThis().GetValue(fMassIndex);
 }
 
-void CP::TMCurvatureState::SetCurvature(double enr) {
-    GetThis().SetValue(fCurvatureIndex,enr);
+void CP::TMMassState::SetMass(double enr) {
+    GetThis().SetValue(fMassIndex,enr);
 }
 
-double CP::TMCurvatureState::GetCurvatureVariance() const {
-    return GetThis().GetCovarianceValue(fCurvatureIndex,
-                                                fCurvatureIndex);
+double CP::TMMassState::GetMassVariance() const {
+    return GetThis().GetCovarianceValue(fMassIndex,
+                                                fMassIndex);
 }
 
-void CP::TMCurvatureState::SetCurvatureVariance(double var) {
-    GetThis().SetCovarianceValue(fCurvatureIndex,fCurvatureIndex,var);
+void CP::TMMassState::SetMassVariance(double var) {
+    GetThis().SetCovarianceValue(fMassIndex,fMassIndex,var);
 }
 
-CP::TCorrValues CP::TMCurvatureState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
-    TCorrValues values(TMCurvatureState::GetSize());
-    values.SetType("Curvature ");
-    const TMCurvatureState* curvState 
-        = dynamic_cast<const TMCurvatureState*>(GetPointer(proj));
+CP::TCorrValues CP::TMMassState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
+    TCorrValues values(TMMassState::GetSize());
+    values.SetType("Mass ");
+    const TMMassState* massState 
+        = dynamic_cast<const TMMassState*>(GetPointer(proj));
     int base = 0;
-    if (curvState) {
-        const int offset = curvState->GetCurvatureIndex();
-        for (int i = 0; i < TMCurvatureState::GetSize(); ++i) {
+    if (massState) {
+        const int offset = massState->GetMassIndex();
+        for (int i = 0; i < TMMassState::GetSize(); ++i) {
             values.SetValue(i+base,
-                            curvState->GetThis().GetValue(i+offset));
-            for (int j = 0; j < TMCurvatureState::GetSize(); ++j) {
+                            massState->GetThis().GetValue(i+offset));
+            for (int j = 0; j < TMMassState::GetSize(); ++j) {
                 values.SetCovarianceValue(
                     i+base, j+base,
-                    curvState->GetThis().GetCovarianceValue(i+offset,
+                    massState->GetThis().GetCovarianceValue(i+offset,
                                                                     j+offset));
             }
         }
@@ -615,11 +615,11 @@ CP::TCorrValues CP::TMPositionDirectionState::ProjectState(const CP::THandle<CP:
 }
 
 ///////////////////////////////////////////////////////
-CP::TMPosDirCurvState::~TMPosDirCurvState() {}
+CP::TMPosDirMassState::~TMPosDirMassState() {}
 
-CP::TCorrValues CP::TMPosDirCurvState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
-    TCorrValues values(TMPosDirCurvState::GetSize());
-    values.SetType("X Y Z T DX DY DZ Curvature ");
+CP::TCorrValues CP::TMPosDirMassState::ProjectState(const CP::THandle<CP::TReconState>& proj) {
+    TCorrValues values(TMPosDirMassState::GetSize());
+    values.SetType("X Y Z T DX DY DZ Mass ");
     const TMPositionState* posState 
         = dynamic_cast<const TMPositionState*>(GetPointer(proj));
     int base = 0;
@@ -653,17 +653,17 @@ CP::TCorrValues CP::TMPosDirCurvState::ProjectState(const CP::THandle<CP::TRecon
         }
     }
     base += TMDirectionState::GetSize();
-    const TMCurvatureState* curvState 
-        = dynamic_cast<const TMCurvatureState*>(GetPointer(proj));
-    if (curvState) {
-        int offset = curvState->GetCurvatureIndex();
-        for (int i = 0; i < TMCurvatureState::GetSize(); ++i) {
+    const TMMassState* massState 
+        = dynamic_cast<const TMMassState*>(GetPointer(proj));
+    if (massState) {
+        int offset = massState->GetMassIndex();
+        for (int i = 0; i < TMMassState::GetSize(); ++i) {
             values.SetValue(i+base, 
-                            curvState->GetThis().GetValue(i+offset));
-            for (int j = 0; j < TMCurvatureState::GetSize(); ++j) {
+                            massState->GetThis().GetValue(i+offset));
+            for (int j = 0; j < TMMassState::GetSize(); ++j) {
                 values.SetCovarianceValue(
                     i+base, j+base,
-                    curvState->GetThis().GetCovarianceValue(i+offset,
+                    massState->GetThis().GetCovarianceValue(i+offset,
                                                                     j+offset));
             }
         }

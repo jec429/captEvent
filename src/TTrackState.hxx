@@ -13,7 +13,7 @@ namespace CP {
 class CP::TTrackState: public TReconState,
                        virtual public TMReconState,
                        virtual public TMEDepositState,
-                       virtual public TMPosDirCurvState,
+                       virtual public TMPosDirMassState,
                        virtual public TMWidthState {
 public:
     TTrackState();
@@ -25,7 +25,7 @@ public:
     /// vector.
     static int GetSize() {
         return TMEDepositState::GetSize() 
-            + TMPosDirCurvState::GetSize()
+            + TMPosDirMassState::GetSize()
             + TMWidthState::GetSize();
     }
 
