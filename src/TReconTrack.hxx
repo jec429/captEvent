@@ -13,13 +13,14 @@ namespace CP {
 }
 
 /// A representation of a curvilinear energy deposit starting a position, and
-/// following a path.  This is described by the amount of energy (dEdX), the
-/// initial position , the initial time, the initial direction, the initial
-/// curvature, and the initial path width.  There must be a way to represent
-/// the path of the energy deposition between the initial and final ends of
-/// the deposition.  At each intermediate point, we require a representation
-/// of the energy deposit (dEdX), position, time, direction, curvature, and
-/// width.  The detector hits are associated with each node along the track.
+/// following a path.  This is described by the amount of energy deposited by
+/// the entire track, the initial position , the initial time, the initial
+/// direction, the initial curvature, and the initial path width.  There must
+/// be a way to represent the path of the energy deposition between the
+/// initial and final ends of the deposition.  At each intermediate point, we
+/// require a representation of the energy deposit (dEdX), position, time,
+/// direction, curvature, and width.  The detector hits are associated with
+/// each node along the track.
 ///
 /// The CP::TReconTrack class is intended to describe the geometry of the
 /// energy deposition in a detector, and not make the association with a
