@@ -35,10 +35,10 @@ public:
         /// successfully identified.
         kOther = 10,
 
-        /// \name Showering Particle Types
-        /// These are particle types that are often associated with
-        /// being showers.
-        /// @{
+        /// \name Showering Particle Types These are particle types that are
+        /// often associated with being showers.  This also represents an
+        /// object that is in someway not consistent with being a track, but
+        /// which can not be identified as a particular particle.  @{
         
         /// A generic shower.
         kShower = 1000, 
@@ -46,27 +46,30 @@ public:
         /// An electro magnetic shower.
         kEM = 1100, 
         
-        /// An electron.  Keep in mind that in the TPC, an electron will be
+        /// An electron.  Keep in mind that in a TPC, an electron may be
         /// reconstructed as a track, and then identified based on dEdX.
         kElectron, 
         
         /// A gamma ray.
         kGamma, 
         
-        /// A generic hadronic shower.
+        /// A generic hadronic shower.  At an accelerator, these might be
+        /// called "jets".
         kHadronic = 1200, 
 
         /// @}
 
         /// A generic track that might be either a light or heavily ionizing
-        /// particle.
+        /// particle.  Particles in this category have enough mass that they
+        /// generally produce track like objects.  In other words, the
+        /// particle mass is "large".  However, some track particles can be
+        /// found using show based algorithms.
         kTrack = 2000,
 
-        /// @name Minimum Ionizing, or Light Particle Types
-        /// These are particles that produce tracks with small ionization, or
+        /// @name Minimum Ionizing, or Light Particle Types These are
+        /// particles that typically produce tracks with small ionization, or
         /// (almost equivalently) have moderate masses.  Practically, these
-        /// particles will be muons, or possibly charged pions. 
-        /// @{
+        /// particles will be muons, or possibly charged pions.  @{
 
         /// A generic track that is not heavily ionizing, typically a MIP.
         kLightTrack= 2100,
@@ -79,12 +82,15 @@ public:
 
         /// @}
         
-        /// @name Heavy Particle Types
-        /// @{
+        /// @name Heavy Particle Types.  These are particlea that typically
+        /// produce tracks with a lot of ionization.  @{
         
         /// A generic heavy track.
         kHeavyTrack = 2200, 
         
+        /// A particle identified as a charged kaon.
+        kKaon,
+
         /// A track identified as a proton.
         kProton,
 
