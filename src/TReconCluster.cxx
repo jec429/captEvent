@@ -301,9 +301,9 @@ void CP::TReconCluster::UpdateFromHits() {
         for (int row = 0; row<3; ++row) {
             for (int col = row; col<3; ++col) {
                 moments(row,col) += diff(row)*diff(col)*(*h)->GetCharge();
+                // Correct for the finite size of the hit.
                 if (row==col) {
-                    // double r = (*h)->GetUncertainty()[row];
-                    double r = 2.0*(*h)->GetRMS()[row]/std::sqrt(12.0);
+                    double r = (*h)->GetRMS()[row];
                     moments(row,col) += r*r*(*h)->GetCharge();
                 }
                 chargeSum(row,col) += (*h)->GetCharge();
