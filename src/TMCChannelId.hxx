@@ -21,8 +21,8 @@ public:
     /// Construct an MC channel dentifier from its electronics-space
     /// coordinates.  The type is 0) for wires and 1) for PMTs.  The "seq" is 0)
     /// for the X wire plane, 1) for the V wire plane, and 2) for the U wire
-    /// plane.  It iss ignored for the light sensors.  The "num" is the wire
-    /// number of the PMT number.
+    /// plane.  It is ignored for the light sensors.  The "num" is the wire
+    /// number, or the PMT number.
     TMCChannelId(UInt_t type,  UInt_t seq,  UInt_t num);
 
     virtual ~TMCChannelId();
