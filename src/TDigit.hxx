@@ -35,7 +35,7 @@ public:
     virtual ~TDigit();
 
     /// Return the channel identifier for this digit.
-    const CP::TChannelId& GetChannelId() const;
+    CP::TChannelId GetChannelId() const;
 
     /// Print the digit information.
     virtual void ls(Option_t* opt = "") const;

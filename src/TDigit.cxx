@@ -9,7 +9,7 @@ CP::TDigit::TDigit(const CP::TChannelId& channel)
 
 CP::TDigit::~TDigit() {}
 
-const CP::TChannelId& CP::TDigit::GetChannelId() const {
+CP::TChannelId CP::TDigit::GetChannelId() const {
     return fChannelId;
 }
 
