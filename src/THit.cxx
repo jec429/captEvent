@@ -131,13 +131,32 @@ void CP::THit::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
     int prec = std::cout.precision();
     std::cout << " Id: " << GetGeomId().AsInt();
-    std::cout << " P: " << std::setprecision(0)
-              << "(" << CP::TUnitsTable::Get().ConvertLength(GetPosition().X())
-              << ", " << CP::TUnitsTable::Get().ConvertLength(GetPosition().Y())
-              << ", " << CP::TUnitsTable::Get().ConvertLength(GetPosition().Z())
-              << ", " << CP::TUnitsTable::Get().ConvertTime(GetTime()) << ")";
-    std::cout << " Q: " << std::setprecision(3) << GetCharge() << " pe"
+    if (GetChannelIdCount() > 0) {
+        std::cout << " C:";
+        for (int i=0; i<GetChannelIdCount(); ++i) {
+            std::cout << " " << GetChannelId(i);
+        }
+    }
+    std::cout << std::endl;
+    TROOT::IncreaseDirLevel();
+    TROOT::IndentLevel();
+    std::cout << "T: " << CP::TUnitsTable::Get().ConvertTime(GetTime());
+    std::cout << " Q: " << CP::TUnitsTable::Get().ConvertCharge(GetCharge())
               << std::endl;
+    TROOT::DecreaseDirLevel();
+    if (GetGeomIdCount() > 1) {
+        TROOT::IncreaseDirLevel();
+        TROOT::IndentLevel();
+        std::cout << "P: (" 
+                  << CP::TUnitsTable::Get().ConvertLength(GetPosition().X())
+                  << ", " 
+                  << CP::TUnitsTable::Get().ConvertLength(GetPosition().Y())
+                  << ", "
+                  << CP::TUnitsTable::Get().ConvertLength(GetPosition().Z()) 
+                  << ")";
+        std::cout << std::endl;
+        TROOT::DecreaseDirLevel();
+    }
     std::string option(opt);
     if (option.find("hits") != std::string::npos) {
         TROOT::IncreaseDirLevel();
