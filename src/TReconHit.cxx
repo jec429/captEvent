@@ -59,7 +59,7 @@ const TVector3& CP::TReconHit::GetUncertainty(void) const {
 }
 
 CP::TGeometryId CP::TReconHit::GetGeomId(int i) const {
-    CP::THandle<CP::THit> hit = GetContributor(i);
+    CP::THandle<CP::THit> hit = GetConstituent(i);
     return hit->GetGeomId();
 }
 
@@ -68,7 +68,7 @@ int CP::TReconHit::GetGeomIdCount() const {
 }
 
 CP::TChannelId CP::TReconHit::GetChannelId(int i) const {
-    CP::THandle<CP::THit> hit = GetContributor(i);
+    CP::THandle<CP::THit> hit = GetConstituent(i);
     return hit->GetChannelId();
 }
 
@@ -77,7 +77,7 @@ int CP::TReconHit::GetChannelIdCount() const {
 }
 
 const CP::TDigitProxy& CP::TReconHit::GetDigit(int i) const {
-    CP::THandle<CP::THit> hit = GetContributor(i);
+    CP::THandle<CP::THit> hit = GetConstituent(i);
     return hit->GetDigit();
 }
 
@@ -85,12 +85,12 @@ int CP::TReconHit::GetDigitCount() const {
     return fContributors.size();
 }
 
-CP::THandle <CP::THit> CP::TReconHit::GetContributor(int i) const {
+CP::THandle <CP::THit> CP::TReconHit::GetConstituent(int i) const {
     if (i<0 || fContributors.size()<= (unsigned) i) throw EHitOutOfRange();
     return fContributors[i];
 }
 
-int CP::TReconHit::GetContributorCount() const {
+int CP::TReconHit::GetConstituentCount() const {
     return fContributors.size();
 }
 

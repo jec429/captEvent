@@ -65,13 +65,13 @@ public:
     /// coordinates.
     virtual const TMatrixD& GetRotation(void) const;
 
-    /// Return a contributing hit.  If the index is out of range, this will
+    /// Return a constituent hit.  If the index is out of range, this will
     /// throw an EHitOutOfRange exception.  By default this will throw an
     /// EHitOutOfRange, but it may be over-ridden in a derived class.
-    virtual CP::THandle<CP::THit> GetContributor(int i=0) const;
+    virtual CP::THandle<CP::THit> GetConstituent(int i=0) const;
 
     /// Return the number of hits that contribute to this hit.
-    virtual int GetContributorCount() const;
+    virtual int GetConstituentCount() const;
 
     /// Return a proxy to the digit that generated this hit.  The TDigitProxy
     /// will be valid if a TDigitContainer is available, and if the digit
@@ -177,7 +177,7 @@ protected:
     /// TReconHits.  This is by definition the identity matrix.
     static TMatrixD* fRotation;
 
-    ClassDef(TReconHit,1);
+    ClassDef(TReconHit,2);
 };
 
 
