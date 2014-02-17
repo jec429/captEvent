@@ -1,4 +1,5 @@
 #include "TMCChannelId.hxx"
+#include "TCaptLog.hxx"
 
 #include <string>
 #include <sstream>
@@ -39,7 +40,7 @@ std::string CP::TMCChannelId::AsString() const {
             str << "U";
             break;
         default:
-            str << "?";
+            str << "?" << GetSequence() << "?" ;
         }
         str << "-" << GetNumber();
         break;
@@ -47,11 +48,12 @@ std::string CP::TMCChannelId::AsString() const {
         str << "-P-" << GetNumber();
         break;
     default:
-        str << "-?-" << GetSequence() << "-" << GetNumber();
+        str << "-?" << GetType() << "?-" << GetSequence() << "-" << GetNumber();
         break;
     }
 
-    return str.str();
+    std::string result = str.str();
+    return result;
 }
 
 UInt_t CP::TMCChannelId::GetType() const {
