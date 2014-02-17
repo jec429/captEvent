@@ -3,6 +3,7 @@
 
 #include <Rtypes.h>
 #include <string>
+#include <ostream>
 
 #include "ECore.hxx"
 #include "method_deprecated.hxx"
@@ -12,6 +13,8 @@ namespace CP {
     EXCEPTION(EChannelId,ECore);
 
     class TChannelId;
+
+    std::ostream& operator<<(std::ostream& s, const CP::TChannelId& id);
 };
 
 /// Base class for channel identifiers.  This can answer simple interrogations
@@ -150,4 +153,5 @@ private:
 
     ClassDef(TChannelId, 1)
 };
+
 #endif

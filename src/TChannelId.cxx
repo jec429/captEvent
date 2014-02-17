@@ -9,14 +9,22 @@
 
 ClassImp(CP::TChannelId);
 
-namespace {
-};
-
 CP::TChannelId::TChannelId(UInt_t id): fChannelId(id) {}
 
 CP::TChannelId::TChannelId(const TChannelId& src): fChannelId(src.fChannelId) {}
 
 CP::TChannelId::~TChannelId() {}
+
+std::ostream& CP::operator<<(std::ostream& s, const CP::TChannelId& id) {
+    try {
+        s << id.AsString();
+    }
+    catch (...) {
+        s << id.AsInt();
+    };
+
+    return s;
+}
 
 unsigned int CP::TChannelId::GetField(int msb, int lsb) const {
     if (lsb>msb || lsb<0 || 31<msb){ 
@@ -91,7 +99,7 @@ std::string CP::TChannelId::SubDetAsString() const {
   
     switch (GetSubDetector()) {
     case kMC:      det = "MC";     break;
-    default:       det = "--";     break; 
+    default:       det = "NV";     break; 
     }
 
     return det;
@@ -110,7 +118,7 @@ std::string CP::TChannelId::AsString() const {
 
     std::ostringstream buffer;
     buffer << std::setw(7) << SubDetAsString()
-           << std::setw(8) << std::hex << std::setfill('0') 
-           << "0x" << fChannelId;
+           << "-0x" << std::setw(8) << std::hex << std::setfill('0') 
+           << fChannelId;
     return buffer.str();
 }
