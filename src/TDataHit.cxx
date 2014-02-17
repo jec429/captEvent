@@ -12,7 +12,7 @@ CP::TDataHit::TDataHit()
     : fChannelId(0) {}
 
 CP::TDataHit::TDataHit(const CP::TWritableDataHit& h) 
-    : CP::TSingleHit(h), fProxy(h.fProxy) {}
+    : CP::TSingleHit(h), fProxy(h.fProxy), fChannelId(h.fChannelId) {}
 
 CP::TDataHit::~TDataHit() { }
 
@@ -25,6 +25,14 @@ const CP::TDigitProxy& CP::TDataHit::GetDigit(int i) const {
     if (i!=0) throw CP::EHitOutOfRange();
     if (!fProxy.IsValid()) throw CP::EHitOutOfRange();
     return fProxy;
+}
+
+int CP::TDataHit::GetChannelIdCount() const {
+    return 1;
+}
+
+CP::TChannelId CP::TDataHit::GetChannelId(int i) const {
+    return TChannelId(fChannelId);
 }
 
 CP::TWritableDataHit::TWritableDataHit() {}

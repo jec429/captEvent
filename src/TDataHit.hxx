@@ -33,6 +33,18 @@ public:
     /// Return the number of digits that contribute to this hit.
     virtual int GetDigitCount() const;
 
+    /// Return the channel identifier associated with this hit.  If the hit
+    /// has an associated channel identifier, then this will return a valid
+    /// TChannelId.  If there isn't an associated hit, this will return an
+    /// invalid value (check with TChannelId::IsValid).  If the index is out
+    /// of range, then this will throw an EHitOutOfRange exception.  This
+    /// information is also available through the digit, and it is an error
+    /// condition if the two values disagree.
+    virtual TChannelId GetChannelId(int i=0) const;
+
+    /// Return the number of channel identifiers associated with the hit.
+    virtual int GetChannelIdCount() const;
+
 protected:
     /// The digit that generated this hit.
     CP::TDigitProxy fProxy;
