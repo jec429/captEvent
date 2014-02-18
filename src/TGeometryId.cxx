@@ -21,20 +21,20 @@ CP::TGeometryId::~TGeometryId() {}
 void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     // Make sure the bit range is valid.
     if (msb<lsb || msb>31 || lsb <0) {
-        CaptError("Invalid bit field range -- MSB: " << msb
+        CaptSevere("Invalid bit field range -- MSB: " << msb
                    << " LSB: " << lsb);
         throw EGeomIdMSBLSB();
     }
     // Make sure val is in range.
     int maxValue = (1 << (msb-lsb+1));
     if (val >= maxValue) {
-        CaptError("Value out of range " << val 
+        CaptSevere("Value out of range " << val 
                    << " Bits in field " << msb-lsb+1 
                    << " Maximum value " << maxValue);
         throw EGeomIdOutOfRange();
     }
     if (val < 0) {
-        CaptError("Value out of range " << val 
+        CaptSevere("Value out of range " << val 
                    << " -- Negative values are not allowed");
         throw EGeomIdOutOfRange();
     }
@@ -45,7 +45,7 @@ void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     // Shift the value and set the field.
     fGeometryId |= ((val << lsb)&mask);
     if (!IsValid()) {
-        CaptError("Invalid id: " << fGeometryId);
+        CaptSevere("Invalid id: " << fGeometryId);
         throw EGeomIdInvalid();
     }
 }

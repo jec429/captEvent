@@ -59,7 +59,7 @@ namespace tut {
         ensure("The state is valid", recState);
 
         const int stateDim = recState->GetDimensions();
-        ensure_equals("Track state dimensions", stateDim, 11);
+        ensure_equals("Track state dimensions", stateDim, 10);
     }
 
     // Test nodes which are saved have the correct type of state and all have
@@ -84,7 +84,11 @@ namespace tut {
         } 
         catch (CP::EWrongStateType& ex) {
             // OK!
-            std::cout << std::endl << "Caught " << ex.what() << std::endl;
+            std::cout << std::endl
+                      << "************************" << std::endl
+                      << "Success with caught exception:" << std::endl 
+                      << ex.what() << std::endl
+                      << "************************" << std::endl;
         }
 #endif
 
@@ -97,7 +101,11 @@ namespace tut {
         } 
         catch (CP::EObjectEmpty& ex) {
             // OK!
-            std::cout << std::endl << "Caught " << ex.what() << std::endl;
+            std::cout << std::endl
+                      << "************************" << std::endl
+                      << "Success with caught exception:" << std::endl 
+                      << ex.what() << std::endl
+                      << "************************" << std::endl;
         }
 
         try {
@@ -184,4 +192,5 @@ namespace tut {
                         (recObj.GetPosition()-pos).Mag(), 0.0001);
 
     }
+
 };

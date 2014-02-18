@@ -85,7 +85,11 @@ namespace tut {
         } 
         catch (CP::EWrongStateType& ex) {
             // OK!
-            std::cout << std::endl << "Caught " << ex.what() << std::endl;
+            std::cout << std::endl
+                      << "************************" << std::endl
+                      << "Success with caught exception:" << std::endl 
+                      << ex.what() << std::endl
+                      << "************************" << std::endl;
         }
 #endif
 
@@ -101,7 +105,11 @@ namespace tut {
         } 
         catch (CP::EObjectEmpty& ex) {
             // OK!
-            std::cout << std::endl << "Caught " << ex.what() << std::endl;
+            std::cout << std::endl
+                      << "************************" << std::endl
+                      << "Success with caught exception:" << std::endl 
+                      << ex.what() << std::endl
+                      << "************************" << std::endl;
         }
 
         try {

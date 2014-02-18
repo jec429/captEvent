@@ -213,7 +213,6 @@ namespace tut {
         ensure("Vertex as Track -- DZ",v.IsFree(7));
         ensure("Vertex as Track -- Curvature",v.IsFree(8));
         ensure("Vertex as Track -- Width 1",v.IsFree(9));
-        ensure("Vertex as Track -- Width 2",v.IsFree(10));
 
     }
 

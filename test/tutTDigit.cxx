@@ -244,7 +244,7 @@ namespace tut {
              ensure_equals("Digits are the same",d1,d2);
              ensure_equals("Digit proxy returns same value",d1,d3);
              ensure("Digit proxies are the same", dp1 == dp2);
-
+             
              CP::TChannelId c1 = d1->GetChannelId();
              CP::TChannelId c3 = (*it)->GetChannelId();
              ensure_equals("Channels are the same",c1.AsUInt(),c3.AsUInt());

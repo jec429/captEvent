@@ -1,3 +1,7 @@
+#ifdef APPLY_GEOMETRY_TESTS
+// This depends on having standard geometries defined.  The geometry hasn't
+// been fully defined so these tests can't be done at the moment.
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -291,3 +295,4 @@ namespace tut {
     }
 
 };
+#endif

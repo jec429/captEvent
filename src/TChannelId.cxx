@@ -28,7 +28,7 @@ std::ostream& CP::operator<<(std::ostream& s, const CP::TChannelId& id) {
 
 unsigned int CP::TChannelId::GetField(int msb, int lsb) const {
     if (lsb>msb || lsb<0 || 31<msb){ 
-        CaptError("Requesting TChannelId Field with invalid bit range"
+        CaptSevere("Requesting TChannelId Field with invalid bit range"
                     << " LSB: " << lsb << " MSB: " << msb);
         throw EChannelId();
     }
@@ -40,17 +40,17 @@ unsigned int CP::TChannelId::GetField(int msb, int lsb) const {
 void CP::TChannelId::SetField(int val, int msb, int lsb) {
     // Make sure the bit range is valid.
     if (lsb>msb || lsb<0 || 31<msb) {
-        CaptError("Trying to set channel id field with invalid bit range"
-                    << " MSB: " << msb
-                    << " LSB: " << lsb);
+        CaptSevere("Trying to set channel id field with invalid bit range"
+                   << " MSB: " << msb
+                   << " LSB: " << lsb);
         throw EChannelId();
     }
     // Make sure val is in range.
     int maxValue = (1 << (msb-lsb+1));
     if (val >= maxValue) {
         CaptSevere("Channel id value out of range " << val 
-                    << " Bits in field " << msb-lsb+1 
-                    << " Maximum value " << maxValue);
+                   << " Bits in field " << msb-lsb+1 
+                   << " Maximum value " << maxValue);
         return;
     }
     if (val < 0) {
@@ -83,12 +83,12 @@ void CP::TChannelId::SetSubDetector(int det) {
 
 const Bool_t CP::TChannelId::IsValid() const {
     if (!(fChannelId & kGuard_Mask)) {
-        CaptError("Channel identifier has invalid guard bit");
+        CaptSevere("Channel identifier has invalid guard bit");
         return false;
     }
     int det = GetSubDetector();
     if (det < 1 || kMaxDetector <= det) {
-        CaptError("Channel identifier has invalid sub-detector: " << det);
+        CaptSevere("Channel identifier has invalid sub-detector: " << det);
         return false;
     }
     return true;
