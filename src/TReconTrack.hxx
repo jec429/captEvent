@@ -92,6 +92,9 @@ public:
     /// Get the width of the track.
     double GetWidth() const;
 
+    /// Reverse the track direction.
+    void ReverseTrack();
+
 private:
 
     /// The state of the track at the back end.

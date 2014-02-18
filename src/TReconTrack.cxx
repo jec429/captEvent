@@ -116,3 +116,30 @@ double CP::TReconTrack::GetWidth() const {
     if (!state) throw EMissingField();
     return state->GetWidth();
 }
+
+void CP::TReconTrack::ReverseTrack() {
+    // Reverse the order of the nodes.
+    std::reverse(GetNodes().begin(), GetNodes().end());
+
+    // Reverse the state directions.
+    for (CP::TReconNodeContainer::iterator n = GetNodes().begin();
+         n != GetNodes().end(); ++n) {
+        CP::THandle<CP::TTrackState> state = (*n)->GetState();
+        state->SetDirection(-state->GetDirection());
+    }
+    
+    // Swap the front and back states.
+    TTrackState tempState(*(GetFront()));
+    *GetFront() = *GetBack();
+    *GetBack() = tempState;
+
+    // Reverse the direction at the front and back.
+    GetFront()->SetDirection(-GetFront()->GetDirection());
+    GetBack()->SetDirection(-GetBack()->GetDirection());
+
+    // Swap the energy deposit at the front and back.
+    double tempDeposit = GetFront()->GetEDeposit();
+    GetFront()->SetEDeposit(GetBack()->GetEDeposit());
+    GetBack()->SetEDeposit(tempDeposit);
+
+}
