@@ -57,6 +57,11 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
         
     // Assign the wire.
     if (names.back().find("Wire_")!=std::string::npos) {
+        if ((names.end()-2)->find("UPlane_") == std::string::npos
+            && (names.end()-2)->find("VPlane_") == std::string::npos
+            && (names.end()-2)->find("XPlane_") == std::string::npos) {
+            return false;
+        }
         id = CP::GeomId::Captain::Wire(fPlane, ++fWire);
         return true;
     }
