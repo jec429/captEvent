@@ -445,7 +445,8 @@ double CP::TReconCluster::GetLongExtent() {
     for (CP::THitSelection::iterator h = hits->begin(); 
          h != hits->end(); ++h) {
         TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
-        maxLen = std::max(maxLen, std::abs(diff*fLongAxis));
+        maxLen = std::max(maxLen,
+                          (*h)->GetRMS().Mag() + std::abs(diff*fLongAxis));
     }
     maxLen /= fLongAxis.Mag();
     return maxLen;
@@ -460,7 +461,8 @@ double CP::TReconCluster::GetMajorExtent() {
     for (CP::THitSelection::iterator h = hits->begin(); 
          h != hits->end(); ++h) {
         TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
-        maxLen = std::max(maxLen, std::abs(diff*fMajorAxis));
+        maxLen = std::max(maxLen, 
+                          (*h)->GetRMS().Mag() + std::abs(diff*fMajorAxis));
     }
     maxLen /= fMajorAxis.Mag();
     return maxLen;
@@ -475,7 +477,8 @@ double CP::TReconCluster::GetMinorExtent() {
     for (CP::THitSelection::iterator h = hits->begin(); 
          h != hits->end(); ++h) {
         TVector3 diff = (*h)->GetPosition() - GetPosition().Vect();
-        maxLen = std::max(maxLen, std::abs(diff*fMinorAxis));
+        maxLen = std::max(maxLen,
+                          (*h)->GetRMS().Mag() + std::abs(diff*fMinorAxis));
     }
     maxLen /= fMinorAxis.Mag();
     return maxLen;
