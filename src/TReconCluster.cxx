@@ -57,6 +57,15 @@ double CP::TReconCluster::GetEDeposit() const {
     return state->GetEDeposit();
 }
     
+double CP::TReconCluster::GetEDepositVariance() const {
+    // I'm being a bit pedantic and casting to the base mix-in class.  This
+    // could just as well cast to a TClusterState.
+    const TMEDepositState* state 
+        = dynamic_cast<const TMEDepositState*>(fState);
+    if (!state) throw EMissingField();
+    return state->GetEDepositVariance();
+}
+    
 TLorentzVector CP::TReconCluster::GetPosition() const {
     // This is the preferred way to access a state field.  
     THandle<CP::TClusterState> state = GetState();

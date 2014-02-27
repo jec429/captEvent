@@ -47,6 +47,9 @@ public:
     /// Get the energy deposited in the cluster.
     double GetEDeposit() const;
 
+    /// Get the variance of the energy deposited in the cluster.
+    double GetEDepositVariance() const;
+
     /// Get the cluster position.
     TLorentzVector GetPosition() const;
 
