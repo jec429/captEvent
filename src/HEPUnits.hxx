@@ -215,6 +215,12 @@ namespace unit {
     const double megavolt = megaelectronvolt/eplus;
     const double kilovolt = 1.e-3*megavolt;
     const double     volt = 1.e-6*megavolt;
+    const double millivolt = 1.e-9*megavolt;
+
+    // symbols
+    const double  kV  =  kilovolt;
+    const double  V   =  volt;
+    const double  mV  =  millivolt;
     ///@}
 
     /// Electric resistance [E][T][Q^-2]
