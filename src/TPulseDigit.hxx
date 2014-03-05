@@ -21,8 +21,11 @@ public:
     virtual ~TPulseDigit();
 
     /// Construct a digit for a particular channel.  The first time bin is
-    /// specified, and then the vector of sample values for the next set of adcs
-    /// need to be provided.
+    /// specified, and then the vector of sample values for the next set of
+    /// adcs need to be provided.  The first time bin is an offset relative to
+    /// the start of the integration.  The start time will usually be saved in
+    /// the header.  The time offset from the start time will be the digitizer
+    /// sample time times the first time bin.
     TPulseDigit(CP::TChannelId chan, int first, const Vector& adcs);
 
     /// Get the index of the first sample.  This can be negative since some
@@ -43,9 +46,9 @@ public:
     
 private: 
 
-    /// The index of the first sample in the pulse.  This is signed since some
-    /// digitizers may return a delta from a sample number saved in the
-    /// header.
+    /// The counter value of the first sample in the pulse.  This is signed
+    /// since some digitizers may return a delta from a sample number saved in
+    /// the header.
     int fFirstSample;    
 
     /// vector of Samples 
