@@ -50,7 +50,8 @@ namespace CP {
 //     -H                Debug THandle (slow)
 //     -n <cnt>          Only read <cnt> events  [Default: 1]
 //     -q                Decrease the verbosity
-//     -r                Open a ROOT file
+//     -r <override>     Override a parameter "name:value"
+//                          example: -r "elecSim.simple.drift.life:0.1 ms"
 //     -R <override>     Name of an run-time parameter override file
 //     -s <cnt>          Skip <cnt> events
 //     -u                Log the memory and CPU usage

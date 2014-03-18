@@ -342,17 +342,27 @@ usage: dump-event.exe [options] [input-file] ...
 
 Options:
     -o <file>         Set the name of an output file.
-                      Multiple output files can be provided.
+                        Multiple output files can be provided.
     -a                Read all events
-    -c <file>         Set the logging config file name.
-    -d                Increase the debug level.
-    -G                Force a geometry file.
-    -g                Force the geometry to be saved.
-    -H                Debug THandle objects
-    -n <cnt>          Only read <cnt> events [Default: 1]
-    -r                Read a ROOT file
+    -c <file>         Set the logging config file name
+    -d                Increase the debug level
+    -D <name>=[error,severe,warn,debug,trace]
+                      Change the named debug level
+    -f <event>        Look for an event number
+    -f <run>,<event>  Look for a run and event number
+    -G <file>         Force a geometry file
+    -g                Don't save geometry in output
+    -H                Debug THandle (slow)
+    -n <cnt>          Only read <cnt> events  [Default: 1]
+    -q                Decrease the verbosity
+    -r <override>     Override parameter "name:value"
+                      Example: -r "elecSim.simple.drift.life:0.1 ms"
+    -R <override>     Name of an run-time parameter override file
     -s <cnt>          Skip <cnt> events
-    -v                Increase the verbosity.
+    -u                Log the memory and CPU usage
+    -v                Increase the verbosity
+    -V <name>=[quiet,log,info,verbose]
+                      Change the named log level
     -O <opt>[=<val>]  Set an option for the user code
 \endverbatim
 

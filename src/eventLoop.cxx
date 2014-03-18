@@ -79,7 +79,10 @@ namespace {
         std::cout << "    -q                Decrease the verbosity"
                   << std::endl;
 
-        std::cout << "    -r                Open a ROOT file"
+        std::cout << "    -r <override>     Override parameter \"name:value\""
+                  << std::endl;
+        std::cout << "                      Example: -r "
+                  << "\"elecSim.simple.drift.life:0.1 ms\""
                   << std::endl;
 
         std::cout << "    -R <override>     Name of an run-time parameter "
@@ -140,7 +143,7 @@ int CP::eventLoop(int argc, char** argv,
 
     // Process the options.
     for (;;) {
-        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qrR:s:uvV:");
+        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qr:R:s:uvV:");
         if (c<0) break;
         switch (c) {
         case 'a':
@@ -264,7 +267,19 @@ int CP::eventLoop(int argc, char** argv,
         }
         case 'r':
         {
-            fileType = kRootFile;
+            std::string param(optarg);
+            // If the param is "<param>:<value>", split this into two
+            // strings "<param>" and "<value>"
+            std::string::size_type sep = param.find_first_of(":");
+            if (sep == std::string::npos) {
+                std::cerr << "ERROR: Invalid override parameter: "
+                          << "\"" << param << "\""
+                          << std::endl;
+                eventLoopUsage(programName,userCode,defaultReadCount);
+            }
+            std::string value = param.substr(sep+1,std::string::npos);
+            param = param.substr(0,sep);
+            CP::TRuntimeParameters::Get().SetOverrideParameter(param,value);
             break;
         }
         case 'R':

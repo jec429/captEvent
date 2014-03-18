@@ -68,19 +68,18 @@ public:
     /// Get parameter.  Value is returned as string. 
     std::string GetParameterS(std::string);
 
-#ifdef DO_NOT_USE
-    /// The object to translate units.
-    CP::TUnitsTable* GetUnitsTableParser() {
-        return fUnitsTableParser;
-    }
-#endif
-
-    /// This command allows the user to set parameters from the
-    /// command line; the command is different from the standard
-    /// file reading, in that the parameters that are set are 'fixed'.
-    /// Ie, they are immutable and cannot be changed, even if they
-    /// exist in some other parameters file that is read in later.
+    /// This command allows the user to set a file of override values; the
+    /// file is different from the standard file reading, in that the
+    /// parameters that are set are 'fixed'.  Ie, they are immutable and
+    /// cannot be changed, even if they exist in some other parameters file
+    /// that is read in later.
     void ReadParamOverrideFile(std::string filename);
+
+    /// Set a single parameter name to a value.  The value string can contain
+    /// a value and a unit, but the value and unit must be separated by a
+    /// space.  This is used to implement a command line option to set a
+    /// single parameter value.
+   void SetOverrideParameter(std::string name, std::string value);
 
 private:
     /// Yes, it's private...
@@ -119,11 +118,6 @@ private:
     /// if they reappear in a different parameters file.  This is used for the
     /// parameter override files.
     std::set<std::string> fConstants;
-
-#ifdef DO_NOT_USE
-    /// The units parser.
-    CP::TUnitsTable *fUnitsTableParser;
-#endif
 
     /// The static pointer to the singleton instance.
     static TRuntimeParameters* fTRuntimeParameters;
