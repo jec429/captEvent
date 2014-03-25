@@ -9,6 +9,8 @@
 #include <sstream>
 #include <cstdlib>
 #include <algorithm>
+#include <functional>
+#include <string>
 #include <locale>
 
 CP::TRuntimeParameters* 
@@ -240,6 +242,30 @@ bool CP::TRuntimeParameters::HasParameter(std::string parameterName) {
     }
 }
 
+
+bool CP::TRuntimeParameters::GetParameterB(std::string parameterName) {
+  
+    if (HasParameter(parameterName)) {
+        std::locale loc;
+        std::string val = fRuntimeParameters[parameterName].c_str();
+        for (std::string::iterator c = val.begin(); c != val.end(); ++c) {
+            *c = std::tolower(*c,loc);
+        }
+        if (val == "y") return true;
+        if (val == "yes") return true;
+        if (val == "true") return true;
+        if (val == "n") return true;
+        if (val == "no") return false;
+        if (val == "false") return false;
+        return GetParameterI(parameterName);
+    } 
+    else {
+        CaptError("CP::TRuntimeParameters::GetParameterAsInteger "
+                   << "Cannot find parameter '" << parameterName << "'.");
+        throw CP::ENonexistantParameter();
+    }
+    return false;
+}
 
 int CP::TRuntimeParameters::GetParameterI(std::string parameterName) {
   

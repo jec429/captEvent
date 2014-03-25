@@ -59,6 +59,9 @@ public:
     /// Check if Parameter is stored in database
     bool HasParameter(std::string);
 
+    /// Get parameter.  Value is returned as boolean. 
+    bool GetParameterB(std::string);
+
     /// Get parameter.  Value is returned as integer. 
     int GetParameterI(std::string);
 
