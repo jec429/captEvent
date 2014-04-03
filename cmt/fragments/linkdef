@@ -12,6 +12,6 @@ $(dict)$(patsubst %_LinkDef,%_Dict,${NAME}).cxx : \
     ${FULLNAME}  $(ROOT_stamps)
 	$(echo) "build ROOT dictionary for" ${FULLNAME}
 	$(silent)if [ ! -d $(dict) ]; then mkdir -p $(dict); fi ;
-	$(silent)$(rootcint) -f $@ -c -p $(includes) $(cppflags) $(word 1, $(filter-out %~,$^)) $(word 2, $(filter-out %~,$^))
+	$(silent)$(rootcint) -f $@ -c -p $(includes) $(word 1, $(filter-out %~,$^)) $(word 2, $(filter-out %~,$^))
 
 # End of the linkdef fragment.
