@@ -328,7 +328,7 @@ void CP::TSHA1::Input(double float_element) {
     else {
         int exponent;
         double mantissa = std::frexp(float_element,&exponent);
-        integer = (2*std::fabs(mantissa)-1) * 0x7FFFFFFFU;
+        integer = (int) ((2*std::fabs(mantissa)-1) * 0x7FFFFFFFU);
         if (mantissa<0) integer = integer | 0x80000000U;
         Input(integer);
         Input(exponent);
