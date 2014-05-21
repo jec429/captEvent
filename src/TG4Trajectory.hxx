@@ -76,7 +76,7 @@ public:
     /// trajectory list.  If for some reason the trajectory doesn't have a
     /// position (i.e. there aren't any trajectory points), this will return a
     /// position outside of the detector hall, and before the spill.
-    TLorentzVector GetInitialPosition(void) {
+    TLorentzVector GetInitialPosition(void) const {
         if (fPositions.size()>0) return fPositions.front().GetPosition();
         return TLorentzVector(10000,10000,10000,-10000);
     }
@@ -86,7 +86,7 @@ public:
     /// trajectory list.  If for some reason the trajectory doesn't have a
     /// position (i.e. there aren't any trajectory points), this will return a
     /// position outside of the detector hall, and before the spill.
-    TLorentzVector GetFinalPosition(void) {
+    TLorentzVector GetFinalPosition(void) const {
         if (fPositions.size()>0) return fPositions.back().GetPosition();
         return TLorentzVector(10000,10000,10000,-10000);
     }
