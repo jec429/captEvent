@@ -120,10 +120,6 @@ int main(int argc, char** argv) {
             TVector3 pos(g->second);
             CP::TGeometryId target = g->first;
 
-            // Limit the test to the "Bar_" volumes.  This excludes the
-            // composite volumes like "P0D_0".
-            if (target.GetName().find("/Bar_") == std::string::npos) continue;
-
             CP::TGeometryId geomId;
             if (!CP::TManager::Get().GeomId().GetGeometryId(
                     pos.X(), pos.Y(), pos.Z(), geomId)) {

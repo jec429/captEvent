@@ -125,11 +125,11 @@ public:
     /// gGeoManager geometry.  If gGeoManager isn't a valid geometry, then the
     /// tables are left in an "empty" state.  This is used by LoadGeometry,
     /// and can be used when you have a geometry already loaded in memory
-    /// (e.g. to update the TGeomIdManager to match the MC geometry in
-    /// ND280MC). After this has been successfully called (returned true),
-    /// gGeoManager will point to a geometry named
-    /// CAPTAINGeometry-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" where "x"
-    /// stands for a lower case hexidecimal digit.
+    /// (e.g. to update the TGeomIdManager to match the MC geometry in the
+    /// detector simulation). After this has been successfully called
+    /// (returned true), gGeoManager will point to a geometry named
+    /// CAPTAINGeometry-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" where
+    /// "x" stands for a lower case hexidecimal digit.
     void ResetGeometry();
 
     /// A map of geometry id represented as integers to the associated ROOT

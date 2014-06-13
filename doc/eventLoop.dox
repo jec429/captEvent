@@ -142,7 +142,11 @@ before the first event, and then save information after the last event.
 This can be done by overriding the
 CP::TEventLoopFunction::Initialize() and
 CP::TEventLoopFunction::Finalize() methods.  Here is an example that
-will histogram the number of hits in the P0D.
+will histogram the number of hits in CAPTAIN.
+
+\note This code only works on files that have been passed through the event
+calibration (i.e. "cali", or "reco" files).  It will not work on GEANT4 or
+elecSim files (i.e. "g4mc" and "elmc" files).
 
 \code
 
@@ -161,22 +165,24 @@ public:
     virtual ~TMySimpleEventLoop() {}
 
     void Initialize() {
-        fP0DHits = new TH1F("p0dHits", "Hits in the P0D",10000,0,10000);
+        fCAPTAINHits = new TH1F("captainHits", "Hits in CAPTAIN",2000,0,2000);
     }
 
     bool operator () (CP::TEvent& event) {
 
-        // Get the list of P0D hits from the event.
-	CP::THandle<CP::THitSelection> p0d(event.GetHitSelection("p0d"));
+        // Get the list of hits from the event.  The handle is essentially
+	// a pointer to the hit selection.
+	CP::THandle<CP::THitSelection> drift(event.GetHits("drift"));
         
-	// Check if this hit selection exists.  Critical!
-	if (p0d) {
+	// Check if this hit selection exists.  Critical!  If the event did
+ 	// not contain the drift hits, then the drift handle will be invalid.
+	if (drift) {
 
-            // Get the number of P0D hits
-            int number_hits = p0d->size();
+            // Get the number of CAPTAIN hits
+            int number_hits = drift->size();
                         
             // Fill the histogram
-            fP0DHits->Fill(number_hits);
+            fCAPTAINHits->Fill(number_hits);
 
         }	
 
@@ -186,12 +192,12 @@ public:
     // Called at least once.  If multiple file are open, it will be called
     // for each one.   Notice there are two forms...
     void Finalize(CP::TRootOutput * const output) {
-        fP0DHits->Draw();
-        gPad->Print("p0dHits.eps");
+        fCAPTAINHits->Draw();
+        gPad->Print("captainHits.eps");
     }
 
 private:
-    TH1F* fP0DHits;
+    TH1F* fCAPTAINHits;
 };
 
 int main(int argc, char **argv) {
@@ -208,7 +214,7 @@ mySimpleEventLoop.exe input-file.root
 \endcode
 
 and will produce a postscript file plotting a histogram of the number of
-hits in the P0D.
+hits in CAPTAIN.
 
 \section eventLoopFilter Filtering Events, or Event Selection
 
@@ -238,7 +244,7 @@ save a TTree in the output file, you must create the tree in your
 TMySimpleEventLoop::Initialize() method, and declare the branches that will
 be saved.  The branch variables should be declare as private members of
 TMySimpleEventLoop.  The code below uses the same information we looked at
-before (number of hits in P0D), but stores it in the TTree.
+before (number of hits in CAPTAIN), but stores it in the TTree.
 
 \code
 #include <eventLoop.hxx>
@@ -252,17 +258,17 @@ public:
 
     virtual void Initialize(void) {
         fOutputTree = new TTree("userLoopTree","A simple summary tree");
-        fOutputTree->Branch("NP0DHits", &fNP0DHits, "NP0DHits/I");
+        fOutputTree->Branch("NHits", &fNHits, "NHits/I");
     }
 
     bool operator () (CP::TEvent& event) {
-       // Get the P0D hits
-       CP::THandle<CP::THitSelection> p0d(event.GetHitSelection("p0d"));
+       // Get the hits
+       CP::THandle<CP::THitSelection> drift(event.GetHits("drift"));
        // Update Tree values
-       if (p0d) fNP0DHits = p0d->size();
-       else  fNP0DHits = 0;
+       if (drift) fNHits = drift->size();
+       else  fNHits = 0;
        fOutputTree->Fill();
-        return false; // Don't save events...
+       return false; // Don't save events...
     }
  
     // Called if the output file is open.  Notice there are two forms...
@@ -272,7 +278,7 @@ public:
 
 private:
     TTree* fOutputTree;
-    int    fNP0DHits;
+    int    fNHits;
 };
 
 int main(int argc, char **argv) {

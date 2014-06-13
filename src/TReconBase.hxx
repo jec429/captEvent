@@ -209,9 +209,9 @@ public:
     CP::THandle<CP::THitSelection> GetHits() const;
 
     /// Add a hit selection to the recon object.  The recon object takes
-    /// ownership of the hit (as per the ND280 pointer ownership policy), so
-    /// you must not add a hit selection currently owned by another object.
-    /// The name of the hit selection will be changed to "hits".
+    /// ownership of the hit (as per the pointer ownership policy), so you
+    /// must not add a hit selection currently owned by another object.  The
+    /// name of the hit selection will be changed to "hits".
     void AddHits(CP::THitSelection* hits);
 
     /// Provide the reconstruction objects used in the algorithm that created
