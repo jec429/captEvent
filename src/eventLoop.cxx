@@ -10,6 +10,7 @@
 #include "TCaptLog.hxx"
 #include "TMemoryUsage.hxx"
 #include "TRuntimeParameters.hxx"
+#include "TInputManager.hxx"
 
 #include <iostream>
 #include <sstream>
@@ -92,6 +93,18 @@ namespace {
         std::cout << "    -s <cnt>          Skip <cnt> events"
                   << std::endl;
         
+        std::cout << "    -t <type>         Set the type of the input file"
+                  << std::endl;
+
+        for (int i = 0; i<CP::TManager::Get().Input().BuilderCount(); ++i) {
+            std::string name
+                = CP::TManager::Get().Input().Builder(i).GetName();
+            std::string doc 
+                = CP::TManager::Get().Input().Builder(i).GetDocumentation();
+            std::cout << "        " << name
+                      << " : " << doc << std::endl;
+        }
+
         std::cout << "    -u                Log the memory and CPU usage"
                   << std::endl;
 
@@ -137,13 +150,11 @@ int CP::eventLoop(int argc, char** argv,
     // If this is not zero, then only accept triggers matched in this mask.
     signal(SIGSEGV, SIG_DFL);
 
-    enum {
-        kRootFile,
-    } fileType = kRootFile;
+    std::string fileType = "root";
 
     // Process the options.
     for (;;) {
-        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qr:R:s:uvV:");
+        int c = getopt(argc, argv, "ac:dD:f:G:gHn:o:O:qr:R:s:t:uvV:");
         if (c<0) break;
         switch (c) {
         case 'a':
@@ -293,6 +304,11 @@ int CP::eventLoop(int argc, char** argv,
             tmp >> skipCount;
             break;
         }
+        case 't':
+        {
+            fileType = optarg;
+            break;
+        }
         case 'u':
         {
           // Enable logging of memory usage
@@ -426,14 +442,15 @@ int CP::eventLoop(int argc, char** argv,
         int lastRunId = -1;
         try {
             std::auto_ptr<CP::TVInputFile> input;
-            switch (fileType) {
-            case kRootFile:{
-                TFile* file = TFile::Open(fileName.c_str(),"OLD");
-                input.reset(new CP::TRootInput(file));
-                break;
+            try {
+                input.reset(
+                    CP::TManager::Get().Input().Builder(fileType.c_str()).Open(
+                        fileName.c_str()));
             }
-            default:
-                std::cout << "ERROR: Unknown file type" << std::endl;
+            catch (...) {
+                std::cout << "ERROR: Cannot open file type \"" 
+                          << fileType << "\"" << std::endl;
+                exit(1);
             }
             
             if (!input->IsOpen()) {

@@ -25,6 +25,7 @@ namespace CP {
     class TGeomIdManager;
     class TRootInput;
     class TGeometryId;
+    class TInputManager;
 
     /// An exception from the data base.
     EXCEPTION(EManager,ECore);
@@ -244,6 +245,9 @@ public:
     /// CP::TManager::GeometryChange for details and an example.
     TGeoManager* Geometry(TEvent* event=NULL);
 
+    /// Return a reference to the input manager;
+    TInputManager& Input();
+
     /// Return a reference to the ROOT TDatabasePDG.
     TDatabasePDG& ParticleData(void);
 
@@ -362,6 +366,9 @@ private:
     /// A vector of call backs that will be called whenever the geometry
     /// changes.
     std::set<CP::TManager::GeometryChange*> fGeometryCallbacks;
+
+    /// Manage the input readers.
+    TInputManager* fInputManager;
 
     ClassDef(TManager,0);
 };

@@ -11,7 +11,27 @@
 
 #include "TEvent.hxx"
 #include "TManager.hxx"
+#include "TInputManager.hxx"
 #include "TCaptLog.hxx"
+
+namespace {
+    class TRootInputBuilder : public CP::TVInputBuilder {
+    public:
+        TRootInputBuilder() 
+            : CP::TVInputBuilder("root", "Read a captEvent ROOT file") {}
+        CP::TVInputFile* Open(const char* file) const {
+            return new CP::TRootInput(file,"OLD");
+        }
+    };
+
+    class TRootInputRegistration {
+    public:
+        TRootInputRegistration() {
+            CP::TManager::Get().Input().Register(new TRootInputBuilder());
+        }
+    };
+    TRootInputRegistration registrationObject;
+}
 
 CP::TRootInput::TRootInput(const char* name, Option_t* option, Int_t compress) 
     : fFile(NULL), fSequence(0), fEventTree(NULL), fEventPointer(0),

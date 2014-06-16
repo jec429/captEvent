@@ -29,6 +29,7 @@
 #include "TEventFolder.hxx"
 #include "TDigitManager.hxx"
 #include "TGeomIdManager.hxx"
+#include "TInputManager.hxx"
 #include "TSHA1.hxx"
 
 ClassImp(CP::TManager);
@@ -165,6 +166,7 @@ CP::TManager::TManager() {
     fGeomId = NULL;
     fGeometryLookup = NULL;
     fAlignmentLookup = NULL;
+    fInputManager = NULL;
 }
 
 CP::TManager& CP::TManager::Get(void) {
@@ -306,3 +308,9 @@ CP::TGeomIdManager& CP::TManager::GeomId(void) {
     return *fGeomId;
 }
 
+CP::TInputManager& CP::TManager::Input(void) {
+    if (!fInputManager) {
+        fInputManager = new CP::TInputManager();
+    }
+    return *fInputManager;
+}
