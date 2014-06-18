@@ -11,7 +11,7 @@ namespace CP {
     class TPulseDigit;
 };
 
-/// Digit for pulse based detectors.  This holds the actual digitization data
+/// Digit for FADC based detectors.  This holds the actual digitization data
 /// for a channel where an sample values are read with a fixed frequency.
 class CP::TPulseDigit : public TDigit {
 public:

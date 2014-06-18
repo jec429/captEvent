@@ -7,7 +7,7 @@ namespace CP {
     class TPulseDigitHeader;
 };
 
-class CP::TPulseDigitHeader : public CP::TDigitHeader{
+class CP::TPulseDigitHeader : public CP::TDigitHeader {
 public:
     TPulseDigitHeader();
     explicit TPulseDigitHeader(const std::string& name);
