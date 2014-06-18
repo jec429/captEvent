@@ -1,9 +1,13 @@
 #ifndef TVInputFile_hxx_seen
 #define TVInputFile_hxx_seen
 
+#include "ECore.hxx"
+
 namespace CP {
     class TVInputFile;
     class TEvent;
+
+    EXCEPTION(EInputFile,ECore);
 };
 
 /// An abstract base class for input files that produce TEvent objects.

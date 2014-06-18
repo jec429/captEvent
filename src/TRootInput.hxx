@@ -9,7 +9,6 @@
 class TTree;
 
 namespace CP {
-    EXCEPTION(EInputFile,ECore);
     EXCEPTION(EInputFileMissing,EInputFile);
     EXCEPTION(ENoEvents,EInputFile);
 
