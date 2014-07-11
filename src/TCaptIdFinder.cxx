@@ -1,5 +1,3 @@
-// $Id: TCaptIdFinder.cxx,v 1.2 2011/01/31 19:24:49 mcgrew Exp $
-
 #include <iostream>
 
 #include <TGeoManager.h>
@@ -8,7 +6,8 @@
 #include "CaptGeomIdDef.hxx"
 #include "TCaptIdFinder.hxx"
 
-CP::TCaptIdFinder::TCaptIdFinder() {}
+CP::TCaptIdFinder::TCaptIdFinder() 
+    : fPlane(-1), fWire(-1), fPhotosensor(-1) {}
 CP::TCaptIdFinder::~TCaptIdFinder() {}
 
 bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names, 
@@ -63,6 +62,12 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
             return false;
         }
         id = CP::GeomId::Captain::Wire(fPlane, ++fWire);
+        return true;
+    }
+
+    // Assign the photosensor.
+    if (names.back().find("PhotoCathode_") != std::string::npos) {
+        id = CP::GeomId::Captain::PhotoSensor(++fPhotosensor);
         return true;
     }
 

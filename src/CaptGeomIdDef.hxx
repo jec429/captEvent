@@ -133,8 +133,12 @@ namespace CP {
                         kDriftRegion,
                         /// A wire plane.
                         kWirePlane,
-                        /// A light sensor (i.e a PMT)
-                        kLightSensor,
+                        /// A photo sensor (i.e a PMT).  All of the
+                        /// photosensors are in the "global" part of the
+                        /// captain namespaces.  This is because they
+                        /// (possibly) sit in lots of different volumes, and
+                        /// are not segmented.
+                        kPhotoSensor,
                     };
                 
                     /// @{ The sequence value for this type of global volume.
@@ -167,6 +171,7 @@ namespace CP {
                     const GeomIdMask kWireMask=MAKE_MASK(kWireMSB,kWireLSB);
                     /// @}
                 };            
+
             };
 
 #undef MAKE_FIELD_MASK

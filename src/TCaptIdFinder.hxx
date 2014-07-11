@@ -23,5 +23,8 @@ private:
     // The most recently seen wire.
     int fWire;
 
+    // The most recently seen photosensor.
+    int fPhotosensor;
+
 };
 #endif

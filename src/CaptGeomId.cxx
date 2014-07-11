@@ -132,7 +132,7 @@ int CP::GeomId::Captain::GetPlane(TGeometryId i) {
                        CP::GeomId::Def::Captain::Global::kFieldLSB);
 }
 
-CP::TGeometryId CP::GeomId::Captain::LightSensor(int sensor) {
+CP::TGeometryId CP::GeomId::Captain::PhotoSensor(int sensor) {
     TSettableGeometryId id;
     id.SetField(CP::GeomId::Def::kCryostat,
                 CP::GeomId::Def::kDetectorIdMSB, 
@@ -140,7 +140,7 @@ CP::TGeometryId CP::GeomId::Captain::LightSensor(int sensor) {
     id.SetField(CP::GeomId::Def::Captain::kGlobal, 
                 CP::GeomId::Def::Captain::kSeqIdMSB,
                 CP::GeomId::Def::Captain::kSeqIdLSB);
-    id.SetField(CP::GeomId::Def::Captain::Global::kLightSensor,
+    id.SetField(CP::GeomId::Def::Captain::Global::kPhotoSensor,
                 CP::GeomId::Def::Captain::Global::kSeqIdMSB,
                 CP::GeomId::Def::Captain::Global::kSeqIdLSB);
     id.SetField(sensor,
@@ -149,7 +149,7 @@ CP::TGeometryId CP::GeomId::Captain::LightSensor(int sensor) {
     return id;
 }
 
-bool CP::GeomId::Captain::IsLightSensor(TGeometryId i) {
+bool CP::GeomId::Captain::IsPhotoSensor(TGeometryId i) {
     TSettableGeometryId id(i);
     if (CP::GeomId::Def::kCryostat 
         != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
@@ -157,15 +157,15 @@ bool CP::GeomId::Captain::IsLightSensor(TGeometryId i) {
     if (CP::GeomId::Def::Captain::kGlobal
         != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
                        CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
-    if (CP::GeomId::Def::Captain::Global::kLightSensor
+    if (CP::GeomId::Def::Captain::Global::kPhotoSensor
         != id.GetField(
             CP::GeomId::Def::Captain::Global::kSeqIdMSB,
             CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return false;
     return true;
 }
 
-int CP::GeomId::Captain::GetLightSensor(TGeometryId i) {
-    if (!IsLightSensor(i)) return -1;
+int CP::GeomId::Captain::GetPhotoSensor(TGeometryId i) {
+    if (!IsPhotoSensor(i)) return -1;
     TSettableGeometryId id(i);
     return id.GetField(CP::GeomId::Def::Captain::Global::kFieldMSB,
                        CP::GeomId::Def::Captain::Global::kFieldLSB);
