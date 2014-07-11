@@ -138,7 +138,7 @@ namespace CP {
                         /// captain namespaces.  This is because they
                         /// (possibly) sit in lots of different volumes, and
                         /// are not segmented.
-                        kPhotoSensor,
+                        kPhotosensor,
                     };
                 
                     /// @{ The sequence value for this type of global volume.
