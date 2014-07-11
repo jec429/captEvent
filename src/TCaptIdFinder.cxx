@@ -67,7 +67,7 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
 
     // Assign the photosensor.
     if (names.back().find("PhotoCathode_") != std::string::npos) {
-        id = CP::GeomId::Captain::PhotoSensor(++fPhotosensor);
+        id = CP::GeomId::Captain::Photosensor(++fPhotosensor);
         return true;
     }
 
