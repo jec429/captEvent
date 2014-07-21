@@ -15,17 +15,18 @@ CP::TInputManager::TInputManager() {}
 CP::TInputManager::~TInputManager() {}
 
 void CP::TInputManager::Register(TVInputBuilder* builder) {
-    
-    CaptError("Register " << builder->GetName());
     fBuilders.push_back(builder);
 }
 
 const CP::TVInputBuilder& CP::TInputManager::Builder(const char* name) {
-    std::string nameString(name);
-
+    std::string optionString(name);
+    std::string nameString = optionString.substr(0,optionString.find("("));
     for (std::vector<const CP::TVInputBuilder*>::iterator b = fBuilders.begin();
          b != fBuilders.end(); ++b) {
         if ((*b)->GetName() == nameString) return *(*b);
+        const TVInputBuilder& builder = *(*b);
+        builder.SetArguments(optionString.c_str());
+        return builder;
     }
     throw ENoInputBuilder();
 }
