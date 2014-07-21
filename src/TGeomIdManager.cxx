@@ -741,32 +741,33 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
         return false;
     }
 
-    // Check to see if we have a file to override the default geometry.
-    if (!GetGeometryFileOverride().empty()
-        || GetGeometryHashOverride().Valid()) {
+    // Check to see if we have a hash code to override the default geometry.
+    if (GetGeometryHashOverride().Valid()) {
         CaptNamedDebug("Geometry","Override standard geometry");
-        if (!GetGeometryFileOverride().empty()) {
-            TFile *filePtr 
-                = TFile::Open(GetGeometryFileOverride().c_str(),"OLD");
-            if (!filePtr) {
-                CaptNamedWarn("Geometry",
-                               " Geometry override file does not exist.");
-            }
-            else {
-                std::auto_ptr<TFile> file(filePtr);        
-                if (LoadGeometry(*file,CP::TSHAHashValue())) {
-                    CaptNamedInfo("Geometry","Override geometry from "
-                                   << file->GetName());
-                    SetGeometryHashOverride(GetHash());
-                    return true;
-                }
-            }
-        }
-
         if (GetGeometryHashOverride().Valid()) {
             if (ReadGeometry(GetGeometryHashOverride())) {
                 CaptNamedInfo("Geometry","Override geometry hash " 
                           << GetGeometryHashOverride());
+                SetGeometryHashOverride(GetHash());
+                return true;
+            }
+        }
+    }
+
+    // Check to see if we have a file to override the default geometry.
+    if (!GetGeometryFileOverride().empty()) {
+        CaptNamedDebug("Geometry","Override standard geometry with a file");
+        TFile *filePtr 
+            = TFile::Open(GetGeometryFileOverride().c_str(),"OLD");
+        if (!filePtr) {
+            CaptNamedWarn("Geometry",
+                          " Geometry override file does not exist.");
+        }
+        else {
+            std::auto_ptr<TFile> file(filePtr);        
+            if (LoadGeometry(*file,CP::TSHAHashValue())) {
+                CaptNamedInfo("Geometry","Override geometry from "
+                              << file->GetName());
                 SetGeometryHashOverride(GetHash());
                 return true;
             }
@@ -917,41 +918,33 @@ TGeoManager* CP::TGeomIdManager::GetGeometry(CP::TEvent* event) {
 }
 
 bool CP::TGeomIdManager::CheckGeometry(const CP::TEvent* const event) {
-    // Check to see if the geometry has been overriden
-    if (GetGeometryHashOverride().Equivalent(GetHash())) {
-        return false;
-    }
-    else if (GetGeometryHashOverride().Valid()) return true;
-    else if (!GetGeometryFileOverride().empty()) return true;
-        
-    // We don't have an event so we can't determine the correct geometry.
-    if (!event) {
-        CaptError("Requesting geometry when there isn't a valid event.\n"
-                  "The correct geometry cannot be determined and won't\n"
-                  "and the current geometry (if one is loaded) won't be\n"
-                  "changed.");
-        return false;
-    }
-    
-    // If we don't have any geometry manager, then we have to look for one.
+    // If we don't have any geometry manager, then we have to load one.
     if (!GetGeoManager()) {
-        CaptNamedInfo("Geometry","Reload Geometry -- Not currently loaded");
+        CaptNamedInfo("Geometry","Load Geometry -- Not currently loaded");
         return true;
     }
 
-    // The current geometry hash code isn't valid.
+    // Check to see if the current geometry hash code is valid.
     if (!GetHash().Valid()) {
-        CaptNamedInfo("Geometry","Reload Geometry -- Current Hash Invalid");
+        CaptNamedInfo("Geometry","Load Geometry -- Current Hash Invalid");
         return true;
     }
 
-    // We don't have an event so don't change the geometry.
+    // Check to see if the geometry has been overriden, and already matchs the
+    // override geometry.
+    if (GetGeometryHashOverride().Equivalent(GetHash())) return false;
+
+    // There is an override geometry, so load the requested one.
+    if (GetGeometryHashOverride().Valid()) return true;
+
+    // There is an override file, so load that file.
+    if (!GetGeometryFileOverride().empty()) return true;
+        
+    // If we don't have an event so don't change the geometry.
     if (!event) return false;
 
-    // See if the current event geometry hash has changed.
-    if (event->GetGeometryHash().Equivalent(GetHash())) {
-        return false;
-    }
+    // If the new event requests the same geometry, don't load it again.
+    if (event->GetGeometryHash().Equivalent(GetHash())) return false;
     
     // If the event doesn't have a valid geometry hash, then only check the
     // geometry if the run number as changed.  First make sure that the
