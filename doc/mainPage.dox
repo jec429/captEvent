@@ -216,10 +216,9 @@ class bogus {
 };
 \endverbatim
 
-
-
 See related pages for release history, Recon Object Design and Usage,
 Understanding the CAPTAIN Event Structure, Todo List, Deprecated List and
-Bug list.  
+Bug list.    Unless otherwise noted, the CAPTAIN software is release under
+the terms of GPL v2 or later.
 
 */
