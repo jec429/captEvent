@@ -58,7 +58,7 @@ namespace {
             geometryName += "/";
             geometryName += gSystem->Getenv("CAPTEVENTCONFIG");
             geometryName += "/GEOMETRY.LIST" ;
-            // Attache the file to a stream.
+            // Attach the file to a stream.
             std::ifstream geoContext(geometryName.c_str());
             std::string line;
             while (std::getline(geoContext,line)) {

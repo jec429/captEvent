@@ -334,9 +334,13 @@ private:
     void SetCurrentInputFile(TFile* input);
     
     /// Get the current input event file.  This is used by TGeomIdManager to
-    /// find the file with the geometry.
+    /// find the file with the geometry.  This is a bit of a layer violation,
+    /// but happens because the base format keeps both the geometries and
+    /// events in the same file, while the TVInputFile class only allows
+    /// events to be returned.
     TFile* CurrentInputFile(void) {return fCurrentInputFile;}
 
+    /// The singleton pointer to the actual manager.
     static TManager *fManager;
     
     /// The current event file.  This is only valid for a ROOT input file.
