@@ -34,6 +34,8 @@ public:
         /// TGeometryId.  This is needed since the electronics configuration
         /// hasn't been specified for the detector.
         kMC     = 1,  
+        /// Flags that the channel id is from the TPC wire planes.
+        kTPC    = 2, 
         kMaxDetector,
     }; 
 
