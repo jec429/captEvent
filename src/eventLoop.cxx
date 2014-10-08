@@ -306,6 +306,7 @@ int CP::eventLoop(int argc, char** argv,
         }
         case 't':
         {
+            std::cout << "INFO:: Set file type to " << optarg << std::endl;
             fileType = optarg;
             break;
         }
@@ -447,9 +448,16 @@ int CP::eventLoop(int argc, char** argv,
                     CP::TManager::Get().Input().Builder(fileType.c_str()).Open(
                         fileName.c_str()));
             }
+            catch (std::exception& ex) {
+                std::cout << "ERROR: Caught exception: " 
+                          << ex.what()
+                          << std::endl;
+                exit(1);
+            }
             catch (...) {
-                std::cout << "ERROR: Cannot open file type \"" 
-                          << fileType << "\"" << std::endl;
+                std::cout << "ERROR: Unknown exception for \"" 
+                          << fileType << "\"" 
+                          << std::endl;
                 exit(1);
             }
             

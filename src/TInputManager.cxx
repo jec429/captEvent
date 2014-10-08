@@ -23,11 +23,14 @@ const CP::TVInputBuilder& CP::TInputManager::Builder(const char* name) {
     std::string nameString = optionString.substr(0,optionString.find("("));
     for (std::vector<const CP::TVInputBuilder*>::iterator b = fBuilders.begin();
          b != fBuilders.end(); ++b) {
-        if ((*b)->GetName() == nameString) return *(*b);
+        if ((*b)->GetName() != nameString) {
+            continue;
+        }
         const TVInputBuilder& builder = *(*b);
         builder.SetArguments(optionString.c_str());
         return builder;
     }
+    CaptError("Builder not found for " << nameString);
     throw ENoInputBuilder();
 }
 
