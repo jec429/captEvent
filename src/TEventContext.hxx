@@ -38,7 +38,13 @@ public:
     };
 
     /// Return the partition for this context.  The partition code provides a
-    /// quick way to identify the general contents of the event.
+    /// quick way to identify the general contents of the event.  For
+    /// instance, the partitions could be defined as the TPC, the light
+    /// detection system, and the cosmic ray telescope.  The partition is set
+    /// so that all components can be combined into a single event, or some
+    /// can be removed without changing the overall event format.  This
+    /// provides a simple way to tell which part of the hardware were used in
+    /// a particular event run.
     ///
     /// \note The partition value must first be checked to make sure it is
     /// valid before the individual bits are checked.
