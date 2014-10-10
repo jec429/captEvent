@@ -47,12 +47,12 @@ namespace {
 
     /// Implement a default GeometryLookup class.  This is used unless another
     /// one is explicitly registered.
-    class DefaultGeometryLookup: public CP::TManager::GeometryLookup {
+    class DefaultGeometryListLookup: public CP::TManager::GeometryLookup {
         Hash fHashs;
     public:
-        virtual ~DefaultGeometryLookup() {}
+        virtual ~DefaultGeometryListLookup() {}
         // Open the context file and read the list of geometries.
-        DefaultGeometryLookup() {
+        DefaultGeometryListLookup() {
             // Generate the name of the file.
             std::string geometryName(gSystem->Getenv("CAPTEVENTROOT"));
             geometryName += "/";
@@ -155,7 +155,7 @@ namespace {
         }
     };
     // Create a private geometry lookup.
-    DefaultGeometryLookup* gDefaultGeometryLookup = NULL;
+    CP::TManager::GeometryLookup* gDefaultGeometryLookup = NULL;
 }
 
 /// The private constructor for the database
@@ -231,7 +231,8 @@ CP::TManager::GeometryLookup* CP::TManager::RegisterGeometryLookup(
     CP::TManager::GeometryLookup* old = fGeometryLookup;
     if (!lookup) {
         if (!gDefaultGeometryLookup) {
-            gDefaultGeometryLookup = new DefaultGeometryLookup;
+            // This is where the default geometry lookup method gets set.
+            gDefaultGeometryLookup = new DefaultGeometryListLookup;
         }
         fGeometryLookup = gDefaultGeometryLookup;
     }
@@ -243,11 +244,7 @@ CP::TSHAHashValue CP::TManager::LookupGeometry(
     const CP::TEvent *const event) const {
     TSHAHashValue hashValue;
     if (!fGeometryLookup) {
-        if (!gDefaultGeometryLookup) {
-            gDefaultGeometryLookup = new DefaultGeometryLookup;
-        }
-        const_cast<CP::TManager*>(this)->fGeometryLookup 
-            = gDefaultGeometryLookup;
+        const_cast<CP::TManager*>(this)->RegisterGeometryLookup(NULL);
     }
     try {
         hashValue = fGeometryLookup->GetHash(event);
