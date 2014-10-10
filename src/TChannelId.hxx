@@ -63,13 +63,22 @@ public:
     /// Format (as much as is possible) as a human readable string
     virtual std::string AsString() const; 
 
-    ///Check if this channel is a FGD channel.
+    ///Check if this channel is from the MC.
     virtual const bool IsMCChannel() const; 
 
-    ///Check if a UInt_t is a FGD channel id, without the user having to
+    ///Check if this channel is from the TPC.
+    virtual const bool IsTPCChannel() const; 
+
+    ///Check if a UInt_t is an MC channel id, without the user having to
     ///construct a channel id.
     static const bool IsMCChannel(UInt_t code) {
         return TChannelId(code).IsMCChannel();
+    }
+
+    ///Check if a UInt_t is a TPC channel id, without the user having to
+    ///construct a channel id.
+    static const bool IsTPCChannel(UInt_t code) {
+        return TChannelId(code).IsTPCChannel();
     }
 
     /// Automatic conversion to char pointer (use with care).  This simplifies
