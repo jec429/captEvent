@@ -144,7 +144,9 @@ namespace {
             // Find the first context after the event context
             Hash::iterator h;
             for (h = fHashs.begin(); h != fHashs.end(); ++h) {
-                if (h->first >= event->GetContext().GetTimeStamp()) break;
+                if (h->first>=(std::time_t)event->GetContext().GetTimeStamp()) {
+                    break;
+                }
             }
             // Before the first context, so use the front.
             if (h == fHashs.begin()) return fHashs.front().second;

@@ -99,22 +99,22 @@ public:
     void SetAlignmentId(const TAlignmentId& h) {fAlignmentId = h;}
     
     /// Set the event number.
-    void SetRunId(int i) {
+    void SetRunId(UInt_t i) {
         fContext.SetRun(i);
         Build();
     }
     
     /// Get the event number.
-    int GetRunId(void) const {return fContext.GetRun();}
+    UInt_t GetRunId(void) const {return fContext.GetRun();}
 
     /// Set the event number.
-    void SetEventId(int i) {
+    void SetEventId(UInt_t i) {
         fContext.SetEvent(i);
         Build();
     }
     
     /// Get the event number.
-    int GetEventId(void) const {return fContext.GetEvent();}
+    UInt_t GetEventId(void) const {return fContext.GetEvent();}
 
     /// Get the digit container by name (may not exist).  This will get the
     /// digits for a sub-detector.  They may not be saved since we often need

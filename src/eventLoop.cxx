@@ -482,10 +482,12 @@ int CP::eventLoop(int argc, char** argv,
             // Process the events in the file.
             for (;!input->EndOfFile();event.reset(input->NextEvent())) {
 
-                if (targetRun>=0 && event->GetRunId()<targetRun) continue;
+                if (targetRun>=0 
+                    && event->GetRunId()< (UInt_t) targetRun) continue;
                 else targetRun = -1;
 
-                if (targetEvent>=0 && event->GetEventId()<targetEvent) continue;
+                if (targetEvent>=0 
+                    && event->GetEventId()<(UInt_t) targetEvent) continue;
                 else targetEvent = -1;
 
                 ++totalRead;

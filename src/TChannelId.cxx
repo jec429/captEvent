@@ -4,6 +4,7 @@
 
 #include "TChannelId.hxx"
 #include "TMCChannelId.hxx"
+#include "TTPCChannelId.hxx"
 
 #include "TCaptLog.hxx"
 
@@ -99,6 +100,7 @@ std::string CP::TChannelId::SubDetAsString() const {
   
     switch (GetSubDetector()) {
     case kMC:      det = "MC";     break;
+    case kTPC:     det = "TPC";    break;
     default:       det = "NV";     break; 
     }
 
@@ -109,10 +111,19 @@ const Bool_t CP::TChannelId::IsMCChannel() const {
     return (kMC == GetSubDetector());
 }
 
+const Bool_t CP::TChannelId::IsTPCChannel() const {
+    return (kTPC == GetSubDetector());
+}
+
 std::string CP::TChannelId::AsString() const {
 
     if (IsMCChannel()) {
         TMCChannelId id(*this);
+        return id.AsString();
+    }
+  
+    if (IsTPCChannel()) {
+        TTPCChannelId id(*this);
         return id.AsString();
     }
 

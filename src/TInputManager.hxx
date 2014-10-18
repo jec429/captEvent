@@ -44,7 +44,7 @@ namespace CP {
 /// builders when the library containing TMyOwnInputBuilder is loaded.
 ///
 class CP::TVInputBuilder {
-    friend CP::TInputManager;
+    friend class CP::TInputManager;
 
 public:
 
