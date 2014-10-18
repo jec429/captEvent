@@ -21,8 +21,9 @@ namespace CP {
 /// about channel, and can preform all of the basic conversions.  The channel
 /// identifiers are designed so that the data fit into a single 32 bit field
 /// (the same as a TGeometryId.  Channel identifiers and geometry identifiers
-/// can be distinguished by the guard bit which is 1 for a TChannelId and 0
-/// for a TGeometryId.
+/// can be distinguished by the guard bit (the most significant bit) which is
+/// 1 for a TChannelId and 0 for a TGeometryId.  That means that the signed
+/// integer representation of a TChannelId is a negative number.
 class CP::TChannelId {
 public:
     /// Enumeration defining the sub-detector identifiers.  These tell you
@@ -54,20 +55,22 @@ public:
     /// sub-detector field is in range.
     virtual const Bool_t IsValid() const;
 
-    /// Get the internal UInt_t representation.
-    virtual const UInt_t AsInt() const {return fChannelId;} 
+    /// Get the Int_t representation of the channel id.  This should usually
+    /// be used when putting this into a database since most of them don't
+    /// seem to support unsigned integers.
+    virtual const Int_t AsInt() const {return (Int_t) fChannelId;} 
 
-    /// Get the internal UInt_t representation
+    /// Get the internal UInt_t representation.
     virtual const UInt_t AsUInt() const {return fChannelId;} 
   
-    /// Format (as much as is possible) as a human readable string
+    /// Format (as much as is possible) as a human readable string.
     virtual std::string AsString() const; 
 
-    ///Check if this channel is a FGD channel.
+    /// Check if this channel is a FGD channel.
     virtual const bool IsMCChannel() const; 
 
-    ///Check if a UInt_t is a FGD channel id, without the user having to
-    ///construct a channel id.
+    /// Check if a UInt_t is a FGD channel id, without the user having to
+    /// construct a channel id.
     static const bool IsMCChannel(UInt_t code) {
         return TChannelId(code).IsMCChannel();
     }
