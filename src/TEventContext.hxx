@@ -4,6 +4,8 @@
 #include <TROOT.h>
 #include <TObject.h>
 
+#include <ctime> 
+
 namespace CP {
     class TEventContext;
     std::ostream& operator<<(std::ostream& s, const CP::TEventContext& c);
@@ -16,10 +18,10 @@ namespace CP {
 /// CP::TEventContext::Invalid.
 class CP::TEventContext {
 public:
-    typedef unsigned int Time;
+    typedef ULong_t Time;
     
     /// A special field value that specifies that the field is invalid.
-    static const int Invalid;
+    static const UInt_t Invalid;
     
     /// Construct an empty context.
     TEventContext();
@@ -31,9 +33,12 @@ public:
 
     virtual ~TEventContext();
 
+    /// Define the partition bits that specify what type of data this is for.
+    /// The values of these bit definitions need to be fixed since they are
+    /// part of the event format.
     enum {
-        /// This context is for MC data.  If this is detector data, then this
-        /// bit will be 0.  If this is MC data, then this bit will be 1.
+        /// If this is detector data, then this bit will be 0.  If this is MC
+        /// data, then this bit will be 1.
         kMCData           = 1<<16,
     };
 
@@ -55,7 +60,7 @@ public:
     ///     // The data is for the global partition.
     /// }
     /// \endcode
-    int GetPartition() const;
+    UInt_t GetPartition() const;
 
     /// Add a convenient check to see if this is MC data.  Note that if the
     /// context partition is invalid, this will return false.
@@ -66,40 +71,61 @@ public:
     bool IsDetector() const;
 
     /// Set the partition for this context.
-    void SetPartition(int p);
+    void SetPartition(UInt_t p);
 
     /// Return the run number for this context.
-    int GetRun() const;
+    UInt_t GetRun() const;
 
     /// Set the run number for this context.
     void SetRun(int r);
 
     /// Return the sub-run number for this context.
-    int GetSubRun() const;
+    UInt_t GetSubRun() const;
 
     /// Set the sub-run number for this context.
     void SetSubRun(int s);
 
     /// Return the event number for this context.
-    int GetEvent() const;
+    UInt_t GetEvent() const;
 
     /// Set the event number for this context.
     void SetEvent(int e);
 
-    /// Return the spill number for this context.
-    int GetSpill() const;
+    /// Return the spill number for this context.  This is a synonym for
+    /// GetNanoseconds() that should be used when events are correlated
+    /// between systems using the accelerator spill number.
+    UInt_t GetSpill() const;
 
-    /// Set the spill number for this context
+    /// Set the spill number for this context.  This is a synonym for
+    /// SetNanoseconds() that should be used when events are correlated
+    /// between systems using the accelerator spill number.
     void SetSpill(int s);
     
-    /// Return the time stamp for this event (only valid to 1 sec)
-    int GetTimeStamp() const;
+    /// Return the offset in nanoseconds from the last one second tick.  This
+    /// is a synonym for GetSpill() that should be used when events are
+    /// correlated by GPS time instead of spill number.
+    UInt_t GetNanoseconds() const {return GetSpill();}
 
-    /// Return the time stamp for this event as a MYSQL compatible time string. 
-    std::string GetTimeStampString() const;
-
-    /// Set the time stamp for this event.
+    /// Set the offset in nanoseconds from the last one second tick.  This is
+    /// a synonym for SetSpill() that should be used when events are
+    /// correlated by the GPS time instead of spill number.
+    void SetNanoseconds(int s) {SetSpill(s);}
+    
+    /// Set the time stamp for this event.  The time stamp should be the
+    /// number of seconds since 00:00:00 Jan 1, 1970 UTC so that it can be
+    /// converted into a time_t.  This is mostly intended to find the
+    /// appropriate calibration data, and events requiring precise timing
+    /// should provide the actual GPS clock data.
     void SetTimeStamp(int t);
+
+    /// Return the time stamp for this event.
+    Time GetTimeStamp() const;
+
+    /// Return the time stamp for this event as an SQL compatible time string.
+    /// Since the time stamps is mostly intended to look up calibration data,
+    /// this provides a simple way to convert the time stamp in to a SQL time
+    /// for a database lookup.
+    std::string GetTimeStampString() const;
 
     /// Return true if the context is valid.  A valid context is defined as a
     /// context where one or more fields is valid.
@@ -107,23 +133,38 @@ public:
 
 private:
     /// The partition associated with this context
-    int fPartition;
+    UInt_t fPartition;
 
     /// The run number associated with this context
-    int fRun;
+    UInt_t fRun;
 
     /// The sub-run number associated with this context
-    int fSubRun;
+    UInt_t fSubRun;
 
     /// The event number associated with this context.
-    int fEvent;
+    UInt_t fEvent;
 
-    /// The spill number associated with this context.
-    int fSpill;
+    /// The "spill" number or "trigger" information associated with this
+    /// context.  This is used to correlate the information in this event with
+    /// events taken in other sub-systems.  In T2K, it syncronizes the beam,
+    /// mumon, ND280 and SK data.  In other setups, this may contain the
+    /// offset in ns from the last second tick (e.g. this is how the CAPTAIN
+    /// mutel and tpc as syncronized).  This can be accessed by
+    /// <Set/Get>Spill() or <Set/Get>Nanoseconds() which are synonyms.  Both
+    /// names are provided to let user code reference this according to its
+    /// actual function.  See the comments on fTimeStamp if this is
+    /// representing a GPS time.
+    UInt_t fSpill;
 
-    /// The unix time stamp associated with this context
+    /// The time stamp (1 sec tick) associated with this context.  While the
+    /// time stamp is not intended for precision timing of the event, but will
+    /// ideally come from a GPS clock.  For applications that require
+    /// precision timing, the raw GPS Clock information should be placed into
+    /// the event so that the lower level information can be accessed.  This
+    /// field is mostly intended to locate the correct set of calibration data
+    /// (e.g. accuracy of "minutes or hours").
     Time fTimeStamp;
 
-    ClassDef(TEventContext,1);
+    ClassDef(TEventContext,2);
 };
 #endif

@@ -1,7 +1,7 @@
 #include "TEventContext.hxx"
 #include <ctime>
 
-const int CP::TEventContext::Invalid = 0xDEADBEEF;
+const UInt_t CP::TEventContext::Invalid = 0xDEADBEEF;
 
 ClassImp(CP::TEventContext);
 
@@ -19,12 +19,13 @@ CP::TEventContext::TEventContext(int partition,
       fRun(run), fSubRun(subRun), fEvent(event), 
       fSpill(spill), fTimeStamp(stamp) {}
 
-int CP::TEventContext::GetPartition() const {return fPartition;}
-int CP::TEventContext::GetRun() const {return fRun;}
-int CP::TEventContext::GetSubRun() const {return fSubRun;}
-int CP::TEventContext::GetEvent() const {return fEvent;}
-int CP::TEventContext::GetSpill() const {return fSpill;}
-int CP::TEventContext::GetTimeStamp() const {return fTimeStamp;}
+UInt_t CP::TEventContext::GetPartition() const {return fPartition;}
+UInt_t CP::TEventContext::GetRun() const {return fRun;}
+UInt_t CP::TEventContext::GetSubRun() const {return fSubRun;}
+UInt_t CP::TEventContext::GetEvent() const {return fEvent;}
+UInt_t CP::TEventContext::GetSpill() const {return fSpill;}
+CP::TEventContext::Time CP::TEventContext::GetTimeStamp() const {
+    return fTimeStamp;}
 std::string CP::TEventContext::GetTimeStampString() const {
     std::time_t t = GetTimeStamp();
     char buf[256];
@@ -32,7 +33,7 @@ std::string CP::TEventContext::GetTimeStampString() const {
     return std::string(buf);
 }
 
-void CP::TEventContext::SetPartition(int v) {fPartition = v;}
+void CP::TEventContext::SetPartition(UInt_t v) {fPartition = v;}
 void CP::TEventContext::SetRun(int v) {fRun = v;}
 void CP::TEventContext::SetSubRun(int v) {fSubRun = v;}
 void CP::TEventContext::SetEvent(int v) {fEvent = v;}
