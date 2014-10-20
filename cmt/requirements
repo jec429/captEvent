@@ -53,6 +53,10 @@ path_prepend LD_LIBRARY_PATH "$(CAPTEVENTROOT)/$(captEvent_tag)"
 path_remove PATH "$(CAPTEVENTROOT)"
 path_prepend PATH "$(CAPTEVENTROOT)/$(captEvent_tag)"
 
+# Define a setup script to check for calibration tables and download them
+# if required. 
+setup_script geometry_setup
+
 # Applications to build
 application dump-event ../app/dump-event.cxx
 apply_pattern dependency target=dump-event depends=captEvent

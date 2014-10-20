@@ -1,0 +1,55 @@
+#! /bin/bash
+#
+# Download the geometries from
+# http://nngroup.physics.sunysb.edu/captain/files/geometry using wget.
+#
+# This is run without arguments.
+
+# The location of the input files.
+if [ ${GEOMFILES}x == x ]; then
+    GEOMFILES=http://nngroup.physics.sunysb.edu/captain/files/geometry/
+fi
+
+# This directory should ALWAYS exist, but check anyway.
+if [ ! -d ${CAPTEVENTROOT} ]; then
+    echo captain-get-geometry: captEvent directory is missing!
+    echo    where is: ${CAPTEVENTROOT}
+    exit 1
+fi
+cd ${CAPTEVENTROOT}
+
+# This directory won't exist when the package is checkout the first  time.
+if [ ! -d ${CAPTEVENTROOT}/${CAPTEVENTCONFIG} ]; then
+    mkdir ${CAPTEVENTCONFIG}
+fi
+cd ${CAPTEVENTCONFIG}
+
+# Get an index of geometry files.
+wget -q -T 5 -t 2 -S -N ${GEOMFILES} -o /dev/null
+
+if [ ! -f index.html ]; then
+    echo captain-get-geometry: Cannot check for new geometries.
+    exit 1
+fi
+
+# Build a list of the files download.
+cat index.html | \
+    egrep 'geom-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}' | \
+    sed 's/<tr>.*<a[^>]*>'// | \
+    sed 's/<.*//' | \
+    cat > geometry.index
+
+# Remove the index.
+rm index.html
+
+# Get the files.
+for file in `cat geometry.index`; do
+    if  [ ! -f ${file} ]; then
+	wget -nv -T 15 -t 1 -S -N -c ${GEOMFILES}/$file 2>&1 | grep URL
+    fi
+done
+
+# Get the geometry context map.
+# wget -nv -S -N -c ${GEOMFILES}/GEOMETRY.LIST -o /dev/null
+
+echo Geometries up to date
