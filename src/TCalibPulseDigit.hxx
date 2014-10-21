@@ -5,6 +5,7 @@
 #include <TROOT.h>
 
 #include <TChannelId.hxx>
+#include <TGeometryId.hxx>
 #include <TDigit.hxx>
 #include <TDigitProxy.hxx>
 
@@ -45,6 +46,11 @@ public:
     /// Return a pointer to the parent digit.
     const CP::TDigitProxy& GetParent() const {return fParent;}
 
+    /// Get the geometry id of the wire for this calibrated digit.  This field
+    /// may not always be filled, and should be checked using
+    /// TGeometryId::IsValid() before it is used.
+    CP::TGeometryId GetGeomId() {return fGeometryId;}
+
     /// Get the time of the first sample.  This can be negative since some
     /// electronics may give a delta relative to an index saved in the header.
     /// It is the time of the start of the first sample, and is saved in
@@ -70,6 +76,9 @@ public:
     /// the calibration.
     void SetSample(int i, double v);
 
+    /// Set the geometry id of the wire.
+    void SetGeomId(CP::TGeometryId id) {fGeometryId = id;}
+
     /// Get the vector of samples.
     const Vector& GetSamples() const;
 
@@ -81,6 +90,9 @@ private:
     /// The digit that the calibrated digit came from.  This must be present
     /// since the calibrated digit will lose information otherwise.
     CP::TDigitProxy fParent;
+
+    /// Save the geometry id for reference.
+    CP::TGeometryId fGeometryId;
 
     /// The time of the first sample in the pulse.  This is signed since some
     /// digitizers may return a delta from a sample number saved in the
@@ -95,6 +107,6 @@ private:
     /// The vector of samples.
     Vector fSamples;
 
-    ClassDef(TCalibPulseDigit,1);
+    ClassDef(TCalibPulseDigit,2);
 };
 #endif
