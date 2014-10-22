@@ -473,10 +473,12 @@ int CP::eventLoop(int argc, char** argv,
 
             // Position to the first event in the file to read.  This might
             // leave the file positioned at the end of file.
-            if (skipCount>0) {
+            while (skipCount > 0) {
+                int startPosition = input->GetPosition();
                 event.reset(input->NextEvent(skipCount-1));
-                int position = input->GetPosition();
-                if (position>0) skipCount = skipCount - position;
+                int changedPosition = input->GetPosition() - startPosition;
+                if (changedPosition>0) skipCount -= changedPosition;
+                else --skipCount;
             }
 
             // Process the events in the file.
