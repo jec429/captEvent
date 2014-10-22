@@ -51,7 +51,9 @@ void CP::TCalibPulseDigit::ls(Option_t* opt) const {
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
 
+    int width = std::cout.width();
     std::cout << GetChannelId()
+              << " " << std::setw(20) << fGeometryId << std::setw(width)
               << " T: " << GetFirstSample() << " to " << GetLastSample()
               << " (" << GetSampleCount() << ")";
 
