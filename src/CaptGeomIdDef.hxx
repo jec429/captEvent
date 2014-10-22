@@ -63,8 +63,7 @@ namespace CP {
             /// (value<<DetectorLSB).  The conversion from a field value to a
             /// sub-detector identifier is ((field&DetectorMask)>>DetectorLSB)
             enum DetectorId {
-                kROOTGeoNodeId = 0,
-                kCryostat,
+                kCryostat = 1,
             };
 
             /// The most significant bit in the field reserved to the

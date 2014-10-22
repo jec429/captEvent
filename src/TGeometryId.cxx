@@ -1,11 +1,14 @@
 // $Id: TGeometryId.cxx,v 1.12 2012/02/22 03:15:09 mcgrew Exp $
 
-#include <sstream>
 #include "TCaptLog.hxx"
 #include "TGeometryId.hxx"
 #include "CaptGeomIdDef.hxx"
 #include "TManager.hxx"
 #include "TGeomIdManager.hxx"
+
+#include <sstream>
+
+#include <exception>
 
 ClassImp(CP::TGeometryId);
 
@@ -63,16 +66,23 @@ int CP::TGeometryId::GetSubsystemId() const {
 }
 
 const bool CP::TGeometryId::IsValid() const {
+    // If it's negative, that means the guard bit is set and this is probably
+    // a channel id.
     if (fGeometryId < 0) return false;
+    
+    // If it's zero (kEmptyId), that means it's probably uninitialized.
+    if (fGeometryId == CP::GeomId::Def::kEmptyId) return false;
 
     int field = fGeometryId >> CP::GeomId::Def::kDetectorIdLSB;
     int mask = (1<<(CP::GeomId::Def::kDetectorIdMSB
                     - CP::GeomId::Def::kDetectorIdLSB+1))-1;
     int sys = (field & mask);
 
+    // Make sure that the detector id field has a valid detector.  This use to
+    // include the possiblity of using raw ROOT node identifiers, but that
+    // capability has been removed.
     switch (sys) {
     case CP::GeomId::Def::kCryostat:
-    case CP::GeomId::Def::kROOTGeoNodeId:
         return true;
     default:
         return false;
@@ -91,7 +101,6 @@ std::string CP::TGeometryId::GetSubsystemName() const {
 
     switch (sys) {
     case CP::GeomId::Def::kCryostat: return "Cryostat";
-    case CP::GeomId::Def::kROOTGeoNodeId: return "node";
     }
 
     return "unknown";
@@ -115,12 +124,24 @@ bool CP::operator!=(const CP::TGeometryId& a, const CP::TGeometryId& b) {
 }
 
 std::ostream& CP::operator<<(std::ostream& s, const CP::TGeometryId& id) {
+    int maxlen = s.width();
+    if (maxlen < 1) maxlen=4096; // Any big number will work.
     try {
         CP::TManager::Get().Geometry();
         std::string name = id.GetName();
         int len = name.size();
-        int maxlen = 50;
-        if (len > maxlen) name = "..." + name.substr(name.size()-maxlen);
+        // chop of the front of the path until the length is OK.
+        while (len > maxlen) {
+             std::size_t pos = name.find_first_of("/");
+             if (pos == std::string::npos) break;
+             pos = name.find_first_of("/",pos+1);
+             if (pos == std::string::npos) break;
+             name = ".../" + name.substr(pos+1);
+             len = name.size();
+        }
+        if (len > maxlen) {
+            throw std::runtime_error("Geometry path name too long");
+        }
         s << name;
     }
     catch (...) {

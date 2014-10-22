@@ -86,7 +86,6 @@ public:
     /// and are.  The only value for CAPTAIN is
     ///
     ///    * CP::GeomId::Def::kCryostat      -- The Cryostat
-    ///    * CP::GeomId::Def::kROOTGeoNodeId -- A general ROOT node
     ///
     /// Any other value is invalid.
     int GetSubsystemId() const;
