@@ -65,6 +65,10 @@ namespace {
 
         std::cout << "    -G <file>         Force a geometry file"
                   << std::endl;
+        std::cout << "         'CAPTAIN' for default CAPTAIN geometry"
+                  << std::endl
+                  << "         'miniCAPTAIN' for default miniCAPTAIN geometry"
+                  << std::endl;
         
         std::cout << "    -g                Don't save geometry in output"
                   << std::endl;
@@ -426,6 +430,16 @@ int CP::eventLoop(int argc, char** argv,
     // If readcount is zero, that means read the entire file.
     if (readCount<1) readCount = std::numeric_limits<int>::max();
     
+    if (geometryFile == "CAPTAIN") {
+        const char* geomFile = gSystem->Getenv("CAPTAINGEOMETRY");
+        if (geomFile) geometryFile = geomFile;
+    }
+
+    if (geometryFile == "miniCAPTAIN") {
+        const char* geomFile = gSystem->Getenv("MINICAPTAINGEOMETRY");
+        if (geomFile) geometryFile = geomFile;
+    }
+
     if (geometryFile != "") {
         TManager::Get().SetGeometryOverride(geometryFile);
     }
