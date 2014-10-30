@@ -15,7 +15,7 @@ public:
     explicit TTPCChannelId(UInt_t id = 0);
 
     /// Constructor to specialise a Channel ID as a TPC channel ID
-    explicit TTPCChannelId(const CP::TChannelId& src);
+    TTPCChannelId(const CP::TChannelId& src);
 
     /// Construct a TPC channel ID from its electronics-space co-ordinates.
     /// The sub-detector identifier is CP::TChannelId::kTPC(=2).
