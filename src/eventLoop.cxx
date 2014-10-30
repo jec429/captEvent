@@ -435,7 +435,8 @@ int CP::eventLoop(int argc, char** argv,
         if (geomFile) geometryFile = geomFile;
     }
 
-    if (geometryFile == "miniCAPTAIN") {
+    if (geometryFile == "miniCAPTAIN"
+        || geometryFile == "mCAPTAIN") {
         const char* geomFile = gSystem->Getenv("MINICAPTAINGEOMETRY");
         if (geomFile) geometryFile = geomFile;
     }
