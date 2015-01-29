@@ -170,6 +170,6 @@ protected:
     /// The time of the hit stopping point.
     Float_t fStopT;
 
-    ClassDef(TG4HitSegment,1);
+    ClassDef(TG4HitSegment,2);
 };
 #endif
