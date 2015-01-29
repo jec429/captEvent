@@ -8,14 +8,16 @@
 ClassImp(CP::TG4HitSegment);
 
 CP::TG4HitSegment::TG4HitSegment()
-    : fPrimaryId(0), fEnergyDeposit(0), fTrackLength(0), 
+    : fPrimaryId(0), fEnergyDeposit(0), fSecondaryDeposit(0), fTrackLength(0), 
       fStartX(0), fStartY(0), fStartZ(0), fStartT(0),
       fStopX(0), fStopY(0), fStopZ(0), fStopT(0) {}
 
 CP::TG4HitSegment::TG4HitSegment(const CP::TG4HitSegment& rhs)
     : TG4VHit(rhs), 
       fContributors(rhs.fContributors), fPrimaryId(rhs.fPrimaryId),
-      fEnergyDeposit(rhs.fEnergyDeposit), fTrackLength(rhs.fTrackLength), 
+      fEnergyDeposit(rhs.fEnergyDeposit),
+      fSecondaryDeposit(rhs.fSecondaryDeposit),
+      fTrackLength(rhs.fTrackLength), 
       fStartX(rhs.fStartX), fStartY(rhs.fStartY),
       fStartZ(rhs.fStartZ), fStartT(rhs.fStartT),
       fStopX(rhs.fStopX), fStopY(rhs.fStopY),

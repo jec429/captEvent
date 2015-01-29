@@ -55,8 +55,12 @@ public:
     /// is zero, the trajectory came from a primary).
     int GetPrimaryTrajectoryId(void) const {return fPrimaryId;}
 
-    /// Get the tota energy deposited in this hit.
+    /// Get the total energy deposited in this hit.
     double GetEnergyDeposit(void) const {return (double) fEnergyDeposit;}
+    
+    /// Get the secondary energy deposited in this hit (see the field
+    /// documentation).
+    double GetSecondaryDeposit(void) const {return (double) fSecondaryDeposit;}
     
     /// Get the total charged track length in this hit.  This includes all of
     /// the contributions from secondary particles that got lumped into this
@@ -105,7 +109,7 @@ public:
     /// GeoNodeId should be defined by the average position of the hit.
     double GetStopZ(void) const {return fStopZ;}
 
-    /// The time of the hit stoping point.  Note that a hit by
+    /// The time of the hit stopping point.  Note that a hit by
     /// definition is in a single volume.  If the hit is spread over two
     /// volumes, it's a result of round-off error (and is almost a bug).  The
     /// GeoNodeId should be defined by the average position of the hit.
@@ -126,6 +130,17 @@ protected:
     /// The total energy deposit in this hit.  
     Float_t fEnergyDeposit;
 
+    /// The "secondary" energy deposit in this hit.  This is used to help
+    /// simulate the recombination of electrons, and is part of the total
+    /// energy deposit.
+    ///
+    /// ND280MC is expected to use this field to save the amount of energy
+    /// deposited as ionization.  The remaining energy will be deposited as
+    /// scintillation light.  In this model, the number of electrons created
+    /// will be about N_e = fSecondaryDeposit/(ionization energy) while N_ph =
+    /// (fEnergyDeposit-fSecondaryDeposit)/(scint energy).
+    Float_t fSecondaryDeposit;
+    
     /// The total charged track length in this hit.  This includes the
     /// contribution from all of the secondary particles (e.g. delta-rays)
     /// that are included in this hit.
