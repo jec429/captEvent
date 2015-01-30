@@ -62,11 +62,48 @@ bool CP::TEventContext::IsValid() const {
     return false;
 }
 
+bool CP::TEventContext::operator== (const CP::TEventContext& rhs) const {
+    if (!IsValid()) return false;
+    if (!rhs.IsValid()) return false;
+
+    if (GetPartition()!=CP::TEventContext::Invalid
+        || rhs.GetPartition()!=CP::TEventContext::Invalid) {
+        if (GetPartition()!=rhs.GetPartition()) return false;
+    }
+
+    if (GetRun()!=CP::TEventContext::Invalid
+        || rhs.GetRun()!=CP::TEventContext::Invalid) {
+        if (GetRun()!=rhs.GetRun()) return false;
+    }
+
+    if (GetSubRun()!=CP::TEventContext::Invalid
+        || rhs.GetSubRun()!=CP::TEventContext::Invalid) {
+        if (GetSubRun()!=rhs.GetSubRun()) return false;
+    }
+
+    if (GetEvent()!=CP::TEventContext::Invalid
+        || rhs.GetEvent()!=CP::TEventContext::Invalid) {
+        if (GetEvent()!=rhs.GetEvent()) return false;
+    }
+
+    if (GetSpill()!=CP::TEventContext::Invalid
+        || rhs.GetSpill()!=CP::TEventContext::Invalid) {
+        if (GetSpill()!=rhs.GetSpill()) return false;
+    }
+
+    if (GetTimeStamp()!=CP::TEventContext::Invalid
+        || rhs.GetTimeStamp()!=CP::TEventContext::Invalid) {
+        if (GetTimeStamp()!=rhs.GetTimeStamp()) return false;
+    }
+
+    return true;
+}
+
 std::ostream& CP::operator<<(std::ostream& s, const CP::TEventContext& c) {
     s << "<";
     bool valid = false;
     if (c.GetPartition()!=CP::TEventContext::Invalid) {
-        s << "P: " << c.GetPartition();
+        s << "P: " << std::hex << "0x" << c.GetPartition() << std::dec;
         valid = true;
     }
     if (c.GetRun()!=CP::TEventContext::Invalid) {

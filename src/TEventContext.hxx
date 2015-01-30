@@ -131,6 +131,9 @@ public:
     /// context where one or more fields is valid.
     bool IsValid() const;
 
+    /// Check of contexts are equal
+    virtual bool operator== (const TEventContext& rhs) const;
+
 private:
     /// The partition associated with this context
     UInt_t fPartition;
