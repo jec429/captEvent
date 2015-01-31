@@ -13,4 +13,34 @@ based off of the ND280 oaEvent library, and provides the definition of the
 CAPTAIN offline event format.  The dependencies of this library are limited
 to ROOT (and any of its dependencies).
 
+
+\section captEvent_v1r0p0_history Version 1.0.0
+
+Freeze information:
+   - Freeze Date: Sat Jan 31 17:54:17 2015
+   - Freeze User: mcgrew
+   - Freeze Host: 
+
+
+FEATURES
+
+This includes many changes needed to adapt the library for use in the
+CAPTAIN experiment.  An incomplete list includes
+
+** Add new method of specifying the input method (for use with the
+   captTrans library).  This adds and extends the TInputManager singleton. 
+
+** Add better event loop options specific to CAPTAIN (e.g. set the
+   geometry)
+
+** Add channel id for the CAPTAIN TPC
+
+** Add a copyright notice
+
+** Add geometry identifiers for photosensors.
+
+** Further adapt TReconTrack and TReconPID for use with CAPTAIN tracking
+
+
+
 */
