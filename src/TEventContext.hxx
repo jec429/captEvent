@@ -133,6 +133,7 @@ public:
 
     /// Check of contexts are equal
     virtual bool operator== (const TEventContext& rhs) const;
+    virtual bool operator!= (const TEventContext& rhs) const;
 
 private:
     /// The partition associated with this context

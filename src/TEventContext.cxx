@@ -62,6 +62,10 @@ bool CP::TEventContext::IsValid() const {
     return false;
 }
 
+bool CP::TEventContext::operator!= (const CP::TEventContext& rhs) const {
+    return not (*this == rhs);
+}
+
 bool CP::TEventContext::operator== (const CP::TEventContext& rhs) const {
     if (!IsValid()) return false;
     if (!rhs.IsValid()) return false;
