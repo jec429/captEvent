@@ -52,6 +52,18 @@ bool CP::TEventContext::IsDetector() const {
     return true;
 }
 
+bool CP::TEventContext::IsCAPTAIN() const {
+    if (fPartition == Invalid) return false;
+    if (fPartition & kCAPTAIN) return true;
+    return false;
+}
+
+bool CP::TEventContext::IsMiniCAPTAIN() const {
+    if (fPartition == Invalid) return false;
+    if (fPartition & kmCAPTAIN) return true;
+    return false;
+}
+
 bool CP::TEventContext::IsValid() const {
     if (GetPartition()!=CP::TEventContext::Invalid) return true;
     if (GetRun()!=CP::TEventContext::Invalid)  return true;
