@@ -74,10 +74,12 @@ public:
     /// the context partition is invalid this will return false.
     bool IsDetector() const;
 
-    /// True if the event is associated with the CAPTAIN tpc
+    /// True if the event is associated with the CAPTAIN tpc.  This is usually
+    /// not set for MC events simulated in CAPTAIN.
     bool IsCAPTAIN() const;
 
-    /// True if the event is associated with the miniCAPTAIN tpc
+    /// True if the event is associated with the miniCAPTAIN tpc This is
+    /// usually not set for MC events simulated for miniCAPTAIN.
     bool IsMiniCAPTAIN() const;
     
     /// Set the partition for this context.

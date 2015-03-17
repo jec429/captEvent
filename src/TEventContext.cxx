@@ -152,6 +152,8 @@ std::ostream& CP::operator<<(std::ostream& s, const CP::TEventContext& c) {
     }
     if (valid) {
         if (c.IsMC()) s << " MC";
+        else if (c.IsCAPTAIN()) s << " CPT";
+        else if (c.IsMiniCAPTAIN()) s << " mCPT";
         else if (c.IsDetector()) s << " DET";
     }
     else {
