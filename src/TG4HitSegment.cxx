@@ -31,9 +31,14 @@ void CP::TG4HitSegment::ls(Option_t *opt) const {
     std::cout << " Primary Id: " << GetPrimaryTrajectoryId() << std::endl;
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
-    std::cout << " Energy Deposit: " 
-              << unit::AsString(GetEnergyDeposit(),"energy")
-              << " Length: " << unit::AsString(GetTrackLength(),"length") 
+    std::cout << " Energy Deposit: "
+              << unit::AsString(GetEnergyDeposit(),"energy");
+    if (GetSecondaryDeposit() > 0) {
+        std::cout << " ("
+                  << unit::AsString(GetSecondaryDeposit(),"energy")
+                  << ")";
+    }
+    std::cout << " Length: " << unit::AsString(GetTrackLength(),"length") 
               << std::endl;
     std::string option(opt);
     if (option.find("dump") != std::string::npos) {
