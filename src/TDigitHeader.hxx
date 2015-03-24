@@ -75,7 +75,7 @@ public:
         return fDataVector->Get<T>(name);
     }
 
-    /// Print the headera information.
+    /// Print the header information.
     virtual void ls(Option_t* opt = "") const;
 
 private:
