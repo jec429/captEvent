@@ -13,23 +13,40 @@ namespace CP {
 /// inherited by objects for each of the detector digit types.
 class CP::TMCDigit {
 public:
-    typedef std::vector<TG4VHit*> ContributorContainer;
+    // A container of pointers to all of the G4VHit objects that contributed
+    // to the digit.  The objects are *NOT* owned by this container.
+    typedef std::vector<const TG4VHit*> ContributorContainer;
 
+    // A container of user information filled by the electronics simulation.
+    // See the electronics simulation for detailed definitions of what is
+    // saved here.
+    typedef std::vector<float> InfoContainer;
+    
     TMCDigit ();
     virtual ~TMCDigit();
 
     /// Construct a digit for a particular channel and cycle number.
     explicit TMCDigit(const CP::TMCDigit::ContributorContainer& contrib);
+    explicit TMCDigit(const CP::TMCDigit::ContributorContainer& contrib,
+                      const CP::TMCDigit::InfoContainer& info);
 
     /// Return the MC information for the raw MC hits that contributed to this
     /// digit.
     virtual const ContributorContainer& GetContributors() const {
         return fContributors;
     }
+
+    /// Return the user information for the MC digit.
+    virtual const InfoContainer& GetInformation() const {
+        return fInformation;
+    }
     
 private: 
     /// The MC hits that contributed to this digit.
     ContributorContainer fContributors;
 
+    /// User information (for documentation) provided by the electronics
+    /// simulation.
+    InfoContainer fInformation;
 };
 #endif
