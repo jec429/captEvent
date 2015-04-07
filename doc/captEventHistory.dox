@@ -43,4 +43,28 @@ CAPTAIN experiment.  An incomplete list includes
 
 
 
+
+\section captEvent_v1r0p1_history Version 1.0.1
+
+Freeze information:
+   - Freeze Date: Tue Apr  7 12:03:30 2015
+   - Freeze User: mcgrew
+   - Freeze Host: boxer boxer 
+
+
+BUG FIXES:
+
+** Fix syntax error in the 010makecheck validation script.
+
+NEW FEATURES:
+
+** TEventContext: Define partitions to distinguish between CAPTAIN and
+   miniCAPTAIN events.  This also adds a "!=" operator for TEventContexts
+   to simplify comparisons.
+
+** TMCDigit: Add the ability to carry along a vector of user information.
+   The user information not specified, but it does need to be matched
+   between the electronics simulation and the later users.  The initial use
+   is to pass the true amount of charge deposited in a digit.
+
 */
