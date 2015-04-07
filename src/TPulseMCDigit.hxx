@@ -24,6 +24,15 @@ public:
                   const CP::TPulseDigit::Vector& adcs,
                   const CP::TMCDigit::ContributorContainer& contrib);
 
-    ClassDef(TPulseMCDigit,2);
+    /// Construct a digit for a particular channel.  See the documentation for
+    /// CP::TPulseDigit for details.  The contrib and info containers are
+    /// documented in CP::TMCDigit.
+    TPulseMCDigit(CP::TChannelId chan, 
+                  int first, 
+                  const CP::TPulseDigit::Vector& adcs,
+                  const CP::TMCDigit::ContributorContainer& contrib,
+                  const CP::TMCDigit::InfoContainer& info);
+
+    ClassDef(TPulseMCDigit,3);
 };
 #endif

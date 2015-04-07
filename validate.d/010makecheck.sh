@@ -4,7 +4,7 @@
 #
 
 # CMT commands must be run in the CMT directory
-if [ x$2 == x ] ; then
+if [ x$2 = x ] ; then
     echo "Cannot get the current package root"
     echo "NOT RUN"
     exit 0

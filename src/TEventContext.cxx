@@ -52,6 +52,18 @@ bool CP::TEventContext::IsDetector() const {
     return true;
 }
 
+bool CP::TEventContext::IsCAPTAIN() const {
+    if (fPartition == Invalid) return false;
+    if (fPartition & kCAPTAIN) return true;
+    return false;
+}
+
+bool CP::TEventContext::IsMiniCAPTAIN() const {
+    if (fPartition == Invalid) return false;
+    if (fPartition & kmCAPTAIN) return true;
+    return false;
+}
+
 bool CP::TEventContext::IsValid() const {
     if (GetPartition()!=CP::TEventContext::Invalid) return true;
     if (GetRun()!=CP::TEventContext::Invalid)  return true;
@@ -60,6 +72,10 @@ bool CP::TEventContext::IsValid() const {
     if (GetSpill()!=CP::TEventContext::Invalid) return true;
     if (GetTimeStamp()!=CP::TEventContext::Invalid) return true;
     return false;
+}
+
+bool CP::TEventContext::operator!= (const CP::TEventContext& rhs) const {
+    return not (*this == rhs);
 }
 
 bool CP::TEventContext::operator== (const CP::TEventContext& rhs) const {
@@ -136,6 +152,8 @@ std::ostream& CP::operator<<(std::ostream& s, const CP::TEventContext& c) {
     }
     if (valid) {
         if (c.IsMC()) s << " MC";
+        else if (c.IsCAPTAIN()) s << " CPT";
+        else if (c.IsMiniCAPTAIN()) s << " mCPT";
         else if (c.IsDetector()) s << " DET";
     }
     else {

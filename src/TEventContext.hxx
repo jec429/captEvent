@@ -37,6 +37,10 @@ public:
     /// The values of these bit definitions need to be fixed since they are
     /// part of the event format.
     enum {
+        /// This context is associated with the CAPTAIN TPC
+        kCAPTAIN          = 1<<0,
+        /// This context is associated with the miniCAPTAIN TPC
+        kmCAPTAIN          = 1<<1,
         /// If this is detector data, then this bit will be 0.  If this is MC
         /// data, then this bit will be 1.
         kMCData           = 1<<16,
@@ -70,6 +74,14 @@ public:
     /// the context partition is invalid this will return false.
     bool IsDetector() const;
 
+    /// True if the event is associated with the CAPTAIN tpc.  This is usually
+    /// not set for MC events simulated in CAPTAIN.
+    bool IsCAPTAIN() const;
+
+    /// True if the event is associated with the miniCAPTAIN tpc This is
+    /// usually not set for MC events simulated for miniCAPTAIN.
+    bool IsMiniCAPTAIN() const;
+    
     /// Set the partition for this context.
     void SetPartition(UInt_t p);
 
@@ -133,6 +145,7 @@ public:
 
     /// Check of contexts are equal
     virtual bool operator== (const TEventContext& rhs) const;
+    virtual bool operator!= (const TEventContext& rhs) const;
 
 private:
     /// The partition associated with this context
@@ -147,16 +160,19 @@ private:
     /// The event number associated with this context.
     UInt_t fEvent;
 
-    /// The "spill" number or "trigger" information associated with this
-    /// context.  This is used to correlate the information in this event with
-    /// events taken in other sub-systems.  In T2K, it syncronizes the beam,
-    /// mumon, ND280 and SK data.  In other setups, this may contain the
-    /// offset in ns from the last second tick (e.g. this is how the CAPTAIN
-    /// mutel and tpc as syncronized).  This can be accessed by
-    /// <Set/Get>Spill() or <Set/Get>Nanoseconds() which are synonyms.  Both
-    /// names are provided to let user code reference this according to its
-    /// actual function.  See the comments on fTimeStamp if this is
-    /// representing a GPS time.
+    /// The time or "spill" information associated with this context.  This is
+    /// used to correlate the information in this event with events taken in
+    /// other sub-systems.  Events are generally correlated using the event
+    /// time, but the context time has a 1 second precision, so it can't
+    /// correlate events at a high trigger rate.  This field contains the
+    /// extra information needed to correlate the events.  In T2K, it
+    /// syncronizes the beam, mumon, ND280 and SK data using the spill number
+    /// (with a 2^16 wrap around.  In CAPTAIN, this contains the offset in ns
+    /// from the last second tick (e.g. this is how the CAPTAIN mutel and tpc
+    /// are syncronized).  This can be accessed by <Set/Get>Spill() or
+    /// <Set/Get>Nanoseconds() which are synonyms.  Both names are provided to
+    /// let user code reference this according to its actual function.  See
+    /// the comments on fTimeStamp if this is representing a GPS time.
     UInt_t fSpill;
 
     /// The time stamp (1 sec tick) associated with this context.  While the
@@ -165,7 +181,8 @@ private:
     /// precision timing, the raw GPS Clock information should be placed into
     /// the event so that the lower level information can be accessed.  This
     /// field is mostly intended to locate the correct set of calibration data
-    /// (e.g. accuracy of "minutes or hours").
+    /// (e.g. accuracy of "minutes or hours") and correlate events between
+    /// sub-systems.
     Time fTimeStamp;
 
     ClassDef(TEventContext,2);

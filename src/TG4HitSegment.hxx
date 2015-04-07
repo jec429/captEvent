@@ -134,11 +134,13 @@ protected:
     /// simulate the recombination of electrons, and is part of the total
     /// energy deposit.
     ///
-    /// ND280MC is expected to use this field to save the amount of energy
-    /// deposited as ionization.  The remaining energy will be deposited as
-    /// scintillation light.  In this model, the number of electrons created
-    /// will be about N_e = fSecondaryDeposit/(ionization energy) while N_ph =
-    /// (fEnergyDeposit-fSecondaryDeposit)/(scint energy).
+    /// DETSIM is expected to use this field to save the amount of energy
+    /// deposited as opticalphotons.  The remaining energy will be deposited
+    /// as ionization.  In this model (in argon), the mean number of quanta
+    /// created will be <N_q> = (fEnergyDeposit)/(19.5*eV), N_q should be
+    /// fluctuated around <N_q>, N_ph = N_q*fSecondaryDeposit/fEnergyDeposit,
+    /// and N_e = N_q - N_ph.  Thd fSecondaryDeposit value already includes
+    /// the binomial fluctuation, so don't fluctuate N_ph or N_e.
     Float_t fSecondaryDeposit;
     
     /// The total charged track length in this hit.  This includes the
