@@ -29,10 +29,10 @@ public:
     /// Get the crate number for this channel [0-2].
     virtual const UInt_t GetCrate() const;
 
-    /// Get the FEM number for this channel [0-20].
+    /// Get the FEM number in the crate [0-20].
     virtual const UInt_t GetFEM() const;
     
-    /// Get the channel on the ASIC [0-64].
+    /// Get the channel on the FEM [0-64].
     virtual const UInt_t GetChannel() const;
 
 protected:
