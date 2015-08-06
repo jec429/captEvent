@@ -17,13 +17,17 @@ namespace CP {
     std::ostream& operator<<(std::ostream& s, const CP::TChannelId& id);
 };
 
-/// Base class for channel identifiers.  This can answer simple interrogations
-/// about channel, and can preform all of the basic conversions.  The channel
-/// identifiers are designed so that the data fit into a single 32 bit field
-/// (the same as a TGeometryId.  Channel identifiers and geometry identifiers
-/// can be distinguished by the guard bit (the most significant bit) which is
-/// 1 for a TChannelId and 0 for a TGeometryId.  That means that the signed
-/// integer representation of a TChannelId is a negative number.
+/// Base class for channel identifiers.  The channel identifier holds the
+/// information about how the DAQ views the electronics and there are derived
+/// classes for each type of electronics readout.
+///
+/// The base class can answer simple interrogations about channel, and can
+/// preform all of the basic conversions.  The channel identifiers are
+/// designed so that the data fit into a single 32 bit field (the same as a
+/// TGeometryId.  Channel identifiers and geometry identifiers can be
+/// distinguished by the guard bit (the most significant bit) which is 1 for a
+/// TChannelId and 0 for a TGeometryId.  That means that the signed integer
+/// representation of a TChannelId is a negative number.
 class CP::TChannelId {
 public:
     /// Enumeration defining the sub-detector identifiers.  These tell you

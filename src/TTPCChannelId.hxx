@@ -8,7 +8,11 @@ namespace CP {
     class TTPCChannelId;
 };
 
-/// A TChannelId derived class for signals from the TPC wires.
+/// A TChannelId derived class for signals from the TPC wires.  The channel
+/// identifier holds the information about how the DAQ views the electronics.
+/// For the TPC, the channel is identified by the crate, the slot in the
+/// crate, and the channel in the slot.  For the TPC, all of the slots hold
+/// front end modules (FEMs), so the methods refer to FEMs.
 class CP::TTPCChannelId : public CP::TChannelId {
 public:
     /// Construct a TPC channel ID from a raw UInt_t
@@ -29,10 +33,11 @@ public:
     /// Get the crate number for this channel [0-2].
     virtual const UInt_t GetCrate() const;
 
-    /// Get the FEM number in the crate [0-20].
+    /// Get the FEM number in the crate [0-31].  The crates can hold up to 20
+    /// cards.
     virtual const UInt_t GetFEM() const;
     
-    /// Get the channel on the FEM [0-64].
+    /// Get the channel on the FEM [0-63].
     virtual const UInt_t GetChannel() const;
 
 protected:
