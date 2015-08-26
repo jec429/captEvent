@@ -62,6 +62,30 @@ public:
     /// Return true if the calibrated time is valid.
     virtual bool HasValidTime(void) const;
 
+    /// Return the time of the start of the first sample contributing to this
+    /// hit.
+    virtual double GetTimeStart() const {
+        // The default is based on the RMS and a factor assuming an almost
+        // uniform charge distribution.  This is usually overridden by the
+        // daughter class.
+        return GetTime()-1.73*GetTimeRMS();
+    }
+
+    /// Return the time of the end of the last sample contributing to this
+    /// hit.
+    virtual double GetTimeStop() const {
+        // The default is based on the RMS and a factor assuming an almost
+        // uniform charge distribution.  This is usually overridden by the
+        // daughter class.
+        return GetTime()+1.73*GetTimeRMS();
+    }
+    
+    /// Get the number of samples saved with this hit.
+    virtual int GetTimeSamples() const {return 1;}
+
+    /// Get the value of a sample saved with this hit.
+    virtual double GetTimeSample(int i) const {return GetCharge();}
+    
     /// The center of the volume associated with this hit.
     virtual const TVector3& GetPosition(void) const = 0;
 

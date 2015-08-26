@@ -46,6 +46,20 @@ public:
     /// the extent (or spread) of the time distribution.
     virtual double GetTimeRMS(void) const; 
 
+    /// Return the time of the start of the first sample contributing to this
+    /// hit.
+    virtual double GetTimeStart() const;
+
+    /// Return the time of the end of the last sample contributing to this
+    /// hit.
+    virtual double GetTimeStop() const;
+
+    /// Get the number of samples saved with this hit.
+    virtual int GetTimeSamples() const;
+
+    /// Get the value of a sample saved with this hit.
+    virtual double GetTimeSample(int i) const;
+    
     /// The center of the volume associated with this hit.
     virtual const TVector3& GetPosition(void) const;
 
@@ -123,6 +137,15 @@ protected:
     /// The RMS of the timing.
     Float_t fTimeRMS;
 
+    /// The time of the first sample in the hit.
+    Float_t fTimeStart;
+
+    /// The time of the last sample in the hit.
+    Float_t fTimeStop;
+
+    /// The charge samples in the hit.
+    std::vector<Float_t> fTimeSamples;
+    
     /// This is set to true if the fast access fields below have been
     /// initialized.
     bool fInitialized; //! Don't Save
@@ -140,6 +163,6 @@ protected:
     /// The rotation of the hit.
     TMatrixD fRotation; //! Don't Save
 
-    ClassDef(TSingleHit,3);
+    ClassDef(TSingleHit,4);
 };
 #endif

@@ -18,6 +18,7 @@ CP::TSingleHit::TSingleHit()
     : fGeomId(0), 
       fCharge(0), fChargeUncertainty(1*unit::coulomb),
       fTime(0), fTimeUncertainty(1*unit::second), fTimeRMS(1*unit::second),
+      fTimeStart(0), fTimeStop(0),
       fInitialized(false),
       fPosition(0,0,0), 
       fUncertainty(100*unit::meter,100*unit::meter,100*unit::meter),
@@ -63,6 +64,26 @@ double CP::TSingleHit::GetTime(void) const {
 double CP::TSingleHit::GetTimeRMS(void) const {
     if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
     return fTimeRMS;
+}
+
+double CP::TSingleHit::GetTimeStart(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fTimeStart;
+}
+
+double CP::TSingleHit::GetTimeStop(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fTimeStop;
+}
+
+int CP::TSingleHit::GetTimeSamples(void) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return (int) fTimeSamples.size();
+}
+
+double CP::TSingleHit::GetTimeSample(int i) const {
+    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+    return fTimeSamples.at(i);
 }
 
 const TVector3& CP::TSingleHit::GetPosition(void) const {

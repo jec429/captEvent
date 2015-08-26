@@ -75,6 +75,20 @@ public:
 
     void SetTimeRMS(double t); 
 
+    void SetTimeStart(double t);
+
+    void SetTimeStop(double t);
+    
+    /// Get the number of samples saved with this hit.
+    template <typename T> void SetTimeSamples(T start, T stop) {
+        std::size_t len = stop-start;
+        fTimeSamples.resize(len);
+        std::copy(start,stop,fTimeSamples.begin());
+    }
+
+    /// Get the value of a sample saved with this hit.
+    virtual double GetTimeSample(int i) const {return GetCharge();}
+    
     void SetChargeValidity(bool valid);
 
     void SetTimeValidity(bool valid);

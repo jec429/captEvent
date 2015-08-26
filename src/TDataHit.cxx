@@ -60,6 +60,10 @@ void CP::TWritableDataHit::SetTimeUncertainty(double t) {fTimeUncertainty = t;}
 
 void CP::TWritableDataHit::SetTimeRMS(double t) {fTimeRMS = t;}
 
+void CP::TWritableDataHit::SetTimeStart(double t) {fTimeStart = t;}
+
+void CP::TWritableDataHit::SetTimeStop(double t) {fTimeStop = t;}
+
 void CP::TWritableDataHit::SetDigit(CP::TDigitProxy proxy) {
     fProxy = proxy;
     CaptNamedDebug("dataHit","Set digit for " << proxy.AsString()
