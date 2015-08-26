@@ -31,6 +31,8 @@ CP::TSingleHit::TSingleHit(const CP::TSingleHit& h)
       fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
       fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
       fTimeRMS(h.fTimeRMS),
+      fTimeStart(h.fTimeStart), fTimeStop(h.fTimeStop),
+      fTimeSamples(h.fTimeSamples),
       fInitialized(h.fInitialized),
       fPosition(h.fPosition),
       fUncertainty(h.fUncertainty),
