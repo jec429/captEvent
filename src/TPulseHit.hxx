@@ -1,34 +1,30 @@
-#ifndef TSingleHit_hxx_seen
-#define TSingleHit_hxx_seen
+#ifndef TPulseHit_hxx_seen
+#define TPulseHit_hxx_seen
 
 #include "THit.hxx"
 
 class TGeoManager;
 
 namespace CP {
-    class TSingleHit;
-    class TMCHit;
-    class TDataHit;
-    class TWritableMCHit;
-    class TWritableDataHit;
+    class TPulseHit;
+    class TFADCHit;
+    class TWritableFADCHit;
 }
 
 /// A single hit.  This cannot be directly instantiated.  
-class CP::TSingleHit: public THit {
+class CP::TPulseHit: public THit {
 private:
-    friend class TMCHit;
-    friend class TDataHit;
-    friend class TWritableMCHit;
-    friend class TWritableDataHit;
+    friend class TFADCHit;
+    friend class TWritableFADCHit;
 
-    // The TSingleHit class can't be directly instantiated.  It is created
+    // The TPulseHit class can't be directly instantiated.  It is created
     // using the TWritableMCHit, or TWritableDataHit classes and is accessed
     // as a THit class.
-    TSingleHit();
-    TSingleHit(const TSingleHit&);
+    TPulseHit();
+    TPulseHit(const TPulseHit&);
 
 public:
-    virtual ~TSingleHit();
+    virtual ~TPulseHit();
 
     /// Return the calibrated "charge" for the hit.
     virtual double GetCharge(void) const;
@@ -46,6 +42,20 @@ public:
     /// the extent (or spread) of the time distribution.
     virtual double GetTimeRMS(void) const; 
 
+    /// Return the time of the start of the first sample contributing to this
+    /// hit.
+    virtual double GetTimeStart() const;
+
+    /// Return the time of the end of the last sample contributing to this
+    /// hit.
+    virtual double GetTimeStop() const;
+
+    /// Get the number of samples saved with this hit.
+    virtual int GetTimeSamples() const;
+
+    /// Get the value of a sample saved with this hit.
+    virtual double GetTimeSample(int i) const;
+    
     /// The center of the volume associated with this hit.
     virtual const TVector3& GetPosition(void) const;
 
@@ -123,6 +133,15 @@ protected:
     /// The RMS of the timing.
     Float_t fTimeRMS;
 
+    /// The time of the first sample in the hit.
+    Float_t fTimeStart;
+
+    /// The time of the last sample in the hit.
+    Float_t fTimeStop;
+
+    /// The charge samples in the hit.
+    std::vector<Float_t> fTimeSamples;
+    
     /// This is set to true if the fast access fields below have been
     /// initialized.
     bool fInitialized; //! Don't Save
@@ -140,6 +159,6 @@ protected:
     /// The rotation of the hit.
     TMatrixD fRotation; //! Don't Save
 
-    ClassDef(TSingleHit,5);
+    ClassDef(TPulseHit,1);
 };
 #endif

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-// $Id: TSingleHit.cxx,v 1.22 2012/06/18 15:32:24 mcgrew Exp $
+// $Id: TPulseHit.cxx,v 1.22 2012/06/18 15:32:24 mcgrew Exp $
 //
 #include <cmath>
 
@@ -8,16 +8,17 @@
 #include <TVector3.h>
 
 #include "TGeomIdManager.hxx"
-#include "TSingleHit.hxx"
+#include "TPulseHit.hxx"
 #include "TManager.hxx"
 #include "HEPUnits.hxx"
 
-ClassImp(CP::TSingleHit);
+ClassImp(CP::TPulseHit);
 
-CP::TSingleHit::TSingleHit() 
+CP::TPulseHit::TPulseHit() 
     : fGeomId(0), 
       fCharge(0), fChargeUncertainty(1*unit::coulomb),
       fTime(0), fTimeUncertainty(1*unit::second), fTimeRMS(1*unit::second),
+      fTimeStart(0), fTimeStop(0),
       fInitialized(false),
       fPosition(0,0,0), 
       fUncertainty(100*unit::meter,100*unit::meter,100*unit::meter),
@@ -25,11 +26,13 @@ CP::TSingleHit::TSingleHit()
     SetBit(kCanDelete,false);
 }
 
-CP::TSingleHit::TSingleHit(const CP::TSingleHit& h) 
+CP::TPulseHit::TPulseHit(const CP::TPulseHit& h) 
     : CP::THit(h), fGeomId(h.fGeomId),
       fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
       fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
       fTimeRMS(h.fTimeRMS),
+      fTimeStart(h.fTimeStart), fTimeStop(h.fTimeStop),
+      fTimeSamples(h.fTimeSamples),
       fInitialized(h.fInitialized),
       fPosition(h.fPosition),
       fUncertainty(h.fUncertainty),
@@ -37,60 +40,80 @@ CP::TSingleHit::TSingleHit(const CP::TSingleHit& h)
     SetBit(kCanDelete,false);
 }
 
-CP::TSingleHit::~TSingleHit() { }
+CP::TPulseHit::~TPulseHit() { }
 
 //////////////////////////////////////////////////
-// Getter methods for CP::TSingleHit
+// Getter methods for CP::TPulseHit
 //////////////////////////////////////////////////
 
-CP::TGeometryId CP::TSingleHit::GetGeomId(int i) const {
+CP::TGeometryId CP::TPulseHit::GetGeomId(int i) const {
     if (i != 0) throw CP::EHitOutOfRange();
     return TGeometryId(fGeomId);
 }
 
-double CP::TSingleHit::GetCharge(void) const {return fCharge;}
+double CP::TPulseHit::GetCharge(void) const {return fCharge;}
 
-double CP::TSingleHit::GetChargeUncertainty(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+double CP::TPulseHit::GetChargeUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fChargeUncertainty;
 }
 
-double CP::TSingleHit::GetTime(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+double CP::TPulseHit::GetTime(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fTime;
 }
 
-double CP::TSingleHit::GetTimeRMS(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+double CP::TPulseHit::GetTimeRMS(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fTimeRMS;
 }
 
-const TVector3& CP::TSingleHit::GetPosition(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+double CP::TPulseHit::GetTimeStart(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return fTimeStart;
+}
+
+double CP::TPulseHit::GetTimeStop(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return fTimeStop;
+}
+
+int CP::TPulseHit::GetTimeSamples(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return (int) fTimeSamples.size();
+}
+
+double CP::TPulseHit::GetTimeSample(int i) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return fTimeSamples.at(i);
+}
+
+const TVector3& CP::TPulseHit::GetPosition(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fPosition;
 }
 
-const TMatrixD& CP::TSingleHit::GetRotation(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+const TMatrixD& CP::TPulseHit::GetRotation(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fRotation;
 }
 
-const TVector3& CP::TSingleHit::GetRMS(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize(); 
+const TVector3& CP::TPulseHit::GetRMS(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize(); 
     return fRMS;
 }
 
-const TVector3& CP::TSingleHit::GetUncertainty(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+const TVector3& CP::TPulseHit::GetUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fUncertainty;
 }
 
-double CP::TSingleHit::GetTimeUncertainty(void) const {
-    if (!fInitialized) const_cast<CP::TSingleHit*>(this)->Initialize();
+double CP::TPulseHit::GetTimeUncertainty(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fTimeUncertainty;
 }
 
-bool CP::TSingleHit::InitializeGeneric() {
+bool CP::TPulseHit::InitializeGeneric() {
     TGeoManager* geom = CP::TManager::Get().Geometry();
     geom->PushPath();
     if (!CP::TManager::Get().GeomId().CdId(TGeometryId(fGeomId))) {
@@ -140,7 +163,7 @@ bool CP::TSingleHit::InitializeGeneric() {
     return true;
 }
 
-void CP::TSingleHit::Initialize(void) {
+void CP::TPulseHit::Initialize(void) {
     try {
         do {
             // Try initializations looking for the first one to work.  The
@@ -151,12 +174,12 @@ void CP::TSingleHit::Initialize(void) {
         fInitialized = true;
     }
     catch (std::exception& e) {
-        CaptSevere("TSingleHit Exception: " << e.what());
+        CaptSevere("TPulseHit Exception: " << e.what());
         return;
     }
     catch (...) {
         // Just don't crash!
-        CaptSevere("TSingleHit Exception: unknown");
+        CaptSevere("TPulseHit Exception: unknown");
         return;
     }
 }

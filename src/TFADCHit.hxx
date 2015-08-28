@@ -1,15 +1,15 @@
-#ifndef TDataHit_hxx_seen
-#define TDataHit_hxx_seen
+#ifndef TFADCHit_hxx_seen
+#define TFADCHit_hxx_seen
 
 #include <iostream>
 #include <vector>
 
-#include "TSingleHit.hxx"
+#include "TPulseHit.hxx"
 #include "TDigitProxy.hxx"
 
 namespace CP {
-    class TDataHit;
-    class TWritableDataHit;
+    class TFADCHit;
+    class TWritableFADCHit;
 }
 
 /// A single calibrated hit detector element.  This corresponds to a real
@@ -18,13 +18,13 @@ namespace CP {
 /// detector.  
 ///
 /// If the MC has written digitized data (derived from TMCDigit), then a
-/// TDataHit will be used to hold the calibrated MC THit objects.  You can get
+/// TFADCHit will be used to hold the calibrated MC THit objects.  You can get
 /// associated MC information using the TDigitProxy saved in the hit.
-class CP::TDataHit : public TSingleHit {
+class CP::TFADCHit : public TPulseHit {
 public:
-    TDataHit();
-    TDataHit(const TWritableDataHit& val);
-    virtual ~TDataHit();
+    TFADCHit();
+    TFADCHit(const TWritableFADCHit& val);
+    virtual ~TFADCHit();
 
     /// Return a proxy to the digit that generated this hit.  If the index is
     /// out of range, this will throw an EHitOutOfRange exception.
@@ -52,16 +52,16 @@ protected:
     /// The electronics channel for this hit.
     UInt_t fChannelId;
 
-    ClassDef(TDataHit,1);
+    ClassDef(TFADCHit,1);
 };
 
-/// Provide a writable interface to a TDataHit that can be used to fill the
+/// Provide a writable interface to a TFADCHit that can be used to fill the
 /// object.
-class CP::TWritableDataHit : public TDataHit {
+class CP::TWritableFADCHit : public TFADCHit {
 public:
-    TWritableDataHit();
-    TWritableDataHit(const TWritableDataHit& h);
-    virtual ~TWritableDataHit();
+    TWritableFADCHit();
+    TWritableFADCHit(const TWritableFADCHit& h);
+    virtual ~TWritableFADCHit();
 
     void SetGeomId(TGeometryId id);
 
@@ -75,6 +75,20 @@ public:
 
     void SetTimeRMS(double t); 
 
+    void SetTimeStart(double t);
+
+    void SetTimeStop(double t);
+    
+    /// Get the number of samples saved with this hit.
+    template <typename T> void SetTimeSamples(T start, T stop) {
+        std::size_t len = stop-start;
+        fTimeSamples.resize(len);
+        std::copy(start,stop,fTimeSamples.begin());
+    }
+
+    /// Get the value of a sample saved with this hit.
+    virtual double GetTimeSample(int i) const {return GetCharge();}
+    
     void SetChargeValidity(bool valid);
 
     void SetTimeValidity(bool valid);
@@ -87,6 +101,6 @@ public:
     /// by SetDigit).
     void SetChannelId(CP::TChannelId id);
 
-    ClassDef(TWritableDataHit,4);
+    ClassDef(TWritableFADCHit,1);
 };
 #endif
