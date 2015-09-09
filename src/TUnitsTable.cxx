@@ -59,6 +59,7 @@ CP::TUnitsTable::TUnitsTable() {
     units["MHz"] = unit::megahertz  ;
 
     // Electric Charge
+    units["electrons"] = unit::eplus  ;
     units["e+"] = unit::eplus  ;
     units["C"] = unit::coulomb ;
     units["muC"] = unit::microcoulomb ;
