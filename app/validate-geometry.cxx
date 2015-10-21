@@ -20,7 +20,7 @@
 
 void usage(int argc, char **argv) {
     std::cout << std::endl
-              << argv[0] << " [options] <intput-file-name>" 
+              << argv[0] << " [options] <input-file-name>" 
               << std::endl
               << std::endl
               << "   Test a geometry to make sure all geometry objects can"
@@ -129,76 +129,9 @@ int main(int argc, char** argv) {
                 std::cout << "FAIL" << std::endl;
                 return 1;
             }
-            if (geomId != target) {
-                std::cout << "expected " << target.AsInt() 
-                          <<  " " << target << std::endl;
-                std::cout << "got      " << geomId.AsInt()
-                          << " " << geomId << std::endl;
-                std::cout << "FAIL" << std::endl;
-                return 1;
-            }
         }
     }
     
-    int ngood = 0;
-    int nbad = 0;
-    
-    // Loop over a bunch of bars in Top Left Barrel ECAL.
-    for(int k = 0; k < 2; ++k){        
-        for(int i = 0; i < 16; ++i){          
-            for(int j = 0; j < 36; ++j){
-                
-                char place[200];
-                if(k == 0) {
-                    unsigned int len = snprintf(place,sizeof(place),"/t2k_1/OA_0/Magnet_0/LeftClam_0/BrlECal_0/Top_0/ScintX1_%i/Bar_%i",i,j);
-                    if (len >= sizeof(place)) {
-                        std::cout << "string not long enough" << std::endl;
-                        std::cout << "FAIL" << std::endl;
-                        return 1;
-                    }
-                }
-                else {
-                    unsigned int len = snprintf(place,sizeof(place),"/t2k_1/OA_0/Magnet_0/LeftClam_0/BrlECal_0/Top_0/ScintY1_%i/Bar_%i",i,j);
-                    if (len >= sizeof(place)) {
-                        std::cout << "string not long enough" << std::endl;
-                        std::cout << "FAIL" << std::endl;
-                        return 1;
-                    }
-                }
-
-                // Start by figuring out what the position of this bar is
-                gGeoManager->cd(place);            
-                double local[3] = {0,0,0};
-                double master[3];            
-                gGeoManager->LocalToMaster(local,master);
-                
-                // Now check if we can re-find this bar.
-                gGeoManager->cd("/t2k_1/OA_0/Magnet_0/LeftClam_0");            
-                gGeoManager->FindNode(master[0],master[1],master[2]);
-                
-                std::string test1(place);
-                std::string test2(gGeoManager->GetPath());
-                
-                if(test1 != test2){
-                    std::cout << "Problem! " << place << " !=  " 
-                              <<  gGeoManager->GetPath() << std::endl;
-                    ++nbad;
-                }
-                else {
-                    ++ngood;
-                }
-            }
-        }
-    }
-
-    std::cout << "Number of successful checks: " << ngood << std::endl;
-    std::cout << "Number of unsuccessful checks: " << nbad << std::endl;
-
-    if (nbad) {
-        std::cout << "FAIL" << std::endl;
-        return 1;
-    }
-
     std::cout << "SUCCESS" << std::endl;
     return 0;
 }
