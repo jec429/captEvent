@@ -28,18 +28,18 @@ namespace tut {
     void testTEventContext::test<1> () {
         CP::TEventContext g1;
 
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
         ensure_equals("Invald value matches 0XDEADBEEF",
                       CP::TEventContext::Invalid, invalid);
         ensure_equals("Invald value matches 0XDEADBEEF",
-                      CP::TEventContext::Invalid, (int) 0XDEADBEEF);
+                      CP::TEventContext::Invalid, (int unsigned) 0XDEADBEEF);
     }
 
     // Test the default constructor and destructor for the partition.
     template<> template<>
     void testTEventContext::test<2> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Partition value is 0xDEADBEEF", 
                       g1.GetPartition(), invalid);
@@ -52,7 +52,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<3> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Run value is 0xDEADBEEF", 
                       g1.GetRun(), invalid);
@@ -65,7 +65,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<4> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Sub run value is 0xDEADBEEF", 
                       g1.GetSubRun(), invalid);
@@ -78,7 +78,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<5> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Event number value is 0xDEADBEEF", 
                       g1.GetEvent(), invalid);
@@ -91,7 +91,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<6> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Spill number value is 0xDEADBEEF", 
                       g1.GetSpill(), invalid);
@@ -104,7 +104,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<7> () {
         CP::TEventContext g1;
-        int invalid = 0xdeadbeef;
+        unsigned int invalid = 0xdeadbeef;
 
         ensure_equals("Time stamp value is 0xDEADBEEF", 
                       g1.GetTimeStamp(), invalid);
@@ -117,7 +117,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<8> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Partition value is 1", 
                       g1.GetPartition(), value);
@@ -128,7 +128,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<9> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Run value is 1", 
                       g1.GetRun(), value);
@@ -139,7 +139,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<10> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Sub run value is 1", 
                       g1.GetSubRun(), value);
@@ -150,7 +150,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<11> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Event number value is 1", 
                       g1.GetEvent(), value);
@@ -161,7 +161,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<12> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Spill number value is 1", 
                       g1.GetSpill(), value);
@@ -172,7 +172,7 @@ namespace tut {
     template<> template<>
     void testTEventContext::test<13> () {
         CP::TEventContext g1(1,1,1,1,1,1);
-        int value = 1;
+        unsigned int value = 1;
 
         ensure_equals("Time stamp value is 1", 
                       g1.GetTimeStamp(), value);
