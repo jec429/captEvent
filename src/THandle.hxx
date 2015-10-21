@@ -109,9 +109,7 @@ namespace CP {
 
     public:
         /// Allow a null handle to be constructed. 
-        THandle() {
-            Default(NULL);
-        }
+        THandle();
 
         /// Explicitly construct a THandle from a T pointer.  If this isn't
         /// explicit, then C++ will use this constructor as a type conversion
@@ -128,11 +126,7 @@ namespace CP {
         /// destroyed.  On the other hand, "h" and "j" both assume full
         /// ownership of "p" which gets deleted as soon as the first one gets
         /// deleted (leaving a dangling reference, a.k.a. BUG).
-        explicit THandle(T* pointee) {
-            THandleBase *base = NULL;
-            if (pointee) base = new THandleBaseDeletable(pointee);
-            Default(base);
-        }
+        explicit THandle(T* pointee);
 
         /// Create a THandle for an object with an explicit ownership.  This
         /// allows THandle objects to refer to static objects, objects that
@@ -140,23 +134,10 @@ namespace CP {
         /// the object is owned by the handle (and can be deleted), the owner
         /// argument is true.  If the object is *not* owned by the handle,
         /// the owner argument is false.
-        THandle(T* pointee, bool owner) {
-            if (pointee) {
-                if (owner) 
-                    Default(new THandleBaseDeletable(pointee));
-                else 
-                    Default(new THandleBaseUndeletable(pointee));
-            }    
-            else {
-                Default(NULL);
-            }
-        }
+        THandle(T* pointee, bool owner);
 
         /// The copy constructor for this handle.
-        THandle(const THandle<T>& rhs) : TVHandle(rhs) {
-            Default(NULL);
-            Link(rhs);
-        }
+        THandle(const THandle<T>& rhs);
     
         // Copy between classes.
         template <class U> 
@@ -168,9 +149,8 @@ namespace CP {
         }
     
         /// The destructor for the THandle object which may delete the pointer. 
-        virtual ~THandle() {
-            if (Unlink()) Destroy();
-        }
+        virtual ~THandle();
+
     
         /// @{ Assign one THandle object to another.  This should be designed
         /// to recast the pointee between the assignments so that an implicit
@@ -188,94 +168,17 @@ namespace CP {
         /// \endcode
         ///
         /// This provides both const and non-const versions of the assignment.
-        THandle<T>& operator = (THandle<T>& rhs) {
-            if (operator == (rhs)) return rhs;
-            // Going to replace the value of this smart pointer, so unref and
-            // possible delete.
-            if (Unlink()) Destroy();
-            // Make sure the handle in the default state.
-            Default(NULL);
-            // Compatible types
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-            return rhs;
-        }
-    
-        const THandle<T>& operator = (const THandle<T>& rhs) {
-            // Going to replace the value of this smart pointer, so unref and
-            // possible delete.
-            if (Unlink()) Destroy();
-            // Make sure the handle in the default state.
-            Default(NULL);
-            // Compatible types
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-            return rhs;
-        }
-
-        template <class U>
-        THandle<U>& operator = (THandle<U>& rhs) {
-            // Going to replace the value of this smart pointer, so unref and
-            // possible delete.
-            if (Unlink()) Destroy();
-            // Make sure the handle in the default state.
-            Default(NULL);
-            // Compatible types
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-            return rhs;
-        }
-    
-        template <class U>
-        const THandle<U>& operator = (const THandle<U>& rhs) {
-            // Going to replace the value of this smart pointer, so unref and
-            // possible delete.
-            if (Unlink()) Destroy();
-            // Make sure the handle in the default state.
-            Default(NULL);
-            // Compatible types
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-            return rhs;
-        }
+        THandle<T>& operator = (THandle<T>& rhs);
+        const THandle<T>& operator = (const THandle<T>& rhs);
+        template <class U> THandle<U>& operator = (THandle<U>& rhs);
+        template <class U> const THandle<U>& operator = (const THandle<U>& rhs);
         /// @}
     
         /// The reference operator 
-        T& operator*() const {
-            TObject* object = GetPointerValue();
-            if (!object) {
-                CaptError("Dereferencing a NULL handle " << typeid(T).name());
-                
-                throw EHandleBadReference();
-            }
-            T* pointer = dynamic_cast<T*>(object);
-            if (!pointer) {
-                CaptError("Dereferencing with an invalid cast "
-                           << typeid(T).name());
-                throw EHandleBadReference();
-            }
-            return *pointer;
-        }
+        T& operator*() const;
 
         /// The redirection operator
-        T* operator->() const {
-            TObject* object = GetPointerValue();
-            if (!object) {
-                CaptError("Referencing a NULL handle " << typeid(T).name());
-                throw EHandleBadReference();
-            }
-            T* pointer = dynamic_cast<T*>(object);
-            if (!pointer) {
-                CaptError("Referencing with an invalid cast"
-                           << typeid(T).name());
-                throw EHandleBadReference();
-            }
-            return pointer;
-        }
+        T* operator->() const;
 
 #ifndef __CINT__
     private:
@@ -408,4 +311,136 @@ namespace CP {
         ClassDef(THandleBaseUndeletable,2);
     };
 }
+
+//////////////////////////////////////////////////////////////////
+// Implementation of methods.
+//////////////////////////////////////////////////////////////////
+template <class T>
+CP::THandle<T>::THandle(T* pointee) {
+    THandleBase *base = NULL;
+    if (pointee) base = new THandleBaseDeletable(pointee);
+    Default(base);
+}
+
+template <class T>
+CP::THandle<T>::THandle() {
+    Default(NULL);
+}
+
+template <class T>
+CP::THandle<T>::THandle(T* pointee, bool owner) {
+    if (pointee) {
+        if (owner) 
+            Default(new THandleBaseDeletable(pointee));
+        else 
+            Default(new THandleBaseUndeletable(pointee));
+    }    
+    else {
+        Default(NULL);
+    }
+}
+
+template <class T>
+CP::THandle<T>::THandle(const THandle<T>& rhs) : TVHandle(rhs) {
+    Default(NULL);
+    Link(rhs);
+}
+
+template <class T>
+CP::THandle<T>::~THandle() {
+    if (Unlink()) Destroy();
+}
+    
+template <class T>
+CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
+    if (operator == (rhs)) return rhs;
+    // Going to replace the value of this smart pointer, so unref and
+    // possible delete.
+    if (Unlink()) Destroy();
+    // Make sure the handle in the default state.
+    Default(NULL);
+    // Compatible types
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    return rhs;
+}
+    
+template <class T> 
+const CP::THandle<T>& CP::THandle<T>::operator = (const THandle<T>& rhs) {
+    // Going to replace the value of this smart pointer, so unref and
+    // possible delete.
+    if (Unlink()) Destroy();
+    // Make sure the handle in the default state.
+    Default(NULL);
+    // Compatible types
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    return rhs;
+}
+
+template <class T> 
+template <class U>
+CP::THandle<U>& CP::THandle<T>::operator = (THandle<U>& rhs) {
+    // Going to replace the value of this smart pointer, so unref and
+    // possible delete.
+    if (Unlink()) Destroy();
+    // Make sure the handle in the default state.
+    Default(NULL);
+    // Compatible types
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    return rhs;
+}
+
+template <class T> 
+template <class U>
+const CP::THandle<U>& CP::THandle<T>::operator = (const THandle<U>& rhs) {
+    // Going to replace the value of this smart pointer, so unref and
+    // possible delete.
+    if (Unlink()) Destroy();
+    // Make sure the handle in the default state.
+    Default(NULL);
+    // Compatible types
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    return rhs;
+}
+
+template <class T>
+T& CP::THandle<T>::operator*() const {
+    TObject* object = GetPointerValue();
+    if (!object) {
+        CaptError("Dereferencing a NULL handle " << typeid(T).name());
+        
+        throw EHandleBadReference();
+    }
+    T* pointer = dynamic_cast<T*>(object);
+    if (!pointer) {
+        CaptError("Dereferencing with an invalid cast "
+                  << typeid(T).name());
+        throw EHandleBadReference();
+    }
+    return *pointer;
+}
+
+template <class T> 
+T* CP::THandle<T>::operator->() const {
+    TObject* object = GetPointerValue();
+    if (!object) {
+        CaptError("Referencing a NULL handle " << typeid(T).name());
+        throw EHandleBadReference();
+    }
+    T* pointer = dynamic_cast<T*>(object);
+    if (!pointer) {
+        CaptError("Referencing with an invalid cast"
+                  << typeid(T).name());
+        throw EHandleBadReference();
+    }
+    return pointer;
+}
+
 #endif
