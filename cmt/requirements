@@ -68,7 +68,7 @@ application validate-geometry ../app/validate-geometry.cxx
 apply_pattern dependency target=validate-geometry depends=captEvent
 
 application dump-geometry ../app/dump-geometry.cxx
-apply_pattern dependency target=validate-geometry depends=captEvent
+apply_pattern dependency target=dump-geometry depends=captEvent
 
 # Test applications to build
 application captEventTUT -check ../test/captEventTUT.cxx ../test/tut*.cxx
