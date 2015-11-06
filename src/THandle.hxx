@@ -235,7 +235,7 @@ namespace CP {
         T* pointer = dynamic_cast<T*>(object);
         return pointer;
     }
-
+    
     /// Make a comparision between two handles based on the pointer value.
     template <class T, class U>
     bool operator <(const THandle<T>& a, const THandle<U>& b) {
@@ -243,7 +243,7 @@ namespace CP {
         U* bPtr = GetPointer(b);
         return (aPtr < bPtr);
     } 
-
+    
 
     /// An abstract base class to implement the reference counted internal
     /// object.  The THandleBase objects contain the actual pointer that is
@@ -312,6 +312,7 @@ namespace CP {
     };
 }
 
+#ifndef __CINT__
 //////////////////////////////////////////////////////////////////
 // Implementation of methods.
 //////////////////////////////////////////////////////////////////
@@ -442,5 +443,6 @@ T* CP::THandle<T>::operator->() const {
     }
     return pointer;
 }
+#endif
 
 #endif
