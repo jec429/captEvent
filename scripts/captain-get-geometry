@@ -1,13 +1,10 @@
 #! /bin/bash
 #
-# Download the geometries from
-# http://nngroup.physics.sunysb.edu/captain/files/geometry using wget.
-#
 # This is run without arguments.
 
 # The location of the input files.
 if [ ${GEOMFILES}x == x ]; then
-    GEOMFILES=http://nngroup.physics.sunysb.edu/captain/files/geometry/
+    GEOMFILES=${CAPTAINPOLICYMIRROR}/files/geometry
 fi
 
 # This directory should ALWAYS exist, but check anyway.
@@ -24,32 +21,10 @@ if [ ! -d ${CAPTEVENTROOT}/${CAPTEVENTCONFIG} ]; then
 fi
 cd ${CAPTEVENTCONFIG}
 
-# Get an index of geometry files.
-wget -q -T 5 -t 2 -S -N ${GEOMFILES} -o /dev/null
-
-if [ ! -f index.html ]; then
-    echo captain-get-geometry: Cannot check for new geometries.
-    exit 1
-fi
-
-# Build a list of the files download.
-cat index.html | \
-    egrep 'geom-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}-[[:xdigit:]]{8}' | \
-    sed 's/<tr>.*<a[^>]*>'// | \
-    sed 's/<.*//' | \
-    cat > geometry.index
-
-# Remove the index.
-rm index.html
-
-# Get the files.
-for file in `cat geometry.index`; do
-    if  [ ! -f ${file} ]; then
-	wget -nv -T 15 -t 1 -S -N -c ${GEOMFILES}/$file 2>&1 | grep URL
+for file in ${GEOMFILES}/*.root; do
+    if [ -f ${file} ]; then
+	ln -s ${file} `basename ${file}` >& /dev/null
     fi
 done
-
-# Get the geometry context map.
-# wget -nv -S -N -c ${GEOMFILES}/GEOMETRY.LIST -o /dev/null
 
 echo Geometries up to date
