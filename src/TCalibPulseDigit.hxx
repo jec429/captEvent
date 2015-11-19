@@ -28,6 +28,7 @@ namespace CP {
 class CP::TCalibPulseDigit : public TDigit {
 public:
     typedef std::vector<float> Vector;
+    typedef Vector::const_iterator iterator;
 
     TCalibPulseDigit ();
     virtual ~TCalibPulseDigit();
@@ -82,6 +83,12 @@ public:
     /// Get the vector of samples.
     const Vector& GetSamples() const;
 
+    /// The iterator for the first sample.
+    iterator begin() const { return fSamples.begin(); }
+
+    /// The iterator for the last sample.
+    iterator end() const { return fSamples.end(); }
+    
     /// Print the digit information.
     virtual void ls(Option_t* opt = "") const;
     

@@ -16,7 +16,8 @@ namespace CP {
 class CP::TPulseDigit : public TDigit {
 public:
     typedef std::vector<unsigned short> Vector;
-
+    typedef Vector::const_iterator iterator;
+    
     TPulseDigit ();
     virtual ~TPulseDigit();
 
@@ -41,6 +42,12 @@ public:
     /// vector of sample counts
     const Vector& GetSamples() const;
 
+    /// The iterator for the first sample.
+    iterator begin() const { return fSamples.begin(); }
+
+    /// The iterator for the last sample.
+    iterator end() const { return fSamples.end(); }
+    
     /// Print the digit information.
     virtual void ls(Option_t* opt = "") const;
     

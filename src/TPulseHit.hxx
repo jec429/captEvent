@@ -24,6 +24,9 @@ private:
     TPulseHit(const TPulseHit&);
 
 public:
+    /// An iterator through the samples
+    typedef std::vector<Float_t>::const_iterator iterator;
+
     virtual ~TPulseHit();
 
     /// Return the calibrated "charge" for the hit.
@@ -55,7 +58,13 @@ public:
 
     /// Get the value of a sample saved with this hit.
     virtual double GetTimeSample(int i) const;
-    
+
+    /// The begin iterator for the time samples.
+    virtual iterator begin() const {return fTimeSamples.begin();}
+
+    /// The end iterator for the time samples.
+    virtual iterator end() const {return fTimeSamples.end();}
+
     /// The center of the volume associated with this hit.
     virtual const TVector3& GetPosition(void) const;
 
