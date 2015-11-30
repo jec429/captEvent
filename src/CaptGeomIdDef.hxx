@@ -138,6 +138,13 @@ namespace CP {
                         /// (possibly) sit in lots of different volumes, and
                         /// are not segmented.
                         kPhotosensor,
+                        /// A wavelength shifting plate (usually associated
+                        /// with a photosensor.  All of wavelength shifting
+                        /// plates are in the "global" part of the captain
+                        /// namespaces.  This is because they (possibly) sit
+                        /// in lots of different volumes, and are not
+                        /// segmented.
+                        kWavelengthShifter,
                     };
                 
                     /// @{ The sequence value for this type of global volume.

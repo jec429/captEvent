@@ -44,7 +44,7 @@ namespace CP {
             /// Get the wire plane from the id.
             int GetPlane(TGeometryId i);
 
-            /// Get the geometry identifier for a wire light sensor.
+            /// Get the geometry identifier for a photo sensor.
             TGeometryId Photosensor(int photoSensor);
 
             /// Check if the id is for a photo sensor.
@@ -52,6 +52,15 @@ namespace CP {
 
             /// Get the photo sensor number from the id.
             int GetPhotosensor(TGeometryId i);
+
+            /// Get the geometry identifier for a wavelength shifter.
+            TGeometryId WavelengthShifter(int photoSensor);
+
+            /// Check if the id is for a wavelength shifter.
+            bool IsWavelengthShifter(TGeometryId i);
+
+            /// Get the wavelength shifter number from the id.
+            int GetWavelengthShifter(TGeometryId i);
 
             /// The geometry identifiers for wires
             TGeometryId Wire(int plane, int wire);

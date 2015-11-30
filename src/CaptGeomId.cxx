@@ -171,6 +171,45 @@ int CP::GeomId::Captain::GetPhotosensor(TGeometryId i) {
                        CP::GeomId::Def::Captain::Global::kFieldLSB);
 }
 
+CP::TGeometryId CP::GeomId::Captain::WavelengthShifter(int sensor) {
+    TSettableGeometryId id;
+    id.SetField(CP::GeomId::Def::kCryostat,
+                CP::GeomId::Def::kDetectorIdMSB, 
+                CP::GeomId::Def::kDetectorIdLSB);
+    id.SetField(CP::GeomId::Def::Captain::kGlobal, 
+                CP::GeomId::Def::Captain::kSeqIdMSB,
+                CP::GeomId::Def::Captain::kSeqIdLSB);
+    id.SetField(CP::GeomId::Def::Captain::Global::kWavelengthShifter,
+                CP::GeomId::Def::Captain::Global::kSeqIdMSB,
+                CP::GeomId::Def::Captain::Global::kSeqIdLSB);
+    id.SetField(sensor,
+                CP::GeomId::Def::Captain::Global::kFieldMSB,
+                CP::GeomId::Def::Captain::Global::kFieldLSB);
+    return id;
+}
+
+bool CP::GeomId::Captain::IsWavelengthShifter(TGeometryId i) {
+    TSettableGeometryId id(i);
+    if (CP::GeomId::Def::kCryostat 
+        != id.GetField(CP::GeomId::Def::kDetectorIdMSB,
+                       CP::GeomId::Def::kDetectorIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::kGlobal
+        != id.GetField(CP::GeomId::Def::Captain::kSeqIdMSB,
+                       CP::GeomId::Def::Captain::kSeqIdLSB)) return false;
+    if (CP::GeomId::Def::Captain::Global::kWavelengthShifter
+        != id.GetField(
+            CP::GeomId::Def::Captain::Global::kSeqIdMSB,
+            CP::GeomId::Def::Captain::Global::kSeqIdLSB)) return false;
+    return true;
+}
+
+int CP::GeomId::Captain::GetWavelengthShifter(TGeometryId i) {
+    if (!IsWavelengthShifter(i)) return -1;
+    TSettableGeometryId id(i);
+    return id.GetField(CP::GeomId::Def::Captain::Global::kFieldMSB,
+                       CP::GeomId::Def::Captain::Global::kFieldLSB);
+}
+
 CP::TGeometryId CP::GeomId::Captain::Wire(int plane, 
                                        int wire) {
     TSettableGeometryId id;
