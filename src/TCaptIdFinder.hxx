@@ -26,5 +26,8 @@ private:
     // The most recently seen photosensor.
     int fPhotosensor;
 
+    // The most recently seen wavelength shifting plate.
+    int fWavelengthShifter;
+
 };
 #endif

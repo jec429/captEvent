@@ -7,7 +7,7 @@
 #include "TCaptIdFinder.hxx"
 
 CP::TCaptIdFinder::TCaptIdFinder() 
-    : fPlane(-1), fWire(-1), fPhotosensor(-1) {}
+    : fPlane(-1), fWire(-1), fPhotosensor(-1), fWavelengthShifter(-1) {}
 CP::TCaptIdFinder::~TCaptIdFinder() {}
 
 bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names, 
@@ -68,6 +68,12 @@ bool CP::TCaptIdFinder::Search(const std::vector<std::string>& names,
     // Assign the photosensor.
     if (names.back().find("PhotoCathode_") != std::string::npos) {
         id = CP::GeomId::Captain::Photosensor(++fPhotosensor);
+        return true;
+    }
+
+    // Assign the wavelength shifter.
+    if (names.back().find("TPB_") != std::string::npos) {
+        id = CP::GeomId::Captain::WavelengthShifter(++fWavelengthShifter);
         return true;
     }
 
