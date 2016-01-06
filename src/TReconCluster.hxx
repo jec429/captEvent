@@ -85,6 +85,16 @@ public:
     /// hit position (the hit position uncertainty is used), and the energy
     /// deposit is the sum of the hit charges.  The algorithm name is set to
     /// the first argument.
+    ///
+    /// \note Since FillFromHits is typically used with 3D hit objects
+    /// (i.e. TReconHit), care must be taken in the reconstruction to make
+    /// sure that the charge is properly shared among the hits.  For instance,
+    /// if a particular hit contributes to several 3D hits (the usual case),
+    /// its charge must be distributed over all of those hits.
+    ///
+    /// \note If FillFromHits is used with 2D hits (i.e. U, V, and X hits),
+    /// the resulting covariances, and energy deposits will have been
+    /// calculated using incorrect assumptions.
     template <typename T> 
     void FillFromHits(const char* name, T begin,T end) {
         // Set the algorithm name.
