@@ -55,10 +55,14 @@ public:
     TVInputBuilder(const char* name, const char* documentation);
     virtual ~TVInputBuilder();
 
-    /// Build a new TVInputFile derived object.  The building of the
-    /// TVInputFile object can be controled using arguments that have been set
-    /// using the SetArguments() method.  The arguments are builder specific,
-    /// and a builder is free to ignore any values set using SetArguments.
+    /// Build a new TVInputFile derived object.  The structure of the fileName
+    /// depends on the specific builder being used.  For a "normal" builder,
+    /// it will just be the name of a file, but if the builder combines the
+    /// result from two or more input files it may be the comma separated list
+    /// of file names.  The building of the TVInputFile object can be
+    /// controlled using a string that is set using the SetArguments() method.
+    /// The format of the string is builder specific, and a builder is free to
+    /// ignore any values set using SetArguments.
     virtual CP::TVInputFile* Open(const char* fileName) const = 0;
 
     /// Get the name of the builder
@@ -70,7 +74,7 @@ public:
 protected:
     /// Set the current arguments for the builder.  These are available when
     /// the file is being opened.  This can be "const" since the fArguments
-    /// field is a mutable field.
+    /// field is a mutable field.  This is set in the TInputManager class.
     void SetArguments(const char* arguments) const {fArguments = arguments;}
 
     /// Get the current arguments for the builder.  This should be used by the
