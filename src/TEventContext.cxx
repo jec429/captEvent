@@ -151,10 +151,12 @@ std::ostream& CP::operator<<(std::ostream& s, const CP::TEventContext& c) {
         valid = true;
     }
     if (valid) {
-        if (c.IsMC()) s << " MC";
-        else if (c.IsCAPTAIN()) s << " CPT";
-        else if (c.IsMiniCAPTAIN()) s << " mCPT";
-        else if (c.IsDetector()) s << " DET";
+        s << " ";
+        if (c.IsDetector()) s << "DET";
+        else s << "MC";
+        if (c.IsCAPTAIN()) s << "-CPT";
+        else if (c.IsMiniCAPTAIN()) s << "-mCPT";
+        else s << "-UNK";
     }
     else {
         s << "Invalid Context";
