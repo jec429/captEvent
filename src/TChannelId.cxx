@@ -5,6 +5,7 @@
 #include "TChannelId.hxx"
 #include "TMCChannelId.hxx"
 #include "TTPCChannelId.hxx"
+#include "TPDSChannelId.hxx"
 
 #include "TCaptLog.hxx"
 
@@ -101,6 +102,7 @@ std::string CP::TChannelId::SubDetAsString() const {
     switch (GetSubDetector()) {
     case kMC:      det = "MC";     break;
     case kTPC:     det = "TPC";    break;
+    case kPDS:     det = "PDS";    break;
     default:       det = "NV";     break; 
     }
 
@@ -115,6 +117,10 @@ const Bool_t CP::TChannelId::IsTPCChannel() const {
     return (kTPC == GetSubDetector());
 }
 
+const Bool_t CP::TChannelId::IsPDSChannel() const {
+    return (kPDS == GetSubDetector());
+}
+
 std::string CP::TChannelId::AsString() const {
 
     if (IsMCChannel()) {
@@ -127,8 +133,13 @@ std::string CP::TChannelId::AsString() const {
         return id.AsString();
     }
 
+    if (IsPDSChannel()) {
+        TPDSChannelId id(*this);
+        return id.AsString();
+    }
+
     std::ostringstream buffer;
-    buffer << std::setw(7) << SubDetAsString()
+    buffer << std::setw(4) << SubDetAsString()
            << "-0x" << std::setw(8) << std::hex << std::setfill('0') 
            << fChannelId;
     return buffer.str();

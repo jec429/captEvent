@@ -41,6 +41,8 @@ public:
         kMC     = 1,  
         /// Flags that the channel id is from the TPC wire planes.
         kTPC    = 2, 
+        /// Flags that the channel id is from the photon detection system.
+        kPDS    = 3, 
         kMaxDetector,
     }; 
 
@@ -76,6 +78,9 @@ public:
     ///Check if this channel is from the TPC.
     virtual const bool IsTPCChannel() const; 
 
+    ///Check if this channel is from the photon detection system.
+    virtual const bool IsPDSChannel() const; 
+
     ///Check if a UInt_t is an MC channel id, without the user having to
     ///construct a channel id.
     static const bool IsMCChannel(UInt_t code) {
@@ -86,6 +91,12 @@ public:
     ///construct a channel id.
     static const bool IsTPCChannel(UInt_t code) {
         return TChannelId(code).IsTPCChannel();
+    }
+
+    ///Check if a UInt_t is a photon detection system channel id, without the
+    ///user having to construct a channel id.
+    static const bool IsPDSChannel(UInt_t code) {
+        return TChannelId(code).IsPDSChannel();
     }
 
     /// Automatic conversion to char pointer (use with care).  This simplifies
