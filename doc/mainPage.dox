@@ -1,6 +1,6 @@
 /*! \mainpage The captEvent Library
   
-  \section captEvent Introduction
+  \section captEvent captEvent
 
   This library provides the basic I/O functions for the CAPTAIN software.
   It is also an example of the \ref codingGuidelines that are encouraged
