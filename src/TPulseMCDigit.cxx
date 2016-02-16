@@ -1,4 +1,5 @@
 #include "TPulseMCDigit.hxx"
+#include "TG4HitSegment.hxx"
 
 ClassImp(CP::TPulseMCDigit);
 
@@ -31,29 +32,48 @@ void CP::TPulseMCDigit::ls(Option_t* opt) const {
 
     std::cout << GetChannelId()
               << " T: " << GetFirstSample() 
-              << " (" << GetSampleCount() << ")";
+              << "-" << GetFirstSample()+GetSampleCount();
 
-    if (GetInformation().empty()) {
-        std::cout << " I: missing";
-    }
-    else {
-        std::cout << " I:";
-        for (CP::TMCDigit::InfoContainer::const_iterator i
-                 = GetInformation().begin();
-             i != GetInformation().end(); ++i) {
-            std::cout << " " << *i;
+    if (GetInformation().size() == GetContributors().size()
+        && !GetInformation().empty()) {
+        std::cout << " I";
+        /// The information and contributor vectors seem to be parallel, so
+        /// present as a matched set.
+        for (std::size_t i=0; i<GetInformation().size(); ++i) {
+            double q = GetInformation().at(i);
+            const CP::TG4HitSegment* s
+                = dynamic_cast<const CP::TG4HitSegment*>(
+                    GetContributors().at(i));
+            std::cout << ": ";
+            if (!s) std::cout << "X";
+            else if (s->GetContributorCount() < 1) std::cout << "N";
+            else std::cout << s->GetContributor(0);
+            std::cout << "," << (int)(q+0.5);
         }
     }
-            
-    if (GetContributors().empty()) {
-        std::cout << " C: missing";
-    }
     else {
-        std::cout << " C:";
-        for (CP::TMCDigit::ContributorContainer::const_iterator i
-                 = GetContributors().begin();
-             i != GetContributors().end(); ++i) {
-            std::cout << " " << *i;
+        if (GetInformation().empty()) {
+            std::cout << " I: missing";
+        }
+        else {
+            std::cout << " I:";
+            for (CP::TMCDigit::InfoContainer::const_iterator i
+                     = GetInformation().begin();
+                 i != GetInformation().end(); ++i) {
+                std::cout << " " << *i;
+            }
+        }
+            
+        if (GetContributors().empty()) {
+            std::cout << " C: missing";
+        }
+        else {
+            std::cout << " C:";
+            for (CP::TMCDigit::ContributorContainer::const_iterator i
+                     = GetContributors().begin();
+                 i != GetContributors().end(); ++i) {
+                std::cout << " " << *i;
+            }
         }
     }
             

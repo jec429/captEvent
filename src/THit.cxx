@@ -146,19 +146,6 @@ void CP::THit::ls(Option_t *opt) const {
                                           "charge")
               << std::endl;
     TROOT::DecreaseDirLevel();
-    if (GetDigitCount() > 0) {
-        TROOT::IncreaseDirLevel();
-        for (int i=0; i<GetDigitCount(); ++i) {
-            CP::TDigitProxy digit = GetDigit(i);
-            if (!digit.IsValid()) {
-                TROOT::IndentLevel();
-                std::cout << "Digit: not-valid";
-                continue;
-            }
-            (*digit)->ls();
-        }
-        TROOT::DecreaseDirLevel();
-    }
     if (GetGeomIdCount() > 1) {
         TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
@@ -196,4 +183,17 @@ void CP::THit::ls(Option_t *opt) const {
         TROOT::DecreaseDirLevel();
     }
     std::cout.precision(prec);
+    if (GetDigitCount() > 0) {
+        TROOT::IncreaseDirLevel();
+        for (int i=0; i<GetDigitCount(); ++i) {
+            CP::TDigitProxy digit = GetDigit(i);
+            if (!digit.IsValid()) {
+                TROOT::IndentLevel();
+                std::cout << "Digit: not-valid";
+                continue;
+            }
+            (*digit)->ls();
+        }
+        TROOT::DecreaseDirLevel();
+    }
 }
