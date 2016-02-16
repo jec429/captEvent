@@ -27,7 +27,7 @@ public:
 
     virtual ~TTPCChannelId();
 
-    ///Format as a human readable string.
+    /// Format as a human readable string.
     virtual std::string AsString() const; 
 
     /// Get the crate number for this channel [0-2].

@@ -40,8 +40,8 @@ void CP::TPulseDigit::ls(Option_t* opt) const {
 
     if (option.find("digits") != std::string::npos) {
         int sample = 0;
-        for (CP::TPulseDigit::Vector::const_iterator d = fSamples.begin();
-             d != fSamples.end(); ++d) {
+        for (CP::TPulseDigit::Vector::const_iterator d = GetSamples().begin();
+             d != GetSamples().end(); ++d) {
             if ((0<sample) && 0 == (sample%10)) {
                 std::cout << std::endl;
                 TROOT::IndentLevel();

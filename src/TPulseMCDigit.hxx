@@ -33,6 +33,9 @@ public:
                   const CP::TMCDigit::ContributorContainer& contrib,
                   const CP::TMCDigit::InfoContainer& info);
 
+    /// Print the digit information.
+    virtual void ls(Option_t* opt = "") const;
+    
     ClassDef(TPulseMCDigit,3);
 };
 #endif

@@ -23,7 +23,7 @@ std::string CP::TTPCChannelId::AsString() const {
     const char* det = TChannelId::SubDetAsString().c_str();
     char buffer[30];
     /// Crude, but effective...
-    std::snprintf(buffer,30,"%7s:%02d:%02d:%02d",
+    std::snprintf(buffer,30,"%3s:%02d:%02d:%02d",
                   det, GetCrate(), GetFEM(), GetChannel());
     return std::string(buffer);
 }
@@ -51,5 +51,3 @@ const UInt_t CP::TTPCChannelId::GetChannel() const {
 void CP::TTPCChannelId::SetChannel(int val) {
     SetField(val, kChanMSB, kChanLSB);
 }
-
-

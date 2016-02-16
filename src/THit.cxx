@@ -130,7 +130,7 @@ int CP::THit::GetGeomIdCount() const {return 0;}
 void CP::THit::ls(Option_t *opt) const {
     CP::ls_header(this,opt);
     int prec = std::cout.precision();
-    std::cout << " Id: " << GetGeomId().AsInt();
+    std::cout << " Geom Id: " << GetGeomId().AsInt();
     if (GetChannelIdCount() > 0) {
         std::cout << " C:";
         for (int i=0; i<GetChannelIdCount(); ++i) {
@@ -146,6 +146,19 @@ void CP::THit::ls(Option_t *opt) const {
                                           "charge")
               << std::endl;
     TROOT::DecreaseDirLevel();
+    if (GetDigitCount() > 0) {
+        TROOT::IncreaseDirLevel();
+        for (int i=0; i<GetDigitCount(); ++i) {
+            CP::TDigitProxy digit = GetDigit(i);
+            if (!digit.IsValid()) {
+                TROOT::IndentLevel();
+                std::cout << "Digit: not-valid";
+                continue;
+            }
+            (*digit)->ls();
+        }
+        TROOT::DecreaseDirLevel();
+    }
     if (GetGeomIdCount() > 1) {
         TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
