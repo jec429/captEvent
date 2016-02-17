@@ -21,7 +21,6 @@ CP::THandleBase::THandleBase() : fCount(0) {
     if (gHandleSet) gHandleSet->insert(this);
 }
 CP::THandleBase::~THandleBase() {
-    DeleteObject();
     --gHandleBaseCount;
     if (gHandleSet) gHandleSet->erase(this);
 }
@@ -31,7 +30,9 @@ CP::THandleBaseDeletable::THandleBaseDeletable()
     : fObject(NULL) { }
 CP::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
     : fObject(pointee) { }
-CP::THandleBaseDeletable::~THandleBaseDeletable() {}
+CP::THandleBaseDeletable::~THandleBaseDeletable() {
+    DeleteObject();
+}
 void CP::THandleBaseDeletable::DeleteObject() {
     if (!fObject) return;
     // Actually delete the object.
@@ -43,7 +44,9 @@ ClassImp(CP::THandleBaseUndeletable);
 CP::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
 CP::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
     : fObject(pointee) { }
-CP::THandleBaseUndeletable::~THandleBaseUndeletable() {}
+CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
+    DeleteObject();
+}
 void CP::THandleBaseUndeletable::DeleteObject() {
     fObject = NULL;  // Just set the object pointer to NULL;
 }
@@ -116,11 +119,10 @@ void CP::TVHandle::Link(const CP::TVHandle& rhs) {
     if (fHandle) fHandle->IncrementReferenceCount();
 }
 
-bool CP::TVHandle::Unlink() {
-    if (!fHandle) return false;
+void CP::TVHandle::Unlink() {
+    if (!fHandle) return;
     fHandle->DecrementReferenceCount();
-    if (fHandle->GetReferenceCount() < 1) return true;
-    return false;
+    if (fHandle->GetReferenceCount() < 1) Destroy();
 }
 
 void CP::TVHandle::Destroy(void) {

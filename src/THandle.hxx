@@ -47,7 +47,7 @@ namespace CP {
         /// Remove a reference to the object being held by removing this
         /// THandle from the reference list.  Returns true if the last
         /// reference is removed.
-        bool Unlink();
+        void Unlink();
 
         /// Delete the pointer if that is allowed by encapuslating all of the
         /// necessary logic.
@@ -356,7 +356,7 @@ CP::THandle<T>::THandle(const THandle<T>& rhs) : TVHandle(rhs) {
 
 template <class T>
 CP::THandle<T>::~THandle() {
-    if (Unlink()) Destroy();
+    Unlink();
 }
     
 template <class T>
@@ -364,7 +364,7 @@ CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
     if (operator == (rhs)) return rhs;
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
+    Unlink();
     // Make sure the handle in the default state.
     Default(NULL);
     // Compatible types
@@ -378,7 +378,7 @@ template <class T>
 const CP::THandle<T>& CP::THandle<T>::operator = (const THandle<T>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
+    Unlink();
     // Make sure the handle in the default state.
     Default(NULL);
     // Compatible types
@@ -393,7 +393,7 @@ template <class U>
 CP::THandle<U>& CP::THandle<T>::operator = (THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
+    Unlink();
     // Make sure the handle in the default state.
     Default(NULL);
     // Compatible types
@@ -408,7 +408,7 @@ template <class U>
 const CP::THandle<U>& CP::THandle<T>::operator = (const THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
+    Unlink();
     // Make sure the handle in the default state.
     Default(NULL);
     // Compatible types
