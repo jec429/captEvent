@@ -49,14 +49,6 @@ namespace CP {
         /// reference is removed.
         void Unlink();
 
-        /// If it's possible, delete the object pointed to by the handle.  The
-        /// handle is not deleted and will contain a NULL object pointer.
-        void DeleteObject(void);
-
-        /// Delete the pointer to the handle for the object.  This will also
-        /// delete the object if that is allowed.
-        void DeleteHandle(void);
-        
         /// Safely get the pointer value for this handle.  This hides the
         /// underlying storage model from the THandle template.
         TObject* GetPointerValue() const;
@@ -89,6 +81,11 @@ namespace CP {
         virtual void ls(Option_t *opt = "") const;
         
     private:
+        /// Check if the object, or the handle to the object should be
+        /// deleted.  This can be safely called even if the object and handle
+        /// don't exist.
+        void CheckSurvival();
+        
         /// The reference counted handle. This handle contains the pointer to
         /// the actual data object.
         THandleBase* fHandle;
@@ -166,7 +163,6 @@ namespace CP {
     
         /// The destructor for the THandle object which may delete the pointer. 
         virtual ~THandle();
-
     
         /// @{ Assign one THandle object to another.  This should be designed
         /// to recast the pointee between the assignments so that an implicit

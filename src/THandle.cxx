@@ -123,23 +123,25 @@ void CP::TVHandle::Unlink() {
     if (!fHandle) return;
     if (IsWeak()) fHandle->DecrementHandleCount();
     else fHandle->DecrementReferenceCount();
-    if (fHandle->GetHandleCount() < 1) DeleteHandle();
-    else if (fHandle->GetReferenceCount() < 1) DeleteObject();
+    CheckSurvival();
 }
 
-void CP::TVHandle::DeleteHandle(void) {
-    DeleteObject();
-
-    // Delete the handle.
-    if (fHandle) delete fHandle;
-    
-    // And mark the current object as invalid.
-    fHandle = NULL;
-}
-
-void CP::TVHandle::DeleteObject(void) {
+void CP::TVHandle::CheckSurvival() {
+    // The handle doesn't exist, so just return.
     if (!fHandle) return;
-    fHandle->DeleteObject();
+    // The handle counter is zero so nothing (no strong, or weak handles) are
+    // using this THandleBase, so delete it.  This also deletes the object.
+    if (fHandle->GetHandleCount() < 1) {
+        fHandle->DeleteObject();
+        delete fHandle;
+        fHandle = 0.0;
+        return;
+    }
+    // The reference counter is zero, so no strong handles are referenceing
+    // the object.  Delete the object, but leave the THandleBase.
+    if (fHandle->GetReferenceCount() < 1) {
+        fHandle->DeleteObject();
+    }
 }
 
 TObject* CP::TVHandle::GetPointerValue() const {
