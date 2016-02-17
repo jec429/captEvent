@@ -21,6 +21,7 @@ CP::THandleBase::THandleBase() : fCount(0) {
     if (gHandleSet) gHandleSet->insert(this);
 }
 CP::THandleBase::~THandleBase() {
+    DeleteObject();
     --gHandleBaseCount;
     if (gHandleSet) gHandleSet->erase(this);
 }
@@ -30,9 +31,7 @@ CP::THandleBaseDeletable::THandleBaseDeletable()
     : fObject(NULL) { }
 CP::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
     : fObject(pointee) { }
-CP::THandleBaseDeletable::~THandleBaseDeletable() {
-    DeleteObject();
-}
+CP::THandleBaseDeletable::~THandleBaseDeletable() {}
 void CP::THandleBaseDeletable::DeleteObject() {
     if (!fObject) return;
     // Actually delete the object.
@@ -44,9 +43,7 @@ ClassImp(CP::THandleBaseUndeletable);
 CP::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
 CP::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
     : fObject(pointee) { }
-CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
-    DeleteObject();
-}
+CP::THandleBaseUndeletable::~THandleBaseUndeletable() {}
 void CP::THandleBaseUndeletable::DeleteObject() {
     fObject = NULL;  // Just set the object pointer to NULL;
 }
