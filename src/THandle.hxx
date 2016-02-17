@@ -293,7 +293,7 @@ namespace CP {
         ClassDef(THandleBaseDeletable,2);
     };
 
-    /// A concrete version of the THandleBase class for pointers that should
+    /// A concrete version of the THandleBase class for pointers that cannot
     /// be deleted when the last reference goes away.  The reference count is
     /// maintained in THandleBase.
     class THandleBaseUndeletable : public THandleBase {
