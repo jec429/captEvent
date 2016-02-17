@@ -49,10 +49,14 @@ namespace CP {
         /// reference is removed.
         void Unlink();
 
-        /// Delete the pointer if that is allowed by encapuslating all of the
-        /// necessary logic.
-        void Destroy(void);
+        /// If it's possible, delete the object pointed to by the handle.  The
+        /// handle is not deleted and will contain a NULL object pointer.
+        void DeleteObject(void);
 
+        /// Delete the pointer to the handle for the object.  This will also
+        /// delete the object if that is allowed.
+        void DeleteHandle(void);
+        
         /// Safely get the pointer value for this handle.  This hides the
         /// underlying storage model from the THandle template.
         TObject* GetPointerValue() const;
@@ -363,7 +367,7 @@ template <class T>
 CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
     if (operator == (rhs)) return rhs;
     // Going to replace the value of this smart pointer, so unref and
-    // possible delete.
+    // possibly delete.
     Unlink();
     // Make sure the handle in the default state.
     Default(NULL);

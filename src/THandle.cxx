@@ -122,22 +122,22 @@ void CP::TVHandle::Link(const CP::TVHandle& rhs) {
 void CP::TVHandle::Unlink() {
     if (!fHandle) return;
     fHandle->DecrementReferenceCount();
-    if (fHandle->GetReferenceCount() < 1) Destroy();
+    if (fHandle->GetReferenceCount() < 1) DeleteHandle();
 }
 
-void CP::TVHandle::Destroy(void) {
-    // Save the value of the handle
-    CP::THandleBase* target = fHandle;
+void CP::TVHandle::DeleteHandle(void) {
+    DeleteObject();
+
+    // Delete the handle.
+    if (fHandle) delete fHandle;
     
-    // But, mark the current object as invalid.
+    // And mark the current object as invalid.
     fHandle = NULL;
-    
-    // Is the target a valid handle?
-    if (!target) return;
-    
-    // Try to delete the object.  The target is a THandleBase and its
-    // distructor will decide if the object is deletable.
-    delete target;
+}
+
+void CP::TVHandle::DeleteObject(void) {
+    if (!fHandle) return;
+    fHandle->DeleteObject();
 }
 
 TObject* CP::TVHandle::GetPointerValue() const {
