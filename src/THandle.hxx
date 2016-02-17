@@ -257,7 +257,12 @@ namespace CP {
         int GetReferenceCount() const {return fCount;}
         void DecrementReferenceCount() {--fCount;}
         void IncrementReferenceCount() {++fCount;}
+        // Return the current pointer to the object.
         virtual TObject* GetObject() const = 0;
+        // Delete the object.  This should check that fObject is a valid
+        // pointer (e.g. not NULL) that can be deleted before freeing the
+        // memory.  The fObject pointer should always be set to NULL.
+        virtual void DeleteObject() = 0;
         void Release() {SetBit(kPointerReleased);}
         bool IsOwner() {return !TestBit(kPointerReleased);}
 
@@ -285,6 +290,7 @@ namespace CP {
         virtual ~THandleBaseDeletable();
 
         TObject* GetObject() const {return fObject;}
+        void DeleteObject();
 
     private:
         /// The actual pointer that will be reference counted.
@@ -303,6 +309,7 @@ namespace CP {
         virtual ~THandleBaseUndeletable();
 
         TObject* GetObject() const {return fObject;}
+        void DeleteObject();
 
     private:
         /// The actual pointer that will be reference counted.

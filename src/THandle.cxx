@@ -31,9 +31,13 @@ CP::THandleBaseDeletable::THandleBaseDeletable()
 CP::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
     : fObject(pointee) { }
 CP::THandleBaseDeletable::~THandleBaseDeletable() {
+    DeleteObject();
+}
+void CP::THandleBaseDeletable::DeleteObject() {
     if (!fObject) return;
     // Actually delete the object.
     if (IsOwner()) delete fObject;
+    fObject = NULL;
 }
 
 ClassImp(CP::THandleBaseUndeletable);
@@ -41,7 +45,10 @@ CP::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
 CP::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
     : fObject(pointee) { }
 CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
-    // Absolutely nothing to do.
+    DeleteObject();
+}
+void CP::THandleBaseUndeletable::DeleteObject() {
+    fObject = NULL;  // Just set the object pointer to NULL;
 }
 
 bool CP::CleanHandleRegistry(bool) {
