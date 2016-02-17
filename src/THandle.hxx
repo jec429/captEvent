@@ -61,12 +61,24 @@ namespace CP {
         /// underlying storage model from the THandle template.
         TObject* GetPointerValue() const;
 
+        /// Define the status bits used by the TVHandle object.  These can't
+        /// collide with any status bits defined in TObject (the parent class
+        /// for TVHandle), and none of the TVHandle children can define a
+        /// status bit that collides with these definitions (i.e. the
+        /// THandle<> templates.  Bits 14 to 23 are available for use.
+        enum EStatusBits {
+            kWeakHandle = BIT(20)
+        };
+
     public:
         /// Release the ownership of the object being held by this handle.
         /// The responsiblity to delete the object passes to the calling
         /// routine.
         void Release();
 
+        /// Check if this is a weak pointer to the object.
+        bool IsWeak() {return !TestBit(kWeakHandle);}
+        
         /// Equality operator for all THandle objects.
         bool operator == (const TVHandle& rhs) const;
 
@@ -259,8 +271,31 @@ namespace CP {
         virtual ~THandleBase();
 
         int GetReferenceCount() const {return fCount;}
-        void DecrementReferenceCount() {--fCount;}
-        void IncrementReferenceCount() {++fCount;}
+        int GetHandleCount() const {return fHandleCount;}
+
+        // Increment/decrement the count of objects that own the object.  This
+        // doesn't include any weak references.
+        void IncrementReferenceCount() {
+            IncrementHandleCount();
+            ++fCount;
+        }
+        void DecrementReferenceCount() {
+            if (fCount>0) --fCount;
+            DecrementHandleCount();
+        }
+
+        // Increment/decrement the count of objects referencing this
+        // THandleBase object.  This includes the count of handles owning the
+        // object as well as the weak handles that are referencing the object,
+        // but don't own it.
+        void IncrementHandleCount() {
+            ++fHandleCount;
+            if (fHandleCount > 30000) {
+                CaptError("To many handles for object: " << fHandleCount);
+            }
+        }
+        void DecrementHandleCount() {if (fHandleCount>0) --fHandleCount;}
+
         // Return the current pointer to the object.
         virtual TObject* GetObject() const = 0;
         // Delete the object.  This should check that fObject is a valid
@@ -271,17 +306,22 @@ namespace CP {
         bool IsOwner() {return !TestBit(kPointerReleased);}
 
     private:
-        /// Define the status bits used by the THandle object.  These can't
-        /// collide with any status bits defined in TObject (the parent class
-        /// for THandleBase), and none of the THandleBase children can define
-        /// a status bit that collides with these definitions.  Bits 14 to 23
-        /// are available for use.
+        /// Define the status bits used by the THandleBase object.  These
+        /// can't collide with any status bits defined in TObject (the parent
+        /// class for THandleBase), and none of the THandleBase children can
+        /// define a status bit that collides with these definitions.  Bits 14
+        /// to 23 are available for use.
         enum EStatusBits {
             kPointerReleased = BIT(20)
         };
-        int fCount;
 
-        ClassDef(THandleBase,2);
+        /// The number of references to the object.
+        unsigned short fCount;
+
+        /// The number of references to the handle.
+        unsigned short fHandleCount;
+
+        ClassDef(THandleBase,3);
     };
 
     /// A concrete version of the THandleBase class for pointers that should

@@ -16,7 +16,7 @@ namespace {
 }
 
 ClassImp(CP::THandleBase);
-CP::THandleBase::THandleBase() : fCount(0) {
+CP::THandleBase::THandleBase() : fCount(0), fHandleCount(0) {
     ++gHandleBaseCount;
     if (gHandleSet) gHandleSet->insert(this);
 }
@@ -121,8 +121,10 @@ void CP::TVHandle::Link(const CP::TVHandle& rhs) {
 
 void CP::TVHandle::Unlink() {
     if (!fHandle) return;
-    fHandle->DecrementReferenceCount();
-    if (fHandle->GetReferenceCount() < 1) DeleteHandle();
+    if (IsWeak()) fHandle->DecrementHandleCount();
+    else fHandle->DecrementReferenceCount();
+    if (fHandle->GetHandleCount() < 1) DeleteHandle();
+    else if (fHandle->GetReferenceCount() < 1) DeleteObject();
 }
 
 void CP::TVHandle::DeleteHandle(void) {
