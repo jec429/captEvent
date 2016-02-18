@@ -72,7 +72,7 @@ namespace CP {
         void WeakHandle();
         
         /// Check if this is a weak pointer to the object.
-        bool IsWeak() const {return !TestBit(kWeakHandle);}
+        bool IsWeak() const {return TestBit(kWeakHandle);}
         
         /// Equality operator for all THandle objects.
         bool operator == (const TVHandle& rhs) const;
