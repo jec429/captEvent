@@ -194,4 +194,119 @@ namespace tut {
         }
         ensure("Handle Registry is clean", CP::CleanHandleRegistry());
     }
+
+    // Test the weak creation and copy constructor.
+    template <> template <>
+    void testTHandle::test<9> () {
+        {
+            CP::THit* hit = CanDelete();
+            CP::THandle<CP::THit> a(hit); 
+            ensure("Copy from pointer", a);
+            ensure_equals("Pointers equal", GetPointer(a), hit);
+            
+            CP::THandle<CP::THit> b(a); 
+            b.MakeWeak();
+            ensure("Weak copy from handle", b);
+            ensure("Weak handle has correct pointer", GetPointer(b) == hit);
+            ensure("Weak handle is equal", a == b);
+            
+            CP::THandle<CP::TMCHit> c(a); 
+            c.MakeWeak();
+            ensure("Weak copy from handle with down cast", c);
+            ensure("Weak handle cast copied pointer", GetPointer(c) == hit);
+            ensure("Weak handle is equal after cast", a == c);
+
+            ensure("Original handle not weak",!a.IsWeak());
+            ensure("Weak handle is weak",b.IsWeak());
+            ensure("Weak down-cast handle is weak",c.IsWeak());
+
+            CP::THandle<CP::THit> d = a;
+            ensure("Assignment of handle", d);
+            ensure("Assignment has correct pointer", GetPointer(d) == hit);
+            ensure("Assignment is equal", a == d);
+            ensure("Handle is not weak", !a.IsWeak());
+            ensure("Assignment is not weak", !d.IsWeak());
+
+            d = b;
+            ensure("Assignment of handle", d);
+            ensure("Assignment has correct pointer", GetPointer(d) == hit);
+            ensure("Assignment is equal", a == d);
+            ensure("Weak handle is still weak", b.IsWeak());
+            ensure("Assignment is not weak", !d.IsWeak());
+
+            d.MakeWeak();
+            ensure("Weak handle is now weak", d.IsWeak());
+            d = a;
+            ensure("Assignment of handle", d);
+            ensure("Assignment has correct pointer", GetPointer(d) == hit);
+            ensure("Assignment is equal", a == d);
+            ensure("Weak handle is still weak", b.IsWeak());
+            ensure("Assignment is still weak", d.IsWeak());
+
+            d.MakeLock();
+            ensure("Assignment of handle", d);
+            ensure("Assignment has correct pointer", GetPointer(d) == hit);
+            ensure("Assignment is equal", a == d);
+            ensure("Weak handle is still weak", b.IsWeak());
+            ensure("Assignment is not weak", !d.IsWeak());
+
+            CP::THandle<CP::THit> e;
+            e.MakeWeak();
+            ensure("Empty is weak", e.IsWeak());
+            e = a;
+            ensure("Still weak after assignment", e.IsWeak());
+            ensure("Null assignment has correct pointer", GetPointer(e) == hit);
+            ensure("Assignment is equal", a == e);
+
+            CP::THandle<CP::THit> f(b);
+            ensure("Original is weak", b.IsWeak());
+            ensure("Copy is weak", f.IsWeak());
+
+            { 
+                CP::THandle<CP::THit> g(a);
+                ensure("Original is not weak", !a.IsWeak());
+                ensure("Copy is not weak", !g.IsWeak());
+            }
+            
+            // Reset A;
+            a = CP::THandle<CP::THit>();
+            ensure("Original handle is reset",!a);
+            ensure("Copied handle is not reset",d);
+            ensure("Weak handle is not reset",b);
+            ensure("Weak down-cast handle is not reset",c);
+
+            // Reset d;
+            d = CP::THandle<CP::THit>();
+            ensure("Original handle is reset",!a);
+            ensure("Copied handle is reset",!d);
+            ensure("Weak handle is reset",!b);
+            ensure("Weak down-cast handle is reset",!c);
+            
+        }
+        ensure("Handle Registry is clean", CP::CleanHandleRegistry());
+    }
+
+    // Test the vectors of weak pointers.
+    template <> template <>
+    void testTHandle::test<10> () {
+        {
+            std::vector<CP::THandle<CP::THit>> handles;
+            std::vector<CP::THandle<CP::THit>> weaks;
+            CP::THandle<CP::THit> a;
+            CP::THandle<CP::THit> b; b.MakeWeak();
+            for (int i=0; i<3; ++i) {
+                CP::THit* hit = CanDelete();
+                a = CP::THandle<CP::THit>(hit); 
+                handles.push_back(a);
+                b = a;
+                weaks.push_back(b);
+            }
+            for (int i=0; i<3; ++i) {
+                ensure("Element is not weak",!handles[i].IsWeak());
+                ensure("Element is weak",weaks[i].IsWeak());
+            }
+        }
+        ensure("Handle Registry is clean", CP::CleanHandleRegistry());
+    }
+
 };

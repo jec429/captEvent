@@ -68,9 +68,19 @@ namespace CP {
         /// routine.
         void Release();
 
-        /// Make the current handle into a weak handle.
-        void WeakHandle();
-        
+        /// Make the current handle into a weak handle.  A weak handle does
+        /// not own the object and the object may be deleted.  If the object
+        /// is deleted, the weak handle will reference a NULL pointer.  The
+        /// MakeWeak method may remove the last reference to the object and
+        /// cause it to be deleted, so it should be check for validity before
+        /// using.
+        void MakeWeak();
+
+        /// Make the current handle into a regular handle that "owns" the
+        /// object.  The object won't be deleted until all handles that own
+        /// the object are removed.
+        void MakeLock();
+
         /// Check if this is a weak pointer to the object.
         bool IsWeak() const {return TestBit(kWeakHandle);}
         
@@ -109,6 +119,44 @@ namespace CP {
     /// In addition, keep in mind that this is a reference counted object (see
     /// Wikipedia for details).  This means that "reference loops" will
     /// prevent objects from being deleted.
+    ///
+    /// Reference loops can be prevented by using weak handles.  A weak handle
+    /// is a handle that can refer to the object without increasing the object
+    /// reference count.  A handle is marked as weak using the MakeWeak()
+    /// method, and will remain weak until a call to MakeLock().  Note: The
+    /// "weak" property follows the handle, not the object being referenced by
+    /// the handle.
+    ///
+    /// \code
+    /// CP::THandle<CP::THit> aHandle(aHitFromSomePlace);
+    /// aHandle.IsWeak()     // Returns false.
+    ///
+    /// CP::THandle<CP::THit> bHandle = aHandle;
+    /// bHandle.IsWeak();    // Returns false.
+    /// bHandle.MakeWeak();
+    /// bHandle.IsWeak();    // Returns true.
+    /// bHandle.MakeLock();
+    /// bHandle.IsWeak();    // Returns false.
+    ///
+    /// CP::THandle<CP::THit> weakHandle;
+    /// weakHandle.MakeWeak();
+    /// weakHandle.IsWeak(); // Returns true;
+    /// weakHandle = aHandle;
+    /// weakHandle.IsWeak(); // Returns true;
+    ///
+    /// aHandle.IsWeak();    // Returns false;
+    /// \endcode
+    ///
+    /// An object will be deleted as soon as the last non-weak handle goes out
+    /// of scope.  This has the interesting side effect that a call to
+    /// MakeWeak() might remove the last non-weak handle (by making it weak),
+    /// and cause the object to be deleted.  You should always check that a
+    /// weak handle is valid before dereferencing it's pointer.
+    ///
+    /// If a weak handle can be promoted to a regular handle using the
+    /// MakeLock() method.  If the weak handle holds a valid reference to an
+    /// object before the call to MakeLock(), it will be a "reference counted"
+    /// owner of the object after the call to MakeLock().
     ///
     /// A reference to a NULL THandle will throw an CP::EHandleBadReference
     /// which means it won't generate a core dump.  For debugging, you can run
@@ -156,20 +204,11 @@ namespace CP {
         THandle(const THandle<T>& rhs);
     
         // Copy between classes.
-        template <class U> 
-        THandle(const THandle<U>& rhs) {
-            Default(NULL);
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-        }
+        template <class U> THandle(const THandle<U>& rhs);
     
         /// The destructor for the THandle object which may delete the pointer. 
         virtual ~THandle();
 
-        /// Return a weak handle to the object.
-        THandle<T> GetWeakHandle() const;
-        
         /// @{ Assign one THandle object to another.  This should be designed
         /// to recast the pointee between the assignments so that an implicit
         /// conversion takes place.  If the recast fails, the new pointer will
@@ -274,7 +313,8 @@ namespace CP {
 
         int GetReferenceCount() const {return fCount;}
         int GetHandleCount() const {return fHandleCount;}
-
+        void CheckHandle() {if (fHandleCount<fCount) fHandleCount=fCount;}
+        
         // Increment/decrement the count of objects that own the object.  This
         // doesn't include any weak references.
         void IncrementReferenceCount() {++fCount;}
@@ -392,18 +432,22 @@ template <class T>
 CP::THandle<T>::THandle(const THandle<T>& rhs) : TVHandle(rhs) {
     Default(NULL);
     Link(rhs);
+    if (rhs.IsWeak()) MakeWeak();
 }
 
+template <class T>
+template <class U> 
+CP::THandle<T>::THandle(const CP::THandle<U>& rhs) {
+    Default(NULL);
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    if (rhs.IsWeak()) MakeWeak();
+}
+    
 template <class T>
 CP::THandle<T>::~THandle() {
     Unlink();
-}
-
-template <class T>
-CP::THandle<T> CP::THandle<T>::GetWeakHandle() const {
-    THandle<T> handle(*this);
-    handle.WeakHandle();
-    return handle;
 }
 
 template <class T>
@@ -412,8 +456,6 @@ CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possibly delete.
     Unlink();
-    // Make sure the handle in the default state.
-    Default(NULL);
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -426,8 +468,6 @@ const CP::THandle<T>& CP::THandle<T>::operator = (const THandle<T>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
     Unlink();
-    // Make sure the handle in the default state.
-    Default(NULL);
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -441,8 +481,6 @@ CP::THandle<U>& CP::THandle<T>::operator = (THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
     Unlink();
-    // Make sure the handle in the default state.
-    Default(NULL);
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -456,8 +494,6 @@ const CP::THandle<U>& CP::THandle<T>::operator = (const THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
     Unlink();
-    // Make sure the handle in the default state.
-    Default(NULL);
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);

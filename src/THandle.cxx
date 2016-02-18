@@ -109,7 +109,9 @@ CP::TVHandle::~TVHandle() {}
 
 void CP::TVHandle::Default(CP::THandleBase* handle) {
     fHandle = handle;
+    SetBit(kWeakHandle,false);
     if (fHandle) {
+        fHandle->CheckHandle();
         fHandle->IncrementReferenceCount();
         fHandle->IncrementHandleCount();
     }
@@ -119,46 +121,59 @@ void CP::TVHandle::Link(const CP::TVHandle& rhs) {
     // Copy the handle.
     fHandle = rhs.fHandle;
     if (!fHandle) return;
+    fHandle->CheckHandle();
     fHandle->IncrementHandleCount();
-    if (rhs.IsWeak()) {
-        SetBit(kWeakHandle);
-        return;
-    }
+    if (IsWeak()) return;
     fHandle->IncrementReferenceCount();
 }
 
 void CP::TVHandle::Unlink() {
     if (!fHandle) return;
+    fHandle->CheckHandle();
     if (!IsWeak()) fHandle->DecrementReferenceCount();
     fHandle->DecrementHandleCount();
     CheckSurvival();
     fHandle = NULL;
 }
 
-void CP::TVHandle::WeakHandle() {
-    if (!fHandle) return;
+void CP::TVHandle::MakeWeak() {
     if (IsWeak()) return;
-    SetBit(kWeakHandle);
+    SetBit(kWeakHandle,true);
     // Decrement the reference count to the object, but leave the handle count
     // unchanged.
+    if (!fHandle) return;
+    fHandle->CheckHandle();
     fHandle->DecrementReferenceCount();
-    // Check to see if the object should still exist.
     CheckSurvival();
+}
+
+void CP::TVHandle::MakeLock() {
+    if (!IsWeak()) return;
+    SetBit(kWeakHandle,false);
+    // Increment the reference count to the object, but leave the handle count
+    // unchanged, but only if there is a valid handle, and a valid object.
+    if (!fHandle) return;
+    if (!fHandle->GetObject()) return;
+    fHandle->CheckHandle();
+    fHandle->IncrementReferenceCount();
 }
 
 void CP::TVHandle::CheckSurvival() {
     // The handle doesn't exist, so just return.
     if (!fHandle) return;
-    // The handle counter is zero so nothing (no strong, or weak handles) are
-    // using this THandleBase, so delete it.  This also deletes the object.
+    // Check for old handles.
+    fHandle->CheckHandle();
+    // The handle counter is zero so nothing (no strong, or weak handles) is
+    // using this THandleBase and it should be deleted.  This also deletes the
+    // object.
     if (fHandle->GetHandleCount() < 1) {
         fHandle->DeleteObject();
         delete fHandle;
         fHandle = NULL;
         return;
     }
-    // The reference counter is zero, so no strong handles are referenceing
-    // the object.  Delete the object, but leave the THandleBase.
+    // The reference counter is zero, so no strong handles are referencing the
+    // object.  Delete the object, but leave the THandleBase.
     if (fHandle->GetReferenceCount() < 1) {
         fHandle->DeleteObject();
     }
@@ -191,7 +206,9 @@ void CP::TVHandle::ls(Option_t *opt) const {
     }
     if (fHandle) {
         std::cout << " Refs: " << fHandle->GetReferenceCount();
-        if (fHandle->IsOwner()) std::cout << " (owner)";
+        std::cout << " (" << fHandle->GetHandleCount() << ")";
+        if (IsWeak()) std::cout << " (weak)";
+        else if (fHandle->IsOwner()) std::cout << " (owner)";
         else std::cout << " (released)";
     }
     std::cout << std::endl;
