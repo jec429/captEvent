@@ -47,10 +47,6 @@ void CP::TGeometryId::SetFieldSafe(int val, int msb, int lsb) {
     fGeometryId &= ~mask;
     // Shift the value and set the field.
     fGeometryId |= ((val << lsb)&mask);
-    if (!IsValid()) {
-        CaptSevere("Invalid id: " << fGeometryId);
-        throw EGeomIdInvalid();
-    }
 }
 
 int CP::TGeometryId::GetFieldSafe(int msb, int lsb) const {
