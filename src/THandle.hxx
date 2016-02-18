@@ -68,8 +68,11 @@ namespace CP {
         /// routine.
         void Release();
 
+        /// Make the current handle into a weak handle.
+        void WeakHandle();
+        
         /// Check if this is a weak pointer to the object.
-        bool IsWeak() {return !TestBit(kWeakHandle);}
+        bool IsWeak() const {return !TestBit(kWeakHandle);}
         
         /// Equality operator for all THandle objects.
         bool operator == (const TVHandle& rhs) const;
@@ -163,7 +166,10 @@ namespace CP {
     
         /// The destructor for the THandle object which may delete the pointer. 
         virtual ~THandle();
-    
+
+        /// Return a weak handle to the object.
+        THandle<T> GetWeakHandle() const;
+        
         /// @{ Assign one THandle object to another.  This should be designed
         /// to recast the pointee between the assignments so that an implicit
         /// conversion takes place.  If the recast fails, the new pointer will
@@ -271,14 +277,8 @@ namespace CP {
 
         // Increment/decrement the count of objects that own the object.  This
         // doesn't include any weak references.
-        void IncrementReferenceCount() {
-            IncrementHandleCount();
-            ++fCount;
-        }
-        void DecrementReferenceCount() {
-            if (fCount>0) --fCount;
-            DecrementHandleCount();
-        }
+        void IncrementReferenceCount() {++fCount;}
+        void DecrementReferenceCount() {if (fCount>0) --fCount;}
 
         // Increment/decrement the count of objects referencing this
         // THandleBase object.  This includes the count of handles owning the
@@ -398,7 +398,14 @@ template <class T>
 CP::THandle<T>::~THandle() {
     Unlink();
 }
-    
+
+template <class T>
+CP::THandle<T> CP::THandle<T>::GetWeakHandle() const {
+    THandle<T> handle(*this);
+    handle.WeakHandle();
+    return handle;
+}
+
 template <class T>
 CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
     if (operator == (rhs)) return rhs;
