@@ -39,7 +39,6 @@ namespace tut {
     void testTGeometryId::test<2> () {
         CP::TGeometryId g1(1);
         CP::TGeometryId g2(-1);
-        ensure("TGeometryId should be valid", g1.IsValid());
         ensure("TGeometryId should not be valid", !g2.IsValid());
     }
 
