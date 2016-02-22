@@ -67,4 +67,47 @@ NEW FEATURES:
    between the electronics simulation and the later users.  The initial use
    is to pass the true amount of charge deposited in a digit.
 
+
+\section captEvent_v1r1p0_history Version 1.1.0
+
+Freeze information:
+   - Freeze Date: Mon Feb 22 15:43:02 2016
+   - Freeze User: mcgrew
+   - Freeze Host: boxer boxer 
+
+
+This is a new release in preparation for handling photon detection system
+hits and incorporating many improvements introduced during commissioning.
+
+FEATURES:
+
+* Introduce specialized TFADCHit to handle hits from the flash ADCs.  The
+  pulse shape is included for the region of interest as defined by a start
+  and stop sample.
+
+* Make C++11 compatible.  This is still compatible with C++98.
+
+* Adapt to work with both ROOT 5.34.34 and ROOT 6.xx.
+
+* Add a TChannelId derived class for the photon detection system.  
+
+* Separate the declaration and definition of template methods.
+
+* Add geometry ids for the wavelength shifting plates.
+
+* Upgrade the THandle<> template to handle weak references (in addition to
+  the strong references it's always handled).  The new handle is backward
+  compatible and source compatible with the older version.  A regular
+  (strong/shared) handle which will keep an object in memory can be changed
+  into a weak handle using the MakeWeak() method.  The "weakness" then
+  follows the variable (not the object pointed to). A weak handle will not
+  prevent an object from being deleted, and will return NULL if the object
+  is no longer available.
+
+SIGIFICANT BUGS FIXED:
+
+* Handle multiple versions of the geometry files and choose the right ones.
+
+* Make sure all the TSingleHit fields are copied by the copy constructor.
+
 */
