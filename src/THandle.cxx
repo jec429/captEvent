@@ -16,7 +16,7 @@ namespace {
 }
 
 ClassImp(CP::THandleBase);
-CP::THandleBase::THandleBase() : fCount(0) {
+CP::THandleBase::THandleBase() : fCount(0), fHandleCount(0) {
     ++gHandleBaseCount;
     if (gHandleSet) gHandleSet->insert(this);
 }
@@ -31,9 +31,13 @@ CP::THandleBaseDeletable::THandleBaseDeletable()
 CP::THandleBaseDeletable::THandleBaseDeletable(TObject* pointee)
     : fObject(pointee) { }
 CP::THandleBaseDeletable::~THandleBaseDeletable() {
+    DeleteObject();
+}
+void CP::THandleBaseDeletable::DeleteObject() {
     if (!fObject) return;
     // Actually delete the object.
     if (IsOwner()) delete fObject;
+    fObject = NULL;
 }
 
 ClassImp(CP::THandleBaseUndeletable);
@@ -41,7 +45,10 @@ CP::THandleBaseUndeletable::THandleBaseUndeletable() : fObject(NULL) { }
 CP::THandleBaseUndeletable::THandleBaseUndeletable(TObject* pointee)
     : fObject(pointee) { }
 CP::THandleBaseUndeletable::~THandleBaseUndeletable() {
-    // Absolutely nothing to do.
+    DeleteObject();
+}
+void CP::THandleBaseUndeletable::DeleteObject() {
+    fObject = NULL;  // Just set the object pointer to NULL;
 }
 
 bool CP::CleanHandleRegistry(bool) {
@@ -102,36 +109,74 @@ CP::TVHandle::~TVHandle() {}
 
 void CP::TVHandle::Default(CP::THandleBase* handle) {
     fHandle = handle;
-    if (fHandle) fHandle->IncrementReferenceCount();
+    SetBit(kWeakHandle,false);
+    if (fHandle) {
+        fHandle->CheckHandle();
+        fHandle->IncrementReferenceCount();
+        fHandle->IncrementHandleCount();
+    }
 }
 
 void CP::TVHandle::Link(const CP::TVHandle& rhs) {
     // Copy the handle.
     fHandle = rhs.fHandle;
-    // Increment the reference count
-    if (fHandle) fHandle->IncrementReferenceCount();
+    if (!fHandle) return;
+    fHandle->CheckHandle();
+    fHandle->IncrementHandleCount();
+    if (IsWeak()) return;
+    fHandle->IncrementReferenceCount();
 }
 
-bool CP::TVHandle::Unlink() {
-    if (!fHandle) return false;
-    fHandle->DecrementReferenceCount();
-    if (fHandle->GetReferenceCount() < 1) return true;
-    return false;
-}
-
-void CP::TVHandle::Destroy(void) {
-    // Save the value of the handle
-    CP::THandleBase* target = fHandle;
-    
-    // But, mark the current object as invalid.
+void CP::TVHandle::Unlink() {
+    if (!fHandle) return;
+    fHandle->CheckHandle();
+    if (!IsWeak()) fHandle->DecrementReferenceCount();
+    fHandle->DecrementHandleCount();
+    CheckSurvival();
     fHandle = NULL;
-    
-    // Is the target a valid handle?
-    if (!target) return;
-    
-    // Try to delete the object.  The target is a THandleBase and its
-    // distructor will decide if the object is deletable.
-    delete target;
+}
+
+void CP::TVHandle::MakeWeak() {
+    if (IsWeak()) return;
+    SetBit(kWeakHandle,true);
+    // Decrement the reference count to the object, but leave the handle count
+    // unchanged.
+    if (!fHandle) return;
+    fHandle->CheckHandle();
+    fHandle->DecrementReferenceCount();
+    CheckSurvival();
+}
+
+void CP::TVHandle::MakeLock() {
+    if (!IsWeak()) return;
+    SetBit(kWeakHandle,false);
+    // Increment the reference count to the object, but leave the handle count
+    // unchanged, but only if there is a valid handle, and a valid object.
+    if (!fHandle) return;
+    if (!fHandle->GetObject()) return;
+    fHandle->CheckHandle();
+    fHandle->IncrementReferenceCount();
+}
+
+void CP::TVHandle::CheckSurvival() {
+    // The handle doesn't exist, so just return.
+    if (!fHandle) return;
+    // Check for old handles.
+    fHandle->CheckHandle();
+    // The handle counter is zero so nothing (no strong, or weak handles) is
+    // using this THandleBase and it should be deleted.  This also deletes the
+    // object.
+    if (fHandle->GetHandleCount() < 1) {
+        fHandle->DeleteObject();
+        delete fHandle;
+        fHandle = NULL;
+        return;
+    }
+    // The reference counter is zero, so no strong handles are referencing the
+    // object.  Delete the object, but leave the THandleBase.
+    if (fHandle->GetReferenceCount() < 1) {
+        fHandle->DeleteObject();
+    }
 }
 
 TObject* CP::TVHandle::GetPointerValue() const {
@@ -161,7 +206,9 @@ void CP::TVHandle::ls(Option_t *opt) const {
     }
     if (fHandle) {
         std::cout << " Refs: " << fHandle->GetReferenceCount();
-        if (fHandle->IsOwner()) std::cout << " (owner)";
+        std::cout << " (" << fHandle->GetHandleCount() << ")";
+        if (IsWeak()) std::cout << " (weak)";
+        else if (fHandle->IsOwner()) std::cout << " (owner)";
         else std::cout << " (released)";
     }
     std::cout << std::endl;

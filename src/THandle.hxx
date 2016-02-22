@@ -47,15 +47,20 @@ namespace CP {
         /// Remove a reference to the object being held by removing this
         /// THandle from the reference list.  Returns true if the last
         /// reference is removed.
-        bool Unlink();
-
-        /// Delete the pointer if that is allowed by encapuslating all of the
-        /// necessary logic.
-        void Destroy(void);
+        void Unlink();
 
         /// Safely get the pointer value for this handle.  This hides the
         /// underlying storage model from the THandle template.
         TObject* GetPointerValue() const;
+
+        /// Define the status bits used by the TVHandle object.  These can't
+        /// collide with any status bits defined in TObject (the parent class
+        /// for TVHandle), and none of the TVHandle children can define a
+        /// status bit that collides with these definitions (i.e. the
+        /// THandle<> templates.  Bits 14 to 23 are available for use.
+        enum EStatusBits {
+            kWeakHandle = BIT(20)
+        };
 
     public:
         /// Release the ownership of the object being held by this handle.
@@ -63,6 +68,22 @@ namespace CP {
         /// routine.
         void Release();
 
+        /// Make the current handle into a weak handle.  A weak handle does
+        /// not own the object and the object may be deleted.  If the object
+        /// is deleted, the weak handle will reference a NULL pointer.  The
+        /// MakeWeak method may remove the last reference to the object and
+        /// cause it to be deleted, so it should be check for validity before
+        /// using.
+        void MakeWeak();
+
+        /// Make the current handle into a regular handle that "owns" the
+        /// object.  The object won't be deleted until all handles that own
+        /// the object are removed.
+        void MakeLock();
+
+        /// Check if this is a weak pointer to the object.
+        bool IsWeak() const {return TestBit(kWeakHandle);}
+        
         /// Equality operator for all THandle objects.
         bool operator == (const TVHandle& rhs) const;
 
@@ -73,6 +94,11 @@ namespace CP {
         virtual void ls(Option_t *opt = "") const;
         
     private:
+        /// Check if the object, or the handle to the object should be
+        /// deleted.  This can be safely called even if the object and handle
+        /// don't exist.
+        void CheckSurvival();
+        
         /// The reference counted handle. This handle contains the pointer to
         /// the actual data object.
         THandleBase* fHandle;
@@ -93,6 +119,44 @@ namespace CP {
     /// In addition, keep in mind that this is a reference counted object (see
     /// Wikipedia for details).  This means that "reference loops" will
     /// prevent objects from being deleted.
+    ///
+    /// Reference loops can be prevented by using weak handles.  A weak handle
+    /// is a handle that can refer to the object without increasing the object
+    /// reference count.  A handle is marked as weak using the MakeWeak()
+    /// method, and will remain weak until a call to MakeLock().  Note: The
+    /// "weak" property follows the handle, not the object being referenced by
+    /// the handle.
+    ///
+    /// \code
+    /// CP::THandle<CP::THit> aHandle(aHitFromSomePlace);
+    /// aHandle.IsWeak()     // Returns false.
+    ///
+    /// CP::THandle<CP::THit> bHandle = aHandle;
+    /// bHandle.IsWeak();    // Returns false.
+    /// bHandle.MakeWeak();
+    /// bHandle.IsWeak();    // Returns true.
+    /// bHandle.MakeLock();
+    /// bHandle.IsWeak();    // Returns false.
+    ///
+    /// CP::THandle<CP::THit> weakHandle;
+    /// weakHandle.MakeWeak();
+    /// weakHandle.IsWeak(); // Returns true;
+    /// weakHandle = aHandle;
+    /// weakHandle.IsWeak(); // Returns true;
+    ///
+    /// aHandle.IsWeak();    // Returns false;
+    /// \endcode
+    ///
+    /// An object will be deleted as soon as the last non-weak handle goes out
+    /// of scope.  This has the interesting side effect that a call to
+    /// MakeWeak() might remove the last non-weak handle (by making it weak),
+    /// and cause the object to be deleted.  You should always check that a
+    /// weak handle is valid before dereferencing it's pointer.
+    ///
+    /// If a weak handle can be promoted to a regular handle using the
+    /// MakeLock() method.  If the weak handle holds a valid reference to an
+    /// object before the call to MakeLock(), it will be a "reference counted"
+    /// owner of the object after the call to MakeLock().
     ///
     /// A reference to a NULL THandle will throw an CP::EHandleBadReference
     /// which means it won't generate a core dump.  For debugging, you can run
@@ -140,18 +204,11 @@ namespace CP {
         THandle(const THandle<T>& rhs);
     
         // Copy between classes.
-        template <class U> 
-        THandle(const THandle<U>& rhs) {
-            Default(NULL);
-            if (dynamic_cast<T*>(rhs.GetPointerValue())) {
-                Link(rhs);
-            }
-        }
+        template <class U> THandle(const THandle<U>& rhs);
     
         /// The destructor for the THandle object which may delete the pointer. 
         virtual ~THandle();
 
-    
         /// @{ Assign one THandle object to another.  This should be designed
         /// to recast the pointee between the assignments so that an implicit
         /// conversion takes place.  If the recast fails, the new pointer will
@@ -255,24 +312,52 @@ namespace CP {
         virtual ~THandleBase();
 
         int GetReferenceCount() const {return fCount;}
-        void DecrementReferenceCount() {--fCount;}
+        int GetHandleCount() const {return fHandleCount;}
+        void CheckHandle() {if (fHandleCount<fCount) fHandleCount=fCount;}
+        
+        // Increment/decrement the count of objects that own the object.  This
+        // doesn't include any weak references.
         void IncrementReferenceCount() {++fCount;}
+        void DecrementReferenceCount() {if (fCount>0) --fCount;}
+
+        // Increment/decrement the count of objects referencing this
+        // THandleBase object.  This includes the count of handles owning the
+        // object as well as the weak handles that are referencing the object,
+        // but don't own it.
+        void IncrementHandleCount() {
+            ++fHandleCount;
+            if (fHandleCount > 30000) {
+                CaptError("To many handles for object: " << fHandleCount);
+            }
+        }
+        void DecrementHandleCount() {if (fHandleCount>0) --fHandleCount;}
+
+        // Return the current pointer to the object.
         virtual TObject* GetObject() const = 0;
+        // Delete the object.  This should check that fObject is a valid
+        // pointer (e.g. not NULL) that can be deleted before freeing the
+        // memory.  The fObject pointer should always be set to NULL.
+        virtual void DeleteObject() = 0;
         void Release() {SetBit(kPointerReleased);}
         bool IsOwner() {return !TestBit(kPointerReleased);}
 
     private:
-        /// Define the status bits used by the THandle object.  These can't
-        /// collide with any status bits defined in TObject (the parent class
-        /// for THandleBase), and none of the THandleBase children can define
-        /// a status bit that collides with these definitions.  Bits 14 to 23
-        /// are available for use.
+        /// Define the status bits used by the THandleBase object.  These
+        /// can't collide with any status bits defined in TObject (the parent
+        /// class for THandleBase), and none of the THandleBase children can
+        /// define a status bit that collides with these definitions.  Bits 14
+        /// to 23 are available for use.
         enum EStatusBits {
             kPointerReleased = BIT(20)
         };
-        int fCount;
 
-        ClassDef(THandleBase,2);
+        /// The number of references to the object.
+        unsigned short fCount;
+
+        /// The number of references to the handle.
+        unsigned short fHandleCount;
+
+        ClassDef(THandleBase,3);
     };
 
     /// A concrete version of the THandleBase class for pointers that should
@@ -285,6 +370,7 @@ namespace CP {
         virtual ~THandleBaseDeletable();
 
         TObject* GetObject() const {return fObject;}
+        void DeleteObject();
 
     private:
         /// The actual pointer that will be reference counted.
@@ -303,6 +389,7 @@ namespace CP {
         virtual ~THandleBaseUndeletable();
 
         TObject* GetObject() const {return fObject;}
+        void DeleteObject();
 
     private:
         /// The actual pointer that will be reference counted.
@@ -345,21 +432,30 @@ template <class T>
 CP::THandle<T>::THandle(const THandle<T>& rhs) : TVHandle(rhs) {
     Default(NULL);
     Link(rhs);
+    if (rhs.IsWeak()) MakeWeak();
 }
 
 template <class T>
-CP::THandle<T>::~THandle() {
-    if (Unlink()) Destroy();
+template <class U> 
+CP::THandle<T>::THandle(const CP::THandle<U>& rhs) {
+    Default(NULL);
+    if (dynamic_cast<T*>(rhs.GetPointerValue())) {
+        Link(rhs);
+    }
+    if (rhs.IsWeak()) MakeWeak();
 }
     
+template <class T>
+CP::THandle<T>::~THandle() {
+    Unlink();
+}
+
 template <class T>
 CP::THandle<T>& CP::THandle<T>::operator = (THandle<T>& rhs) {
     if (operator == (rhs)) return rhs;
     // Going to replace the value of this smart pointer, so unref and
-    // possible delete.
-    if (Unlink()) Destroy();
-    // Make sure the handle in the default state.
-    Default(NULL);
+    // possibly delete.
+    Unlink();
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -371,9 +467,7 @@ template <class T>
 const CP::THandle<T>& CP::THandle<T>::operator = (const THandle<T>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
-    // Make sure the handle in the default state.
-    Default(NULL);
+    Unlink();
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -386,9 +480,7 @@ template <class U>
 CP::THandle<U>& CP::THandle<T>::operator = (THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
-    // Make sure the handle in the default state.
-    Default(NULL);
+    Unlink();
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
@@ -401,9 +493,7 @@ template <class U>
 const CP::THandle<U>& CP::THandle<T>::operator = (const THandle<U>& rhs) {
     // Going to replace the value of this smart pointer, so unref and
     // possible delete.
-    if (Unlink()) Destroy();
-    // Make sure the handle in the default state.
-    Default(NULL);
+    Unlink();
     // Compatible types
     if (dynamic_cast<T*>(rhs.GetPointerValue())) {
         Link(rhs);
