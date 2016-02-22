@@ -110,4 +110,19 @@ SIGIFICANT BUGS FIXED:
 
 * Make sure all the TSingleHit fields are copied by the copy constructor.
 
+
+\section captEvent_v1r1p1_history Version 1.1.1
+
+Freeze information:
+   - Freeze Date: Mon Feb 22 15:52:26 2016
+   - Freeze User: mcgrew
+   - Freeze Host: boxer boxer 
+
+
+BUG FIX:
+
+There was a major mis-fire on the freeze for version 1.1.0 and a lot of
+code wasn't properly merged into master before the branch.  This is after
+the merge into master, and is rebased on the updated version of master.
+
 */
