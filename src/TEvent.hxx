@@ -15,6 +15,7 @@
 #include "TDigitContainer.hxx"
 #include "TSHAHashValue.hxx"
 #include "TAlignmentId.hxx"
+#include "nanoStamp.hxx"
 
 /// The standard namespace for captain offline software (see \ref namespaces).  
 namespace CP {
@@ -112,6 +113,18 @@ public:
         fContext.SetEvent(i);
         Build();
     }
+
+    /// Set the high precision time stamp for the event.
+    /// @{
+    void SetTimeStamp(int s, int ns) {fTimeStamp = CP::TimeToNanoStamp(s,ns);}
+    void SetTimeStamp(CP::NanoStamp ns) {fTimeStamp = ns;}
+    /// @}
+
+    /// Get the high precision time stamp for the event.  This should be the
+    /// highest precision time available for the event, but it might just be
+    /// the computer time.  The NanoStamp is a uint64_t, which is defined in
+    /// nanoStamp.hxx along with some utility routines.
+    CP::NanoStamp GetTimeStamp() const {return fTimeStamp;}
     
     /// Get the event number.
     UInt_t GetEventId(void) const {return fContext.GetEvent();}
@@ -149,9 +162,12 @@ private:
     /// the geometry when handling this event.
     TAlignmentId fAlignmentId;
 
+    /// The timestamp for the event as nanoseconds since Jan 1, 1970.
+    NanoStamp fTimeStamp;
+    
     /// Build internal structure of the event.
     void Build();
 
-    ClassDef(TEvent,8);
+    ClassDef(TEvent,9);
 };
 #endif
