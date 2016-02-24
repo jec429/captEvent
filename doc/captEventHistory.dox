@@ -125,4 +125,25 @@ There was a major mis-fire on the freeze for version 1.1.0 and a lot of
 code wasn't properly merged into master before the branch.  This is after
 the merge into master, and is rebased on the updated version of master.
 
+
+\section captEvent_v1r1p2_history Version 1.1.2
+
+Freeze information:
+   - Freeze Date: Wed Feb 24 17:56:10 2016
+   - Freeze User: mcgrew
+   - Freeze Host: boxer boxer 
+
+
+Minor features:
+
+* Add a timestamp type (NanoStamp) which represents the time since Jan 1,
+  1970 in nanoseconds.  It is in fact an int64_t.  There are a couple of
+  almost trivial utility routines associated with it to make it easier to
+  change back and forth between NanoStamp and time_t.
+
+* Add a high precision (i.e. NanoStamp) time stamp to the TEvent object.
+
+* Add a time stamp to the PDS digit header so that PDS digits from
+  different triggers can be combined.
+
 */
