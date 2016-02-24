@@ -52,6 +52,7 @@ void CP::TEvent::Build(void) {
     if (!FindDatum("fits")) {
         AddDatum(new CP::TDataVector("fits","Fit results from reconstruction"));
     }
+    fTimeStamp = 0;
     Register();
 }
 
