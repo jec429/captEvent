@@ -174,17 +174,38 @@ void CP::THit::ls(Option_t *opt) const {
         TROOT::IndentLevel();
         std::cout << "Uncertainty: " 
                   << std::setprecision(2)
-                  << "(" << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().X())
-                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Y())
-                  << ", " << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Z())
-                  << ", " << CP::TUnitsTable::Get().ConvertTime(GetTimeUncertainty())
+                  << "("
+                  << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().X())
+                  << ", "
+                  << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Y())
+                  << ", "
+                  << CP::TUnitsTable::Get().ConvertLength(GetUncertainty().Z())
+                  << ", "
+                  << CP::TUnitsTable::Get().ConvertTime(GetTimeUncertainty())
                   << ")"
                   << std::endl;
         TROOT::DecreaseDirLevel();
     }
     std::cout.precision(prec);
-    if (GetDigitCount() > 0) {
+    if (option.find("samples") != std::string::npos) {
         TROOT::IncreaseDirLevel();
+        TROOT::IndentLevel();
+        std::cout << "Start Time: "
+                  << (int) GetTimeStart() << " ns" 
+                  << " Stop Time: " 
+                  << (int) GetTimeStop() << " ns" 
+                  << std::endl;
+        TROOT::IncreaseDirLevel();
+        for (int i=0; i<GetTimeSamples(); ++i) {
+            TROOT::IndentLevel();
+            std::cout << "Sample: " << i << "    Q: " 
+                      << CP::TUnitsTable::Get().ConvertCharge(GetTimeSample(i))
+                      << std::endl;
+        }
+        TROOT::DecreaseDirLevel();
+        TROOT::DecreaseDirLevel();
+    }
+    if (GetDigitCount() > 0) {
         for (int i=0; i<GetDigitCount(); ++i) {
             CP::TDigitProxy digit = GetDigit(i);
             if (!digit.IsValid()) {
@@ -194,6 +215,5 @@ void CP::THit::ls(Option_t *opt) const {
             }
             (*digit)->ls();
         }
-        TROOT::DecreaseDirLevel();
     }
 }
