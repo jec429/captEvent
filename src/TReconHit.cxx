@@ -99,7 +99,7 @@ CP::TWritableReconHit::TWritableReconHit(const CP::TWritableReconHit& h)
     : CP::TReconHit(h) {}
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
-    fContributors.push_back(hit);
+    if (hit) fContributors.push_back(hit);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
@@ -107,8 +107,8 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit) {
 
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2) {
-    fContributors.push_back(hit1);
-    fContributors.push_back(hit2);
+    if (hit1) fContributors.push_back(hit1);
+    if (hit2) fContributors.push_back(hit2);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
@@ -117,9 +117,9 @@ CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
 CP::TWritableReconHit::TWritableReconHit(CP::THandle<CP::THit> hit1,
                                          CP::THandle<CP::THit> hit2,
                                          CP::THandle<CP::THit> hit3) {
-    fContributors.push_back(hit1);
-    fContributors.push_back(hit2);
-    fContributors.push_back(hit3);
+    if (hit1) fContributors.push_back(hit1);
+    if (hit2) fContributors.push_back(hit2);
+    if (hit3) fContributors.push_back(hit3);
     fCharge = -9999.;
     fTime = -9999.;
     fTimeUncertainty = -9999;
