@@ -284,7 +284,7 @@ bool CP::TGeomIdManager::ReadGeometry(const CP::TSHAHashValue& hc) {
         CaptError("Cannot open geometry file: " << inputName);
         return false;
     }
-    std::auto_ptr<TFile> inFile(inputPtr);
+    std::unique_ptr<TFile> inFile(inputPtr);
     return LoadGeometry(*inFile,hc);
 }
 
@@ -764,7 +764,7 @@ bool CP::TGeomIdManager::FindAndLoadGeometry(CP::TEvent* event) {
                           " Geometry override file does not exist.");
         }
         else {
-            std::auto_ptr<TFile> file(filePtr);        
+            std::unique_ptr<TFile> file(filePtr);        
             if (LoadGeometry(*file,CP::TSHAHashValue())) {
                 CaptNamedInfo("Geometry","Override geometry from "
                               << file->GetName());
@@ -1020,7 +1020,7 @@ void CP::TGeomIdManager::ApplyAlignment(const CP::TEvent* const event) {
             alignPair = CP::TManager::Get().Alignment(event);
         while (alignPair.second) {
             TGeometryId geomId = alignPair.first;
-            std::auto_ptr<TGeoMatrix> align(alignPair.second);
+            std::unique_ptr<TGeoMatrix> align(alignPair.second);
             std::string path = geomId.GetName();
             TGeoPhysicalNode* pNode 
                 = gGeoManager->MakePhysicalNode(path.c_str());

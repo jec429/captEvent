@@ -11,11 +11,17 @@ namespace CP {
 }
     
 /// A state holding parameters associated with a TReconPID.  
-class CP::TPIDState: public TReconState, 
-                     virtual public TMReconState,
-                     virtual public TMPositionDirectionState, 
-                     virtual public TMMomentumState,
-                     virtual public TMChargeState {
+class CP::TPIDState:
+#ifndef __CINT__
+    public TReconState, 
+    virtual public TMReconState,
+    virtual public TMPositionDirectionState, 
+    virtual public TMMomentumState,
+    virtual public TMChargeState
+#else
+    public TReconState
+#endif
+{
 public:
     TPIDState();
     TPIDState(const CP::TPIDState& init);
@@ -36,6 +42,6 @@ public:
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
-    ClassDef(TPIDState,1);
+    ClassDef(TPIDState,2);
 };
 #endif

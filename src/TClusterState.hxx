@@ -9,10 +9,16 @@ namespace CP {
 }
 
 /// A state holding the parameters associated with a TReconCluster.  
-class CP::TClusterState: public TReconState, 
-                         virtual public TMReconState,
-                         virtual public TMEDepositState,
-                         virtual public TMPositionState {
+class CP::TClusterState:
+#ifndef __CINT__
+    public TReconState, 
+    virtual public TMReconState,
+    virtual public TMEDepositState,
+    virtual public TMPositionState
+#else
+    public TReconState
+#endif
+{
 public:
     TClusterState();
     virtual ~TClusterState();
@@ -28,6 +34,6 @@ public:
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
-    ClassDef(TClusterState,1);
+    ClassDef(TClusterState,2);
 };
 #endif

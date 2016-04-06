@@ -10,11 +10,17 @@ namespace CP {
 
 /// A state holding parameters associated with a TReconTrack, and the
 /// intermediate states.
-class CP::TTrackState: public TReconState,
-                       virtual public TMReconState,
-                       virtual public TMEDepositState,
-                       virtual public TMPosDirMassState,
-                       virtual public TMWidthState {
+class CP::TTrackState:
+#ifndef __CINT__
+    public TReconState,
+    virtual public TMReconState,
+    virtual public TMEDepositState,
+    virtual public TMPosDirMassState,
+    virtual public TMWidthState
+#else
+    public TReconState
+#endif
+{
 public:
     TTrackState();
     TTrackState(const TTrackState& init);
@@ -32,7 +38,7 @@ public:
     /// The projection operator to get the full state.
     static CP::TCorrValues ProjectState(const CP::THandle<CP::TReconState>& state);
 
-    ClassDef(TTrackState,1);
+    ClassDef(TTrackState,2);
 };
 
 #endif

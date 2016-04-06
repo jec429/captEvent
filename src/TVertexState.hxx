@@ -9,9 +9,15 @@ namespace CP {
 }
 
 /// A state holding parameters associated with a TReconVertex.
-class CP::TVertexState: public TReconState,
-                        virtual public TMReconState,
-                        virtual public TMPositionState {
+class CP::TVertexState:
+#ifndef __CINT__
+    public TReconState,
+    virtual public TMReconState,
+    virtual public TMPositionState
+#else
+    public TReconState
+#endif
+{
 public:
     TVertexState();
     virtual ~TVertexState();
@@ -28,6 +34,6 @@ public:
     static CP::TCorrValues ProjectState(const 
                                         CP::THandle<CP::TReconState>& state);
     
-    ClassDef(TVertexState,1);
+    ClassDef(TVertexState,2);
 };
 #endif

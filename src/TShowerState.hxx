@@ -9,11 +9,17 @@ namespace CP {
 }
 
 /// A state holding the parameters associated with a TReconShower. 
-class CP::TShowerState: public TReconState, 
-                        virtual public TMReconState,
-                        virtual public TMEDepositState,
-                        virtual public TMPositionDirectionState,
-                        virtual public TMConeState {
+class CP::TShowerState:
+#ifndef __CINT__
+    public TReconState, 
+    virtual public TMReconState,
+    virtual public TMEDepositState,
+    virtual public TMPositionDirectionState,
+    virtual public TMConeState
+#else
+    public TReconState
+#endif
+{
 public:
     TShowerState();
     TShowerState(const TShowerState& init);
@@ -32,6 +38,6 @@ public:
     static CP::TCorrValues ProjectState(
         const CP::THandle<CP::TReconState>& state);
 
-    ClassDef(TShowerState,1);
+    ClassDef(TShowerState,2);
 };
 #endif
