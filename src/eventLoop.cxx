@@ -457,7 +457,7 @@ int CP::eventLoop(int argc, char** argv,
         int lastEventId = -1;
         int lastRunId = -1;
         try {
-            std::auto_ptr<CP::TVInputFile> input;
+            std::unique_ptr<CP::TVInputFile> input;
             try {
                 input.reset(
                     CP::TManager::Get().Input().Builder(fileType.c_str()).Open(
@@ -484,7 +484,7 @@ int CP::eventLoop(int argc, char** argv,
             if (!outputFiles.empty()) outputFiles.front()->cd();
             userCode.BeginFile(input.get());
             
-            std::auto_ptr<TEvent> event(input->FirstEvent());
+            std::unique_ptr<TEvent> event(input->FirstEvent());
 
             // Position to the first event in the file to read.  This might
             // leave the file positioned at the end of file.
