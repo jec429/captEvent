@@ -200,7 +200,7 @@ void CP::THit::ls(Option_t *opt) const {
         TROOT::IndentLevel();
         std::cout << "Samples: ";
         for (int i=0; i<GetTimeSamples(); ++i) {
-            if (i>1) std::cout << ", ";
+            if (i>0) std::cout << ", ";
             std::cout << CP::TUnitsTable::Get().ConvertCharge(GetTimeSample(i));
         }
         std::cout << std::endl;
