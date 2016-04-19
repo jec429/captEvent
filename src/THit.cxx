@@ -1,3 +1,4 @@
+
 ////////////////////////////////////////////////////////////
 // $Id: THit.cxx,v 1.24 2012/07/11 16:31:20 mcgrew Exp $
 //
@@ -184,24 +185,25 @@ void CP::THit::ls(Option_t *opt) const {
                   << CP::TUnitsTable::Get().ConvertTime(GetTimeUncertainty())
                   << ")"
                   << std::endl;
-        TROOT::DecreaseDirLevel();
-    }
-    std::cout.precision(prec);
-    if (option.find("samples") != std::string::npos) {
-        TROOT::IncreaseDirLevel();
         TROOT::IndentLevel();
         std::cout << "Start Time: "
                   << (int) GetTimeStart() << " ns" 
                   << " Stop Time: " 
                   << (int) GetTimeStop() << " ns" 
                   << std::endl;
+        TROOT::DecreaseDirLevel();
+    }
+    std::cout.precision(prec);
+    if (option.find("samples") != std::string::npos) {
         TROOT::IncreaseDirLevel();
+        TROOT::IncreaseDirLevel();
+        TROOT::IndentLevel();
+        std::cout << "Samples: ";
         for (int i=0; i<GetTimeSamples(); ++i) {
-            TROOT::IndentLevel();
-            std::cout << "Sample: " << i << "    Q: " 
-                      << CP::TUnitsTable::Get().ConvertCharge(GetTimeSample(i))
-                      << std::endl;
+            if (i>1) std::cout << ", ";
+            std::cout << CP::TUnitsTable::Get().ConvertCharge(GetTimeSample(i));
         }
+        std::cout << std::endl;
         TROOT::DecreaseDirLevel();
         TROOT::DecreaseDirLevel();
     }
@@ -213,7 +215,7 @@ void CP::THit::ls(Option_t *opt) const {
                 std::cout << "Digit: not-valid";
                 continue;
             }
-            (*digit)->ls();
+            (*digit)->ls(opt);
         }
     }
 }

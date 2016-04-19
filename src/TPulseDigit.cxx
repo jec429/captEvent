@@ -32,7 +32,7 @@ void CP::TPulseDigit::ls(Option_t* opt) const {
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
 
-    std::cout << GetChannelId()
+    std::cout << GetChannelId() << " opt: " << opt
               << " T: " << GetFirstSample() 
               << " (" << GetSampleCount() << ")";
 

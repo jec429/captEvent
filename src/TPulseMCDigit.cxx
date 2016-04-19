@@ -34,12 +34,13 @@ void CP::TPulseMCDigit::ls(Option_t* opt) const {
               << " T: " << GetFirstSample() 
               << "-" << GetFirstSample()+GetSampleCount();
 
+    const std::size_t mInfo = 5;
     if (GetInformation().size() == GetContributors().size()
         && !GetInformation().empty()) {
         std::cout << " I";
         /// The information and contributor vectors seem to be parallel, so
         /// present as a matched set.
-        for (std::size_t i=0; i<GetInformation().size(); ++i) {
+        for (std::size_t i=0; i<std::min(mInfo,GetInformation().size()); ++i) {
             double q = GetInformation().at(i);
             const CP::TG4HitSegment* s
                 = dynamic_cast<const CP::TG4HitSegment*>(
@@ -50,6 +51,7 @@ void CP::TPulseMCDigit::ls(Option_t* opt) const {
             else std::cout << s->GetContributor(0);
             std::cout << "," << (int)(q+0.5);
         }
+        if (GetInformation().size() >= mInfo) std::cout << " ...";
     }
     else {
         if (GetInformation().empty()) {
@@ -57,11 +59,12 @@ void CP::TPulseMCDigit::ls(Option_t* opt) const {
         }
         else {
             std::cout << " I:";
-            for (CP::TMCDigit::InfoContainer::const_iterator i
-                     = GetInformation().begin();
-                 i != GetInformation().end(); ++i) {
-                std::cout << " " << *i;
+            for (std::size_t i=0; i<std::min(mInfo,GetInformation().size());
+                 ++i) {
+                double q = GetInformation().at(i);
+                std::cout << " " << q;
             }
+            if (GetInformation().size() >= mInfo) std::cout << " ...";
         }
             
         if (GetContributors().empty()) {
