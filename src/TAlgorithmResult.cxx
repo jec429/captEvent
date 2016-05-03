@@ -34,6 +34,10 @@ CP::TAlgorithmResult::TAlgorithmResult(const CP::THitSelection& hits)
 
 CP::TAlgorithmResult::~TAlgorithmResult() { }
 
+bool CP::TAlgorithmResult::IsEmpty() const {
+    return (size()<1 && fStatusSummary.empty());
+}
+
 void CP::TAlgorithmResult::AddStatus(const char* s) {
     std::string status(s);
     fStatusSummary = "(" + status + ") " + fStatusSummary;

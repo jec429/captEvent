@@ -158,6 +158,9 @@ public:
     /// Print the result information.
     virtual void ls(Option_t *opt = "") const;
     
+    /// Return true if the algorithm is empty.
+    bool IsEmpty() const;
+
 private:   
     friend class TAlgorithm;
     
