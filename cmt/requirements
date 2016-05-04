@@ -42,7 +42,7 @@ library captEvent *.cxx *.hxx $(bin)dict/*.cxx
 macro_append captEvent_dependencies " linkdef "
 
 # Build information used by packages that use this one.
-macro captEvent_cppflags " -DCAPTEVENT_USED "
+macro captEvent_cppflags " -DCAPTEVENT_USED -Wno-non-template-friend "
 macro captEvent_linkopts " -L$(CAPTEVENTROOT)/$(captEvent_tag) -lcaptEvent "
 macro captEvent_stamps " $(captEventstamp) $(linkdefstamp) "
 
