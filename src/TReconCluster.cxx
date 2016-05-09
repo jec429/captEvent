@@ -384,7 +384,7 @@ void CP::TReconCluster::ls(Option_t *opt) const {
     TROOT::DecreaseDirLevel();
 }
 
-void CP::TReconCluster::FillTemporaries() {
+void CP::TReconCluster::FillTemporaries() const {
     if (fTemporariesInitialized) return;
     fTemporariesInitialized = true;
 
@@ -431,22 +431,22 @@ void CP::TReconCluster::FillTemporaries() {
 
 }
 
-const TVector3& CP::TReconCluster::GetLongAxis() {
+const TVector3& CP::TReconCluster::GetLongAxis() const {
     FillTemporaries();
     return fLongAxis;
 }
 
-const TVector3& CP::TReconCluster::GetMajorAxis() {
+const TVector3& CP::TReconCluster::GetMajorAxis() const {
     FillTemporaries();
     return fMajorAxis;
 }
 
-const TVector3& CP::TReconCluster::GetMinorAxis() {
+const TVector3& CP::TReconCluster::GetMinorAxis() const {
     FillTemporaries();
     return fMinorAxis;
 }
 
-double CP::TReconCluster::GetLongExtent() {
+double CP::TReconCluster::GetLongExtent() const {
     FillTemporaries();
 
     double maxLen = 0.0;
@@ -462,7 +462,7 @@ double CP::TReconCluster::GetLongExtent() {
 
 }
 
-double CP::TReconCluster::GetMajorExtent() {
+double CP::TReconCluster::GetMajorExtent() const {
     FillTemporaries();
 
     double maxLen = 0.0;
@@ -478,7 +478,7 @@ double CP::TReconCluster::GetMajorExtent() {
 
 }
 
-double CP::TReconCluster::GetMinorExtent() {
+double CP::TReconCluster::GetMinorExtent() const {
     FillTemporaries();
 
     double maxLen = 0.0;
