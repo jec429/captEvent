@@ -331,6 +331,13 @@ int CP::eventLoop(int argc, char** argv,
         {
             // Set the debug level for a named trace.
             std::string arg(optarg);
+            std::size_t comma = arg.find(",");
+            if (comma != std::string::npos) {
+                std::cerr << "ERROR: Only one verbosity setting per option: "
+                          << "\"" << arg << "\""
+                          << std::endl;
+                eventLoopUsage(programName,userCode,defaultReadCount);
+            }
             std::size_t sep = arg.find("=");
             if (sep != std::string::npos) {
                 std::string name = arg.substr(0,sep);
