@@ -102,6 +102,7 @@ public:
 
     /// Print the object information.
     virtual void ls(Option_t *opt = "") const;
+    virtual void Print(Option_t *opt = "") const {ls(opt);}
 
 protected:
     friend class TMReconState;

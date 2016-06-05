@@ -234,6 +234,7 @@ public:
     /// @{Override methods in the base TObject class.
     virtual void ls(Option_t* opt = "") const; 
     virtual void Browse(TBrowser* b);
+    virtual void Print(Option_t* opt = "") const {ls(opt);}
     /// @}
 
     /// Turn the object status into a string.
