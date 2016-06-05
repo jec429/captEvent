@@ -208,6 +208,9 @@ void CP::ls_header(const TObject* obj, Option_t* opt) {
     TROOT::IndentLevel();
     std::cout << obj->ClassName() << "(" << obj << "):: ";
     std::cout << obj->GetName();
+    if (obj->GetUniqueID() > 0) {
+        std::cout << " (uid " << obj->GetUniqueID() << ")";
+    }
     if (strstr(opt,"size")) {
         TClass* cls = obj->Class();
         if (!cls) return;
