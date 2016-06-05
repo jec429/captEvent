@@ -95,6 +95,9 @@ public:
     /// Reverse the track direction.
     void ReverseTrack();
 
+    /// List the results of particle id.
+    virtual void ls(Option_t* opt = "") const; 
+
 private:
 
     /// The state of the track at the back end.

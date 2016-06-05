@@ -143,3 +143,34 @@ void CP::TReconTrack::ReverseTrack() {
     GetBack()->SetEDeposit(tempDeposit);
 
 }
+
+void CP::TReconTrack::ls(Option_t *opt) const {
+    ls_base(opt);
+
+    TROOT::IncreaseDirLevel();
+    std::string option(opt);
+    if (fState) {
+        TROOT::IncreaseDirLevel();
+        fState->ls(opt);
+        TROOT::DecreaseDirLevel();
+    }
+    if (fBackState) {
+        TROOT::IncreaseDirLevel();
+        fBackState->ls(opt);
+        TROOT::DecreaseDirLevel();
+    }
+    if (fNodes && (option.find("dump") != std::string::npos
+                   || option.find("recon") != std::string::npos)) {
+        TROOT::IncreaseDirLevel();
+        fNodes->ls(opt);
+        TROOT::DecreaseDirLevel();
+    }
+
+    TROOT::IncreaseDirLevel();
+    for (const_iterator v = begin(); v != end(); ++v) {
+        (*v)->ls(opt);
+    };
+    TROOT::DecreaseDirLevel();
+
+    TROOT::DecreaseDirLevel();
+}
