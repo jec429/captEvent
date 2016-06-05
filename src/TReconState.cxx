@@ -104,11 +104,31 @@ void CP::TReconState::ls(Option_t*) const {
         std::cout << ":: " 
                   << std::setw(9) << std::setprecision(3) 
                   << GetValue(i);
-        if (IsFixed(i)) std::cout << "    fixed";
+        if (IsFixed(i)) {
+            std::cout << "    fixed";
+        }
         else {
             std::cout << " +- " 
-                      << std::setw(5) << std::setprecision(3) 
-                      << std::sqrt(GetCovarianceValue(i,i));
+                      << std::setw(6) << std::setprecision(2) 
+                      << std::sqrt(GetCovarianceValue(i,i))
+                      << " :";
+            for (int j=0 ; j<i; ++j) {
+                if (IsFree(j)) continue;
+                if (IsFixed(j)) {
+                    std::cout << "  fixed";
+                    continue;
+                }
+                double c = GetCovarianceValue(i,j);
+                c /= std::sqrt(GetCovarianceValue(i,i));
+                c /= std::sqrt(GetCovarianceValue(j,j));
+                if (std::abs(c) < 0.01) {
+                    std::cout << "   negl";
+                    continue;
+                }
+                std::cout << " "
+                          << std::setw(6) << std::setprecision(2) 
+                          << c;
+            }
         }
         std::cout << std::endl;
     }
