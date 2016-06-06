@@ -192,8 +192,10 @@ public:
     /// Return the number of geometry identifiers associated with this hit.
     virtual int GetGeomIdCount() const;
 
-    /// Print the hit information.
-    virtual void ls(Option_t *opt = "") const;
+    /// @{Override methods in the base TObject class.
+    virtual void ls(Option_t* opt = "") const; 
+    virtual void Print(Option_t* opt = "") const {ls(opt);}
+    /// @}
 
     /// Define the status bits used by the THit object.  These can't collide
     /// with any status bits defined in TObject (the parent class for THit),
