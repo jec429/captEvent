@@ -129,10 +129,10 @@ public:
     void SetQuality(double quality) {fQuality = quality;}
 
     /// Get the number of degrees of freedom in the reconstruction.
-    int GetNDOF() const {return fNDOF;}
+    double GetNDOF() const {return fNDOF;}
 
     /// Set the number of degrees of freedom.
-    void SetNDOF(int n) {fNDOF = n;}
+    void SetNDOF(double n) {fNDOF = n;}
 
     /// Get the state associated with this reconstruction object.  The state
     /// is created by the derived class.  This should generally be used in
@@ -273,12 +273,12 @@ protected:
     CP::TReconBase::Status fStatus;
 
     /// The number of degrees of freedom.
-    int fNDOF;
+    float fNDOF;
 
     /// The name of the reconstruction algorithm.
     std::string fAlgorithm;
 
-    ClassDef(TReconBase,3);
+    ClassDef(TReconBase,4);
 };
 
 /// A container class for reconstruction objects inheriting from a std::vector
