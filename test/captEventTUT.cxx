@@ -11,6 +11,19 @@ namespace tut {
     test_runner_singleton runner;
 }
 
+void usage(const char* argv[]) {
+    std::cout << "A test harness for TUT based test." << std::endl;
+    std::cout << "Usage: " << argv[0] 
+              << " [regression] | [list] | [ group] [test-number]"
+              << std::endl;
+    std::cout << "       list        -- List all groups" << std::endl;
+    std::cout << "       regression  -- run all tests" << std::endl;
+    std::cout << "       group       -- run one group" << std::endl;
+    std::cout << "       group <int> -- run one test in a group." 
+              << std::endl;
+    exit (1);
+}
+
 int main(int argc,const char* argv[]) {
     tut::reporter visi;
     enum {errorFound, doRegression, doList, doGroup} command;
@@ -38,18 +51,7 @@ int main(int argc,const char* argv[]) {
     }
     else command = errorFound;
 
-    if (command == errorFound) {
-        std::cout << "A test harness for TUT based test." << std::endl;
-        std::cout << "Usage: " << argv[0] 
-                  << " [regression] | [list] | [ group] [test-number]"
-                  << std::endl;
-        std::cout << "       list        -- List all groups" << std::endl;
-        std::cout << "       regression  -- run all tests" << std::endl;
-        std::cout << "       group       -- run one group" << std::endl;
-        std::cout << "       group <int> -- run one test in a group." 
-                  << std::endl;
-        exit (1);
-    }
+    if (command == errorFound) usage(argv);
     
     tut::runner.get().set_callback(&visi);
     
@@ -74,6 +76,7 @@ int main(int argc,const char* argv[]) {
     }
     catch( const std::exception& ex ) {
         std::cerr << "Exception raised: " << ex.what() << std::endl;
+        usage(argv);
     }
     
     if (!visi.all_ok()) exit(1);

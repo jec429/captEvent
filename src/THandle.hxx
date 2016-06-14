@@ -147,6 +147,37 @@ namespace CP {
     /// aHandle.IsWeak();    // Returns false;
     /// \endcode
     ///
+    /// When handling weak and non-weak handles, the difference between
+    /// assignment and the copy constructor must be observed.  The assignment
+    /// operator assigns the object referenced by a handle to another handle,
+    /// while the copy constructor copies the value of a handle to a new
+    /// handle.  The weak-ness of the handle follows the handle and so is not
+    /// transferred during assignment.  However, when a copy constructor is
+    /// used, a new handle is being created, and the "weak" property of the
+    /// original handle will be transfered to the new handle.  Contrast the
+    /// two situations.
+    ///
+    /// \code
+    /// CP::THandle<CP::THit> aHandle(aHitFromSomePlace);
+    /// aHandle.IsWeak()     // Returns false.
+    ///
+    /// CP::THandle<CP::THit> bHandle;
+    /// bHandle.IsWeak();    // Returns false.
+    /// bHandle.MakeWeak();
+    /// bHandle = aHandle;   // The bHandle remains weak.
+    /// bHandle.IsWeak();    // Returns true.
+    ///
+    /// CP::THandle<CP::THit> dHandle;
+    /// dHandle = bHandle;   // Assign a weak to a non-weak.
+    /// dHandle.IsWeak();    // The non-weak remains non-weak.
+    ///
+    /// CP::THandle<CP::THit> eHandle(bHandle);
+    /// eHandle.IsWeak();    // Returns true.
+    /// 
+    /// CP::THandle<CP::THit> fHandle(aHandle);
+    /// fHandle.IsWeak();    // Returns false.
+    /// \endcode
+    ///
     /// An object will be deleted as soon as the last non-weak handle goes out
     /// of scope.  This has the interesting side effect that a call to
     /// MakeWeak() might remove the last non-weak handle (by making it weak),

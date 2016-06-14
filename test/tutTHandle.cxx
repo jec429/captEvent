@@ -232,7 +232,7 @@ namespace tut {
             ensure("Assignment has correct pointer", GetPointer(d) == hit);
             ensure("Assignment is equal", a == d);
             ensure("Weak handle is still weak", b.IsWeak());
-            ensure("Assignment is not weak", !d.IsWeak());
+            ensure("Assignment is still not weak", !d.IsWeak());
 
             d.MakeWeak();
             ensure("Weak handle is now weak", d.IsWeak());
@@ -262,7 +262,8 @@ namespace tut {
             ensure("Original is weak", b.IsWeak());
             ensure("Copy is weak", f.IsWeak());
 
-            { 
+            {
+                // reduce scope so that "g" doesn't increase reference count. 
                 CP::THandle<CP::THit> g(a);
                 ensure("Original is not weak", !a.IsWeak());
                 ensure("Copy is not weak", !g.IsWeak());
