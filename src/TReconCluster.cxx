@@ -360,8 +360,18 @@ void CP::TReconCluster::ls(Option_t *opt) const {
     std::ios::fmtflags save = std::cout.flags();
     for (int i = 0; i<3; ++i) {
         TROOT::IndentLevel();
-        if (i == 0) std::cout << "Moments: ";
-        else        std::cout << "         ";
+        if (i == 0) std::cout << "Position Cov: ";
+        else        std::cout << "              ";
+        THandle<CP::TClusterState> state = GetState();
+        for (int j = 0; j<3; ++j) {
+            std::cout << std::setw(12) << state->GetPositionCovariance(i,j);
+        }
+        std::cout << std::setw(0) << std::endl;
+    }
+    for (int i = 0; i<3; ++i) {
+        TROOT::IndentLevel();
+        if (i == 0) std::cout << "Moments:      ";
+        else        std::cout << "              ";
         for (int j = 0; j<3; ++j) {
             std::cout << std::setw(12) << fMoments(i,j);
         }
