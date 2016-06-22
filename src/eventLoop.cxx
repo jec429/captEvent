@@ -22,8 +22,10 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdlib>
 
 #include <TROOT.h>
+#include <TObjString.h>
 
 namespace {
     void eventLoopUsage(std::string programName, 
@@ -421,6 +423,14 @@ int CP::eventLoop(int argc, char** argv,
                 std::cerr << "ERROR: Output file not open" << std::endl;
                 exit(2);
             }
+            // Save the command line to the TFile.
+            std::string command;
+            for (int i=0; i<argc; ++i) {
+                if (i > 0) command += " ";
+                command += argv[i];
+            }
+            TObjString commandLine(command.c_str());
+            output->WriteObject(&commandLine,"commandLine");
             outputFiles.push_back(output);
         }
     }
@@ -488,7 +498,21 @@ int CP::eventLoop(int argc, char** argv,
                 continue;
             }
             
-            if (!outputFiles.empty()) outputFiles.front()->cd();
+            if (!outputFiles.empty()) {
+                // Save the input file name input the output file.
+                for (std::vector<CP::TRootOutput*>::iterator f
+                         = outputFiles.begin();
+                     f != outputFiles.end(); ++f) {
+                    std::unique_ptr<char>
+                        resolvedPath(realpath(fileName.c_str(),NULL));
+                    TObjString inputNameString(resolvedPath.get());
+                    (*f)->WriteObject(&inputNameString,"inputFile");
+                }
+                // Make sure we are on the first output file so that any
+                // created histograms go to a predictable place.
+                outputFiles.front()->cd();
+            }
+
             userCode.BeginFile(input.get());
             
             std::unique_ptr<TEvent> event(input->FirstEvent());
