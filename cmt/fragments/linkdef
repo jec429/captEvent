@@ -14,6 +14,6 @@ $(dict)$(patsubst %_LinkDef,%_Dict,${NAME}).cxx : \
 	$(silent)if [ ! -d $(dict) ]; then mkdir -p $(dict); fi ;
 	$(silent)$(rootcint) -f $@ -c -p $(includes) $(word 1, $(filter-out %~,$^)) $(word 2, $(filter-out %~,$^))
 	$(silent)if [ -f $(patsubst %_Dict.cxx,%_Dict_rdict.pcm,$@) ]; \
-		then ln $(patsubst %_Dict.cxx,%_Dict_rdict.pcm,$@) $(bin); fi
+		then ln -f $(patsubst %_Dict.cxx,%_Dict_rdict.pcm,$@) $(bin); fi
 
 # End of the linkdef fragment.
