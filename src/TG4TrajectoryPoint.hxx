@@ -61,6 +61,17 @@ public:
         return fVolumeNode;
     }
 
+    /// Set the G4 process type and and subtype.
+    void SetProcessType(int type, int subtype) {
+        fProcessType = type + 1000*subtype;
+    }
+
+    /// Get the G4ProcessType (as an integer).
+    int GetProcessType() const {return fProcessType % 1000;}
+
+    /// Get the G4 process subtype (as an integer).
+    int GetProcessSubtype() const {return fProcessType / 1000;}
+
     /// Print the hit information.
     virtual void ls(Option_t * = "") const;
 
@@ -83,6 +94,13 @@ private:
     /// TGeomInfo::Get().VolumeName() method from the oaUtility library.
     Int_t fVolumeNode;
 
-    ClassDef(TG4TrajectoryPoint,5);
+    /// The interaction process type associated with this trajectory point.
+    /// The value is a combination of the process type and the process
+    /// subtype [the type is (fProcessType%1000), the subtype is
+    /// (fProcessType/1000)].  It's filled with G4ProcessType +
+    /// 1000*G4ProcessSubType.
+    UInt_t fProcessType;
+
+    ClassDef(TG4TrajectoryPoint,6);
 };
 #endif
