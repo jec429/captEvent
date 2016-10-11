@@ -23,16 +23,12 @@ void CP::TG4TrajectoryPoint::ls(Option_t *opt) const {
     std::cout << std::endl;
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
-    std::cout << unit::AsString(TLorentzVector(fPositionX,
-                                               fPositionY,
-                                               fPositionZ,
-                                               fPositionT),
-                                "length")
-              << " P: " 
-              << unit::AsString(
-                  TVector3(fMomentumX,fMomentumY,fMomentumZ).Mag(),
-                  "momentum")
-              << " Volume: " << fVolumeNode
+    std::cout << unit::AsString(GetPosition(),"length")
+              << " @ " 
+              << unit::AsString(GetMomentum().Mag(),"momentum")
+              << " V: " << GetVolumeNode()
+              << " Proc: " << GetProcessType()
+              << "-" << GetProcessSubtype()
               << std::endl;
     TROOT::DecreaseDirLevel();
 }

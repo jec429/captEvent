@@ -66,9 +66,53 @@ public:
         fProcessType = type + 1000*subtype;
     }
 
+    /// Process types copied from the G4 definitions so that we don't directly
+    /// depend on GEANT4 being installed to read the data.  The exact
+    /// definitions are in the GEANT documentation, but the (important) names
+    /// are pretty self explanatory.
+    enum {
+        kProcessNotDefined,
+        kProcessTransportation,
+        kProcessElectromagetic,
+        kProcessOptical,
+        kProcessHadronic,
+        kProcessPhotoLeptonHadron,
+        kProcessDecay,
+        kProcessGeneral,
+        kProcessParameterization,
+        kProcessUserDefined
+    };
+    
     /// Get the G4ProcessType (as an integer).
     int GetProcessType() const {return fProcessType % 1000;}
 
+    /// Several important process sub-types as defined by GEANT4.  These are
+    /// copied so that reading the files does not directly depend on having
+    /// GEANT installed.
+    enum {
+        // EM subtypes for charged particles.
+        kSubtypeEMCoulombScattering = 1,
+        kSubtypeEMIonization = 2,
+        kSubtypeEMBremsstrahlung = 3,
+        kSubtypeEMPairProdByCharged = 4,
+        kSubtypeEMNuclearStopping = 8,
+
+        // EM subtypes for photons
+        kSubtypeEMMultipleScattering = 10,
+        kSubtypeEMPhotoelectric = 12,
+        kSubtypeEMComptonScattering = 13,
+        kSubtypeEMGammaConversion = 14,
+        
+        // Hadronic subtypes
+        kSubtypeHadronElastic = 111,
+        kSubtypeHadronInelastic = 121,
+        kSubtypeHadronCapture = 131,
+        kSubtypeHadronChargeExchange = 161,
+
+        // General subtypes
+        kSubtypeGeneralStepLimit = 401,
+    };
+    
     /// Get the G4 process subtype (as an integer).
     int GetProcessSubtype() const {return fProcessType / 1000;}
 
