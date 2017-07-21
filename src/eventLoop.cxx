@@ -481,20 +481,18 @@ int CP::eventLoop(int argc, char** argv,
                         fileName.c_str()));
             }
             catch (std::exception& ex) {
-                std::cout << "ERROR: Caught exception: " 
-                          << ex.what()
-                          << std::endl;
+                CaptError("ERROR: Caught exception: " 
+                          << ex.what());
                 exit(1);
             }
             catch (...) {
-                std::cout << "ERROR: Unknown exception for \"" 
-                          << fileType << "\"" 
-                          << std::endl;
+                CaptError("ERROR: Unknown exception for \"" 
+                          << fileType << "\"");
                 exit(1);
             }
             
             if (!input->IsOpen()) {
-                std::cout << "ERROR: File not found " << fileName << std::endl;
+                CaptError("ERROR: File not found " << fileName);
                 continue;
             }
             
@@ -579,12 +577,11 @@ int CP::eventLoop(int argc, char** argv,
                 event.reset(NULL);
                 if (!CleanHandleRegistry()) {
                     DumpHandleRegistry();
-                    std::cout << "WARNING: Memory Leak in "
-                              << std::endl;
-                    std::cout << "    File(event,run): " << fileName 
+                    CaptError("WARNING: Memory Leak in "
+                              << " File(event,run): " << fileName 
                               << ":(" 
                               << lastEventId 
-                              << "," << lastRunId << ")" << std::endl;
+                              << "," << lastRunId << ")");
                 }
                 
                 if (totalRead>(nextOutput-0.5)) {
@@ -601,9 +598,8 @@ int CP::eventLoop(int argc, char** argv,
             
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: Memory Leak after finishing "
-                          << std::endl;
-                std::cout << "       " << fileName << std::endl;
+                CaptError("WARNING: Memory Leak after finishing "
+                          << fileName);
             }
             
             if (!outputFiles.empty()) outputFiles.front()->cd();
@@ -611,27 +607,25 @@ int CP::eventLoop(int argc, char** argv,
             input->CloseFile();
         }
         catch (std::exception& except) {
-            std::cout << "ERROR: Uncaught exception in " 
-                      << fileName << std::endl;
-            std::cout << "      " << except.what() << std::endl;
+            CaptError("ERROR: Uncaught exception in " 
+                      << fileName);
+            CaptError("    What: " << except.what());
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: Memory Leak after finishing "
-                          << std::endl;
-                std::cout << "       " << fileName << std::endl;
+                CaptError("WARNING: Memory Leak after finishing "
+                          << fileName);
             }
             exitStatus = 3;
             break;
         }
         catch (...) {
             // Don't crash on an error, but try to go to the next file.
-            std::cout << "ERROR: Uncaught exception in " 
-                      << fileName << std::endl;
+            CaptError("ERROR: Uncaught exception in " 
+                      << fileName);
             if (!CleanHandleRegistry()) {
                 DumpHandleRegistry();
-                std::cout << "WARNING: Memory Leak after finishing "
-                          << std::endl;
-                std::cout << "       " << fileName << std::endl;
+                CaptError("WARNING: Memory Leak after finishing "
+                          << fileName);
             }
             exitStatus = 4;
             break;
