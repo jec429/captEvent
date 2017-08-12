@@ -186,11 +186,15 @@ void CP::THit::ls(Option_t *opt) const {
                   << ")"
                   << std::endl;
         TROOT::IndentLevel();
-        std::cout << "Start Time: "
-                  << (int) GetTimeStart() << " ns" 
-                  << " Stop Time: " 
-                  << (int) GetTimeStop() << " ns" 
-                  << std::endl;
+        std::cout << "Start Time: " << (int) GetTimeStart() << " ns";
+        if (GetTimeLowerBound() > GetTimeStart()) {
+            std::cout << " [" << (int) GetTimeLowerBound() << " ns]";
+        }
+        std::cout << " Stop Time: " << (int) GetTimeStop() << " ns" ;
+        if (GetTimeUpperBound() < GetTimeStop()) {
+            std::cout << " [" << (int) GetTimeUpperBound() << " ns]";
+        }
+        std::cout << std::endl;
         TROOT::DecreaseDirLevel();
     }
     std::cout.precision(prec);
