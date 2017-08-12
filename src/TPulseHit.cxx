@@ -18,6 +18,7 @@ CP::TPulseHit::TPulseHit()
     : fGeomId(0), 
       fCharge(0), fChargeUncertainty(1*unit::coulomb),
       fTime(0), fTimeUncertainty(1*unit::second), fTimeRMS(1*unit::second),
+      fTimeLowerBound(0), fTimeUpperBound(0),
       fTimeStart(0), fTimeStop(0),
       fInitialized(false),
       fPosition(0,0,0), 
@@ -31,6 +32,7 @@ CP::TPulseHit::TPulseHit(const CP::TPulseHit& h)
       fCharge(h.fCharge), fChargeUncertainty(h.fChargeUncertainty),
       fTime(h.fTime), fTimeUncertainty(h.fTimeUncertainty),
       fTimeRMS(h.fTimeRMS),
+      fTimeLowerBound(h.fTimeLowerBound), fTimeUpperBound(h.fTimeUpperBound),
       fTimeStart(h.fTimeStart), fTimeStop(h.fTimeStop),
       fTimeSamples(h.fTimeSamples),
       fInitialized(h.fInitialized),
@@ -66,6 +68,16 @@ double CP::TPulseHit::GetTime(void) const {
 double CP::TPulseHit::GetTimeRMS(void) const {
     if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
     return fTimeRMS;
+}
+
+double CP::TPulseHit::GetTimeLowerBound(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return fTimeLowerBound;
+}
+
+double CP::TPulseHit::GetTimeUpperBound(void) const {
+    if (!fInitialized) const_cast<CP::TPulseHit*>(this)->Initialize();
+    return fTimeUpperBound;
 }
 
 double CP::TPulseHit::GetTimeStart(void) const {
@@ -160,6 +172,16 @@ bool CP::TPulseHit::InitializeGeneric() {
 
     geom->PopPath();
     
+    // Make sure that fTimeLowerBound and fTimeUpperBound are initialized.
+    if (std::abs(fTimeLowerBound) < 0.1 || fTimeLowerBound < fTimeStart) {
+        fTimeLowerBound = fTimeStart;
+    }
+    if (std::abs(fTimeUpperBound) < 0.1
+        || fTimeUpperBound < fTimeLowerBound
+        || fTimeUpperBound > fTimeStop) {
+        fTimeUpperBound = fTimeStop;
+    }
+
     return true;
 }
 

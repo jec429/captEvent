@@ -75,6 +75,10 @@ public:
 
     void SetTimeRMS(double t); 
 
+    void SetTimeLowerBound(double t);
+
+    void SetTimeUpperBound(double t);
+    
     void SetTimeStart(double t);
 
     void SetTimeStop(double t);

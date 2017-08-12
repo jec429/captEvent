@@ -57,6 +57,10 @@ void CP::TWritableFADCHit::SetTimeUncertainty(double t) {fTimeUncertainty = t;}
 
 void CP::TWritableFADCHit::SetTimeRMS(double t) {fTimeRMS = t;}
 
+void CP::TWritableFADCHit::SetTimeLowerBound(double t) {fTimeLowerBound = t;}
+
+void CP::TWritableFADCHit::SetTimeUpperBound(double t) {fTimeUpperBound = t;}
+
 void CP::TWritableFADCHit::SetTimeStart(double t) {fTimeStart = t;}
 
 void CP::TWritableFADCHit::SetTimeStop(double t) {fTimeStop = t;}

@@ -62,6 +62,22 @@ public:
     /// Return true if the calibrated time is valid.
     virtual bool HasValidTime(void) const;
 
+    /// Return the starting time of the charge integration.  This is the lower
+    /// bound of the full width of the hit.  This must be greater than or
+    /// equal to GetTimeStart().
+    virtual double GetTimeLowerBound(void) const {
+        // The default is usually overridden by the daughter class.
+        return GetTimeStart();
+    }
+
+    /// Return the ending time of the charge integration.  This is the upper
+    /// bound of the full width of the hit.  This must be less than or
+    /// equal to GetTimeStop().
+    virtual double GetTimeUpperBound(void) const {
+        // The default is usually overridden by the daughter class.
+        return GetTimeStop();
+    }
+    
     /// Return the time of the start of the first sample contributing to this
     /// hit.
     virtual double GetTimeStart() const {

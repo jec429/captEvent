@@ -45,11 +45,21 @@ public:
     /// the extent (or spread) of the time distribution.
     virtual double GetTimeRMS(void) const; 
 
-    /// Return the time of the start of the first sample contributing to this
+    /// Return the starting time of the charge integration.  This is the lower
+    /// bound of the full width of the hit.  This must be greater than or
+    /// equal to GetTimeStart().
+    virtual double GetTimeLowerBound(void) const;
+
+    /// Return the ending time of the charge integration.  This is the upper
+    /// bound of the full width of the hit.  This must be less than or
+    /// equal to GetTimeStop().
+    virtual double GetTimeUpperBound(void) const;
+
+    /// Return the time of the start of the first sample added to this
     /// hit.
     virtual double GetTimeStart() const;
 
-    /// Return the time of the end of the last sample contributing to this
+    /// Return the time of the end of the last sample added to this
     /// hit.
     virtual double GetTimeStop() const;
 
@@ -142,10 +152,18 @@ protected:
     /// The RMS of the timing.
     Float_t fTimeRMS;
 
-    /// The time of the first sample in the hit.
+    /// The starting time of the charge integration.  This is the lower bound
+    /// of the full width of the hit.
+    Float_t fTimeLowerBound;
+
+    /// The ending time of the charge integration.  This is the upper bound
+    /// of the full width of the hit.
+    Float_t fTimeUpperBound;
+
+    /// The time of the first sample added to the hit.
     Float_t fTimeStart;
 
-    /// The time of the last sample in the hit.
+    /// The time of the last sample added to the hit.
     Float_t fTimeStop;
 
     /// The charge samples in the hit.
@@ -168,6 +186,6 @@ protected:
     /// The rotation of the hit.
     TMatrixD fRotation; //! Don't Save
 
-    ClassDef(TPulseHit,1);
+    ClassDef(TPulseHit,2);
 };
 #endif
