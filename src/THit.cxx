@@ -141,10 +141,12 @@ void CP::THit::ls(Option_t *opt) const {
     std::cout << std::endl;
     TROOT::IncreaseDirLevel();
     TROOT::IndentLevel();
-    std::cout << "T: " << unit::AsString(GetTime(),GetTimeUncertainty(),"time")
-              << " Q: " << unit::AsString(GetCharge(), 
+    std::cout << "T: (" << unit::AsString(GetTime(),GetTimeUncertainty(),"time")
+              << ") RMS: " << unit::AsString(GetTimeRMS(),"time")
+              << " Q: (" << unit::AsString(GetCharge(), 
                                           GetChargeUncertainty(),
                                           "charge")
+              << ")"
               << std::endl;
     TROOT::DecreaseDirLevel();
     if (GetGeomIdCount() > 1) {
